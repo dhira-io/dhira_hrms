@@ -1,6 +1,8 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../l10n/app_localizations.dart';
 
 class TimesheetSubmitBar extends StatelessWidget {
   final VoidCallback onCancel;
@@ -17,13 +19,15 @@ class TimesheetSubmitBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final themeColors = AppColors.of(context);
+
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.95),
+        color: themeColors.white.withValues(alpha: 0.95),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: themeColors.black.withValues(alpha: 0.08),
             blurRadius: 32,
             offset: const Offset(0, -12),
           ),
@@ -33,50 +37,20 @@ class TimesheetSubmitBar extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
-            child: ElevatedButton(
+            child: CommonButton(
+              text: l10n.cancel,
               onPressed: onCancel,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.of(context).surfaceContainerHigh,
-                foregroundColor: AppColors.of(context).textSecondary,
-                elevation: 0,
-              ),
-              child: Text(l10n.cancel, style: const TextStyle(fontWeight: FontWeight.bold)),
+              variant: ButtonVariant.outlined,
+              padding:       EdgeInsets.symmetric(vertical: 14.h),
             ),
           ),
-          const SizedBox(width: 12),
+                SizedBox(width: 12.w),
           Expanded(
             flex: 2,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.of(context).primary, AppColors.of(context).primaryContainer],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.of(context).primary.withValues(alpha: 0.2),
-                    blurRadius: 16,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: ElevatedButton(
-                onPressed: onSubmit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  elevation: 0,
-                ),
-                child: Text(
-                  submitLabel ?? l10n.submitWeeklyTimesheet,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+            child: CommonButton(
+              text: submitLabel ?? l10n.submitWeeklyTimesheet,
+              onPressed: onSubmit,
+              padding:       EdgeInsets.symmetric(vertical: 14.h),
             ),
           ),
         ],

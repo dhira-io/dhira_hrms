@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/auth/presentation/bloc/sso_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/logout_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
@@ -22,16 +23,14 @@ import '../../../performance/presentation/cubit/self_assessment/self_assessment_
 import '../../../performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import '../../../performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../../../../core/services/notification_manager.dart';
-import 'dart:developer';
+import 'login_cubit.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
   final LogoutUseCase logoutUseCase;
 
-  AuthBloc({
-    required this.loginUseCase,
-    required this.logoutUseCase,
-  }) : super(const AuthState.initial()) {
+  AuthBloc({required this.loginUseCase, required this.logoutUseCase})
+    : super(const AuthState.initial()) {
     on<AuthEvent>((event, emit) async {
       await event.when(
         started: () => _onAuthStatusChecked(emit),
@@ -49,38 +48,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onLogoutRequested(Emitter<AuthState> emit) async {
     emit(const AuthState.loading());
-    
+
     // Deactivate Firebase device on logout
     try {
       await NotificationManager().deactivate();
     } catch (_) {}
 
     final result = await logoutUseCase();
-    result.fold(
-      (failure) => emit(AuthState.error(failure.message)),
-      (_) {
-        // Destroy locally scoped Blocs to clear all data and force recreation on next login
-        Get.delete<AttendanceBloc>(force: true);
-        Get.delete<LeaveBloc>(force: true);
-        Get.delete<ProfileBloc>(force: true);
-        Get.delete<TimesheetBloc>(force: true);
-        Get.delete<ApprovalsBloc>(force: true);
-        Get.delete<NotificationBloc>(force: true);
-        Get.delete<DashboardCubit>(force: true);
-        Get.delete<BottomNavCubit>(force: true);
-        Get.delete<OrganizationBloc>(force: true);
-        Get.delete<TaskBloc>(force: true);
-        Get.delete<PerformanceBloc>(force: true);
-        Get.delete<SettingsCubit>(force: true);
-        Get.delete<NotificationSettingsCubit>(force: true);
-        Get.delete<FileOperationCubit>(force: true);
-        Get.delete<SelfAssessmentCubit>(force: true);
-        Get.delete<TeamEvaluationCubit>(force: true);
-        Get.delete<TeamEvaluationFilterCubit>(force: true);
+    result.fold((failure) => emit(AuthState.error(failure.message)), (_) {
+      _cleanupSessionData();
+      emit(const AuthState.unauthenticated());
+    });
+  }
 
-        emit(const AuthState.unauthenticated());
-      },
-    );
+  void _cleanupSessionData() {
+    // Destroy locally scoped Blocs and Cubits to clear all data and force recreation on next login.
+    // This ensures that stale data from the previous user is not shown and that BLoCs
+    // are properly re-initialized with the correct user context.
+    Get.find<LoginCubit>().reset();
+    Get.find<SSOCubit>().reset();
+    Get.delete<AttendanceBloc>(force: true);
+    Get.delete<LeaveBloc>(force: true);
+    Get.delete<ProfileBloc>(force: true);
+    Get.delete<TimesheetBloc>(force: true);
+    Get.delete<ApprovalsBloc>(force: true);
+    Get.delete<NotificationBloc>(force: true);
+    Get.delete<DashboardCubit>(force: true);
+    Get.delete<BottomNavCubit>(force: true);
+    Get.delete<OrganizationBloc>(force: true);
+    Get.delete<TaskBloc>(force: true);
+    Get.delete<PerformanceBloc>(force: true);
+    Get.delete<SettingsCubit>(force: true);
+    Get.delete<NotificationSettingsCubit>(force: true);
+    Get.delete<FileOperationCubit>(force: true);
+    Get.delete<SelfAssessmentCubit>(force: true);
+    Get.delete<TeamEvaluationCubit>(force: true);
+    Get.delete<TeamEvaluationFilterCubit>(force: true);
   }
 
   Future<void> _onAuthStatusChecked(Emitter<AuthState> emit) async {
@@ -88,14 +91,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final isActive = await loginUseCase.repository.isSessionActive();
     if (isActive) {
       final result = await loginUseCase.repository.getCurrentUser();
-      result.fold(
-        (failure) => emit(const AuthState.unauthenticated()),
-        (user) {
-          emit(AuthState.authenticated(user));
-          // Ensure device is registered
-          NotificationManager().getToken();
-        },
-      );
+      result.fold((failure) => emit(const AuthState.unauthenticated()), (user) {
+        emit(AuthState.authenticated(user));
+        // Ensure device is registered
+        NotificationManager().getToken();
+      });
     } else {
       emit(const AuthState.unauthenticated());
     }

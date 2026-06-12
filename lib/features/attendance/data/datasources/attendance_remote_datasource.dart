@@ -24,6 +24,9 @@ abstract class IAttendanceRemoteDataSource {
     required int month,
     required int year,
   });
+  Future<AttendancePunchSummaryModel> getAttendancePunchSummary({
+    required String attendanceDate,
+  });
   Future<List<LeaveHistoryModel>> getLeaveHistory(String employee);
   Future<LeaveDetailsModel> getLeaveDetails({
     required String employee,
@@ -49,9 +52,7 @@ abstract class IAttendanceRemoteDataSource {
 class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
   final DioClient dioClient;
 
-  AttendanceRemoteDataSourceImpl({
-    required this.dioClient,
-  });
+  AttendanceRemoteDataSourceImpl({required this.dioClient});
 
   @override
   Future<AttendanceStatusModel> getCheckinStatus(String empid) async {
@@ -69,6 +70,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       success: data['success'] == true,
       lastOut: data['last_out'] as String?,
       workedSeconds: (data['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (data['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -88,6 +90,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
       workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -107,6 +110,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
       workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -155,6 +159,7 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
       workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -174,10 +179,9 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       success: messageData['success'] == true,
       message: messageData['message'] as String?,
       workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
-
-
 
   @override
   Future<AttendanceMonthSummaryModel> getAttendanceMonthSummary({
@@ -190,6 +194,17 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
       data: {"employee": employee, "month": month, "year": year},
     );
     return AttendanceMonthSummaryModel.fromJson(response.data['message']);
+  }
+
+  @override
+  Future<AttendancePunchSummaryModel> getAttendancePunchSummary({
+    required String attendanceDate,
+  }) async {
+    final response = await dioClient.get(
+      AttendanceApiConstants.getAttendancePunchSummary,
+      queryParameters: {'attendance_date': attendanceDate},
+    );
+    return AttendancePunchSummaryModel.fromJson(response.data['message'] ?? {});
   }
 
   @override

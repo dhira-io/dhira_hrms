@@ -16,11 +16,22 @@ import '../../../../../core/error/exceptions.dart';
 import 'package:dhira_hrms/core/constants/leave_constants.dart';
 
 abstract class LeaveApprovalRemoteDataSource {
-  Future<List<ApprovalRequestModel>> getPendingLeaves(ApprovalCategory category, {int page = 1, int pageSize = 10});
-  Future<String> submitLeaveWorkflowAction(String leaveApplicationName, String action);
-  Future<void> addComment(String referenceDoctype, String referenceName, String content);
+  Future<List<ApprovalRequestModel>> getPendingLeaves(
+    ApprovalCategory category, {
+    int page = 1,
+    int pageSize = 10,
+  });
+  Future<String> submitLeaveWorkflowAction(
+    String leaveApplicationName,
+    String action,
+  );
+  Future<void> addComment(
+    String referenceDoctype,
+    String referenceName,
+    String content,
+  );
   Future<List<CommentModel>> getComments(String doctype, String requestId);
-  
+
   // Leave Management methods
   Future<List<LeaveTypeModel>> fetchLeaveTypes();
   Future<bool> updateLeaveApplication({
@@ -38,20 +49,37 @@ abstract class LeaveApprovalRemoteDataSource {
     String? workflowState,
     String? attachment,
   });
-  Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender);
-  Future<LeaveStatisticsModel> getLeaveStatistics(String employeeId, String fromDate, String toDate);
-  Future<List<OverlapLeaveModel>> getOverlapLeaves(String employeeId, String fromDate, String toDate);
+  Future<LeaveBalanceModel> getLeaveBalance(
+    String employeeId,
+    String todayDate,
+    String gender,
+  );
+  Future<LeaveStatisticsModel> getLeaveStatistics(
+    String employeeId,
+    String fromDate,
+    String toDate,
+  );
+  Future<List<OverlapLeaveModel>> getOverlapLeaves(
+    String employeeId,
+    String fromDate,
+    String toDate,
+  );
   Future<String> uploadFile(String filePath, String fileName, String? leaveId);
 }
 
-class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource {
+class LeaveApprovalRemoteDataSourceImpl
+    implements LeaveApprovalRemoteDataSource {
   final DioClient dioClient;
   final LocalStorageService localStorageService;
 
   LeaveApprovalRemoteDataSourceImpl(this.dioClient, this.localStorageService);
 
   @override
-  Future<List<ApprovalRequestModel>> getPendingLeaves(ApprovalCategory category, {int page = 1, int pageSize = 10}) async {
+  Future<List<ApprovalRequestModel>> getPendingLeaves(
+    ApprovalCategory category, {
+    int page = 1,
+    int pageSize = 10,
+  }) async {
     final String endpoint = (category == ApprovalCategory.team)
         ? LeaveApprovalApiConstants.getPendingLeaves
         : LeaveApprovalApiConstants.getMyLeaveApplications;
@@ -81,7 +109,10 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
       };
     }
 
-    final response = await dioClient.get(endpoint, queryParameters: queryParameters);
+    final response = await dioClient.get(
+      endpoint,
+      queryParameters: queryParameters,
+    );
 
     if (response.data != null) {
       final dynamic msg = response.data['message'];
@@ -106,23 +137,30 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
 
       final List finalItems = items ?? [];
 
-      return finalItems.map((json) => ApprovalRequestModel.fromJson(
-        json as Map<String, dynamic>,
-        ApprovalType.leave,
-        category,
-      )).toList();
+      return finalItems
+          .map(
+            (json) => ApprovalRequestModel.fromJson(
+              json as Map<String, dynamic>,
+              ApprovalType.leave,
+              category,
+            ),
+          )
+          .toList();
     }
     return [];
   }
 
   @override
-  Future<String> submitLeaveWorkflowAction(String leaveApplicationName, String action) async {
+  Future<String> submitLeaveWorkflowAction(
+    String leaveApplicationName,
+    String action,
+  ) async {
     final response = await dioClient.put(
       LeaveApprovalApiConstants.leaveBulkWorkflowAction,
       data: {
         "leave_application_names": '["$leaveApplicationName"]',
         "action": action,
-        "description": action == "Cancel" ? "withdraw" : action
+        "description": action == "Cancel" ? "withdraw" : action,
       },
     );
     if (response.data == null) {
@@ -153,18 +191,24 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
           // Ignore parsing errors and fall back to the basic error
         }
       }
-      final String errorStr = failed.first['error']?.toString() ?? 'Failed to process action';
+      final String errorStr =
+          failed.first['error']?.toString() ?? 'Failed to process action';
       throw ServerException(message: errorStr);
     }
-    
+
     return messageData?['message']?.toString() ?? "Leave $action successfully";
   }
 
   @override
-  Future<void> addComment(String referenceDoctype, String referenceName, String content) async {
+  Future<void> addComment(
+    String referenceDoctype,
+    String referenceName,
+    String content,
+  ) async {
     final commentEmail = localStorageService.getUserEmail() ?? '';
     final commentBy = localStorageService.getUserFullname() ?? '';
-    final wrappedContent = '<div class="ql-editor read-mode"><p>$content</p></div>';
+    final wrappedContent =
+        '<div class="ql-editor read-mode"><p>$content</p></div>';
 
     final response = await dioClient.post(
       LeaveApprovalApiConstants.addComment,
@@ -174,7 +218,7 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
         "content": wrappedContent,
         "comment_email": commentEmail,
         "comment_by": commentBy,
-        "comment_type": "Comment"
+        "comment_type": "Comment",
       },
     );
     if (response.data == null || response.data['message'] == null) {
@@ -183,11 +227,16 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
   }
 
   @override
-  Future<List<CommentModel>> getComments(String doctype, String requestId) async {
+  Future<List<CommentModel>> getComments(
+    String doctype,
+    String requestId,
+  ) async {
     final queryParams = {
-      'fields': '["name","content","comment_type","owner","creation","comment_by"]',
-      'filters': '[["reference_doctype","=","$doctype"],["reference_name","=","$requestId"]]',
-      'order_by': 'creation desc'
+      'fields':
+          '["name","content","comment_type","owner","creation","comment_by"]',
+      'filters':
+          '[["reference_doctype","=","$doctype"],["reference_name","=","$requestId"]]',
+      'order_by': 'creation desc',
     };
 
     final response = await dioClient.get(
@@ -197,16 +246,19 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
 
     if (response.data != null && response.data['data'] != null) {
       final List<dynamic> data = response.data['data'];
-      return data.map((json) => CommentModel.fromJson(json as Map<String, dynamic>)).toList();
+      return data
+          .map((json) => CommentModel.fromJson(json as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }
 
   @override
   Future<List<LeaveTypeModel>> fetchLeaveTypes() async {
-    final response = await dioClient.get(LeaveApiConstants.leaveType, queryParameters: {
-      'fields': '["name", "leave_type_name"]',
-    });
+    final response = await dioClient.get(
+      LeaveApiConstants.leaveType,
+      queryParameters: {'fields': '["name", "leave_type_name"]'},
+    );
 
     final dynamic raw = response.data;
     final dynamic msg = raw?['message'];
@@ -286,13 +338,14 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
   }
 
   @override
-  Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender) async {
+  Future<LeaveBalanceModel> getLeaveBalance(
+    String employeeId,
+    String todayDate,
+    String gender,
+  ) async {
     final response = await dioClient.get(
       LeaveApiConstants.getLeaveBalance,
-      queryParameters: {
-        'employee': employeeId,
-        'date': todayDate,
-      },
+      queryParameters: {'employee': employeeId, 'date': todayDate},
     );
     if (response.data != null && response.data['message'] != null) {
       final message = response.data['message'];
@@ -319,7 +372,11 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
   }
 
   @override
-  Future<LeaveStatisticsModel> getLeaveStatistics(String employeeId, String fromDate, String toDate) async {
+  Future<LeaveStatisticsModel> getLeaveStatistics(
+    String employeeId,
+    String fromDate,
+    String toDate,
+  ) async {
     final response = await dioClient.get(
       LeaveApiConstants.getLeaveStatistics,
       queryParameters: {
@@ -329,13 +386,19 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
       },
     );
     if (response.data != null && response.data['message'] != null) {
-      return LeaveStatisticsModel.fromJson(response.data['message'] as Map<String, dynamic>);
+      return LeaveStatisticsModel.fromJson(
+        response.data['message'] as Map<String, dynamic>,
+      );
     }
     throw Exception("Failed to fetch leave statistics");
   }
 
   @override
-  Future<List<OverlapLeaveModel>> getOverlapLeaves(String employeeId, String fromDate, String toDate) async {
+  Future<List<OverlapLeaveModel>> getOverlapLeaves(
+    String employeeId,
+    String fromDate,
+    String toDate,
+  ) async {
     final response = await dioClient.get(
       LeaveApiConstants.getApprovedLeavesSameProject,
       queryParameters: {
@@ -348,14 +411,23 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
       final message = response.data['message'];
       if (message is Map && message['success'] == true) {
         final List<dynamic> data = message['data'] ?? [];
-        return data.map((json) => OverlapLeaveModel.fromJson(json as Map<String, dynamic>)).toList();
+        return data
+            .map(
+              (json) =>
+                  OverlapLeaveModel.fromJson(json as Map<String, dynamic>),
+            )
+            .toList();
       }
     }
     return [];
   }
 
   @override
-  Future<String> uploadFile(String filePath, String fileName, String? leaveId) async {
+  Future<String> uploadFile(
+    String filePath,
+    String fileName,
+    String? leaveId,
+  ) async {
     final Map<String, dynamic> params = {
       "file": await MultipartFile.fromFile(filePath, filename: fileName),
       "fieldname": "custom_attach_document",
@@ -370,7 +442,10 @@ class LeaveApprovalRemoteDataSourceImpl implements LeaveApprovalRemoteDataSource
 
     final formData = FormData.fromMap(params);
 
-    final response = await dioClient.post(LeaveApiConstants.uploadFile, data: formData);
+    final response = await dioClient.post(
+      LeaveApiConstants.uploadFile,
+      data: formData,
+    );
     if (response.data != null && response.data['message'] != null) {
       return response.data['message']['file_url'] as String;
     }

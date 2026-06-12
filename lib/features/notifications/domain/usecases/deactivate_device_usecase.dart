@@ -7,7 +7,15 @@ class DeactivateDeviceUseCase {
 
   DeactivateDeviceUseCase({required this.repository});
 
-  Future<Either<Failure, void>> call({required String token, required String deviceId, required String platform}) async {
-    return await repository.deactivateDevice(token: token, deviceId: deviceId, platform: platform);
+  Future<Either<Failure, void>> call({
+    required String token,
+    required String deviceId,
+    required String platform,
+  }) async {
+    return await repository.deactivateDevice(
+      token: token,
+      deviceId: deviceId,
+      platform: platform,
+    );
   }
 }

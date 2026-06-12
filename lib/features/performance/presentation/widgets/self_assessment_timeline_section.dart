@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
@@ -38,7 +39,10 @@ class _SelfAssessmentTimelineSectionState
               padding: const EdgeInsets.all(AppConstants.p16),
               child: Row(
                 children: [
-                  Icon(Icons.timeline_outlined, color: AppColors.of(context).primary),
+                  Icon(
+                    Icons.timeline_outlined,
+                    color: AppColors.of(context).primary,
+                  ),
                   const SizedBox(width: AppConstants.p12),
                   Expanded(
                     child: Text(
@@ -57,7 +61,10 @@ class _SelfAssessmentTimelineSectionState
             ),
           ),
           if (_isExpanded) ...[
-            Divider(height: 1, color: AppColors.of(context).surfaceContainerHigh),
+            Divider(
+              height: 1.h,
+              color: AppColors.of(context).surfaceContainerHigh,
+            ),
             Padding(
               padding: const EdgeInsets.all(AppConstants.p16),
               child: _TimelineList(timeline: widget.timeline),
@@ -113,14 +120,18 @@ class _TimelineStageCard extends StatelessWidget {
             width: AppConstants.p32,
             height: AppConstants.p32,
             decoration: BoxDecoration(
-              color: isCompleted ? AppColors.of(context).successBg : AppColors.of(context).infoBg,
+              color: isCompleted
+                  ? AppColors.of(context).successBg
+                  : AppColors.of(context).infoBg,
               shape: BoxShape.circle,
             ),
             child: Center(
               child: Icon(
                 isCompleted ? Icons.check : Icons.schedule,
                 size: AppConstants.iconSmall,
-                color: isCompleted ? AppColors.of(context).successDark : AppColors.of(context).info,
+                color: isCompleted
+                    ? AppColors.of(context).successDark
+                    : AppColors.of(context).info,
               ),
             ),
           ),
@@ -140,14 +151,14 @@ class _TimelineStageCard extends StatelessWidget {
                   stage.date.toIso8601String().split('T')[0],
                   style: AppTextStyle.labelSmall.copyWith(
                     color: AppColors.of(context).onSurfaceVariant,
-                    fontSize: AppConstants.fs10,
+                    fontSize: AppConstants.fs8.sp,
                   ),
                 ),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
             decoration: BoxDecoration(
               color: isCompleted
                   ? AppColors.of(context).successBg
@@ -166,7 +177,7 @@ class _TimelineStageCard extends StatelessWidget {
                     ? AppColors.of(context).successDark
                     : AppColors.of(context).onSurfaceVariant,
                 fontWeight: FontWeight.bold,
-                fontSize: AppConstants.fs10,
+                fontSize: AppConstants.fs8.sp,
               ),
             ),
           ),

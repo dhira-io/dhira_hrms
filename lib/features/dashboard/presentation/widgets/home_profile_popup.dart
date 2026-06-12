@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,14 +26,17 @@ class HomeProfilePopup extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: kToolbarHeight + MediaQuery.of(context).padding.top + AppConstants.p8,
+          top:
+              kToolbarHeight +
+              MediaQuery.of(context).padding.top +
+              AppConstants.p8,
           right: AppConstants.p16,
           child: Material(
             color: AppColors.of(context).white,
             elevation: 8,
             borderRadius: BorderRadius.circular(AppConstants.r12),
             child: Container(
-              width: 180,
+              width: 180.w,
               padding: const EdgeInsets.symmetric(vertical: AppConstants.p8),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -46,11 +50,19 @@ class HomeProfilePopup extends StatelessWidget {
                     context.push(AppRouter.changePasswordPath);
                   }),
                   Divider(),
-                  _popupItem(context, l10n.signOut, Icons.logout, () {
-                    context.read<DashboardCubit>().closeMenus();
-                    context.read<AuthBloc>().add(const AuthEvent.logoutRequested());
-                    context.go(AppRouter.loginPath);
-                  }, textColor: AppColors.of(context).error),
+                  _popupItem(
+                    context,
+                    l10n.signOut,
+                    Icons.logout,
+                    () {
+                      context.read<DashboardCubit>().closeMenus();
+                      context.read<AuthBloc>().add(
+                        const AuthEvent.logoutRequested(),
+                      );
+                      context.go(AppRouter.loginPath);
+                    },
+                    textColor: AppColors.of(context).error,
+                  ),
                 ],
               ),
             ),
@@ -60,7 +72,13 @@ class HomeProfilePopup extends StatelessWidget {
     );
   }
 
-  Widget _popupItem(BuildContext context, String title, IconData icon, VoidCallback onTap, {Color? textColor}) {
+  Widget _popupItem(
+    BuildContext context,
+    String title,
+    IconData icon,
+    VoidCallback onTap, {
+    Color? textColor,
+  }) {
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -70,7 +88,11 @@ class HomeProfilePopup extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, size: AppConstants.iconXSmall, color: textColor ?? AppColors.of(context).textSecondary),
+            Icon(
+              icon,
+              size: AppConstants.iconXSmall,
+              color: textColor ?? AppColors.of(context).textSecondary,
+            ),
             const SizedBox(width: AppConstants.p12),
             Expanded(
               child: Text(

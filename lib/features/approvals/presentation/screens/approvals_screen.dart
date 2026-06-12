@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/presentation/widgets/approvals_sections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/widgets/no_internet_widget.dart';
 import '../bloc/approvals_bloc.dart';
@@ -14,6 +14,7 @@ import 'package:dhira_hrms/core/widgets/app_header.dart';
 import '../../domain/entities/approval_type.dart';
 import '../widgets/approvals_shimmer.dart';
 import '../dialogs/widgets/approvals_list_content.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 
 class ApprovalsScreen extends StatefulWidget {
   const ApprovalsScreen({super.key});
@@ -45,8 +46,11 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.9) {
-      context.read<ApprovalsBloc>().add(const ApprovalsEvent.loadMoreRequested());
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.9) {
+      context.read<ApprovalsBloc>().add(
+        const ApprovalsEvent.loadMoreRequested(),
+      );
     }
   }
 
@@ -58,7 +62,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
           success: (data) {
             // Scroll to top only when category or type actually changed
             if (_previousCategory != null &&
-                (_previousCategory != data.category || _previousType != data.type)) {
+                (_previousCategory != data.category ||
+                    _previousType != data.type)) {
               if (_scrollController.hasClients) {
                 _scrollController.jumpTo(0);
               }
@@ -66,13 +71,23 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
             _previousCategory = data.category;
             _previousType = data.type;
 
-            if (data.successMessage != null && data.successMessage!.isNotEmpty) {
+            if (data.successMessage != null &&
+                data.successMessage!.isNotEmpty) {
               ToastUtils.showSuccess(data.successMessage!);
-              context.read<ApprovalsBloc>().add(const ApprovalsEvent.clearMessages());
+              context.read<ApprovalsBloc>().add(
+                const ApprovalsEvent.clearMessages(),
+              );
             }
             if (data.errorMessage != null && data.errorMessage!.isNotEmpty) {
-              ToastUtils.showError(data.errorMessage!);
-              context.read<ApprovalsBloc>().add(const ApprovalsEvent.clearMessages());
+              String displayError = data.errorMessage!;
+              if (displayError.startsWith('FAILED_TO_REFRESH_PREFIX:')) {
+                final errorDetails = displayError.substring('FAILED_TO_REFRESH_PREFIX:'.length);
+                displayError = AppLocalizations.of(context)!.failedToRefresh(errorDetails);
+              }
+              ToastUtils.showError(displayError);
+              context.read<ApprovalsBloc>().add(
+                const ApprovalsEvent.clearMessages(),
+              );
             }
           },
           failure: (message) => ToastUtils.showError(message),
@@ -85,8 +100,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
           onRefresh: () async {
             final completer = Completer<void>();
             context.read<ApprovalsBloc>().add(
-                  ApprovalsEvent.refreshRequested(completer: completer),
-                );
+              ApprovalsEvent.refreshRequested(completer: completer),
+            );
             return completer.future;
           },
           child: BlocBuilder<ApprovalsBloc, ApprovalsState>(
@@ -111,9 +126,9 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                         hasScrollBody: false,
                         child: NoInternetWidget(
                           message: message,
-                          onReload: () => context
-                              .read<ApprovalsBloc>()
-                              .add(const ApprovalsEvent.started()),
+                          onReload: () => context.read<ApprovalsBloc>().add(
+                            const ApprovalsEvent.started(),
+                          ),
                         ),
                       ),
                     ],
@@ -126,7 +141,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                       SliverPersistentHeader(
                         pinned: true,
                         delegate: _PersistentHeaderDelegate(
-                          height: 64,
+                          height: 64.h,
                           child: Container(
                             color: AppColors.of(context).background,
                             child: const ApprovalsSubTabsSection(),
@@ -141,8 +156,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                         context: context,
                       ),
                       // Bottom padding
-                      const SliverPadding(
-                        padding: EdgeInsets.only(bottom: 100),
+                            SliverPadding(
+                        padding: EdgeInsets.only(bottom: 100.h),
                       ),
                     ],
                   ),
@@ -168,8 +183,13 @@ class _PersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => height;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => child;
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) => child;
 
   @override
-  bool shouldRebuild(_PersistentHeaderDelegate oldDelegate) => oldDelegate.height != height || oldDelegate.child != child;
+  bool shouldRebuild(_PersistentHeaderDelegate oldDelegate) =>
+      oldDelegate.height != height || oldDelegate.child != child;
 }

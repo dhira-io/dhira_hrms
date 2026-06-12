@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -56,7 +57,7 @@ class DashboardSkeleton extends StatelessWidget {
                 3,
                 (index) => Expanded(
                   child: Container(
-                    height: 80,
+                    height: 80.h,
                     margin: const EdgeInsets.only(right: AppConstants.p12),
                     decoration: BoxDecoration(
                       color: AppColors.of(context).white,
@@ -81,7 +82,7 @@ class DashboardSkeleton extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  width: 60,
+                  width: 60.w,
                   height: AppConstants.p16,
                   decoration: BoxDecoration(
                     color: AppColors.of(context).white,

@@ -1,26 +1,24 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../l10n/app_localizations.dart';
 
 class TimesheetWeeklyTotalCard extends StatelessWidget {
   final double totalWeeklyHours;
 
-  const TimesheetWeeklyTotalCard({
-    super.key,
-    required this.totalWeeklyHours,
-  });
+  const TimesheetWeeklyTotalCard({super.key, required this.totalWeeklyHours});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Container(
-      padding: const EdgeInsets.all(AppConstants.p16),
+      padding:       EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(AppConstants.r12),
+        borderRadius: BorderRadius.circular(10.r),
         boxShadow: [
           BoxShadow(
             color: AppColors.of(context).black.withValues(alpha: 0.05),
@@ -28,7 +26,9 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(color: AppColors.of(context).border.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: AppColors.of(context).border.withValues(alpha: 0.5),
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,30 +39,32 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
               Text(
                 l10n.timesheetWeekTotal,
                 style: AppTextStyle.statsLabel.copyWith(
-                  fontSize: 14,
+                  fontSize: 11.sp,
                   color: AppColors.of(context).slate600,
                 ),
               ),
-              const SizedBox(height: 4),
+                    SizedBox(height: 2.h),
               Text(
                 l10n.timesheetHoursGoal(totalWeeklyHours.toStringAsFixed(1)),
                 style: AppTextStyle.h1.copyWith(
                   color: AppColors.of(context).brandBlue,
-                  fontSize: 20,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w800,
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 16),
+                SizedBox(width: 12.w),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(AppConstants.r8),
               child: LinearProgressIndicator(
                 value: (totalWeeklyHours / 48).clamp(0.0, 1.0),
                 backgroundColor: AppColors.of(context).slate100,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.of(context).brandBlue),
-                minHeight: 10,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  AppColors.of(context).brandBlue,
+                ),
+                minHeight: 8,
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/sa_tracking_entity.dart';
@@ -16,7 +17,8 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trackingData = tracking ??
+    final trackingData =
+        tracking ??
         context.select((SelfAssessmentCubit cubit) => cubit.state.tracking);
     if (trackingData == null || trackingData.sessions.isEmpty) {
       return const SizedBox.shrink();
@@ -47,7 +49,10 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
               ],
             ),
           ),
-          Divider(height: 1, color: AppColors.of(context).surfaceContainerHigh),
+          Divider(
+            height: 1.h,
+            color: AppColors.of(context).surfaceContainerHigh,
+          ),
           ...trackingData.sessions.map((session) {
             final sessionQuestions = trackingData.questions
                 .where((q) => q.session == session.session)
@@ -70,13 +75,17 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AppColors.of(context).surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
-                  border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
+                  border: Border.all(
+                    color: AppColors.of(context).surfaceContainerHigh,
+                  ),
                 ),
                 child: ExpansionTile(
                   shape: const Border(),
                   collapsedShape: const Border(),
                   leading: CircleAvatar(
-                    backgroundColor: AppColors.of(context).primary.withValues(alpha: 0.1),
+                    backgroundColor: AppColors.of(
+                      context,
+                    ).primary.withValues(alpha: 0.1),
                     child: Text(
                       session.session,
                       style: AppTextStyle.labelLarge.copyWith(
@@ -129,13 +138,13 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                                 padding: const EdgeInsets.all(AppConstants.p4),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: AppColors.of(context).success.withValues(
-                                    alpha: 0.1,
-                                  ),
+                                  color: AppColors.of(
+                                    context,
+                                  ).success.withValues(alpha: 0.1),
                                   border: Border.all(
-                                    color: AppColors.of(context).success.withValues(
-                                      alpha: 0.3,
-                                    ),
+                                    color: AppColors.of(
+                                      context,
+                                    ).success.withValues(alpha: 0.3),
                                   ),
                                 ),
                                 child: Icon(
@@ -164,7 +173,8 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                                             vertical: AppConstants.p4,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: AppColors.of(context).primaryContainer
+                                            color: AppColors.of(context)
+                                                .primaryContainer
                                                 .withValues(alpha: 0.3),
                                             borderRadius: BorderRadius.circular(
                                               AppConstants.r4,
@@ -178,9 +188,9 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                                             vertical: AppConstants.p4,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: AppColors.of(context).success.withValues(
-                                              alpha: 0.1,
-                                            ),
+                                            color: AppColors.of(
+                                              context,
+                                            ).success.withValues(alpha: 0.1),
                                             borderRadius: BorderRadius.circular(
                                               AppConstants.r4,
                                             ),
@@ -191,7 +201,9 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                                               Icon(
                                                 Icons.star,
                                                 size: 12,
-                                                color: AppColors.of(context).success,
+                                                color: AppColors.of(
+                                                  context,
+                                                ).success,
                                               ),
                                               const SizedBox(
                                                 width: AppConstants.p4,
@@ -200,7 +212,9 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                                                 '$ratingValue / 4',
                                                 style: AppTextStyle.labelSmall
                                                     .copyWith(
-                                                      color: AppColors.of(context).success,
+                                                      color: AppColors.of(
+                                                        context,
+                                                      ).success,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                     ),
@@ -223,7 +237,11 @@ class SelfAssessmentTrackingSection extends StatelessWidget {
                           ),
                         ),
                         if (index < sessionQuestions.length - 1)
-                          Divider(height: 1, thickness: 0.5, color: AppColors.of(context).surfaceContainerHigh),
+                          Divider(
+                            height: 1.h,
+                            thickness: 0.5,
+                            color: AppColors.of(context).surfaceContainerHigh,
+                          ),
                       ],
                     );
                   }).toList(),

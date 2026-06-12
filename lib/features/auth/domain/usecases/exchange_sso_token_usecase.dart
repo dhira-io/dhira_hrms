@@ -8,7 +8,10 @@ class ExchangeSSOTokenUseCase {
 
   ExchangeSSOTokenUseCase(this.repository);
 
-  Future<Either<Failure, UserEntity>> call(String apiKey, String apiSecret) async {
+  Future<Either<Failure, UserEntity>> call(
+    String apiKey,
+    String apiSecret,
+  ) async {
     return await repository.exchangeSSOToken(apiKey, apiSecret);
   }
 }

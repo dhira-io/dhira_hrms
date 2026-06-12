@@ -19,7 +19,8 @@ abstract class UserModel with _$UserModel {
 
   const UserModel._();
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
   // Conversion from Data Model to Domain Entity
   UserEntity toEntity() {

@@ -8,7 +8,15 @@ class AddLeaveCommentUseCase {
 
   AddLeaveCommentUseCase(this.repository);
 
-  Future<Either<Failure, void>> call(String referenceDoctype, String referenceName, String content) async {
-    return await repository.addComment(referenceDoctype, referenceName, content);
+  Future<Either<Failure, void>> call(
+    String referenceDoctype,
+    String referenceName,
+    String content,
+  ) async {
+    return await repository.addComment(
+      referenceDoctype,
+      referenceName,
+      content,
+    );
   }
 }

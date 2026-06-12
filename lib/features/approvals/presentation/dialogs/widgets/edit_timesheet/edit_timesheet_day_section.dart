@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
@@ -47,57 +48,81 @@ class EditTimesheetDaySection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final totalHrs = assignments.fold(
       0.0,
-      (sum, a) => sum + (double.tryParse(actualControllers[a.name ?? a.hashCode.toString()]?.text ?? "") ?? a.spentHours),
+      (sum, a) =>
+          sum +
+          (double.tryParse(
+                actualControllers[a.name ?? a.hashCode.toString()]?.text ?? "",
+              ) ??
+              a.spentHours),
     );
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin:       EdgeInsets.only(bottom: 16.h),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.of(context).border),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(8.r),
       ),
       child: Column(
         children: [
           InkWell(
             onTap: onToggle,
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding:       EdgeInsets.all(16.w),
               child: Row(
                 children: [
-                  Icon(Icons.calendar_today_outlined, size: 20, color: AppColors.of(context).textPrimary),
-                  const SizedBox(width: 12),
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 20,
+                    color: AppColors.of(context).textPrimary,
+                  ),
+                        SizedBox(width: 12.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          DateTimeUtils.formatDateString(date, pattern: AppFormats.dateWithDay),
-                          style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                          DateTimeUtils.formatDateString(
+                            date,
+                            pattern: DateTimeUtils.dateWithDay,
+                          ),
+                          style: AppTextStyle.bodyMedium.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
                           l10n.submittedOn(assignments.first.date ?? ""),
-                          style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary),
+                          style: AppTextStyle.labelSmall.copyWith(
+                            color: AppColors.of(context).textSecondary,
+                          ),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding:       EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 4.h,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.of(context).infoBg,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
                     child: Text(
                       l10n.totalHrs(totalHrs.toInt()),
-                      style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).info, fontWeight: FontWeight.bold),
+                      style: AppTextStyle.labelSmall.copyWith(
+                        color: AppColors.of(context).info,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                   Icon(
-                    isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
                     color: AppColors.of(context).textSecondary,
                   ),
                 ],
@@ -105,7 +130,7 @@ class EditTimesheetDaySection extends StatelessWidget {
             ),
           ),
           if (isExpanded) ...[
-            Divider(height: 1),
+            Divider(height: 1.h),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
@@ -128,16 +153,48 @@ class EditTimesheetDaySection extends StatelessWidget {
                   final idx = entry.key + 1;
                   final a = entry.value;
                   final key = a.name ?? a.hashCode.toString();
-                  return DataRow(cells: [
-                    DataCell(Text(idx.toString())),
-                    DataCell(_buildTableDropdown(key)),
-                    DataCell(_buildTableTextField(context,taskControllers[key]!)),
-                    DataCell(_buildTableTextField(context,descriptionControllers[key]!, width: 180, isLarge: true)),
-                    DataCell(_buildTableTextField(context,expectedControllers[key]!, width: 60, suffix: l10n.hoursUnit)),
-                    DataCell(_buildTableTextField(context,actualControllers[key]!, width: 60, suffix: l10n.hoursUnit)),
-                    DataCell(TimesheetStatusBadge(status: a.status ?? l10n.pending)),
-                    DataCell(Text(getEmployeeName(a.raisedBy, employees), style: AppTextStyle.bodySmall)),
-                  ]);
+                  return DataRow(
+                    cells: [
+                      DataCell(Text(idx.toString())),
+                      DataCell(_buildTableDropdown(context, key)),
+                      DataCell(
+                        _buildTableTextField(context, taskControllers[key]!),
+                      ),
+                      DataCell(
+                        _buildTableTextField(
+                          context,
+                          descriptionControllers[key]!,
+                          width: 180.w,
+                          isLarge: true,
+                        ),
+                      ),
+                      DataCell(
+                        _buildTableTextField(
+                          context,
+                          expectedControllers[key]!,
+                          width: 60.w,
+                          suffix: l10n.hoursUnit,
+                        ),
+                      ),
+                      DataCell(
+                        _buildTableTextField(
+                          context,
+                          actualControllers[key]!,
+                          width: 60.w,
+                          suffix: l10n.hoursUnit,
+                        ),
+                      ),
+                      DataCell(
+                        TimesheetStatusBadge(status: a.status ?? l10n.pending),
+                      ),
+                      DataCell(
+                        Text(
+                          getEmployeeName(a.raisedBy, employees),
+                          style: AppTextStyle.bodySmall,
+                        ),
+                      ),
+                    ],
+                  );
                 }).toList(),
               ),
             ),
@@ -147,24 +204,31 @@ class EditTimesheetDaySection extends StatelessWidget {
     );
   }
 
-  Widget _buildTableDropdown(String key) {
+  Widget _buildTableDropdown(BuildContext context, String key) {
     return SizedBox(
-      width: 150,
+      width: 150.w,
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: selectedProjects[key],
           isExpanded: true,
           isDense: true,
-          style: AppTextStyle.bodySmall,
+          dropdownColor: AppColors.of(context).surfaceContainerHighest,
+          style: AppTextStyle.bodySmall.copyWith(
+            color: AppColors.of(context).textPrimary,
+          ),
           items: projects
-              .map((p) => DropdownMenuItem(
-                    value: p.name,
-                    child: Text(
-                      p.projectName,
-                      style: AppTextStyle.bodySmall,
-                      overflow: TextOverflow.ellipsis,
+              .map(
+                (p) => DropdownMenuItem(
+                  value: p.name,
+                  child: Text(
+                    p.projectName,
+                    style: AppTextStyle.bodySmall.copyWith(
+                      color: AppColors.of(context).textPrimary,
                     ),
-                  ))
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              )
               .toList(),
           onChanged: (val) => onProjectChanged(key, val),
         ),
@@ -183,19 +247,24 @@ class EditTimesheetDaySection extends StatelessWidget {
       width: width,
       child: TextField(
         controller: controller,
-        style: AppTextStyle.bodySmall,
+        style: AppTextStyle.bodySmall.copyWith(
+          color: AppColors.of(context).textPrimary,
+        ),
         maxLines: isLarge ? 3 : 1,
         minLines: 1,
         decoration: InputDecoration(
           isDense: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
+          contentPadding:       EdgeInsets.symmetric(
+            horizontal: 8.w,
+            vertical: 8.h,
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(6.r)),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(6.r),
             borderSide: BorderSide(color: AppColors.of(context).border),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(6.r),
             borderSide: BorderSide(color: AppColors.of(context).primary),
           ),
           suffixText: suffix,

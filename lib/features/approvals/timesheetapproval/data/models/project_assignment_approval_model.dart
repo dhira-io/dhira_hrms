@@ -6,7 +6,8 @@ part 'project_assignment_approval_model.freezed.dart';
 part 'project_assignment_approval_model.g.dart';
 
 @freezed
-abstract class ProjectAssignmentApprovalModel with _$ProjectAssignmentApprovalModel {
+abstract class ProjectAssignmentApprovalModel
+    with _$ProjectAssignmentApprovalModel {
   const factory ProjectAssignmentApprovalModel({
     @JsonKey(name: 'row_id') String? name,
     String? parent,
@@ -19,7 +20,8 @@ abstract class ProjectAssignmentApprovalModel with _$ProjectAssignmentApprovalMo
     @JsonKey(name: 'raised_by') String? raisedBy,
     int? completed,
     int? approved,
-    @JsonKey(name: 'applicable_for_compensatory_off') int? applicableForCompensatoryOff,
+    @JsonKey(name: 'applicable_for_compensatory_off')
+    int? applicableForCompensatoryOff,
     String? status,
     @JsonKey(name: 'docstatus') int? docStatus,
     @JsonKey(name: 'task_data') String? taskData,
@@ -27,9 +29,12 @@ abstract class ProjectAssignmentApprovalModel with _$ProjectAssignmentApprovalMo
 
   const ProjectAssignmentApprovalModel._();
 
-  factory ProjectAssignmentApprovalModel.fromJson(Map<String, dynamic> json) => _$ProjectAssignmentApprovalModelFromJson(json);
+  factory ProjectAssignmentApprovalModel.fromJson(Map<String, dynamic> json) =>
+      _$ProjectAssignmentApprovalModelFromJson(json);
 
-  static ProjectAssignmentApprovalModel fromEntity(ProjectAssignmentEntity entity) {
+  static ProjectAssignmentApprovalModel fromEntity(
+    ProjectAssignmentEntity entity,
+  ) {
     return ProjectAssignmentApprovalModel(
       name: entity.name,
       parent: entity.parent,

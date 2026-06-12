@@ -19,7 +19,7 @@ class FileValidationUtils {
     'pptx',
     'jpg',
     'png',
-    'jpeg'
+    'jpeg',
   ];
 
   /// Validates a file's size and extension.

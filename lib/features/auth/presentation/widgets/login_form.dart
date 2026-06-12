@@ -1,11 +1,22 @@
+import 'package:dhira_hrms/core/constants/app_assets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/routing/app_router.dart';
+import 'package:dhira_hrms/core/services/local_storage_service.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/login_cubit.dart';
+import 'package:dhira_hrms/features/auth/presentation/bloc/sso_cubit.dart';
+import 'package:dhira_hrms/features/settings/data/constants/webview_urls.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/constants/app_assets.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../bloc/login_cubit.dart';
-import '../bloc/sso_cubit.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
+/// Customized premium login form with rich visual components and styles.
 class LoginForm extends StatefulWidget {
   final VoidCallback? onForgotPasswordTap;
   final VoidCallback? onMicrosoftTap;
@@ -18,25 +29,101 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
+
   late TextEditingController emailController;
   late TextEditingController passwordController;
+  late FocusNode emailFocusNode;
+  late FocusNode passwordFocusNode;
+
+  late TapGestureRecognizer _termsRecognizer;
+  late TapGestureRecognizer _privacyRecognizer;
+
   bool _isPasswordVisible = false;
+  bool _rememberMe = false;
+  bool _hasSubmitted = false;
 
   @override
   void initState() {
     super.initState();
+
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    emailFocusNode = FocusNode();
+    passwordFocusNode = FocusNode();
+
+    _termsRecognizer = TapGestureRecognizer()..onTap = _openTerms;
+
+    _privacyRecognizer = TapGestureRecognizer()..onTap = _openPrivacy;
+
+    _loadRememberMeCredentials();
+  }
+
+  void _loadRememberMeCredentials() {
+    final storage = Get.find<LocalStorageService>();
+    final isRemembered = storage.getRememberMe();
+    if (isRemembered) {
+      final savedEmail = storage.getRememberMeEmail();
+      final savedPassword = storage.getRememberMePassword();
+      if (savedEmail != null) emailController.text = savedEmail;
+      if (savedPassword != null) passwordController.text = savedPassword;
+      setState(() {
+        _rememberMe = true;
+      });
+    }
+  }
+
+  void _handleRememberMe() {
+    final storage = Get.find<LocalStorageService>();
+    if (_rememberMe) {
+      storage.saveRememberMeCredentials(
+        emailController.text.trim(),
+        passwordController.text,
+      );
+    } else {
+      storage.clearRememberMeCredentials();
+    }
+  }
+
+  void _openTerms() {
+    final l10n = AppLocalizations.of(context)!;
+
+    context.push(
+      AppRouter.commonWebViewPath,
+      extra: {
+        'url': SettingsWebViewUrls.termsAndConditions,
+        'title': l10n.termsOfService,
+      },
+    );
+  }
+
+  void _openPrivacy() {
+    final l10n = AppLocalizations.of(context)!;
+
+    context.push(
+      AppRouter.commonWebViewPath,
+      extra: {
+        'url': SettingsWebViewUrls.privacyAndSecurity,
+        'title': l10n.dataProcessingAgreement,
+      },
+    );
   }
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+
+    _termsRecognizer.dispose();
+    _privacyRecognizer.dispose();
+
     super.dispose();
   }
 
   void _submit() {
+    FocusScope.of(context).unfocus();
+    setState(() => _hasSubmitted = true);
     if (_formKey.currentState?.validate() ?? false) {
       context.read<LoginCubit>().login(
         emailController.text.trim(),
@@ -47,245 +134,334 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return BlocBuilder<LoginCubit, LoginState>(
+    final colors = AppColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return BlocConsumer<LoginCubit, LoginState>(
+      listener: (context, loginState) {
+        loginState.whenOrNull(success: (_) => _handleRememberMe());
+      },
       builder: (context, loginState) {
-        final l10n = AppLocalizations.of(context)!;
         return BlocBuilder<SSOCubit, SSOState>(
           builder: (context, ssoState) {
-            final isLoading =
-                loginState.maybeWhen(
-                  loading: () => true,
-                  orElse: () => false,
-                ) ||
-                ssoState.maybeWhen(loading: () => true, orElse: () => false);
-
-            final error = loginState.maybeWhen(
-              error: (msg) => msg,
-              orElse: () =>
-                  ssoState.maybeWhen(error: (msg) => msg, orElse: () => null),
+            final isLoginLoading = loginState.maybeWhen(
+              loading: () => true,
+              orElse: () => false,
             );
+            final isSSOLoading = ssoState.maybeWhen(
+              loading: () => true,
+              orElse: () => false,
+            );
+            final isLoading = isLoginLoading || isSSOLoading;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                isDark
-                    ? ColorFiltered(
-                        colorFilter: const ColorFilter.mode(
-                          Colors.white,
-                          BlendMode.srcIn,
-                        ),
-                        child: Image.asset(AppAssets.logo, height: 37),
-                      )
-                    : Image.asset(AppAssets.logo, height: 37),
-                const SizedBox(height: 10),
-                Divider(color: AppColors.of(context).bordergrey),
-                const SizedBox(height: 20),
-
-                Text(
-                  l10n.signIn,
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Poppins',
+            return Form(
+              key: _formKey,
+              autovalidateMode: _hasSubmitted
+                  ? AutovalidateMode.onUserInteraction
+                  : AutovalidateMode.disabled,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// Email Label
+                  Text(
+                    l10n.email,
+                    style: AppTextStyle.loginLabel.copyWith(
+                      color: colors.textPrimary,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 56),
 
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                        SizedBox(height: 8.h),
+
+                  /// Email Field
+                  TextFormField(
+                    controller: emailController,
+                    focusNode: emailFocusNode,
+                    keyboardType: TextInputType.emailAddress,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      color: colors.textPrimary,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: l10n.enterEmail,
+                      hintStyle: AppTextStyle.bodyMedium.copyWith(
+                        color: colors.gray400,
+                      ),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      contentPadding:       EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 10.h,
+                      ),
+                      filled: true,
+                      fillColor: colors.surfaceContainerLowest,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                        borderSide: BorderSide(
+                          color: colors.gray400,
+                          width: 1.w,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                        borderSide: BorderSide(
+                          color: colors.gray400,
+                          width: 1.w,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                        borderSide: BorderSide(
+                          color: colors.primaryContainer,
+                          width: 1.5.w,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return l10n.emailRequired;
+                      }
+
+                      if (!value.contains('@')) {
+                        return l10n.enterValidEmail;
+                      }
+
+                      return null;
+                    },
+                  ),
+
+                        SizedBox(height: 20.h),
+
+                  /// Password Label
+                  Text(
+                    l10n.password,
+                    style: AppTextStyle.loginLabel.copyWith(
+                      color: colors.textPrimary,
+                    ),
+                  ),
+
+                        SizedBox(height: 8.h),
+
+                  /// Password Field
+                  TextFormField(
+                    controller: passwordController,
+                    focusNode: passwordFocusNode,
+                    obscureText: !_isPasswordVisible,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      color: colors.textPrimary,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: '••••••••',
+                      hintStyle: AppTextStyle.bodyMedium.copyWith(
+                        color: colors.gray400,
+                      ),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      contentPadding:       EdgeInsets.symmetric(
+                        horizontal: 14.w,
+                        vertical: 11.h,
+                      ),
+                      filled: true,
+                      fillColor: colors.surfaceContainerLowest,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: BorderSide(
+                          color: colors.gray400,
+                          width: 1.w,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: BorderSide(
+                          color: colors.gray400,
+                          width: 1.w,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: BorderSide(
+                          color: colors.primaryContainer,
+                          width: 1.5.w,
+                        ),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: colors.gray400,
+                          size: 20,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return l10n.passwordRequired;
+                      }
+
+                      if (value.length < 4) {
+                        return l10n.passwordTooShort;
+                      }
+
+                      return null;
+                    },
+                  ),
+
+                        SizedBox(height: 16.h),
+
+                  /// Remember Me + Forgot Password
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(l10n.emailAddress),
-                      const SizedBox(height: 8),
-
-                      TextFormField(
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(color: AppColors.of(context).onSurface),
-                        decoration: InputDecoration(
-                          labelText: l10n.emailAddress,
-                          hintText: l10n.emailAddress,
-                          hintStyle: TextStyle(color: AppColors.of(context).onSurfaceVariant),
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.of(context).border),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.of(context).border),
-                          ),
-                          filled: true,
-                          fillColor: isDark ? AppColors.of(context).surfaceContainerLow : Colors.grey.shade100,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return l10n.emailRequired;
-                          }
-                          if (!value.contains('@')) {
-                            return l10n.enterValidEmail;
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-
-                      Text(l10n.password),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: passwordController,
-                        obscureText: !_isPasswordVisible,
-                        style: TextStyle(color: AppColors.of(context).onSurface),
-                        decoration: InputDecoration(
-                          labelText: l10n.password,
-                          hintText: '••••••••',
-                          hintStyle: TextStyle(color: AppColors.of(context).onSurfaceVariant),
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.of(context).border),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppColors.of(context).border),
-                          ),
-                          filled: true,
-                          fillColor: isDark ? AppColors.of(context).surfaceContainerLow : Colors.grey.shade100,
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _isPasswordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: AppColors.of(context).onSurfaceVariant,
-                            ),
-                            onPressed: () => setState(
-                              () => _isPasswordVisible = !_isPasswordVisible,
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 24.w,
+                            height: 24.h,
+                            child: Checkbox(
+                              value: _rememberMe,
+                              onChanged: (val) {
+                                FocusScope.of(context).unfocus();
+                                setState(() {
+                                  _rememberMe = val ?? false;
+                                });
+                              },
+                              activeColor: colors.primaryContainer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                              side: BorderSide(
+                                color: colors.gray400,
+                                width: 1.5.w,
+                              ),
                             ),
                           ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return l10n.passwordRequired;
-                          }
-                          if (value.length < 4) {
-                            return l10n.passwordTooShort;
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 8),
 
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: widget.onForgotPasswordTap,
-                          child: Text(
-                            l10n.forgotPassword,
-                            style: TextStyle(
-                              color: AppColors.of(context).primaryBlue,
-                              fontSize: 14,
+                                SizedBox(width: 8.w),
+
+                          Text(
+                            l10n.rememberMe,
+                            style: AppTextStyle.bodySmall.copyWith(
+                              color: colors.textSecondary,
                               fontWeight: FontWeight.w500,
                             ),
+                          ),
+                        ],
+                      ),
+
+                      GestureDetector(
+                        onTap: () {
+                          emailFocusNode.unfocus();
+                          passwordFocusNode.unfocus();
+                          FocusScope.of(context).unfocus();
+                          widget.onForgotPasswordTap?.call();
+                        },
+                        child: Text(
+                          l10n.forgotPassword,
+                          style: AppTextStyle.loginForgotPassword.copyWith(
+                            color: colors.primaryContainer,
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 30),
 
+                        SizedBox(height: 32.h),
 
+                  /// Login Button
+                  CommonButton(
+                    text: l10n.signIn,
+                    onPressed: _submit,
+                    isLoading: isLoginLoading,
+                    width: double.infinity,
+                  ),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.of(context).primaryBlue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                        SizedBox(height: 24.h),
+
+                  /// Divider
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(color: colors.border, thickness: 1),
                       ),
-                    ),
-                    onPressed: isLoading ? null : _submit,
-                    child: isLoading
-                        ? SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
+                      Padding(
+                        padding:       EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Text(
+                          l10n.orLoginWith,
+                          style: AppTextStyle.loginOrWith.copyWith(
+                            color: colors.gray400,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(color: colors.border, thickness: 1),
+                      ),
+                    ],
+                  ),
+
+                        SizedBox(height: 24.h),
+
+                  /// Microsoft Login
+                  CommonButton(
+                    text: l10n.loginWithOffice365,
+                    variant: ButtonVariant.outlined,
+                    customIcon: Image.asset(AppAssets.microsoftLogo, height: 20.h),
+                    width: double.infinity,
+                    isLoading: isSSOLoading,
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      context.read<SSOCubit>().initiateMicrosoftSSO();
+                    },
+                  ),
+
+                        SizedBox(height: 48.h),
+
+                  /// Terms & Privacy
+                  Center(
+                    child: Padding(
+                      padding:       EdgeInsets.symmetric(horizontal: 16.w),
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          style: AppTextStyle.bodySmall.copyWith(
+                            color: colors.gray400,
+                            fontSize: 12.sp,
+                            height: 1.4.h,
+                          ),
+                          children: [
+                            TextSpan(text: l10n.bySigningUpAgree),
+
+                            TextSpan(
+                              text: l10n.termsOfService,
+                              recognizer: _termsRecognizer,
+                              style: AppTextStyle.bodySmall.copyWith(
+                                color: colors.primaryContainer,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12.sp,
+                                decoration: TextDecoration.underline,
                               ),
-                              strokeWidth: 2,
                             ),
-                          )
-                        : Text(
-                            l10n.signIn,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                  ),
-                ),
 
-                 Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Divider(color: AppColors.of(context).bordergrey),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Center(
-                    child: Text(
-                      l10n.or,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                            TextSpan(text: l10n.andText),
+
+                            TextSpan(
+                              text: l10n.dataProcessingAgreement,
+                              recognizer: _privacyRecognizer,
+                              style: AppTextStyle.bodySmall.copyWith(
+                                color: colors.primaryContainer,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12.sp,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-
-                InkWell(
-                  onTap: isLoading
-                      ? null
-                      : () {
-                          context.read<SSOCubit>().initiateMicrosoftSSO();
-                        },
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.of(context).bordergrey),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          l10n.loginWith,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Image.asset(AppAssets.microsoftLogo, scale: 2),
-                        const SizedBox(width: 4),
-                        Text(
-                          l10n.office365,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         );

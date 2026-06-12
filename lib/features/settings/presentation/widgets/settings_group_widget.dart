@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 
@@ -18,7 +19,11 @@ class SettingsGroupWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 12.0),
+          padding:       EdgeInsets.only(
+            left: 8.0.w,
+            right: 8.0.w,
+            bottom: 12.0.h,
+          ),
           child: Text(
             title.toUpperCase(),
             style: AppTextStyle.labelSmall.copyWith(
@@ -31,7 +36,7 @@ class SettingsGroupWidget extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: AppColors.of(context).surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             boxShadow: [
               BoxShadow(
                 color: AppColors.of(context).onSurface.withValues(alpha: 0.02),
@@ -41,9 +46,7 @@ class SettingsGroupWidget extends StatelessWidget {
             ],
           ),
           clipBehavior: Clip.antiAlias,
-          child: Column(
-            children: items,
-          ),
+          child: Column(children: items),
         ),
       ],
     );

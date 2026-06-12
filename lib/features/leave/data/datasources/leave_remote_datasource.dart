@@ -38,7 +38,11 @@ abstract class LeaveRemoteDataSource {
     String? workflowState,
     String? attachmentUrl,
   });
-  Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender);
+  Future<LeaveBalanceModel> getLeaveBalance(
+    String employeeId,
+    String todayDate,
+    String gender,
+  );
   Future<LeaveStatisticsModel> getLeaveStatistics({
     required String employeeId,
     required String fromDate,
@@ -100,7 +104,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
         "custom_half_details": halfDaySegment,
         "half_day_segment": halfDaySegment,
         "total_leave_days": totalleavedays,
-        "custom_attach_document": attachmentUrl
+        "custom_attach_document": attachmentUrl,
       },
     );
 
@@ -156,7 +160,6 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       "custom_attach_document": attachmentUrl,
     };
 
-
     final response = await dioClient.post(
       LeaveApiConstants.updateLeave,
       data: data,
@@ -185,12 +188,14 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   }
 
   @override
-  Future<LeaveBalanceModel> getLeaveBalance(String employeeId, String todayDate, String gender) async {
+  Future<LeaveBalanceModel> getLeaveBalance(
+    String employeeId,
+    String todayDate,
+    String gender,
+  ) async {
     final response = await dioClient.post(
       LeaveApiConstants.getEmployeeLeaveData,
-      data: {
-        "employee_id": employeeId,
-      },
+      data: {"employee_id": employeeId},
     );
 
     final message = response.data['message'];
@@ -213,9 +218,11 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       // Apply Gender Filter
       // Male: Hide Maternity, Female: Hide Paternity
       bool shouldInclude = true;
-      if (gender.toLowerCase() == 'male' && leaveTypeName.contains(LeaveTypes.maternityLeave)) {
+      if (gender.toLowerCase() == 'male' &&
+          leaveTypeName.contains(LeaveTypes.maternityLeave)) {
         shouldInclude = false;
-      } else if (gender.toLowerCase() == 'female' && leaveTypeName.contains(LeaveTypes.paternityLeave)) {
+      } else if (gender.toLowerCase() == 'female' &&
+          leaveTypeName.contains(LeaveTypes.paternityLeave)) {
         shouldInclude = false;
       }
 
@@ -230,20 +237,26 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
         pendingSum += pending;
         availableSum += available;
 
-        details.add(DetailedBalanceModel(
-          leaveType: leaveTypeName,
-          allocated: allocated.toDouble(),
-          used: used.toDouble(),
-          pending: pending.toDouble(),
-          available: available.toDouble(),
-        ));
+        details.add(
+          DetailedBalanceModel(
+            leaveType: leaveTypeName,
+            allocated: allocated.toDouble(),
+            used: used.toDouble(),
+            pending: pending.toDouble(),
+            available: available.toDouble(),
+          ),
+        );
       }
     }
 
     // Use calculated sums or fallback to summary if available and sums are zero
     // This ensures robustness across different API response versions
-    final finalTotalAllocated = totalAllocatedSum > 0 ? totalAllocatedSum : _parseNum(summary['total_allocated']);
-    final finalTotalAvailable = availableSum > 0 ? availableSum : _parseNum(summary['total_available']);
+    final finalTotalAllocated = totalAllocatedSum > 0
+        ? totalAllocatedSum
+        : _parseNum(summary['total_allocated']);
+    final finalTotalAvailable = availableSum > 0
+        ? availableSum
+        : _parseNum(summary['total_available']);
 
     return LeaveBalanceModel(
       totalAllocated: finalTotalAllocated,
@@ -256,7 +269,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       details: details,
     );
   }
-  
+
   @override
   Future<LeaveStatisticsModel> getLeaveStatistics({
     required String employeeId,
@@ -270,9 +283,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
         "from_date": fromDate,
         "to_date": toDate,
       },
-      options: Options(
-        headers: {"Accept": "application/json"},
-      ),
+      options: Options(headers: {"Accept": "application/json"}),
     );
 
     if (response.data['message'] != null) {
@@ -297,7 +308,8 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       },
     );
 
-    if (response.data['message'] != null && response.data['message']['success'] == true) {
+    if (response.data['message'] != null &&
+        response.data['message']['success'] == true) {
       final List data = response.data['message']['data'] ?? [];
       return data.map((e) => OverlapLeaveModel.fromJson(e)).toList();
     }
@@ -328,9 +340,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     final response = await dioClient.post(
       LeaveApiConstants.uploadFile,
       data: formData,
-      options: Options(
-        contentType: "multipart/form-data",
-      ),
+      options: Options(contentType: "multipart/form-data"),
     );
 
     if (response.data['message'] != null) {

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../data/constants/notification_constants.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../../domain/usecases/get_notifications_usecase.dart';
@@ -6,6 +7,19 @@ import '../../domain/usecases/mark_all_read_usecase.dart';
 import '../../domain/usecases/mark_read_usecase.dart';
 import 'notification_event.dart';
 import 'notification_state.dart';
+
+extension NotificationBlocX on NotificationBloc {
+  void maybeAddLoad(AuthState authState) {
+    authState.maybeWhen(
+      authenticated: (_) {
+        if (state is! NotificationLoading && state is! NotificationLoaded) {
+          add(const NotificationEvent.load());
+        }
+      },
+      orElse: () {},
+    );
+  }
+}
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final GetNotificationsUseCase getNotificationsUseCase;
@@ -122,15 +136,20 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       result.fold(
         (failure) => emit(currentState.copyWith(isFetchingMore: false)),
         (newNotifications) {
-          final existingIds = currentState.notifications.map((n) => n.id).toSet();
-          final uniqueNewItems = newNotifications.where((n) => !existingIds.contains(n.id)).toList();
-          
+          final existingIds = currentState.notifications
+              .map((n) => n.id)
+              .toSet();
+          final uniqueNewItems = newNotifications
+              .where((n) => !existingIds.contains(n.id))
+              .toList();
+
           final updatedNotifications = List<NotificationEntity>.from(
             currentState.notifications,
           )..addAll(uniqueNewItems);
 
           final grouped = _groupNotifications(updatedNotifications);
-          final hasMore = newNotifications.length == _pageSize && uniqueNewItems.isNotEmpty;
+          final hasMore =
+              newNotifications.length == _pageSize && uniqueNewItems.isNotEmpty;
 
           emit(
             currentState.copyWith(
@@ -154,19 +173,32 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     final currentState = state;
     if (currentState is NotificationLoaded) {
       emit(currentState.copyWith(isMarkingAllRead: true));
-    }
 
-    final result = await markAllReadUseCase();
-    
-    final finalState = state;
-    result.fold(
-      (failure) {
-        if (finalState is NotificationLoaded) {
-          emit(finalState.copyWith(isMarkingAllRead: false));
-        }
-      },
-      (_) => add(const NotificationEvent.load(isRefresh: true)),
-    );
+      final result = await markAllReadUseCase();
+      result.fold(
+        (failure) => emit(currentState.copyWith(isMarkingAllRead: false)),
+        (_) {
+          final updatedNotifications = currentState.notifications.map((n) {
+            return n.copyWith(isRead: true);
+          }).toList();
+
+          final updatedGrouped = currentState.groupedNotifications.map((key, list) {
+            return MapEntry(
+              key,
+              list.map((n) => n.copyWith(isRead: true)).toList(),
+            );
+          });
+
+          emit(
+            currentState.copyWith(
+              notifications: updatedNotifications,
+              groupedNotifications: updatedGrouped,
+              isMarkingAllRead: false,
+            ),
+          );
+        },
+      );
+    }
   }
 
   _GroupedData _groupNotifications(List<NotificationEntity> notifications) {

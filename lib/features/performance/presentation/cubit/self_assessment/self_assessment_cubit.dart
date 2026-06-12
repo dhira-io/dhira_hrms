@@ -52,7 +52,7 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     String selfAssessmentId = AppConstants.emptyString,
     String evaluationId = AppConstants.emptyString,
   }) async {
-    emit(state.copyWith(status: SelfAssessmentStatus.loading));
+    emit(const SelfAssessmentState(status: SelfAssessmentStatus.loading));
 
     if (selfAssessmentId.isNotEmpty || evaluationId.isNotEmpty) {
       await fetchSelfAssessment(selfAssessmentId, evaluationId);
@@ -77,10 +77,10 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         if (isClosed) return;
         emit(
           state.copyWith(
-          status: SelfAssessmentStatus.failure,
-          errorMessage: PerformanceErrorUtils.pageErrorMessage(failure),
-        ),
-      );
+            status: SelfAssessmentStatus.failure,
+            errorMessage: PerformanceErrorUtils.pageErrorMessage(failure),
+          ),
+        );
       },
       (saId) async {
         if (saId == null) {
@@ -105,9 +105,18 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       emit(state.copyWith(status: SelfAssessmentStatus.loading));
     }
 
+    final isEvaluation =
+        evaluationId.isNotEmpty || selfAssessmentId.startsWith('EVAL-');
+
     final results = await Future.wait([
       getSelfAssessmentDetailsUseCase(selfAssessmentId, evaluationId),
-      getSaTrackingUseCase(selfAssessmentId),
+      isEvaluation
+          ? Future.value(
+              const Right<Failure, SaTrackingEntity>(
+                SaTrackingEntity(name: '', sessions: [], questions: []),
+              ),
+            )
+          : getSaTrackingUseCase(selfAssessmentId),
     ]);
 
     final assessmentResult =
@@ -146,6 +155,30 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
         );
       },
     );
+
+    final details = assessmentResult.fold((_) => null, (d) => d);
+    final tracking = trackingResult.fold((_) => null, (t) => t);
+    if (details != null &&
+        tracking != null &&
+        tracking.sessions.isNotEmpty &&
+        !isEvaluation) {
+      final sessionsPayload = tracking.sessions.map((s) {
+        final map = <String, dynamic>{
+          'session': s.session,
+          'session_start': s.sessionStart,
+          'session_end': s.sessionEnd,
+          'completed_tasks': s.completedTasks,
+        };
+        if (s.name.isNotEmpty) {
+          map['name'] = s.name;
+        }
+        return map;
+      }).toList();
+
+      await updateSaTrackingUseCase(details.name, {
+        'sessions': sessionsPayload,
+      }).catchError((_) => const Right<Failure, void>(null));
+    }
   }
 
   Map<String, List<GoalReviewEntity>> _groupGoals(
@@ -175,24 +208,29 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     final details = state.details;
     if (details == null) return;
 
-    for (var goal in details.goalReviews) {
-      final hasRating = goal.selfRating.isNotEmpty;
-      final hasComment = goal.selfComment.isNotEmpty;
-      if ((hasRating && !hasComment) || (!hasRating && hasComment)) {
-        emit(
-          state.copyWith(
-            actionStatus: SelfAssessmentActionStatus.failure,
-            actionErrorMessage:
-                PerformanceApiKeys.incompleteSelfAssessmentAnswer,
-          ),
-        );
-        return;
+    final isEvaluation = details.name.startsWith('EVAL-');
+
+    if (!isEvaluation) {
+      for (var goal in details.goalReviews) {
+        final hasRating = goal.selfRating.isNotEmpty;
+        final hasComment = goal.selfComment.isNotEmpty;
+        if ((hasRating && !hasComment) || (!hasRating && hasComment)) {
+          emit(
+            state.copyWith(
+              actionStatus: SelfAssessmentActionStatus.failure,
+              actionErrorMessage:
+                  PerformanceApiKeys.incompleteSelfAssessmentAnswer,
+            ),
+          );
+          return;
+        }
       }
     }
 
     final payload = SelfAssessmentPayloadMapper.updatePayload(
       details: details,
       isSubmit: isSubmit,
+      isEvaluation: isEvaluation,
     );
 
     if (isSubmit) {
@@ -201,7 +239,9 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       emit(state.copyWith(actionStatus: SelfAssessmentActionStatus.saving));
     }
 
-    final result = await updateSelfAssessmentUseCase(details.name, payload);
+    final result = isEvaluation
+        ? await updateEvaluationUseCase(details.name, payload)
+        : await updateSelfAssessmentUseCase(details.name, payload);
 
     await result.fold(
       (failure) async {
@@ -216,37 +256,41 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
       (_) async {
         if (isClosed) return;
 
-        // Push tracking updates to the backend
-        if (state.tracking != null && state.tracking!.sessions.isNotEmpty) {
-          final questionsPayload = state.tracking!.questions.map((q) {
-            final map = <String, dynamic>{
-              'key': q.key,
-              'question': q.question,
-              'rating': q.rating,
-              'session': q.session,
-              'last_modified': q.lastModified,
-            };
-            if (q.name.isNotEmpty) {
-              map['name'] = q.name;
+        SaTrackingEntity? updatedTracking = state.tracking;
+
+        if (!isEvaluation) {
+          // Push tracking updates to the backend
+          if (state.tracking != null && state.tracking!.sessions.isNotEmpty) {
+            final questionsPayload = state.tracking!.questions.map((q) {
+              final map = <String, dynamic>{
+                'key': q.key,
+                'question': q.question,
+                'rating': q.rating,
+                'session': q.session,
+                'last_modified': q.lastModified,
+              };
+              if (q.name.isNotEmpty) {
+                map['name'] = q.name;
+              }
+              return map;
+            }).toList();
+
+            if (questionsPayload.isNotEmpty) {
+              final trackingPayload = {'questions': questionsPayload};
+              await updateSaTrackingUseCase(
+                details.name,
+                trackingPayload,
+              ).catchError((_) => const Right<Failure, void>(null));
             }
-            return map;
-          }).toList();
-
-          if (questionsPayload.isNotEmpty) {
-            final trackingPayload = {'questions': questionsPayload};
-            await updateSaTrackingUseCase(
-              details.name,
-              trackingPayload,
-            ).catchError((_) => const Right<Failure, void>(null));
           }
-        }
 
-        // Fetch updated tracking data after a successful save
-        final trackingResult = await getSaTrackingUseCase(details.name);
-        final updatedTracking = trackingResult.fold(
-          (_) => state.tracking,
-          (t) => t,
-        );
+          // Fetch updated tracking data after a successful save
+          final trackingResult = await getSaTrackingUseCase(details.name);
+          updatedTracking = trackingResult.fold(
+            (_) => state.tracking,
+            (t) => t,
+          );
+        }
 
         if (isClosed) return;
 
@@ -359,8 +403,9 @@ class SelfAssessmentCubit extends Cubit<SelfAssessmentState> {
     String finalRating = selfRating ?? goal.selfRating;
     double finalProgress = progress ?? goal.progress;
 
-    final int ratingInt =
-        SelfAssessmentRatingPolicy.parseRating(finalRating).toInt();
+    final int ratingInt = SelfAssessmentRatingPolicy.parseRating(
+      finalRating,
+    ).toInt();
     final values = SelfAssessmentRatingPolicy.progressValues(ratingInt);
     final double minVal = values.first;
     final double maxVal = values.last;

@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
@@ -48,14 +49,11 @@ class ApprovalsListContent {
 
     return [
       SliverPadding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
+        padding:       EdgeInsets.only(left: 16.w, right: 16.w),
         sliver: SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return ApprovalCard(data: requests[index]);
-            },
-            childCount: requests.length,
-          ),
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return ApprovalCard(data: requests[index]);
+          }, childCount: requests.length),
         ),
       ),
       if (isLoadMoreLoading)

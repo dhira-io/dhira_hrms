@@ -15,9 +15,9 @@ class DashboardStatsEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        daysPresent,
-        leaveBalance,
-        nextHoliday,
-        nextHolidayDate,
-      ];
+    daysPresent,
+    leaveBalance,
+    nextHoliday,
+    nextHolidayDate,
+  ];
 }

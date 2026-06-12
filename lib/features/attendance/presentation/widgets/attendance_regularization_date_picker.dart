@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -37,7 +38,7 @@ class RegularizationDatePicker extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 12),
+              SizedBox(height: 12.h),
         InkWell(
           onTap: () async {
             final date = await showDatePicker(

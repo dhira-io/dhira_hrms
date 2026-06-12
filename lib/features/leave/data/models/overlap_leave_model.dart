@@ -22,7 +22,8 @@ abstract class OverlapLeaveModel with _$OverlapLeaveModel {
 
   const OverlapLeaveModel._();
 
-  factory OverlapLeaveModel.fromJson(Map<String, dynamic> json) => _$OverlapLeaveModelFromJson(json);
+  factory OverlapLeaveModel.fromJson(Map<String, dynamic> json) =>
+      _$OverlapLeaveModelFromJson(json);
 
   OverlapLeaveEntity toEntity() {
     return OverlapLeaveEntity(
@@ -53,5 +54,6 @@ abstract class OverlapEmployeeModel with _$OverlapEmployeeModel {
     String? department,
   }) = _OverlapEmployeeModel;
 
-  factory OverlapEmployeeModel.fromJson(Map<String, dynamic> json) => _$OverlapEmployeeModelFromJson(json);
+  factory OverlapEmployeeModel.fromJson(Map<String, dynamic> json) =>
+      _$OverlapEmployeeModelFromJson(json);
 }

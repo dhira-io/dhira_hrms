@@ -17,13 +17,13 @@ class ShimmerLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.surfaceContainerHigh,
-      highlightColor: AppColors.surfaceContainerLowest,
+      baseColor: AppColors.of(context).surfaceContainerHigh,
+      highlightColor: AppColors.of(context).surfaceContainerLowest,
       child: Container(
         height: height,
         width: width,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: AppColors.of(context).white,
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),

@@ -35,13 +35,17 @@ class LeaveReasonField extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
               borderSide: BorderSide(
-                color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+                color: AppColors.of(
+                  context,
+                ).outlineVariant.withValues(alpha: 0.5),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
               borderSide: BorderSide(
-                color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+                color: AppColors.of(
+                  context,
+                ).outlineVariant.withValues(alpha: 0.5),
               ),
             ),
             focusedBorder: OutlineInputBorder(

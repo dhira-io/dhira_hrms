@@ -9,7 +9,8 @@ part 'forgot_password_cubit.freezed.dart';
 class ForgotPasswordState with _$ForgotPasswordState {
   const factory ForgotPasswordState.initial() = ForgotPasswordInitial;
   const factory ForgotPasswordState.loading() = ForgotPasswordLoading;
-  const factory ForgotPasswordState.success(String message) = ForgotPasswordSuccess;
+  const factory ForgotPasswordState.success(String message) =
+      ForgotPasswordSuccess;
   const factory ForgotPasswordState.error(String message) = ForgotPasswordError;
 }
 
@@ -17,7 +18,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final ForgotPasswordUseCase forgotPasswordUseCase;
 
   ForgotPasswordCubit({required this.forgotPasswordUseCase})
-      : super(const ForgotPasswordState.initial());
+    : super(const ForgotPasswordState.initial());
 
   Future<void> requestForgotPassword(String email) async {
     emit(const ForgotPasswordState.loading());

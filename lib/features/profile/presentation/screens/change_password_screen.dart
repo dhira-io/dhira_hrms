@@ -1,4 +1,6 @@
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
@@ -13,22 +15,23 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocProvider.value(
       value: Get.find<ProfileBloc>(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Change Password')),
+        appBar: AppBar(title: Text(l10n.changePassword)),
         body: BlocListener<ProfileBloc, ProfileState>(
           listener: (context, state) {
             state.whenOrNull(
-              success: (message) {
+              success: (message, _, _) {
                 ToastUtils.showSuccess(message);
                 context.go(AppRouter.loginPath);
               },
-              error: (message) => ToastUtils.showError(message),
+              error: (message, _, _) => ToastUtils.showError(message),
             );
           },
-          child: const SingleChildScrollView(
-            padding: EdgeInsets.all(24),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(24.w),
             child: ChangePasswordForm(),
           ),
         ),

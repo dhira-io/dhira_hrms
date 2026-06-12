@@ -22,7 +22,8 @@ class AttendanceMonthSummaryModel extends AttendanceMonthSummaryEntity {
       weekendDays: (json['weekend_days'] as num).toInt(),
       totalWorkingDays: (json['total_working_days'] as num).toInt(),
       attendancePercentage: (json['attendance_percentage'] as num).toDouble(),
-      holidayDetails: (json['holiday_details'] as List?)
+      holidayDetails:
+          (json['holiday_details'] as List?)
               ?.map((e) => HolidayDetailModel.fromJson(e))
               .toList() ??
           [],
@@ -38,17 +39,15 @@ class AttendanceMonthSummaryModel extends AttendanceMonthSummaryEntity {
       'weekend_days': weekendDays,
       'total_working_days': totalWorkingDays,
       'attendance_percentage': attendancePercentage,
-      'holiday_details':
-          holidayDetails.map((e) => (e as HolidayDetailModel).toJson()).toList(),
+      'holiday_details': holidayDetails
+          .map((e) => (e as HolidayDetailModel).toJson())
+          .toList(),
     };
   }
 }
 
 class HolidayDetailModel extends HolidayDetailEntity {
-  const HolidayDetailModel({
-    required super.date,
-    required super.name,
-  });
+  const HolidayDetailModel({required super.date, required super.name});
 
   factory HolidayDetailModel.fromJson(Map<String, dynamic> json) {
     return HolidayDetailModel(
@@ -58,9 +57,6 @@ class HolidayDetailModel extends HolidayDetailEntity {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'date': date,
-      'name': name,
-    };
+    return {'date': date, 'name': name};
   }
 }

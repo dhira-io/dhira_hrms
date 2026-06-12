@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -26,7 +27,8 @@ class LeaveBalanceOverviewCard extends StatefulWidget {
   });
 
   @override
-  State<LeaveBalanceOverviewCard> createState() => _LeaveBalanceOverviewCardState();
+  State<LeaveBalanceOverviewCard> createState() =>
+      _LeaveBalanceOverviewCardState();
 }
 
 class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
@@ -44,11 +46,13 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
         if (state.balanceError != null) {
           return GenericErrorWidget(
             onRetry: () {
-              context.read<LeaveBloc>().add(LeaveEvent.balanceRequested(
-                    employeeId: widget.employeeId,
-                    todayDate: DateTimeUtils.todayDate(),
-                    gender: widget.gender,
-                  ));
+              context.read<LeaveBloc>().add(
+                LeaveEvent.balanceRequested(
+                  employeeId: widget.employeeId,
+                  todayDate: DateTimeUtils.todayDate(),
+                  gender: widget.gender,
+                ),
+              );
             },
             message: state.balanceError,
           );
@@ -60,7 +64,10 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
 
         final l10n = AppLocalizations.of(context)!;
         final details = state.balance.details;
-        final double totalAvailable = details.fold(0.0, (sum, item) => sum + item.available);
+        final double totalAvailable = details.fold(
+          0.0,
+          (sum, item) => sum + item.available,
+        );
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
@@ -68,7 +75,9 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
           decoration: BoxDecoration(
             color: AppColors.of(context).earnedTrack.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(AppConstants.r12),
-            border: Border.all(color: AppColors.of(context).primary.withValues(alpha: 0.1)),
+            border: Border.all(
+              color: AppColors.of(context).primary.withValues(alpha: 0.1),
+            ),
             boxShadow: [
               BoxShadow(
                 color: AppColors.of(context).black.withValues(alpha: 0.02),
@@ -88,8 +97,8 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                   child: Row(
                     children: [
                       Container(
-                        width: 48,
-                        height: 48,
+                        width: 48.w,
+                        height: 48.h,
                         decoration: BoxDecoration(
                           color: AppColors.of(context).leaveBg,
                           borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -111,18 +120,20 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                                 fontFamily: AppTextStyle.headingFont,
                                 fontWeight: FontWeight.normal,
                                 color: AppColors.of(context).onSurface,
-                                fontSize: 14,
+                                fontSize: AppConstants.fs14.sp,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 2),
+                            SizedBox(height: 2.h),
                             Text(
-                              l10n.availableStatus(_formatLeaveValue(totalAvailable)),
+                              l10n.availableStatus(
+                                _formatLeaveValue(totalAvailable),
+                              ),
                               style: AppTextStyle.bodySmall.copyWith(
                                 color: AppColors.of(context).primary,
                                 fontWeight: FontWeight.w600,
-                                fontSize: 13,
+                                fontSize: AppConstants.fs13.sp,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -148,7 +159,8 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
                   physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(AppConstants.p16),
                   itemCount: details.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: AppConstants.p16),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: AppConstants.p16),
                   itemBuilder: (context, index) {
                     final item = details[index];
                     return LeaveDetailCard(item: item);
@@ -161,7 +173,6 @@ class _LeaveBalanceOverviewCardState extends State<LeaveBalanceOverviewCard> {
       },
     );
   }
-
 }
 
 class LeaveDetailCard extends StatelessWidget {
@@ -178,7 +189,9 @@ class LeaveDetailCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.of(context).slate50.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(AppConstants.r16),
-        border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.4)),
+        border: Border.all(
+          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.4),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,24 +201,28 @@ class LeaveDetailCard extends StatelessWidget {
             style: AppTextStyle.bodyLarge.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.of(context).onSurface,
-              fontSize: 15,
+              fontSize: AppConstants.fs15.sp,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           LeaveInfoRow(
             label: l10n.allocatedLabel,
             value: _formatLeaveValue(item.allocated),
             valueFontWeight: FontWeight.w500,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           LeaveInfoRow(
             label: l10n.usedLabel,
             value: _formatLeaveValue(item.used),
             valueFontWeight: FontWeight.w500,
           ),
-          const SizedBox(height: 8),
-          Divider(height: 1, color: AppColors.of(context).outlineVariant, thickness: 0.5),
-          const SizedBox(height: 12),
+          SizedBox(height: 8.h),
+          Divider(
+            height: 1.h,
+            color: AppColors.of(context).outlineVariant,
+            thickness: 0.5,
+          ),
+          SizedBox(height: 12.h),
           LeaveInfoRow(
             label: l10n.availableLabel,
             value: _formatLeaveValue(item.available),
@@ -234,7 +251,7 @@ class LeaveBalanceOverviewShimmer extends StatelessWidget {
       baseColor: AppColors.of(context).border,
       highlightColor: AppColors.of(context).surface,
       child: Container(
-        height: 70,
+        height: 70.h,
         decoration: BoxDecoration(
           color: AppColors.of(context).white,
           borderRadius: BorderRadius.circular(AppConstants.r12),

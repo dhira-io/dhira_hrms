@@ -20,8 +20,9 @@ abstract class ProfileModel with _$ProfileModel {
     String? company,
     String? department,
     @JsonKey(name: 'reports_to') String? reportsTo,
-    @JsonKey(name: 'status') String? employmentType,
+    @JsonKey(name: 'employment_type') String? employmentType,
     @JsonKey(name: 'company_email') String? companyEmail,
+    @JsonKey(name: 'personal_email') String? personalEmail,
     @JsonKey(name: 'cell_number') String? phone,
     @JsonKey(name: 'blood_group') String? bloodGroup,
     @JsonKey(name: 'date_of_joining') String? dateOfJoining,
@@ -33,14 +34,23 @@ abstract class ProfileModel with _$ProfileModel {
     @JsonKey(name: 'marital_status') String? maritalStatus,
     @JsonKey(name: 'doctype') String? docType,
     @JsonKey(name: 'naming_series') String? namingSeries,
-    @JsonKey(name: 'emergency_contact_name') String? emergencyContact,
-    @JsonKey(name: 'custom_employee_assignment') List<ProfileProjectAssignmentModel>? projectAssignments,
+    @JsonKey(name: 'emergency_phone_number') String? emergencyContact,
+    @JsonKey(name: 'person_to_be_contacted') String? emergencyContactName,
+    @JsonKey(name: 'custom_nationality') String? nationality,
+    @JsonKey(name: 'custom_employee_assignment')
+    List<ProfileProjectAssignmentModel>? projectAssignments,
     @JsonKey(name: 'name') String? empId,
+    @JsonKey(name: 'current_address') String? currentAddress,
+    @JsonKey(name: 'permanent_address') String? permanentAddress,
+    @JsonKey(name: 'custom_current_location') String? currentLocation,
+    @JsonKey(name: 'custom_professional_summary') String? professionalSummary,
+    @JsonKey(name: 'custom_awards_and_achievements') String? awardsAndAchievements,
   }) = _ProfileModel;
 
   const ProfileModel._();
 
-  factory ProfileModel.fromJson(Map<String, dynamic> json) => _$ProfileModelFromJson(json);
+  factory ProfileModel.fromJson(Map<String, dynamic> json) =>
+      _$ProfileModelFromJson(json);
 
   ProfileEntity toEntity() {
     return ProfileEntity(
@@ -58,6 +68,7 @@ abstract class ProfileModel with _$ProfileModel {
       reportsTo: reportsTo,
       employmentType: employmentType,
       companyEmail: companyEmail,
+      personalEmail: personalEmail,
       phone: phone,
       bloodGroup: bloodGroup,
       dateOfJoining: dateOfJoining,
@@ -70,8 +81,15 @@ abstract class ProfileModel with _$ProfileModel {
       docType: docType,
       namingSeries: namingSeries,
       emergencyContact: emergencyContact,
+      emergencyContactName: emergencyContactName,
+      nationality: nationality,
       projectAssignments: projectAssignments?.map((e) => e.toEntity()).toList(),
       empId: empId,
+      currentAddress: currentAddress,
+      permanentAddress: permanentAddress,
+      currentLocation: currentLocation,
+      professionalSummary: professionalSummary,
+      awardsAndAchievements: awardsAndAchievements,
     );
   }
 }

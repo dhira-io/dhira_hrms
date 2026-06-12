@@ -1,8 +1,8 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-
 
 class EditTimesheetFooter extends StatelessWidget {
   final int selectedCount;
@@ -21,12 +21,14 @@ class EditTimesheetFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(8));
+    final btnShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8.r),
+    );
     const btnSize = Size(100, 44);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
         border: Border(top: BorderSide(color: AppColors.of(context).border)),
       ),
@@ -37,12 +39,14 @@ class EditTimesheetFooter extends StatelessWidget {
             children: [
               Text(
                 l10n.rowsSelected(selectedCount, totalCount),
-                style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).textSecondary),
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: AppColors.of(context).textSecondary,
+                ),
               ),
               const Spacer(),
             ],
           ),
-          const SizedBox(height: 16),
+                SizedBox(height: 16.h),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -51,16 +55,22 @@ class EditTimesheetFooter extends StatelessWidget {
                 backgroundColor: AppColors.of(context).primary,
                 minimumSize: btnSize,
                 shape: btnShape,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:       EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                  vertical: 12.h,
+                ),
                 elevation: 0,
               ),
               child: Text(
                 l10n.update,
-                style: TextStyle(color: AppColors.of(context).white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: AppColors.of(context).white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 12),
+                SizedBox(height: 12.h),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
@@ -69,11 +79,17 @@ class EditTimesheetFooter extends StatelessWidget {
                 minimumSize: btnSize,
                 shape: btnShape,
                 side: BorderSide(color: AppColors.of(context).primary),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:       EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                  vertical: 12.h,
+                ),
               ),
               child: Text(
                 l10n.cancel,
-                style: TextStyle(color: AppColors.of(context).primary, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: AppColors.of(context).primary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

@@ -22,12 +22,12 @@ abstract class TimesheetOverviewModel with _$TimesheetOverviewModel {
       _$TimesheetOverviewModelFromJson(json);
 
   TimesheetOverviewEntity toEntity() => TimesheetOverviewEntity(
-        filled: filled,
-        pendingApproval: pendingApproval,
-        correctionNeeded: correctionNeeded,
-        upcomingToSubmit: upcomingToSubmit,
-        approved: approved,
-        totalWeeks: totalWeeks,
-        weekMeta: weekMeta,
-      );
+    filled: filled,
+    pendingApproval: pendingApproval,
+    correctionNeeded: correctionNeeded,
+    upcomingToSubmit: upcomingToSubmit,
+    approved: approved,
+    totalWeeks: totalWeeks,
+    weekMeta: weekMeta,
+  );
 }

@@ -8,10 +8,15 @@ class LoginUseCase {
 
   LoginUseCase(this.repository);
 
-  Future<Either<Failure, UserEntity>> call(String email, String password) async {
+  Future<Either<Failure, UserEntity>> call(
+    String email,
+    String password,
+  ) async {
     // Basic validation before calling the repository
     if (email.isEmpty || password.isEmpty) {
-      return const Left(ValidationFailure("Email and password cannot be empty"));
+      return const Left(
+        ValidationFailure("Email and password cannot be empty"),
+      );
     }
     return await repository.signIn(email, password);
   }

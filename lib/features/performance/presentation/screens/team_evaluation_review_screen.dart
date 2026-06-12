@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_state.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,9 +45,9 @@ class _TeamEvaluationReviewScreenState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        Get.find<SelfAssessmentCubit>().fetchSelfAssessment(
-          widget.selfAssessmentId,
-          widget.evaluationId,
+        Get.find<SelfAssessmentCubit>().initSelfAssessment(
+          selfAssessmentId: widget.selfAssessmentId,
+          evaluationId: widget.evaluationId,
         );
       }
     });
@@ -56,10 +57,7 @@ class _TeamEvaluationReviewScreenState
   Widget build(BuildContext context) {
     Future<void> refreshAssessment() async {
       final cubit = context.read<SelfAssessmentCubit>();
-      cubit.fetchSelfAssessment(
-        widget.selfAssessmentId,
-        widget.evaluationId,
-      );
+      cubit.fetchSelfAssessment(widget.selfAssessmentId, widget.evaluationId);
       await cubit.stream.firstWhere(
         (state) => state.status != SelfAssessmentStatus.loading,
       );
@@ -103,66 +101,71 @@ class _TeamEvaluationReviewScreenState
           appBar: CommonAppBar(
             title: AppLocalizations.of(context)!.performanceReview,
           ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
-                    builder: (context, state) {
-                      if (state.status == SelfAssessmentStatus.failure &&
-                          PerformanceErrorUtils.isServerErrorMessage(
-                            state.errorMessage,
-                          )) {
-                        return GenericErrorWidget(
-                          onRetry: () {
-                            context.read<SelfAssessmentCubit>().fetchSelfAssessment(
-                                  widget.selfAssessmentId,
-                                  widget.evaluationId,
-                                );
-                          },
-                        );
-                      }
-
-                      return RefreshIndicator(
-                        onRefresh: refreshAssessment,
-                        color: AppColors.of(context).primary,
-                        backgroundColor: AppColors.of(context).surface,
-                        child: SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          padding: const EdgeInsets.only(
-                            bottom: 120,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              EmployeeHeroSection(
-                                name: widget.employeeName,
-                                empId: widget.employeeId,
-                                department: widget.department,
-                                status: widget.status,
-                              ),
-                              KraNavigation(
-                                selectedKra: state.selectedKra,
-                                onKraSelected: (kra) {
+          body: GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            behavior: HitTestBehavior.opaque,
+            child: SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child:
+                        BlocBuilder<SelfAssessmentCubit, SelfAssessmentState>(
+                          builder: (context, state) {
+                            if (state.status == SelfAssessmentStatus.failure &&
+                                PerformanceErrorUtils.isServerErrorMessage(
+                                  state.errorMessage,
+                                )) {
+                              return GenericErrorWidget(
+                                onRetry: () {
                                   context
                                       .read<SelfAssessmentCubit>()
-                                      .selectKra(kra);
+                                      .fetchSelfAssessment(
+                                        widget.selfAssessmentId,
+                                        widget.evaluationId,
+                                      );
                                 },
+                              );
+                            }
+
+                            return RefreshIndicator(
+                              onRefresh: refreshAssessment,
+                              color: AppColors.of(context).primary,
+                              backgroundColor: AppColors.of(context).surface,
+                              child: SingleChildScrollView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                keyboardDismissBehavior:
+                                    ScrollViewKeyboardDismissBehavior.onDrag,
+                                padding:       EdgeInsets.only(bottom: 120.h),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    EmployeeHeroSection(
+                                      name: widget.employeeName,
+                                      empId: widget.employeeId,
+                                      department: widget.department,
+                                      status: widget.status,
+                                    ),
+                                    KraNavigation(
+                                      selectedKra: state.selectedKra,
+                                      onKraSelected: (kra) {
+                                        context
+                                            .read<SelfAssessmentCubit>()
+                                            .selectKra(kra);
+                                      },
+                                    ),
+                                    DetailedReviewSection(
+                                      selectedKra: state.selectedKra,
+                                      employeeName: widget.employeeName,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              DetailedReviewSection(
-                                selectedKra: state.selectedKra,
-                                employeeName: widget.employeeName,
-                              ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                      );
-                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           bottomSheet: MediaQuery.of(context).viewInsets.bottom > 0

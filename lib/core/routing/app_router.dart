@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/presentation/screens/common_web_view_screen.dart';
+import 'package:dhira_hrms/features/notifications/data/constants/notification_constants.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_regularization_bloc.dart';
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dhira_hrms/core/config/app_config_service.dart';
@@ -9,11 +10,21 @@ import 'package:dhira_hrms/features/dashboard/presentation/screens/dashboard_scr
 import 'package:dhira_hrms/features/my_task/presentation/screens/my_task_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_chart_screen.dart';
 import 'package:dhira_hrms/features/organization/presentation/screens/organization_screen.dart';
+import 'package:dhira_hrms/features/auth/presentation/screens/auth_callback_screen.dart'
+    as dhira_auth_callback;
+import 'package:dhira_hrms/features/payslip/presentation/bloc/payslip_bloc.dart';
+import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_detail_screen.dart';
+import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_list_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import 'package:dhira_hrms/features/splash/presentation/screens/splash_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/screens/welcome_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/screens/get_started_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:dhira_hrms/features/onboarding/presentation/bloc/onboarding_cubit.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
@@ -32,6 +43,12 @@ import 'package:dhira_hrms/features/settings/presentation/screens/language_selec
 import 'package:dhira_hrms/features/settings/presentation/screens/notification_preferences_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
+import 'package:dhira_hrms/features/approvals/domain/usecases/get_approvals_access_usecase.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
@@ -42,8 +59,12 @@ import 'package:flutter/material.dart';
 
 class AppRouter {
   static const String splashPath = '/';
+  static const String welcomePath = '/welcome';
+  static const String getStartedPath = '/get-started';
+  static const String onboardingPath = '/onboarding';
   static const String loginPath = '/login';
   static const String dashboardPath = '/dashboard';
+  static const String authCallbackPath = '/auth/callback';
   static const String forgotPasswordPath = '/forgot-password';
   static const String otpVerificationPath = '/otp-verification';
   static const String organizationPath = '/organization';
@@ -71,6 +92,8 @@ class AppRouter {
   static const String languageSelectionPath = '/language-selection';
   static const String appearanceSelectionPath = '/appearance-selection';
   static const String commonWebViewPath = '/webview';
+  static const String payslipPath = '/payslip';
+  static const String payslipDetailPath = '/payslip-detail';
 
   // Router Extra Keys
   static const String argEmployeeName = 'employeeName';
@@ -89,60 +112,96 @@ class AppRouter {
   static const String typeLeaveApplication = 'leave application';
   static const String typeTimesheet = 'timesheet';
   static const String typeAttendance = 'attendance';
-  static const String typeAttendanceRegularization = 'attendance regularization';
+  static const String typeAttendanceRegularization =
+      'attendance regularization';
   static const String typePerformance = 'performance';
   static const String typeSelfAssessment = 'self assessment';
   static const String typeRegularization = 'regularization';
   static const String typeAssessment = 'assessment';
+  static const String typeCompensatory = 'compensatory';
 
-  static void navigateByNotification({String? type, String? docName, String? title}) {
+  static Future<void> _navigateToApprovals(ApprovalType type) async {
+    try {
+      final getAccess = Get.find<GetApprovalsAccessUseCase>();
+      final accessResult = await getAccess();
+      final bool isManager = accessResult.fold(
+        (_) => false,
+        (access) => access.canAccess,
+      );
+
+      final category = isManager
+          ? ApprovalCategory.team
+          : ApprovalCategory.raised;
+
+      Get.find<ApprovalsBloc>().add(
+        ApprovalsEvent.categoryChanged(type, category),
+      );
+
+      Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
+      router.go(dashboardPath);
+    } catch (e) {
+      router.go(dashboardPath);
+    }
+  }
+
+  static void navigateByNotification({
+    String? type,
+    String? docName,
+    String? title,
+  }) {
     final String normalizedType = type?.toLowerCase() ?? '';
     final String normalizedTitle = title?.toLowerCase() ?? '';
 
-    // Check by type first
+    // Check for compensatory leave first (before generic leave, since compOff
+    // doctype is 'Compensatory Leave Request' which also contains 'leave')
+    if (normalizedType.contains(typeCompensatory) ||
+        normalizedTitle.contains(typeCompensatory)) {
+      _navigateToApprovals(ApprovalType.compOff);
+      return;
+    }
+
+    // Check by type first (handles leave, leave_application, leave application, etc.)
     if (normalizedType.contains(typeLeave)) {
-      router.push(applyLeavePath, extra: {
-        argEmployeeId: '',
-        argLeave: null,
-      });
+      _navigateToApprovals(ApprovalType.leave);
       return;
     }
 
     if (normalizedType.contains(typeTimesheet)) {
-      router.push(applyTimesheetPath, extra: docName);
+      _navigateToApprovals(ApprovalType.timesheet);
       return;
     }
 
-    if (normalizedType.contains(typeAttendance) || normalizedType.contains(typeRegularization)) {
-      router.push(attendanceRegularizationPath);
+    if (normalizedType.contains(typeAttendance) ||
+        normalizedType.contains(typeRegularization)) {
+      _navigateToApprovals(ApprovalType.attendance);
       return;
     }
 
-    if (normalizedType.contains(typePerformance) || normalizedType.contains(typeAssessment)) {
+    if (normalizedType.contains(typePerformance) ||
+        normalizedType.contains(typeAssessment)) {
       router.push(performanceSelfAssessmentPath);
       return;
     }
 
     // Fallback to keyword matching in title if type is generic (like 'alert' or 'policy')
     if (normalizedTitle.contains(typeLeave)) {
-      router.push(applyLeavePath, extra: {
-        argEmployeeId: '',
-        argLeave: null,
-      });
+      _navigateToApprovals(ApprovalType.leave);
       return;
     }
 
-    if (normalizedTitle.contains(typeAttendance) || normalizedTitle.contains(typeRegularization)) {
-      router.push(attendanceRegularizationPath);
+    if (normalizedTitle.contains(typeAttendance) ||
+        normalizedTitle.contains(typeRegularization)) {
+      _navigateToApprovals(ApprovalType.attendance);
       return;
     }
 
     if (normalizedTitle.contains(typeTimesheet)) {
-      router.push(timesheetPath);
+      _navigateToApprovals(ApprovalType.timesheet);
       return;
     }
 
-    if (normalizedTitle.contains('task') || normalizedTitle.contains('assigned')) {
+    if (normalizedTitle.contains('task') ||
+        normalizedTitle.contains('assigned')) {
       router.push(myTaskPath);
       return;
     }
@@ -153,15 +212,102 @@ class AppRouter {
     }
   }
 
+  static void navigateByMobileUrl(
+    String mobileUrl, {
+    String? referenceDoctype,
+    String? referenceName,
+    String? type,
+    String? fallbackPath,
+  }) {
+    if (mobileUrl.isEmpty) {
+      if (fallbackPath != null) {
+        router.push(fallbackPath);
+      } else {
+        navigateByNotification(
+          type: referenceDoctype ?? type,
+          docName: referenceName,
+        );
+      }
+      return;
+    }
+
+    // Clean mobile_url (starts with /app/ or app/)
+    String cleanUrl = mobileUrl.trim();
+    if (cleanUrl.startsWith(PushNotificationValues.appPrefixWithSlashes)) {
+      cleanUrl = cleanUrl.substring(5);
+    } else if (cleanUrl.startsWith(PushNotificationValues.appPrefix)) {
+      cleanUrl = cleanUrl.substring(4);
+    }
+    if (cleanUrl.startsWith('/')) {
+      cleanUrl = cleanUrl.substring(1);
+    }
+
+    final parts = cleanUrl.split('/');
+    final pathRoot = parts[0].toLowerCase();
+
+    if (pathRoot == PushNotificationValues.urlNotifications) {
+      router.push(notificationsPath);
+      return;
+    }
+
+    // Compensatory leave must be checked before generic 'leave'
+    if (pathRoot.contains(typeCompensatory)) {
+      _navigateToApprovals(ApprovalType.compOff);
+      return;
+    }
+
+    if (pathRoot == PushNotificationValues.urlLeaveApplication ||
+        pathRoot == PushNotificationValues.urlLeave) {
+      _navigateToApprovals(ApprovalType.leave);
+      return;
+    }
+
+    if (pathRoot == PushNotificationValues.urlTimesheet) {
+      _navigateToApprovals(ApprovalType.timesheet);
+      return;
+    }
+
+    if (pathRoot == PushNotificationValues.urlAttendance ||
+        pathRoot == PushNotificationValues.urlRegularization ||
+        pathRoot == PushNotificationValues.urlAttendanceRegularization) {
+      _navigateToApprovals(ApprovalType.attendance);
+      return;
+    }
+
+    if (pathRoot == PushNotificationValues.urlPerformance ||
+        pathRoot == PushNotificationValues.urlSelfAssessment) {
+      router.push(performanceSelfAssessmentPath);
+      return;
+    }
+
+    // Fallback: use notification metadata if available
+    if (referenceDoctype != null || type != null || referenceName != null) {
+      navigateByNotification(
+        type: referenceDoctype ?? type,
+        docName: referenceName,
+      );
+    } else if (fallbackPath != null) {
+      router.push(fallbackPath);
+    } else {
+      router.push(notificationsPath);
+    }
+  }
+
   // Routes that don't require authentication
   static const List<String> _publicRoutes = [
     splashPath,
+    welcomePath,
+    getStartedPath,
+    onboardingPath,
     loginPath,
     forgotPasswordPath,
     otpVerificationPath,
+    authCallbackPath,
+    commonWebViewPath,
   ];
 
-  static final GlobalKey<NavigatorState> navigatorKey = ChuckerFlutter.navigatorKey;
+  static final GlobalKey<NavigatorState> navigatorKey =
+      ChuckerFlutter.navigatorKey;
 
   static final router = GoRouter(
     navigatorKey: navigatorKey,
@@ -195,12 +341,32 @@ class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
+        path: welcomePath,
+        builder: (context, state) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: getStartedPath,
+        builder: (context, state) => const GetStartedScreen(),
+      ),
+      GoRoute(
+        path: onboardingPath,
+        builder: (context, state) => BlocProvider(
+          create: (context) => OnboardingCubit(Get.find()),
+          child: const OnboardingScreen(),
+        ),
+      ),
+      GoRoute(
         path: loginPath,
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: dashboardPath,
         builder: (context, state) => const DashboardScreen(),
+      ),
+      GoRoute(
+        path: authCallbackPath,
+        builder: (context, state) =>
+            const dhira_auth_callback.AuthCallbackScreen(),
       ),
       GoRoute(
         path: forgotPasswordPath,
@@ -227,10 +393,27 @@ class AppRouter {
       ),
       GoRoute(
         path: timesheetPath,
-        builder: (context, state) => BlocProvider.value(
-          value: Get.find<TimesheetBloc>(),
-          child: const ApplyTimesheetScreen(timesheetId: "current"),
-        ),
+        builder: (context, state) {
+          final today = DateTime.now();
+          return BlocProvider.value(
+            value: Get.find<TimesheetBloc>()
+              ..add(TimesheetEvent.daySelected(today))
+              ..add(
+                TimesheetEvent.fetchMonthWiseRequested(
+                  month: today.month,
+                  year: today.year,
+                ),
+              )
+              ..add(
+                TimesheetEvent.fetchOverviewRequested(
+                  month: today.month,
+                  year: today.year,
+                ),
+              )
+              ..add(const TimesheetEvent.started(timesheetId: "current")),
+            child: const ApplyTimesheetScreen(timesheetId: "current"),
+          );
+        },
       ),
       GoRoute(
         path: profilePath,
@@ -263,9 +446,24 @@ class AppRouter {
         path: applyTimesheetPath,
         builder: (context, state) {
           final timesheetId = state.extra as String? ?? "0";
+          final today = DateTime.now();
 
           return BlocProvider.value(
-            value: Get.find<TimesheetBloc>(),
+            value: Get.find<TimesheetBloc>()
+              ..add(TimesheetEvent.daySelected(today))
+              ..add(
+                TimesheetEvent.fetchMonthWiseRequested(
+                  month: today.month,
+                  year: today.year,
+                ),
+              )
+              ..add(
+                TimesheetEvent.fetchOverviewRequested(
+                  month: today.month,
+                  year: today.year,
+                ),
+              )
+              ..add(TimesheetEvent.started(timesheetId: timesheetId)),
             child: ApplyTimesheetScreen(timesheetId: timesheetId),
           );
         },
@@ -276,6 +474,7 @@ class AppRouter {
           create: (context) => AttendanceRegularizationBloc(
             submitRegularizationUseCase: Get.find(),
             uploadFileUseCase: Get.find(),
+            getAttendancePunchSummaryUseCase: Get.find(),
             localStorageService: Get.find(),
             imageCompressService: Get.find(),
           ),
@@ -299,8 +498,8 @@ class AppRouter {
 
           return MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (_) => Get.find<SelfAssessmentCubit>()
+              BlocProvider.value(
+                value: Get.find<SelfAssessmentCubit>()
                   ..initSelfAssessment(
                     selfAssessmentId: selfAssessmentId,
                     evaluationId: evaluationId,
@@ -374,13 +573,34 @@ class AppRouter {
             const begin = Offset(1.0, 0.0);
             const end = Offset.zero;
             const curve = Curves.easeInOut;
-            final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            final tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
             return SlideTransition(
               position: animation.drive(tween),
               child: child,
             );
           },
         ),
+      ),
+      GoRoute(
+        path: payslipPath,
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<PayslipBloc>(),
+          child: const PayslipListScreen(),
+        ),
+      ),
+      GoRoute(
+        path: payslipDetailPath,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>? ?? {};
+          final name = extra[argDocName] as String? ?? '';
+          return BlocProvider.value(
+            value: Get.find<PayslipBloc>(),
+            child: PayslipDetailScreen(name: name),
+          );
+        },
       ),
     ],
   );

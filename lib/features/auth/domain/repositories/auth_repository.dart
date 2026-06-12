@@ -9,7 +9,10 @@ abstract class IAuthRepository {
   Future<bool> isSessionActive();
   Future<Either<Failure, void>> forgotPassword(String email);
   Future<Either<Failure, void>> initiateMicrosoftSSO();
-  Future<Either<Failure, UserEntity>> exchangeSSOToken(String apiKey, String apiSecret);
+  Future<Either<Failure, UserEntity>> exchangeSSOToken(
+    String apiKey,
+    String apiSecret,
+  );
   Future<Either<Failure, bool>> verifyOtp(String email, String otp);
   Future<Either<Failure, bool>> resendOtp(String email);
 }

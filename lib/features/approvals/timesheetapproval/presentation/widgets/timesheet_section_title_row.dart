@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/small_action_btn.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
@@ -20,7 +21,12 @@ class TimesheetSectionTitleRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(l10n.dailyTimesheet, style: AppTextStyle.h2Bold.copyWith(color: AppColors.of(context).onSurface)),
+        Text(
+          l10n.dailyTimesheet,
+          style: AppTextStyle.h2Bold.copyWith(
+            color: AppColors.of(context).onSurface,
+          ),
+        ),
         Row(
           children: [
             SmallActionBtn(
@@ -28,7 +34,7 @@ class TimesheetSectionTitleRow extends StatelessWidget {
               label: l10n.expandAll,
               onTap: onExpandAll,
             ),
-            const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
             SmallActionBtn(
               icon: Icons.unfold_less,
               label: l10n.collapseAll,

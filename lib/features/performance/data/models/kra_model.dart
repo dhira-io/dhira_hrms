@@ -17,16 +17,13 @@ abstract class KraModel with _$KraModel {
       _$KraModelFromJson(json);
 
   factory KraModel.fromEntity(KraEntity entity) => KraModel(
-        docName: entity.id,
-        name: entity.name,
-        weightage: entity.weightage,
-      );
+    docName: entity.id,
+    name: entity.name,
+    weightage: entity.weightage,
+  );
 
   const KraModel._();
 
-  KraEntity toEntity() => KraEntity(
-        id: docName,
-        name: name,
-        weightage: weightage,
-      );
+  KraEntity toEntity() =>
+      KraEntity(id: docName, name: name, weightage: weightage);
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -85,14 +86,16 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
                       : AppColors.of(context).surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(AppConstants.r12),
                   border: Border.all(
-                    color: isSelected ? AppColors.of(context).primary : AppColors.of(context).border,
+                    color: isSelected
+                        ? AppColors.of(context).primary
+                        : AppColors.of(context).border,
                     width: isSelected ? 1.5 : 1,
                   ),
                 ),
                 child: Row(
                   children: [
                     _CustomRadioButton(isSelected: isSelected),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10.w),
                     Expanded(
                       child: Text(
                         item.label,
@@ -101,7 +104,7 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
                           fontWeight: isSelected
                               ? FontWeight.bold
                               : FontWeight.w500,
-                          fontSize: AppConstants.fs13,
+                          fontSize: AppConstants.fs11.sp,
                         ),
                       ),
                     ),
@@ -131,12 +134,14 @@ class _CustomRadioButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 20,
-      height: 20,
+      width: 20.w,
+      height: 20.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: isSelected ? AppColors.of(context).primary : AppColors.of(context).outlineVariant,
+          color: isSelected
+              ? AppColors.of(context).primary
+              : AppColors.of(context).outlineVariant,
           width: isSelected ? 5 : 1.5,
         ),
         color: AppColors.of(context).surfaceContainerLowest,
@@ -144,8 +149,8 @@ class _CustomRadioButton extends StatelessWidget {
       child: isSelected
           ? Center(
               child: Container(
-                width: 6,
-                height: 6,
+                width: 6.w,
+                height: 6.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.of(context).white,

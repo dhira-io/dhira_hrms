@@ -9,21 +9,23 @@ class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
   void setInitialData(List<TeamEvaluationEntity> evaluations) {
     final departments = {
       PerformanceStatus.allDepartment,
-      ...evaluations.map((e) => e.department)
+      ...evaluations.map((e) => e.department),
     }.toList();
 
     final totalCount = evaluations.length;
     final submittedCount = evaluations.where((e) => e.docstatus == 1).length;
-    final pendingCount = evaluations.where((e) => e.docstatus == 0).length;
+    final pendingCount = evaluations.where((e) => e.docstatus != 1).length;
 
-    emit(state.copyWith(
-      allEvaluations: evaluations,
-      filteredEvaluations: evaluations,
-      departments: departments,
-      totalCount: totalCount,
-      submittedCount: submittedCount,
-      pendingCount: pendingCount,
-    ));
+    emit(
+      state.copyWith(
+        allEvaluations: evaluations,
+        filteredEvaluations: evaluations,
+        departments: departments,
+        totalCount: totalCount,
+        submittedCount: submittedCount,
+        pendingCount: pendingCount,
+      ),
+    );
     _filter();
   }
 
@@ -44,35 +46,53 @@ class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
     _filter();
   }
 
+  void applyFilters({required String department, required String status}) {
+    emit(
+      state.copyWith(selectedDepartment: department, selectedStatus: status),
+    );
+    _filter();
+  }
+
   void _filter() {
     List<TeamEvaluationEntity> filtered = state.allEvaluations;
 
     if (state.selectedDepartment != PerformanceStatus.allDepartment) {
-      filtered = filtered.where((e) => e.department == state.selectedDepartment).toList();
+      filtered = filtered
+          .where((e) => e.department == state.selectedDepartment)
+          .toList();
     }
 
     if (state.selectedStatus != PerformanceStatus.allStatus) {
-      final statusInt = state.selectedStatus == PerformanceStatus.submitted ? 1 : 0;
-      filtered = filtered.where((e) => e.docstatus == statusInt).toList();
+      if (state.selectedStatus == PerformanceStatus.submitted) {
+        filtered = filtered.where((e) => e.docstatus == 1).toList();
+      } else {
+        filtered = filtered.where((e) => e.docstatus != 1).toList();
+      }
     }
 
     if (state.searchQuery.isNotEmpty) {
       final query = state.searchQuery.toLowerCase();
-      filtered = filtered.where((e) =>
-          e.employee.toLowerCase().contains(query) ||
-          e.name.toLowerCase().contains(query) ||
-          (e.employeeName?.toLowerCase().contains(query) ?? false)).toList();
+      filtered = filtered
+          .where(
+            (e) =>
+                e.employee.toLowerCase().contains(query) ||
+                e.name.toLowerCase().contains(query) ||
+                (e.employeeName?.toLowerCase().contains(query) ?? false),
+          )
+          .toList();
     }
 
     emit(state.copyWith(filteredEvaluations: filtered));
   }
 
   void resetFilters() {
-    emit(state.copyWith(
-      selectedDepartment: PerformanceStatus.allDepartment,
-      selectedStatus: PerformanceStatus.allStatus,
-      searchQuery: '',
-    ));
+    emit(
+      state.copyWith(
+        selectedDepartment: PerformanceStatus.allDepartment,
+        selectedStatus: PerformanceStatus.allStatus,
+        searchQuery: '',
+      ),
+    );
     _filter();
   }
 

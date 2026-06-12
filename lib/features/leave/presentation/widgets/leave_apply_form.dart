@@ -1,24 +1,16 @@
-import 'package:dhira_hrms/core/constants/storage_constants.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
-import 'package:path/path.dart' as p;
-import '../../../../core/services/image_compress_service.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../core/constants/leave_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
 import 'leave_apply/leave_overlap_section.dart';
-import 'leave_apply/leave_request_guidelines.dart';
+import '../../../../core/widgets/common_guidelines.dart';
 import 'leave_apply/leave_form_action_buttons.dart';
-import 'leave_apply/leave_type_dropdown.dart';
 import 'leave_apply/leave_form_fields.dart';
 import 'leave_apply/leave_form_elements.dart';
 import '../utils/leave_form_utils.dart';
@@ -53,19 +45,23 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   void initState() {
     super.initState();
     final bloc = context.read<LeaveBloc>();
-    
+
     // Initialize form state from BLoC
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Trigger types fetch if empty
-      if (bloc.state.leaveTypes.isEmpty && !bloc.state.isLoading && !bloc.state.isInitialLoading) {
+      if (bloc.state.leaveTypes.isEmpty &&
+          !bloc.state.isLoading &&
+          !bloc.state.isInitialLoading) {
         bloc.add(const LeaveEvent.typesRequested());
       }
 
-      bloc.add(LeaveEvent.formInitialized(
-        leave: widget.leave,
-        employeeName: widget.empName,
-        gender: widget.gender,
-      ));
+      bloc.add(
+        LeaveEvent.formInitialized(
+          leave: widget.leave,
+          employeeName: widget.empName,
+          gender: widget.gender,
+        ),
+      );
 
       if (widget.leave != null) {
         _checkOverlap();
@@ -76,7 +72,6 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       _reasonController.text = widget.leave!.description ?? "";
     }
   }
-
 
   @override
   void dispose() {
@@ -102,13 +97,20 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       final bounds = LeaveFormUtils.getFromDateBounds(state.selectedLeaveType);
       firstDate = bounds.firstDate;
       lastDate = bounds.lastDate;
-      initial = (state.fromDate != null && !state.fromDate!.isBefore(firstDate) && !state.fromDate!.isAfter(lastDate))
+      initial =
+          (state.fromDate != null &&
+              !state.fromDate!.isBefore(firstDate) &&
+              !state.fromDate!.isAfter(lastDate))
           ? state.fromDate!
-          : (today.isBefore(firstDate) ? firstDate : (today.isAfter(lastDate) ? lastDate : today));
+          : (today.isBefore(firstDate)
+                ? firstDate
+                : (today.isAfter(lastDate) ? lastDate : today));
     } else {
       firstDate = state.fromDate!;
       lastDate = today.add(const Duration(days: 365));
-      initial = (state.toDate != null && !state.toDate!.isBefore(firstDate)) ? state.toDate! : firstDate;
+      initial = (state.toDate != null && !state.toDate!.isBefore(firstDate))
+          ? state.toDate!
+          : firstDate;
     }
 
     final holidays = LeaveFormUtils.extractHolidays(state.statistics);
@@ -140,12 +142,16 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   void _checkOverlap() {
     final state = context.read<LeaveBloc>().state;
     if (state.fromDate != null && state.toDate != null) {
-      context.read<LeaveBloc>().add(const LeaveEvent.overlapHiddenStatusChanged(false));
-      context.read<LeaveBloc>().add(LeaveEvent.overlapLeavesRequested(
-            employeeId: widget.employeeId,
-            fromDate: state.fromDate!.format(),
-            toDate: state.toDate!.format(),
-          ));
+      context.read<LeaveBloc>().add(
+        const LeaveEvent.overlapHiddenStatusChanged(false),
+      );
+      context.read<LeaveBloc>().add(
+        LeaveEvent.overlapLeavesRequested(
+          employeeId: widget.employeeId,
+          fromDate: state.fromDate!.format(),
+          toDate: state.toDate!.format(),
+        ),
+      );
     }
   }
 
@@ -169,7 +175,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   Future<void> _pickAndUploadFile() async {
     final bloc = context.read<LeaveBloc>();
     final l10n = AppLocalizations.of(context)!;
-    
+
     if (!FileValidationUtils.canUploadMore(
       currentCount: bloc.state.uploadCount,
       l10n: l10n,
@@ -183,9 +189,7 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
 
     if (result != null && result.files.single.path != null) {
-      bloc.add(LeaveEvent.uploadFileRequested(
-        file: result.files.single,
-      ));
+      bloc.add(LeaveEvent.uploadFileRequested(file: result.files.single));
     }
   }
 
@@ -204,29 +208,39 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
       );
 
       if (widget.leave == null) {
-        bloc.add(LeaveEvent.applyRequested(
-          employeeId: widget.employeeId,
-          employeeName: widget.empName.isEmpty ? AppLocalizations.of(context)!.user : widget.empName,
-          leaveType: state.selectedLeaveType!,
-          fromDate: fromStr,
-          toDate: toStr,
-          reason: _reasonController.text,
-          halfDay: state.isHalfDay ? 1 : 0,
-          halfDayDate: state.isHalfDay && state.halfDayDate != null ? state.halfDayDate!.format() : null,
-          halfDaySegment: state.isHalfDay ? state.daySegment : null,
-          totalleavedays: totalDays,
-        ));
+        bloc.add(
+          LeaveEvent.applyRequested(
+            employeeId: widget.employeeId,
+            employeeName: widget.empName.isEmpty
+                ? AppLocalizations.of(context)!.user
+                : widget.empName,
+            leaveType: state.selectedLeaveType!,
+            fromDate: fromStr,
+            toDate: toStr,
+            reason: _reasonController.text,
+            halfDay: state.isHalfDay ? 1 : 0,
+            halfDayDate: state.isHalfDay && state.halfDayDate != null
+                ? state.halfDayDate!.format()
+                : null,
+            halfDaySegment: state.isHalfDay ? state.daySegment : null,
+            totalleavedays: totalDays,
+          ),
+        );
       } else {
-        bloc.add(LeaveEvent.updateRequested(
-          leaveId: widget.leave!.name,
-          fromDate: fromStr,
-          toDate: toStr,
-          reason: _reasonController.text,
-          halfDay: state.isHalfDay ? 1 : 0,
-          halfDayDate: state.isHalfDay && state.halfDayDate != null ? state.halfDayDate!.format() : null,
-          halfDaySegment: state.isHalfDay ? state.daySegment : null,
-          totalleavedays: totalDays,
-        ));
+        bloc.add(
+          LeaveEvent.updateRequested(
+            leaveId: widget.leave!.name,
+            fromDate: fromStr,
+            toDate: toStr,
+            reason: _reasonController.text,
+            halfDay: state.isHalfDay ? 1 : 0,
+            halfDayDate: state.isHalfDay && state.halfDayDate != null
+                ? state.halfDayDate!.format()
+                : null,
+            halfDaySegment: state.isHalfDay ? state.daySegment : null,
+            totalleavedays: totalDays,
+          ),
+        );
       }
     }
   }
@@ -268,7 +282,17 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                   onPickAndUploadFile: _pickAndUploadFile,
                 ),
                 const SizedBox(height: AppConstants.p24),
-                const LeaveRequestGuidelines(),
+                CommonGuidelines(
+                  title: l10n.leaveRequestGuidelines,
+                  items: [
+                    l10n.guideline1,
+                    l10n.guideline2,
+                    l10n.guideline3,
+                    l10n.guideline4,
+                    l10n.guideline5,
+                    l10n.guideline6,
+                  ],
+                ),
                 const SizedBox(height: AppConstants.p24),
                 LeaveOverlapSection(
                   overlapLeaves: state.overlapLeaves,
@@ -280,7 +304,8 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
                 onCancel: () => Navigator.pop(context),
                 onSubmit: _submitForm,
                 isLoading: state.isLoading,
-                isSubmitDisabled: state.isInitialLoading ||
+                isSubmitDisabled:
+                    state.isInitialLoading ||
                     state.isLoading ||
                     state.isUploading ||
                     (requiresDocs && state.uploadedFileUrl == null),
@@ -292,4 +317,3 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     );
   }
 }
-

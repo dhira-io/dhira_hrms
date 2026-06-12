@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
@@ -30,11 +32,13 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      context.read<ProfileBloc>().add(ProfileEvent.passwordChangeRequested(
-            oldPassword: _oldPasswordController.text,
-            newPassword: _newPasswordController.text,
-            logoutAllSessions: "1",
-          ));
+      context.read<ProfileBloc>().add(
+        ProfileEvent.passwordChangeRequested(
+          oldPassword: _oldPasswordController.text,
+          newPassword: _newPasswordController.text,
+          logoutAllSessions: "1",
+        ),
+      );
     }
   }
 
@@ -42,9 +46,14 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<ProfileBloc, ProfileState>(
-      buildWhen: (previous, current) => previous.maybeWhen(loading: () => true, orElse: () => false) != current.maybeWhen(loading: () => true, orElse: () => false),
+      buildWhen: (previous, current) =>
+          previous.maybeWhen(loading: () => true, orElse: () => false) !=
+          current.maybeWhen(loading: () => true, orElse: () => false),
       builder: (context, state) {
-        final isLoading = state.maybeWhen(loading: () => true, orElse: () => false);
+        final isLoading = state.maybeWhen(
+          loading: () => true,
+          orElse: () => false,
+        );
 
         return Form(
           key: _formKey,
@@ -64,17 +73,18 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               _PasswordField(
                 controller: _confirmPasswordController,
                 label: l10n.confirmPassword,
-                validator: (val) => val != _newPasswordController.text ? l10n.passwordsDoNotMatch : null,
+                validator: (val) => val != _newPasswordController.text
+                    ? l10n.passwordsDoNotMatch
+                    : null,
               ),
               const SizedBox(height: AppConstants.p32),
               SizedBox(
                 width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: isLoading ? null : _submit,
-                  child: isLoading 
-                      ? CircularProgressIndicator(color: AppColors.of(context).surface) 
-                      : Text(l10n.changePassword.toUpperCase()),
+                height: 50.h,
+                child: CommonButton(
+                  text: l10n.changePassword.toUpperCase(),
+                  isLoading: isLoading,
+                  onPressed: _submit,
                 ),
               ),
             ],
@@ -104,9 +114,7 @@ class _PasswordField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: true,
-      decoration: InputDecoration(
-        labelText: label,
-      ),
+      decoration: InputDecoration(labelText: label),
       validator: (val) {
         if (val == null || val.isEmpty) return l10n.required;
         if (minLength != null && val.length < minLength!) {
@@ -118,4 +126,3 @@ class _PasswordField extends StatelessWidget {
     );
   }
 }
-

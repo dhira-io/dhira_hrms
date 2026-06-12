@@ -15,7 +15,8 @@ class KraAddState with _$KraAddState {
 class KraAddCubit extends Cubit<KraAddState> {
   final GetKraListUseCase getKraListUseCase;
 
-  KraAddCubit({required this.getKraListUseCase}) : super(const KraAddState.initial());
+  KraAddCubit({required this.getKraListUseCase})
+    : super(const KraAddState.initial());
 
   Future<void> loadKras(String jobFamily) async {
     emit(const KraAddState.loading());

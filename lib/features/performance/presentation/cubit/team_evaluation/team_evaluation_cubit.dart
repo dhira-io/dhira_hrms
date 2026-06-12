@@ -17,7 +17,7 @@ class TeamEvaluationCubit extends Cubit<TeamEvaluationState> {
   Future<void> fetchEvaluations() async {
     emit(const TeamEvaluationState.loading());
     final result = await getTeamEvaluationsUseCase();
-    
+
     await result.fold(
       (failure) async => emit(
         TeamEvaluationState.failure(
@@ -26,16 +26,17 @@ class TeamEvaluationCubit extends Cubit<TeamEvaluationState> {
       ),
       (evaluations) async {
         emit(TeamEvaluationState.success(evaluations));
-        
+
         // Fetch employee info one by one to show individual shimmer completion
         for (int i = 0; i < evaluations.length; i++) {
           final eval = evaluations[i];
-          
+
           // Skip if already fetched or not needed
-          if (eval.employeeName != null && eval.employeeStatus != null) continue;
+          if (eval.employeeName != null && eval.employeeStatus != null)
+            continue;
 
           final infoResult = await getEmployeeInfoUseCase(eval.employee);
-          
+
           infoResult.fold(
             (failure) {
               // If fails, use the employee ID as the name to stop shimmering
@@ -53,7 +54,9 @@ class TeamEvaluationCubit extends Cubit<TeamEvaluationState> {
   void _updateEmployeeInfo(String evaluationId, String name, String status) {
     state.mapOrNull(
       success: (successState) {
-        final updatedList = List<TeamEvaluationEntity>.from(successState.evaluations);
+        final updatedList = List<TeamEvaluationEntity>.from(
+          successState.evaluations,
+        );
         final index = updatedList.indexWhere((e) => e.name == evaluationId);
         if (index != -1) {
           updatedList[index] = updatedList[index].copyWith(

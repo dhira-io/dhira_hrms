@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:open_filex/open_filex.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart' as fln;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'
+    as fln;
 import 'package:get/get.dart';
 import '../../features/notifications/data/constants/notification_constants.dart';
 import '../../features/notifications/presentation/bloc/notification_bloc.dart';
@@ -19,8 +22,9 @@ class NotificationManager {
   NotificationManager._internal();
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  final fln.FlutterLocalNotificationsPlugin _localNotifications = fln.FlutterLocalNotificationsPlugin();
-  
+  final fln.FlutterLocalNotificationsPlugin _localNotifications =
+      fln.FlutterLocalNotificationsPlugin();
+
   LocalStorageService? _storage;
 
   /// Initialize Firebase and Notification settings
@@ -35,10 +39,18 @@ class NotificationManager {
       );
 
       // 2. Setup Local Notifications
-      final initializationSettingsAndroid =
-          fln.AndroidInitializationSettings(LocalNotificationConstants.iconPath);
-      final initializationSettingsIOS = fln.DarwinInitializationSettings();
-      
+      final initializationSettingsAndroid = fln.AndroidInitializationSettings(
+        LocalNotificationConstants.iconPath,
+      );
+      final initializationSettingsIOS = fln.DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+        defaultPresentAlert: true,
+        defaultPresentBadge: true,
+        defaultPresentSound: true,
+      );
+
       final settings = fln.InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: initializationSettingsIOS,
@@ -52,15 +64,18 @@ class NotificationManager {
       );
 
       // 3. Create Android Notification Channel
-      const fln.AndroidNotificationChannel channel = fln.AndroidNotificationChannel(
-        LocalNotificationConstants.channelId,
-        LocalNotificationConstants.channelName,
-        description: LocalNotificationConstants.channelDescription,
-        importance: fln.Importance.max,
-      );
+      const fln.AndroidNotificationChannel channel =
+          fln.AndroidNotificationChannel(
+            LocalNotificationConstants.channelId,
+            LocalNotificationConstants.channelName,
+            description: LocalNotificationConstants.channelDescription,
+            importance: fln.Importance.max,
+          );
 
       await _localNotifications
-          .resolvePlatformSpecificImplementation<fln.AndroidFlutterLocalNotificationsPlugin>()
+          .resolvePlatformSpecificImplementation<
+            fln.AndroidFlutterLocalNotificationsPlugin
+          >()
           ?.createNotificationChannel(channel);
 
       // 4. Handle Foreground Messages
@@ -77,7 +92,8 @@ class NotificationManager {
         _refreshNotificationList();
       });
 
-      RemoteMessage? initialMessage = await _firebaseMessaging.getInitialMessage();
+      RemoteMessage? initialMessage = await _firebaseMessaging
+          .getInitialMessage();
       if (initialMessage != null) {
         _handleNotificationClick(jsonEncode(initialMessage.data));
         _refreshNotificationList();
@@ -85,7 +101,6 @@ class NotificationManager {
 
       // 6. Get FCM Token
       await getToken();
-
     } catch (e) {
       // Silent fail
     }
@@ -98,14 +113,15 @@ class NotificationManager {
       if (token != null) {
         await _storage?.saveFcmToken(token);
         try {
-          if (Get.isRegistered<StoreFcmTokenUseCase>() && Get.isRegistered<DeviceIdService>()) {
+          if (Get.isRegistered<StoreFcmTokenUseCase>() &&
+              Get.isRegistered<DeviceIdService>()) {
             final deviceIdService = Get.find<DeviceIdService>();
             final deviceId = await deviceIdService.getDeviceId();
             final platform = deviceIdService.getPlatform();
             await Get.find<StoreFcmTokenUseCase>().call(
-              token: token, 
-              deviceId: deviceId, 
-              platform: platform
+              token: token,
+              deviceId: deviceId,
+              platform: platform,
             );
           }
         } catch (e) {}
@@ -119,16 +135,18 @@ class NotificationManager {
   /// Deactivate device on logout
   Future<void> deactivate() async {
     try {
-      final token = _storage?.getFcmToken() ?? await _firebaseMessaging.getToken();
+      final token =
+          _storage?.getFcmToken() ?? await _firebaseMessaging.getToken();
       if (token != null) {
-        if (Get.isRegistered<DeactivateDeviceUseCase>() && Get.isRegistered<DeviceIdService>()) {
+        if (Get.isRegistered<DeactivateDeviceUseCase>() &&
+            Get.isRegistered<DeviceIdService>()) {
           final deviceIdService = Get.find<DeviceIdService>();
           final deviceId = await deviceIdService.getDeviceId();
           final platform = deviceIdService.getPlatform();
           await Get.find<DeactivateDeviceUseCase>().call(
             token: token,
             deviceId: deviceId,
-            platform: platform
+            platform: platform,
           );
         }
       }
@@ -136,18 +154,36 @@ class NotificationManager {
   }
 
   /// Show local notification when app is in foreground
-  void _showLocalNotification(RemoteMessage message, fln.AndroidNotificationChannel channel) {
+  void _showLocalNotification(
+    RemoteMessage message,
+    fln.AndroidNotificationChannel channel,
+  ) {
     // Extract title and body from notification object OR data payload as fallback
-    final String title = message.notification?.title ?? 
-                        message.data['title']?.toString() ?? 
-                        message.data['subject']?.toString() ?? 
-                        'New Notification';
-    
-    final String body = message.notification?.body ?? 
-                       message.data['message']?.toString() ?? 
-                       message.data['content']?.toString() ?? 
-                       message.data['body']?.toString() ?? 
-                       '';
+    final String title =
+        message.notification?.title ??
+        message.data[PushNotificationPayloadKeys.title]?.toString() ??
+        message.data[PushNotificationPayloadKeys.subject]?.toString() ??
+        'New Notification';
+
+    String body =
+        message.notification?.body ??
+        message.data[PushNotificationPayloadKeys.message]?.toString() ??
+        message.data[PushNotificationPayloadKeys.content]?.toString() ??
+        message.data[PushNotificationPayloadKeys.body]?.toString() ??
+        '';
+
+    // Section 7 Edge Cases: items JSON fails to parse on bulk -> show generic message
+    if (message.data[PushNotificationPayloadKeys.isBulk] ==
+        PushNotificationValues.trueString) {
+      try {
+        final itemsStr =
+            message.data[PushNotificationPayloadKeys.items]?.toString() ??
+            PushNotificationValues.defaultItemsJson;
+        jsonDecode(itemsStr);
+      } catch (e) {
+        body = PushNotificationValues.genericPendingBody;
+      }
+    }
 
     _localNotifications.show(
       id: message.hashCode,
@@ -161,7 +197,11 @@ class NotificationManager {
           importance: fln.Importance.max,
           priority: fln.Priority.high,
         ),
-        iOS: const fln.DarwinNotificationDetails(),
+        iOS: const fln.DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
       ),
       payload: jsonEncode(message.data),
     );
@@ -172,10 +212,90 @@ class NotificationManager {
     if (payload == null || payload.isEmpty) return;
     try {
       final Map<String, dynamic> data = jsonDecode(payload);
-      final String type = data['type']?.toString().toLowerCase() ?? '';
-      final String docName = data['docname']?.toString() ?? '';
-      final String title = data['title']?.toString() ?? data['subject']?.toString() ?? '';
-      AppRouter.navigateByNotification(type: type, docName: docName, title: title);
+
+      // Intercept local file open payloads
+      if (data.containsKey('localFilePath')) {
+        final filePath = data['localFilePath'] as String;
+        if (filePath.isNotEmpty) {
+          final file = File(filePath);
+          if (file.existsSync()) {
+            OpenFilex.open(filePath);
+          }
+        }
+        return;
+      }
+
+      // Section 4 & 6: Check for digest/bulk notification first
+      if (data[PushNotificationPayloadKeys.isBulk] ==
+          PushNotificationValues.trueString) {
+        final int count =
+            int.tryParse(
+              data[PushNotificationPayloadKeys.count]?.toString() ??
+                  PushNotificationValues.defaultCount,
+            ) ??
+            0;
+
+        List items = [];
+        try {
+          items = jsonDecode(
+            data[PushNotificationPayloadKeys.items]?.toString() ??
+                PushNotificationValues.defaultItemsJson,
+          );
+        } catch (e) {
+          // Section 7 Edge Cases: items JSON fails to parse
+          // Show generic "You have pending approvals" message
+          try {
+            Get.snackbar(
+              PushNotificationValues.genericPendingTitle,
+              PushNotificationValues.genericPendingBody,
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          } catch (_) {
+            // Safe fallback if Get context is not ready
+          }
+        }
+
+        final String mobileUrl =
+            data[PushNotificationPayloadKeys.mobileUrl]?.toString() ?? '';
+
+        // Open Notifications List screen (by navigating to mobile_url / fallbackPath)
+        AppRouter.navigateByMobileUrl(
+          mobileUrl,
+          fallbackPath: AppRouter.notificationsPath,
+        );
+        return;
+      }
+
+      // Immediate notification logic
+      final String type =
+          data[PushNotificationPayloadKeys.type]?.toString() ?? '';
+      final String referenceDoctype =
+          data[PushNotificationPayloadKeys.referenceDoctype]?.toString() ?? '';
+
+      // Support both spec's reference_name and legacy docname for safety
+      final String referenceName =
+          data[PushNotificationPayloadKeys.referenceName]?.toString() ??
+          data[PushNotificationPayloadKeys.docName]?.toString() ??
+          '';
+
+      final String mobileUrl =
+          data[PushNotificationPayloadKeys.mobileUrl]?.toString() ?? '';
+
+      if (mobileUrl.isNotEmpty) {
+        // Navigate using mobile_url directly
+        AppRouter.navigateByMobileUrl(
+          mobileUrl,
+          referenceDoctype: referenceDoctype,
+          referenceName: referenceName,
+          type: type,
+        );
+      } else {
+        // Build route from reference_doctype + reference_name
+        AppRouter.navigateByNotification(
+          type: referenceDoctype.isNotEmpty ? referenceDoctype : type,
+          docName: referenceName,
+        );
+      }
     } catch (e) {
       AppRouter.router.push(AppRouter.notificationsPath);
     }
@@ -190,20 +310,58 @@ class NotificationManager {
     } catch (_) {}
   }
 
+  /// Show a custom local notification (e.g., for file downloads)
+  Future<void> showCustomLocalNotification({
+    required String title,
+    required String body,
+    String? payload,
+  }) async {
+    try {
+      final int id = DateTime.now().millisecondsSinceEpoch.remainder(100000);
+      const fln.AndroidNotificationDetails androidPlatformChannelSpecifics =
+          fln.AndroidNotificationDetails(
+            LocalNotificationConstants.channelId,
+            LocalNotificationConstants.channelName,
+            channelDescription: LocalNotificationConstants.channelDescription,
+            importance: fln.Importance.max,
+            priority: fln.Priority.high,
+          );
+      const fln.NotificationDetails platformChannelSpecifics =
+          fln.NotificationDetails(
+            android: androidPlatformChannelSpecifics,
+            iOS: fln.DarwinNotificationDetails(
+              presentAlert: true,
+              presentBadge: true,
+              presentSound: true,
+            ),
+          );
+
+      await _localNotifications.show(
+        id: id,
+        title: title,
+        body: body,
+        notificationDetails: platformChannelSpecifics,
+        payload: payload,
+      );
+    } catch (e, stack) {
+      print("Error in showCustomLocalNotification: $e\n$stack");
+    }
+  }
+
   /// Send a test notification locally
   Future<void> sendTestNotification() async {
     const fln.AndroidNotificationDetails androidPlatformChannelSpecifics =
         fln.AndroidNotificationDetails(
-      LocalNotificationConstants.channelId,
-      LocalNotificationConstants.channelName,
-      channelDescription: LocalNotificationConstants.channelDescription,
-      importance: fln.Importance.max,
-      priority: fln.Priority.high,
-      ticker: 'ticker',
-    );
+          LocalNotificationConstants.channelId,
+          LocalNotificationConstants.channelName,
+          channelDescription: LocalNotificationConstants.channelDescription,
+          importance: fln.Importance.max,
+          priority: fln.Priority.high,
+          ticker: 'ticker',
+        );
     const fln.NotificationDetails platformChannelSpecifics =
         fln.NotificationDetails(android: androidPlatformChannelSpecifics);
-    
+
     await _localNotifications.show(
       id: 0,
       title: 'Test Notification',

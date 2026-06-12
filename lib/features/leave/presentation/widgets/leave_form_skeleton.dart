@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -9,24 +10,24 @@ class LeaveFormSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.border,
-      highlightColor: AppColors.surface,
+      baseColor: AppColors.of(context).surfaceContainerHigh,
+      highlightColor: AppColors.of(context).surfaceContainerLowest,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section Title
-          _buildBox(width: 140, height: 24),
+          _buildBox(width: 140.w, height: 24.h),
           const SizedBox(height: AppConstants.p20),
 
           // Leave Type Label
-          _buildBox(width: 100, height: 16),
+          _buildBox(width: 100.w, height: 16.h),
           const SizedBox(height: AppConstants.p8),
           // Leave Type Dropdown
-          _buildBox(width: double.infinity, height: 56),
+          _buildBox(width: double.infinity, height: 56.h),
           const SizedBox(height: AppConstants.p20),
 
           // Half Day Toggle
-          _buildBox(width: double.infinity, height: 50),
+          _buildBox(width: double.infinity, height: 50.h),
           const SizedBox(height: AppConstants.p20),
 
           // From/To Dates
@@ -36,9 +37,9 @@ class LeaveFormSkeleton extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildBox(width: 80, height: 16),
+                    _buildBox(width: 80.w, height: 16.h),
                     const SizedBox(height: AppConstants.p8),
-                    _buildBox(width: double.infinity, height: 56),
+                    _buildBox(width: double.infinity, height: 56.h),
                   ],
                 ),
               ),
@@ -47,9 +48,9 @@ class LeaveFormSkeleton extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildBox(width: 80, height: 16),
+                    _buildBox(width: 80.w, height: 16.h),
                     const SizedBox(height: AppConstants.p8),
-                    _buildBox(width: double.infinity, height: 56),
+                    _buildBox(width: double.infinity, height: 56.h),
                   ],
                 ),
               ),
@@ -58,14 +59,14 @@ class LeaveFormSkeleton extends StatelessWidget {
           const SizedBox(height: AppConstants.p20),
 
           // Reason Label
-          _buildBox(width: 120, height: 16),
+          _buildBox(width: 120.w, height: 16.h),
           const SizedBox(height: AppConstants.p8),
           // Reason Field
-          _buildBox(width: double.infinity, height: 120),
+          _buildBox(width: double.infinity, height: 120.h),
           const SizedBox(height: AppConstants.p24),
 
           // Guidelines
-          _buildBox(width: double.infinity, height: 100),
+          _buildBox(width: double.infinity, height: 100.h),
         ],
       ),
     );

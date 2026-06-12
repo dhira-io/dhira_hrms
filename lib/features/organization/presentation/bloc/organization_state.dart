@@ -8,7 +8,10 @@ part 'organization_state.freezed.dart';
 class OrganizationState with _$OrganizationState {
   const factory OrganizationState.initial() = _Initial;
   const factory OrganizationState.loading() = _Loading;
-  const factory OrganizationState.organizationsLoaded(List<OrganizationEntity> organizations) = _OrganizationsLoaded;
-  const factory OrganizationState.chartLoaded(OrgChartNodeEntity rootNode) = _ChartLoaded;
+  const factory OrganizationState.organizationsLoaded(
+    List<OrganizationEntity> organizations,
+  ) = _OrganizationsLoaded;
+  const factory OrganizationState.chartLoaded(OrgChartNodeEntity rootNode) =
+      _ChartLoaded;
   const factory OrganizationState.error(String message) = _Error;
 }

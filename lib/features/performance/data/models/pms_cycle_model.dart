@@ -16,8 +16,5 @@ abstract class PmsCycleModel with _$PmsCycleModel {
 
   const PmsCycleModel._();
 
-  PmsCycleEntity toEntity() => PmsCycleEntity(
-        name: name,
-        cycleName: cycleName,
-      );
+  PmsCycleEntity toEntity() => PmsCycleEntity(name: name, cycleName: cycleName);
 }

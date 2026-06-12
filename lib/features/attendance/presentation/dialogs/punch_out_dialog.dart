@@ -1,13 +1,10 @@
-import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/widgets/common_alert_dialog.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 
 void showPunchOutDialog({
   required BuildContext context,
-  required Duration baseDuration,
-  required Stopwatch stopwatch,
+  required int Function() getWorkedSeconds,
   required VoidCallback onConfirm,
 }) {
   final l10n = AppLocalizations.of(context)!;
@@ -25,80 +22,17 @@ void showPunchOutDialog({
       return StreamBuilder(
         stream: Stream.periodic(const Duration(seconds: 1)),
         builder: (sbContext, snapshot) {
-          final currentTotal = baseDuration + stopwatch.elapsed;
+          final currentTotal = Duration(seconds: getWorkedSeconds());
           final formattedTime = formatDuration(currentTotal);
           final isLess = currentTotal.inMinutes < (9 * 60 + 30);
           final title = isLess ? l10n.punchOutEarlyWarning : l10n.confirmLogout;
 
-          return AlertDialog(
-            backgroundColor: AppColors.of(context).surfaceContainerLowest,
-            surfaceTintColor: AppColors.of(context).surfaceContainerLowest,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            title: Text(
-              title,
-              style: AppTextStyle.h3.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.of(context).onSurface,
-              ),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  l10n.punchOutConfirmation(formattedTime),
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.of(context).textSecondary,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  height: 48,
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(dialogContext),
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppConstants.r8),
-                      ),
-                      side: BorderSide(color: AppColors.of(context).border),
-                    ),
-                    child: Text(
-                      l10n.cancel,
-                      style: AppTextStyle.label.copyWith(
-                        color: AppColors.of(context).textPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(dialogContext);
-                      onConfirm();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.of(context).primaryBlue,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppConstants.r8),
-                      ),
-                    ),
-                    child: Text(
-                      l10n.yesLogOut,
-                      style: AppTextStyle.label.copyWith(
-                        color: AppColors.of(context).white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          return CommonAlertDialog(
+            title: title,
+            content: l10n.punchOutConfirmation(formattedTime),
+            confirmText: l10n.yesLogOut,
+            cancelText: l10n.cancel,
+            onConfirm: onConfirm,
           );
         },
       );

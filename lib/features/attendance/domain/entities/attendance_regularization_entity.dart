@@ -23,13 +23,13 @@ class AttendanceRegularizationEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        date,
-        employee,
-        requestType,
-        requestedInTime,
-        requestedOutTime,
-        routeToHR,
-        reason,
-        supportingDocument,
-      ];
+    date,
+    employee,
+    requestType,
+    requestedInTime,
+    requestedOutTime,
+    routeToHR,
+    reason,
+    supportingDocument,
+  ];
 }

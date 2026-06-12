@@ -17,8 +17,6 @@ abstract class ApprovalsAccessModel with _$ApprovalsAccessModel {
       _$ApprovalsAccessModelFromJson(json);
 
   ApprovalsAccessEntity toEntity() {
-    return ApprovalsAccessEntity(
-      canAccess: canAccess,
-    );
+    return ApprovalsAccessEntity(canAccess: canAccess);
   }
 }

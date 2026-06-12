@@ -7,6 +7,7 @@ import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessme
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SelfAssessmentEmployeeCard extends StatelessWidget {
@@ -31,11 +32,15 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    final bool resolvedIsLoading = isLoading ??
-        context.select((SelfAssessmentCubit cubit) =>
-            cubit.state.status == SelfAssessmentStatus.loading);
+    final bool resolvedIsLoading =
+        isLoading ??
+        context.select(
+          (SelfAssessmentCubit cubit) =>
+              cubit.state.status == SelfAssessmentStatus.loading,
+        );
 
-    final resolvedDetails = details ??
+    final resolvedDetails =
+        details ??
         context.select((SelfAssessmentCubit cubit) => cubit.state.details);
 
     final empName = (resolvedDetails?.employeeName.isNotEmpty ?? false)
@@ -48,12 +53,14 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
         ? resolvedDetails!.department
         : (department ?? AppConstants.emptyString);
 
-    final resolvedDueDate = dueDate ??
+    final resolvedDueDate =
+        dueDate ??
         (resolvedDetails != null
             ? DateTimeUtils.formatToDMY(resolvedDetails.submissionDate)
             : AppConstants.emptyString);
 
-    final answered = resolvedDetails?.goalReviews
+    final answered =
+        resolvedDetails?.goalReviews
             .where((g) => g.selfRating.isNotEmpty)
             .length ??
         0;
@@ -89,7 +96,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                       empName,
                       style: AppTextStyle.h3Bold.copyWith(
                         color: AppColors.of(context).onSurface,
-                        fontSize: AppConstants.fs20,
+                        fontSize: AppConstants.fs18.sp,
                       ),
                     ),
                     const SizedBox(height: AppConstants.p4),
@@ -111,13 +118,15 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                       color: AppColors.of(context).outline,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.0,
-                      fontSize: AppConstants.fs10,
+                      fontSize: AppConstants.fs9.sp,
                     ),
                   ),
                   if (resolvedIsLoading)
                     Shimmer.fromColors(
                       baseColor: AppColors.of(context).surfaceContainerHigh,
-                      highlightColor: AppColors.of(context).surfaceContainerLowest,
+                      highlightColor: AppColors.of(
+                        context,
+                      ).surfaceContainerLowest,
                       child: Container(
                         height: AppConstants.p16,
                         width: AppConstants.p80,
@@ -139,7 +148,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppConstants.p20),
+          const SizedBox(height: AppConstants.p16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -151,7 +160,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                     style: AppTextStyle.labelSmall.copyWith(
                       color: AppColors.of(context).onSurface,
                       fontWeight: FontWeight.bold,
-                      fontSize: AppConstants.fs11,
+                      fontSize: AppConstants.fs10.sp,
                     ),
                   ),
                   Text(
@@ -161,7 +170,7 @@ class SelfAssessmentEmployeeCard extends StatelessWidget {
                     style: AppTextStyle.labelSmall.copyWith(
                       color: AppColors.of(context).primary,
                       fontWeight: FontWeight.bold,
-                      fontSize: AppConstants.fs11,
+                      fontSize: AppConstants.fs10.sp,
                     ),
                   ),
                 ],

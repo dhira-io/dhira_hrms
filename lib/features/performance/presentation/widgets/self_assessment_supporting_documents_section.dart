@@ -2,6 +2,7 @@ import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/features/performance/domain/entities/self_assessment_entity.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
@@ -15,13 +16,15 @@ class SupportingDocumentsSection extends StatelessWidget {
   final bool? isEditable;
   final bool? isUploading;
   final String? deletingAttachmentId;
-  final Future<void> Function(String filePath, String fileName)? onUploadAttachment;
+  final Future<void> Function(String filePath, String fileName)?
+  onUploadAttachment;
   final Future<bool> Function(String fileId)? onDeleteAttachment;
   final void Function({
     required String fileUrl,
     required String fileName,
     required AppLocalizations l10n,
-  })? onFileAction;
+  })?
+  onFileAction;
 
   const SupportingDocumentsSection({
     super.key,
@@ -37,7 +40,8 @@ class SupportingDocumentsSection extends StatelessWidget {
   Future<void> _pickAndUploadAttachment(
     BuildContext context,
     List<FileAttachmentEntity> resolvedAttachments,
-    Future<void> Function(String filePath, String fileName) resolvedOnUploadAttachment,
+    Future<void> Function(String filePath, String fileName)
+    resolvedOnUploadAttachment,
   ) async {
     final l10n = AppLocalizations.of(context)!;
     if (!FileValidationUtils.canUploadMore(
@@ -75,24 +79,28 @@ class SupportingDocumentsSection extends StatelessWidget {
     final state = cubit.state;
 
     final resolvedAttachments = attachments ?? state.details?.attachments ?? [];
-    final bool resolvedIsEditable = isEditable ??
-        (state.details?.docStatus == AppConstants.docStatusDraft);
+    final bool resolvedIsEditable =
+        isEditable ?? (state.details?.docStatus == AppConstants.docStatusDraft);
     final bool resolvedIsUploading = isUploading ?? state.isAttachmentUploading;
-    final resolvedDeletingAttachmentId = deletingAttachmentId ?? state.deletingAttachmentId;
+    final resolvedDeletingAttachmentId =
+        deletingAttachmentId ?? state.deletingAttachmentId;
 
-    final resolvedOnUploadAttachment = onUploadAttachment ??
-        (filePath, fileName) => cubit.uploadAttachment(filePath: filePath, fileName: fileName);
+    final resolvedOnUploadAttachment =
+        onUploadAttachment ??
+        (filePath, fileName) =>
+            cubit.uploadAttachment(filePath: filePath, fileName: fileName);
 
-    final resolvedOnDeleteAttachment = onDeleteAttachment ??
-        (fileId) => cubit.deleteAttachment(fileId);
+    final resolvedOnDeleteAttachment =
+        onDeleteAttachment ?? (fileId) => cubit.deleteAttachment(fileId);
 
-    final resolvedOnFileAction = onFileAction ??
+    final resolvedOnFileAction =
+        onFileAction ??
         ({required fileUrl, required fileName, required l10n}) {
           context.read<FileOperationCubit>().handleFileAction(
-                fileUrl: fileUrl,
-                fileName: fileName,
-                l10n: l10n,
-              );
+            fileUrl: fileUrl,
+            fileName: fileName,
+            l10n: l10n,
+          );
         };
 
     return Column(
@@ -115,9 +123,9 @@ class SupportingDocumentsSection extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(AppConstants.p12),
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).surfaceContainerHigh.withValues(
-                      alpha: 0.5,
-                    ),
+                    color: AppColors.of(
+                      context,
+                    ).surfaceContainerHigh.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(AppConstants.r12),
                   ),
                   child: Icon(
@@ -141,37 +149,14 @@ class SupportingDocumentsSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: AppConstants.p16),
-                ElevatedButton(
-                  onPressed: resolvedIsUploading
-                      ? null
-                      : () => _pickAndUploadAttachment(
-                             context,
-                             resolvedAttachments,
-                             resolvedOnUploadAttachment,
-                           ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.of(context).primary,
-                    foregroundColor: AppColors.of(context).white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppConstants.p24,
-                      vertical: AppConstants.p12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppConstants.r8),
-                    ),
+                CommonButton(
+                  text: l10n.selectFiles,
+                  onPressed: () => _pickAndUploadAttachment(
+                    context,
+                    resolvedAttachments,
+                    resolvedOnUploadAttachment,
                   ),
-                  child: resolvedIsUploading
-                      ? SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              AppColors.of(context).white,
-                            ),
-                          ),
-                        )
-                      : Text(l10n.selectFiles),
+                  isLoading: resolvedIsUploading,
                 ),
               ],
             ),
@@ -218,7 +203,9 @@ class SupportingDocumentsSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AppColors.of(context).surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(AppConstants.r8),
-                  border: Border.all(color: AppColors.of(context).surfaceContainerHigh),
+                  border: Border.all(
+                    color: AppColors.of(context).surfaceContainerHigh,
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -269,7 +256,8 @@ class SupportingDocumentsSection extends StatelessWidget {
                               ),
                             )
                           : IconButton(
-                              onPressed: () => resolvedOnDeleteAttachment(file.name),
+                              onPressed: () =>
+                                  resolvedOnDeleteAttachment(file.name),
                               icon: Icon(
                                 Icons.delete_outline,
                                 size: AppConstants.iconSmall,

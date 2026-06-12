@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import '../../core/theme/app_text_style.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/common_alert_dialog.dart';
 import '../../l10n/app_localizations.dart';
 
 class AppDialogs {
@@ -13,13 +15,9 @@ class AppDialogs {
         return CupertinoAlertDialog(
           title: Text(
             l10n.appTitle,
-            style: AppTextStyle.h3.copyWith(fontSize: 14),
+            style: AppTextStyle.h3.copyWith(fontSize: 14.sp),
           ),
-          content: Text(
-            message,
-            style: AppTextStyle.bodyMedium,
-            maxLines: 3,
-          ),
+          content: Text(message, style: AppTextStyle.bodyMedium, maxLines: 3),
           actions: <Widget>[
             CupertinoDialogAction(
               onPressed: () {
@@ -32,7 +30,7 @@ class AppDialogs {
                   color: AppColors.of(context).primary,
                 ),
               ),
-            )
+            ),
           ],
         );
       },
@@ -47,28 +45,20 @@ class AppDialogs {
     bool isDestructive = false,
   }) async {
     final l10n = AppLocalizations.of(context)!;
-    final result = await showDialog<bool>(
+    bool result = false;
+    await showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.cancel),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: isDestructive ? AppColors.of(context).error : AppColors.of(context).primary,
-            ),
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(confirmLabel, style: const TextStyle(color: Colors.white)),
-          ),
-        ],
+      builder: (ctx) => CommonAlertDialog(
+        title: title,
+        content: message,
+        confirmText: confirmLabel,
+        cancelText: l10n.cancel,
+        onConfirm: () {
+          result = true;
+        },
+        confirmButtonColor: isDestructive ? AppColors.of(context).error : null,
       ),
     );
-    return result ?? false;
+    return result;
   }
 }
-

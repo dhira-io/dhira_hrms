@@ -3,7 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'attendance_work_durations_entity.freezed.dart';
 
 @freezed
-abstract class AttendanceWorkDurationsEntity with _$AttendanceWorkDurationsEntity {
+abstract class AttendanceWorkDurationsEntity
+    with _$AttendanceWorkDurationsEntity {
   const factory AttendanceWorkDurationsEntity({
     required double todayHours,
     required String todayLabel,

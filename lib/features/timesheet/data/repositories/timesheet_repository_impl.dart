@@ -7,7 +7,6 @@ import '../../domain/repositories/timesheet_repository.dart';
 import '../datasources/timesheet_remote_datasource.dart';
 import '../models/project_assignment_model.dart';
 import '../models/timesheet_overview_model.dart';
-import '../../domain/entities/timesheet_overview_entity.dart';
 
 class TimesheetRepositoryImpl implements ITimesheetRepository {
   final TimesheetRemoteDataSource remoteDataSource;
@@ -47,24 +46,23 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
           "to_date": toDate,
           "project_assignments": assignments.map((a) {
             final model = ProjectAssignmentModel.fromEntity(a);
-            return model.toJson()
-              ..addAll({
-                "date": DateTimeUtils.formatToYMD(
-                  DateTime.tryParse(a.date!) ?? DateTime.now(),
-                ),
-                "hours_details": "0.00/0.00",
-                "raised_by": employee,
-                "completed": 0,
-                "approved": 0,
-                "applicable_for_compensatory_off": 0,
-                "status": docStatus == 1 ? "Pending" : (a.status ?? "Draft"),
-                "task_data": a.taskData ?? "",
-                "description": a.description ?? "",
-                "attachments": a.attachments ?? "",
-              });
+            return model.toJson()..addAll({
+              "date": DateTimeUtils.formatToYMD(
+                DateTime.tryParse(a.date!) ?? DateTime.now(),
+              ),
+              "hours_details": "0.00/0.00",
+              "raised_by": employee,
+              "completed": 0,
+              "approved": 0,
+              "applicable_for_compensatory_off": 0,
+              "status": docStatus == 1 ? "Pending" : (a.status ?? "Draft"),
+              "task_data": a.taskData ?? "",
+              "description": a.description ?? "",
+              "attachments": a.attachments ?? "",
+            });
           }).toList(),
         };
-        
+
         final result = await remoteDataSource.createTimesheet(payload);
         return Right(result);
       } catch (e) {
@@ -87,10 +85,15 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final payload = _buildSyncPayload(assignments, employee, docStatus: approved);
+        final payload = _buildSyncPayload(
+          assignments,
+          employee,
+          docStatus: approved,
+        );
         payload['name'] = name;
-        payload['docstatus'] = approved; // In the Bloc, 'approved' is used for docstatus (1=Pending)
-        
+        payload['docstatus'] =
+            approved; // In the Bloc, 'approved' is used for docstatus (1=Pending)
+
         final result = await remoteDataSource.updateTimesheet(payload);
         return Right(result);
       } catch (e) {
@@ -99,21 +102,25 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
     });
   }
 
-  Map<String, dynamic> _buildSyncPayload(List<ProjectAssignmentEntity> assignments, String employee, {int? docStatus}) {
+  Map<String, dynamic> _buildSyncPayload(
+    List<ProjectAssignmentEntity> assignments,
+    String employee, {
+    int? docStatus,
+  }) {
     final Map<String, dynamic> changes = {};
 
     for (var a in assignments) {
       if (a.date == null) continue;
       final date = DateTime.tryParse(a.date!) ?? DateTime.now();
-      
-      final weekKey = DateTimeUtils.getTimesheetWeekKey(date);
+
+      final weekKey = DateTimeUtils.getTimesheetWeekStorageKey(date);
       final dayKey = DateTimeUtils.getTimesheetDayKey(date);
       final ymdDate = DateTimeUtils.formatToYMD(date);
 
       if (!changes.containsKey(weekKey)) {
         changes[weekKey] = <String, dynamic>{};
       }
-      
+
       final Map<String, dynamic> weekData = changes[weekKey];
       if (!weekData.containsKey(dayKey)) {
         weekData[dayKey] = <Map<String, dynamic>>[];
@@ -122,20 +129,20 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
       final List<Map<String, dynamic>> dayTasks = weekData[dayKey];
       final model = ProjectAssignmentModel.fromEntity(a);
       dayTasks.add(
-        model.toJson()
-          ..addAll({
-            "date": ymdDate,
-            "raised_by": employee,
-            "status": (docStatus == 1) ? "Pending" : (a.status ?? "Draft"),
-            "description": a.description ?? "",
-            "task_data": a.taskData ?? "",
-            "attachments": a.attachments ?? "",
-          }),
+        model.toJson()..addAll({
+          "date": ymdDate,
+          "raised_by": employee,
+          "status": (docStatus == 1) ? "Pending" : (a.status ?? "Draft"),
+          "description": a.description ?? "",
+          "task_data": a.taskData ?? "",
+          "attachments": a.attachments ?? "",
+        }),
       );
     }
 
     return {"changes": changes};
   }
+
   @override
   Future<Either<Failure, List<ProjectAssignmentEntity>>> fetchWeekWiseDetails({
     required int month,
@@ -143,7 +150,10 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final raw = await remoteDataSource.fetchWeekWiseDetails(month: month, year: year);
+        final raw = await remoteDataSource.fetchWeekWiseDetails(
+          month: month,
+          year: year,
+        );
         final List<ProjectAssignmentEntity> allAssignments = [];
 
         if (raw['message'] != null && raw['message'] is Map) {
@@ -153,8 +163,9 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
             final weekData = weekEntry.value;
             if (weekData is Map) {
               // Support both "days" wrapper and direct day keys
-              final Map<String, dynamic> daysMap = (weekData['days'] != null && weekData['days'] is Map) 
-                  ? weekData['days'] 
+              final Map<String, dynamic> daysMap =
+                  (weekData['days'] != null && weekData['days'] is Map)
+                  ? weekData['days']
                   : Map<String, dynamic>.from(weekData);
 
               for (var dayEntry in daysMap.entries) {
@@ -164,7 +175,9 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
                   for (var taskJson in dayValue) {
                     final model = ProjectAssignmentModel.fromJson(taskJson);
                     final parent = taskJson['parent'];
-                    allAssignments.add(model.copyWith(parent: parent).toEntity());
+                    allAssignments.add(
+                      model.copyWith(parent: parent).toEntity(),
+                    );
                   }
                 }
               }
@@ -187,11 +200,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final payload = {
-          "name": name,
-          "parent": parent,
-          "date": date,
-        };
+        final payload = {"name": name, "parent": parent, "date": date};
         await remoteDataSource.deleteTimesheetEntry(payload);
         return const Right(null);
       } catch (e) {
@@ -206,17 +215,12 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-
-        final payload = {
-          "timesheet_name": timesheetName,
-        };
+        final payload = {"timesheet_name": timesheetName};
 
         await remoteDataSource.deleteTimesheet(payload);
 
         return const Right(null);
-
       } catch (e) {
-
         return Left(Failure.fromException(e));
       }
     });
@@ -229,7 +233,10 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final raw = await remoteDataSource.getTimesheetOverview(month: month, year: year);
+        final raw = await remoteDataSource.getTimesheetOverview(
+          month: month,
+          year: year,
+        );
         if (raw['message'] != null && raw['message'] is Map) {
           final model = TimesheetOverviewModel.fromJson(raw['message']);
           return Right(model.toEntity());
@@ -242,9 +249,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
   }
 
   @override
-  Future<Either<Failure, String>> uploadFile({
-    required String filePath,
-  }) async {
+  Future<Either<Failure, String>> uploadFile({required String filePath}) async {
     try {
       final result = await remoteDataSource.uploadFile(filePath);
       return Right(result);

@@ -8,6 +8,7 @@ import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_state.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 
 class LeaveBalanceCard extends StatelessWidget {
   const LeaveBalanceCard({super.key});
@@ -39,10 +40,9 @@ class TimesheetSummaryCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocSelector<TimesheetBloc, TimesheetState, String>(
       selector: (state) {
-        return state.maybeMap(
-          loaded: (s) => l10n.entriesCount(s.timesheets.length),
-          orElse: () => l10n.entriesCount(0),
-        );
+        return state.status == TimesheetStateStatus.loaded
+            ? l10n.entriesCount(state.timesheets.length)
+            : l10n.entriesCount(0);
       },
       builder: (context, summary) {
         return _OverviewCard(
@@ -78,9 +78,9 @@ class _OverviewCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.of(context).onSurface.withValues(
-              alpha: AppConstants.opacityVeryLow,
-            ),
+            color: AppColors.of(
+              context,
+            ).onSurface.withValues(alpha: AppConstants.opacityVeryLow),
             blurRadius: AppConstants.p10,
             offset: const Offset(0, AppConstants.p4),
           ),

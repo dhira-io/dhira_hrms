@@ -17,7 +17,8 @@ abstract class LeaveStatisticsModel with _$LeaveStatisticsModel {
   const factory LeaveStatisticsModel({
     required bool success,
     @JsonKey(fromJson: _stringFromJson) required String employee,
-    @JsonKey(name: 'employee_name', fromJson: _stringFromJson) required String employeeName,
+    @JsonKey(name: 'employee_name', fromJson: _stringFromJson)
+    required String employeeName,
     required LeavePeriodModel period,
     required LeaveStatsModel statistics,
     required LeaveDetailsModel details,
@@ -43,7 +44,8 @@ abstract class LeaveStatisticsModel with _$LeaveStatisticsModel {
 @freezed
 abstract class LeavePeriodModel with _$LeavePeriodModel {
   const factory LeavePeriodModel({
-    @JsonKey(name: 'from_date', fromJson: _stringFromJson) required String fromDate,
+    @JsonKey(name: 'from_date', fromJson: _stringFromJson)
+    required String fromDate,
     @JsonKey(name: 'to_date', fromJson: _stringFromJson) required String toDate,
   }) = _LeavePeriodModel;
 
@@ -53,10 +55,7 @@ abstract class LeavePeriodModel with _$LeavePeriodModel {
       _$LeavePeriodModelFromJson(json);
 
   LeavePeriodEntity toEntity() {
-    return LeavePeriodEntity(
-      fromDate: fromDate,
-      toDate: toDate,
-    );
+    return LeavePeriodEntity(fromDate: fromDate, toDate: toDate);
   }
 }
 
@@ -89,10 +88,14 @@ abstract class LeaveStatsModel with _$LeaveStatsModel {
 @freezed
 abstract class LeaveDetailsModel with _$LeaveDetailsModel {
   const factory LeaveDetailsModel({
-    @JsonKey(name: 'applied_leaves', fromJson: _listFromJson) required List<dynamic> appliedLeaves,
-    @JsonKey(name: 'approved_leaves', fromJson: _listFromJson) required List<dynamic> approvedLeaves,
-    @JsonKey(name: 'pending_leaves', fromJson: _listFromJson) required List<dynamic> pendingLeaves,
-    @JsonKey(name: 'cancelled_leaves', fromJson: _listFromJson) required List<dynamic> cancelledLeaves,
+    @JsonKey(name: 'applied_leaves', fromJson: _listFromJson)
+    required List<dynamic> appliedLeaves,
+    @JsonKey(name: 'approved_leaves', fromJson: _listFromJson)
+    required List<dynamic> approvedLeaves,
+    @JsonKey(name: 'pending_leaves', fromJson: _listFromJson)
+    required List<dynamic> pendingLeaves,
+    @JsonKey(name: 'cancelled_leaves', fromJson: _listFromJson)
+    required List<dynamic> cancelledLeaves,
   }) = _LeaveDetailsModel;
 
   const LeaveDetailsModel._();

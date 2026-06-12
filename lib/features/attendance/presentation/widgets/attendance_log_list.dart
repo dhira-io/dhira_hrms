@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_state.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -69,10 +70,10 @@ class _AttendanceLogListState extends State<AttendanceLogList> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(
+              margin: EdgeInsets.only(
                 left: AppConstants.p20,
                 right: AppConstants.p20,
-                top: 8,
+                top: 8.h,
               ),
               padding: const EdgeInsets.all(AppConstants.p20),
               decoration: BoxDecoration(
@@ -151,7 +152,7 @@ class _CalendarView extends StatelessWidget {
             onFormatChanged: onFormatChanged,
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         _CalendarHeader(
           focusedDay: focusedDay,
           calendarFormat: calendarFormat,
@@ -174,7 +175,7 @@ class _CalendarView extends StatelessWidget {
             onPageChanged(newDate);
           },
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         TableCalendar(
           firstDay: DateTime.utc(2020, 1, 1),
           lastDay: DateTime.utc(2030, 12, 31),
@@ -215,8 +216,8 @@ class _CalendarView extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 10),
-        Divider(height: 0.5),
+        SizedBox(height: 10.h),
+        Divider(height: 0.5.h),
         const _Legend(),
       ],
     );
@@ -270,7 +271,7 @@ class _CalendarHeader extends StatelessWidget {
             style: AppTextStyle.h3.copyWith(
               fontWeight: FontWeight.w800,
               color: AppColors.of(context).darkSlate,
-              height: 1.1,
+              height: 1.1.h,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -326,7 +327,7 @@ class _MonthWeekToggle extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(4),
+      padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
         color: AppColors.of(context).slateBg,
         borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -387,9 +388,11 @@ class _ToggleItem extends StatelessWidget {
           child: Text(
             label,
             style: AppTextStyle.bodyMedium.copyWith(
-              fontSize: AppConstants.fs14,
+              fontSize: AppConstants.fs12.sp,
               fontWeight: FontWeight.w700,
-              color: isActive ? AppColors.of(context).blueIcon : AppColors.of(context).placeholdergrey,
+              color: isActive
+                  ? AppColors.of(context).blueIcon
+                  : AppColors.of(context).placeholdergrey,
             ),
           ),
         ),
@@ -425,7 +428,10 @@ class _CalendarDay extends StatelessWidget {
     Border? border;
 
     if (isToday) {
-      border = Border.all(color: AppColors.of(context).calendarTodayBorder, width: 1.5);
+      border = Border.all(
+        color: AppColors.of(context).calendarTodayBorder,
+        width: 1.5.w,
+      );
     }
 
     if (status != null) {
@@ -462,7 +468,9 @@ class _CalendarDay extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(AppConstants.p4),
       decoration: BoxDecoration(
-        color: isToday ? AppColors.of(context).surfaceContainerLowest : backgroundColor,
+        color: isToday
+            ? AppColors.of(context).surfaceContainerLowest
+            : backgroundColor,
         borderRadius: BorderRadius.circular(AppConstants.r8),
         border: border,
       ),
@@ -487,21 +495,41 @@ class _Legend extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
         Wrap(
           spacing: 16,
           runSpacing: 10,
           children: [
-            _LegendItem(color: AppColors.of(context).presentBg, label: l10n.present),
-            _LegendItem(color: AppColors.of(context).absentBg, label: l10n.absent),
-            _LegendItem(color: AppColors.of(context).leaveBg, label: l10n.onLeave),
-            _LegendItem(color: AppColors.of(context).weekendBg, label: l10n.weekend),
-            _LegendItem(color: AppColors.of(context).holidayBg, label: l10n.holiday),
-            _LegendItem(color: AppColors.of(context).halfDayBg, label: l10n.halfDay),
+            _LegendItem(
+              color: AppColors.of(context).presentBg,
+              label: l10n.present,
+            ),
+            _LegendItem(
+              color: AppColors.of(context).absentBg,
+              label: l10n.absent,
+            ),
+            _LegendItem(
+              color: AppColors.of(context).leaveBg,
+              label: l10n.onLeave,
+            ),
+            _LegendItem(
+              color: AppColors.of(context).weekendBg,
+              label: l10n.weekend,
+            ),
+            _LegendItem(
+              color: AppColors.of(context).holidayBg,
+              label: l10n.holiday,
+            ),
+            _LegendItem(
+              color: AppColors.of(context).halfDayBg,
+              label: l10n.halfDay,
+            ),
             _LegendItem(
               color: AppColors.of(context).surfaceContainerLowest,
               label: l10n.today,
-              border: Border.all(color: AppColors.of(context).calendarTodayBorder),
+              border: Border.all(
+                color: AppColors.of(context).calendarTodayBorder,
+              ),
             ),
           ],
         ),
@@ -524,83 +552,84 @@ class _MonthSummary extends StatelessWidget {
     }
 
     return CollapsibleSection(
-        initiallyExpanded: false,
-        title: Row(
-          children: [
-            Text(
-              l10n.monthSummary,
-              style: AppTextStyle.h3.copyWith(
-                fontWeight: FontWeight.bold,
-                letterSpacing: 0.5,
-              ),
+      initiallyExpanded: false,
+      title: Row(
+        children: [
+          Text(
+            l10n.monthSummary,
+            style: AppTextStyle.h3.copyWith(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+              fontSize: AppConstants.fs15.sp,
             ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppConstants.p20,
-            0,
-            AppConstants.p20,
-            AppConstants.p8,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              Row(
-            children: [
-              Expanded(
-                child: _SummaryItem(
-                  title: l10n.presentDays,
-                  value: summary != null
-                      ? formatValue(summary!.presentDays)
-                      : "0",
-                  color: AppColors.of(context).monthSummaryPresentBg,
-                  textColor: AppColors.of(context).monthSummaryPresentText,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _SummaryItem(
-                  title: l10n.absentDays,
-                  value: summary != null
-                      ? formatValue(summary!.absentDays)
-                      : "0",
-                  color: AppColors.of(context).monthSummaryAbsentBg,
-                  textColor: AppColors.of(context).monthSummaryAbsentText,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _SummaryItem(
-                  title: l10n.onLeave,
-                  value: summary != null
-                      ? formatValue(summary!.onLeaveDays)
-                      : "0",
-                  color: AppColors.of(context).monthSummaryLeaveBg,
-                  textColor: AppColors.of(context).monthSummaryLeaveText,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _HolidaySummaryItem(
-                  title: l10n.holidays,
-                  value: summary?.holidays.toString() ?? "0",
-                  color: AppColors.of(context).monthSummaryHolidayBg,
-                  textColor: AppColors.of(context).monthSummaryHolidayText,
-                  holidays: summary?.holidayDetails ?? [],
-                ),
-              ),
-            ],
           ),
         ],
       ),
-    ),
-  );
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppConstants.p20,
+          0,
+          AppConstants.p20,
+          AppConstants.p8,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 20.h),
+            Row(
+              children: [
+                Expanded(
+                  child: _SummaryItem(
+                    title: l10n.presentDays,
+                    value: summary != null
+                        ? formatValue(summary!.presentDays)
+                        : "0",
+                    color: AppColors.of(context).monthSummaryPresentBg,
+                    textColor: AppColors.of(context).monthSummaryPresentText,
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: _SummaryItem(
+                    title: l10n.absentDays,
+                    value: summary != null
+                        ? formatValue(summary!.absentDays)
+                        : "0",
+                    color: AppColors.of(context).monthSummaryAbsentBg,
+                    textColor: AppColors.of(context).monthSummaryAbsentText,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.h),
+            Row(
+              children: [
+                Expanded(
+                  child: _SummaryItem(
+                    title: l10n.onLeave,
+                    value: summary != null
+                        ? formatValue(summary!.onLeaveDays)
+                        : "0",
+                    color: AppColors.of(context).monthSummaryLeaveBg,
+                    textColor: AppColors.of(context).monthSummaryLeaveText,
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: _HolidaySummaryItem(
+                    title: l10n.holidays,
+                    value: summary?.holidays.toString() ?? "0",
+                    color: AppColors.of(context).monthSummaryHolidayBg,
+                    textColor: AppColors.of(context).monthSummaryHolidayText,
+                    holidays: summary?.holidayDetails ?? [],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -635,7 +664,7 @@ class _SummaryItem extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             value,
             style: AppTextStyle.h2.copyWith(
@@ -701,7 +730,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
@@ -714,7 +743,7 @@ class _HolidaySummaryItem extends StatelessWidget {
                 ),
               ),
               if (holidays.length == 1) ...[
-                const SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
                     "(${holidays.first.name} - ${DateTimeUtils.formatHolidayDate(holidays.first.date)})",
@@ -748,15 +777,15 @@ class _LegendItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 12,
-          height: 12,
+          width: 12.w,
+          height: 12.h,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(4.r),
             border: border,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8.w),
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -71,8 +72,8 @@ class RegularizationDetailsSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 24,
-                width: 24,
+                height: 24.h,
+                width: 24.w,
                 child: Checkbox(
                   value: routeToHR,
                   onChanged: onRouteToHRChanged,
@@ -95,7 +96,7 @@ class RegularizationDetailsSection extends StatelessWidget {
                     Text(
                       l10n.routeToHRSub,
                       style: AppTextStyle.labelSmall.copyWith(
-                        fontSize: AppConstants.fs10,
+                        fontSize: AppConstants.fs9.sp,
                         color: AppColors.of(context).textSecondary,
                       ),
                     ),
@@ -164,7 +165,7 @@ class _TimeInput extends StatelessWidget {
             text: label,
             style: AppTextStyle.labelSmall.copyWith(
               color: AppColors.of(context).onSurfaceVariant,
-              fontSize: AppConstants.fs10,
+              fontSize: AppConstants.fs9.sp,
               fontWeight: FontWeight.bold,
             ),
             children: [
@@ -183,6 +184,7 @@ class _TimeInput extends StatelessWidget {
           controller: controller,
           readOnly: true,
           onTap: () async {
+            FocusManager.instance.primaryFocus?.unfocus();
             final time = await showTimePicker(
               context: context,
               initialTime: TimeOfDay.now(),

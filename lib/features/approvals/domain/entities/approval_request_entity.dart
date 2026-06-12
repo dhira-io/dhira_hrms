@@ -36,14 +36,14 @@ class ConflictingLeaveEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        employeeName,
-        employeeRole,
-        profileImage,
-        leaveType,
-        status,
-        fromDate,
-        toDate,
-      ];
+    employeeName,
+    employeeRole,
+    profileImage,
+    leaveType,
+    status,
+    fromDate,
+    toDate,
+  ];
 }
 
 class ApprovalRequestEntity extends Equatable {
@@ -91,20 +91,20 @@ class ApprovalRequestEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        employeeId,
-        status,
-        category,
-        type,
-        availableActions,
-        isMainApprover,
-        conflictingLeaves,
-        fromDate,
-        toDate,
-        isHalfDay,
-        halfDaySegment,
-        halfDayDate,
-        customHalfDetails,
-        fileUrl,
-      ];
+    id,
+    employeeId,
+    status,
+    category,
+    type,
+    availableActions,
+    isMainApprover,
+    conflictingLeaves,
+    fromDate,
+    toDate,
+    isHalfDay,
+    halfDaySegment,
+    halfDayDate,
+    customHalfDetails,
+    fileUrl,
+  ];
 }

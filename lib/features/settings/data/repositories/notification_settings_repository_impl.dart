@@ -4,7 +4,8 @@ import '../../data/models/notification_settings_model.dart';
 import '../../domain/entities/notification_settings_entity.dart';
 import '../../domain/repositories/notification_settings_repository.dart';
 
-class NotificationSettingsRepository implements INotificationSettingsRepository {
+class NotificationSettingsRepository
+    implements INotificationSettingsRepository {
   final SharedPreferences _prefs;
   static const String _key = 'notification_settings';
 

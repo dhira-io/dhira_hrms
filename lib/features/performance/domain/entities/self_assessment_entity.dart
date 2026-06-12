@@ -33,7 +33,6 @@ abstract class FileAttachmentEntity with _$FileAttachmentEntity {
   }) = _FileAttachmentEntity;
 }
 
-
 @freezed
 abstract class GoalReviewEntity with _$GoalReviewEntity {
   const factory GoalReviewEntity({

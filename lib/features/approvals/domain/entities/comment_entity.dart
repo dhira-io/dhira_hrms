@@ -18,5 +18,12 @@ class CommentEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [name, content, commentType, owner, creation, commentBy];
+  List<Object?> get props => [
+    name,
+    content,
+    commentType,
+    owner,
+    creation,
+    commentBy,
+  ];
 }

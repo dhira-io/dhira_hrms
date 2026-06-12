@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 
@@ -20,12 +21,15 @@ class NotificationSectionWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+          padding:       EdgeInsets.symmetric(
+            horizontal: 8.0.w,
+            vertical: 16.0.h,
+          ),
           child: Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 40.w,
+                height: 40.h,
                 decoration: BoxDecoration(
                   color: AppColors.of(context).primaryFixed,
                   shape: BoxShape.circle,
@@ -36,7 +40,7 @@ class NotificationSectionWidget extends StatelessWidget {
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
               Text(
                 title,
                 style: AppTextStyle.h3.copyWith(
@@ -48,10 +52,10 @@ class NotificationSectionWidget extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.all(24.0),
+          padding:       EdgeInsets.all(24.0.w),
           decoration: BoxDecoration(
             color: AppColors.of(context).surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             boxShadow: [
               BoxShadow(
                 color: AppColors.of(context).onSurface.withValues(alpha: 0.04),
@@ -60,9 +64,7 @@ class NotificationSectionWidget extends StatelessWidget {
               ),
             ],
           ),
-          child: Column(
-            children: children,
-          ),
+          child: Column(children: children),
         ),
       ],
     );

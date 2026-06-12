@@ -14,28 +14,20 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> loadProfile() async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
-    
+
     final empId = localStorageService.getEmpId() ?? '';
-    
+
     if (empId.isEmpty) {
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: 'userEmailNotFound',
-      ));
+      emit(state.copyWith(isLoading: false, errorMessage: 'userEmailNotFound'));
       return;
     }
-    
+
     final result = await getProfileUseCase(empId);
-    
+
     result.fold(
-      (failure) => emit(state.copyWith(
-        isLoading: false,
-        errorMessage: failure.message,
-      )),
-      (profile) => emit(state.copyWith(
-        isLoading: false,
-        userProfile: profile,
-      )),
+      (failure) =>
+          emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
+      (profile) => emit(state.copyWith(isLoading: false, userProfile: profile)),
     );
   }
 }

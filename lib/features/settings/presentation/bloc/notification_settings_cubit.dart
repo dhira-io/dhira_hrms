@@ -3,9 +3,8 @@ import '../../domain/entities/notification_settings_entity.dart';
 import 'notification_settings_state.dart';
 
 class NotificationSettingsCubit extends Cubit<NotificationSettingsState> {
-  NotificationSettingsCubit() : super(NotificationSettingsState(
-    settings: _getStaticSettings(),
-  ));
+  NotificationSettingsCubit()
+    : super(NotificationSettingsState(settings: _getStaticSettings()));
 
   static NotificationSettingsEntity _getStaticSettings() {
     return const NotificationSettingsEntity(
@@ -92,8 +91,10 @@ class NotificationSettingsCubit extends Cubit<NotificationSettingsState> {
       return section;
     }).toList();
 
-    emit(state.copyWith(
-      settings: state.settings!.copyWith(sections: updatedSections),
-    ));
+    emit(
+      state.copyWith(
+        settings: state.settings!.copyWith(sections: updatedSections),
+      ),
+    );
   }
 }

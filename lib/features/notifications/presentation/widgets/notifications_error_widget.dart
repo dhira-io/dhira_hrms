@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 
@@ -22,25 +23,28 @@ class NotificationsErrorWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.error_outline, 
-            size: 48, 
+            Icons.error_outline,
+            size: 48,
             color: AppColors.of(context).error,
           ),
-          const SizedBox(height: 16),
+                SizedBox(height: 16.h),
           Text(
-            message, 
+            message,
             style: AppTextStyle.bodyMedium,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 24),
+                SizedBox(height: 24.h),
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.of(context).primary,
               foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding:       EdgeInsets.symmetric(
+                horizontal: 32.w,
+                vertical: 12.h,
+              ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
             ),
             child: Text(l10n.retry),

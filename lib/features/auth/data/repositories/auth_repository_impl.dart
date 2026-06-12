@@ -7,13 +7,18 @@ import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../models/user_model.dart';
 import '../../../../core/utils/string_utils.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AuthRepositoryImpl implements IAuthRepository {
   final AuthRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
   final LocalStorageService localStorageService;
 
-  AuthRepositoryImpl(this.remoteDataSource, this.networkInfo, this.localStorageService);
+  AuthRepositoryImpl(
+    this.remoteDataSource,
+    this.networkInfo,
+    this.localStorageService,
+  );
 
   @override
   Future<Either<Failure, UserEntity>> signIn(
@@ -32,6 +37,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         await localStorageService.saveUserFullname(userEntity.fullName);
         await localStorageService.saveEmpId(userEntity.empId);
         await localStorageService.saveEmpName(userEntity.fullName);
+        await localStorageService.saveIsFirstTime(false);
 
         if (userEntity.department != null) {
           await localStorageService.saveDepartment(userEntity.department!);
@@ -48,20 +54,26 @@ class AuthRepositoryImpl implements IAuthRepository {
           await localStorageService.saveGender(userEntity.gender!);
         }
 
-        final existingCookies = localStorageService.getCookieMap() ?? {};
-        final sid = existingCookies['sid'] ?? "";
+        // Read latest cookies (which should have the new sid from AuthInterceptor)
+        final currentCookies = localStorageService.getCookieMap() ?? {};
 
+        // Merge without overwriting the sid if it exists in currentCookies
         final Map<String, String> setCookieMap = {
+          ...currentCookies,
           "full_name": userEntity.fullName,
-          "sid": sid,
           "system_user": "yes",
           "user_id": email,
           "user_image": userEntity.userImage ?? "",
         };
+
         await localStorageService.saveCookieMap(setCookieMap);
 
         return Right(userEntity);
       } catch (e) {
+        try {
+          await remoteDataSource.logout();
+        } catch (_) {}
+        await localStorageService.clearAll();
         return Left(Failure.fromException(e));
       }
     });
@@ -77,6 +89,7 @@ class AuthRepositoryImpl implements IAuthRepository {
           // Ignore API failure (e.g., token expired 401)
         }
         await localStorageService.clearAll();
+        svg.cache.clear();
         return const Right(null);
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -171,6 +184,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         await localStorageService.saveUserFullname(userEntity.fullName);
         await localStorageService.saveEmpId(userEntity.empId);
         await localStorageService.saveEmpName(userEntity.fullName);
+        await localStorageService.saveIsFirstTime(false);
 
         if (userEntity.department != null) {
           await localStorageService.saveDepartment(userEntity.department!);
@@ -184,20 +198,26 @@ class AuthRepositoryImpl implements IAuthRepository {
           await localStorageService.saveApprover(userEntity.approver!);
         }
 
-        final existingCookies = localStorageService.getCookieMap() ?? {};
-        final sid = existingCookies['sid'] ?? "";
+        // Read latest cookies (which should have the new sid from AuthInterceptor)
+        final currentCookies = localStorageService.getCookieMap() ?? {};
 
+        // Merge without overwriting the sid if it exists in currentCookies
         final Map<String, String> setCookieMap = {
+          ...currentCookies,
           "full_name": userEntity.fullName,
-          "sid": sid,
           "system_user": "yes",
           "user_id": userEntity.email,
           "user_image": userEntity.userImage ?? "",
         };
+
         await localStorageService.saveCookieMap(setCookieMap);
 
         return Right(userEntity);
       } catch (e) {
+        try {
+          await remoteDataSource.logout();
+        } catch (_) {}
+        await localStorageService.clearAll();
         return Left(Failure.fromException(e));
       }
     });

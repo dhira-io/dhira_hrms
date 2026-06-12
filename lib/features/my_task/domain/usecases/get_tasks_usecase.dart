@@ -8,7 +8,10 @@ class GetTasksUseCase {
 
   GetTasksUseCase(this.repository);
 
-  Future<Either<Failure, List<TaskEntity>>> call({required int start, required int length}) async {
+  Future<Either<Failure, List<TaskEntity>>> call({
+    required int start,
+    required int length,
+  }) async {
     return await repository.getTasks(start: start, length: length);
   }
 }

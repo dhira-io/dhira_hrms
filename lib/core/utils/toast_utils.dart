@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ToastUtils {
@@ -13,7 +14,7 @@ class ToastUtils {
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.green,
       textColor: Colors.white,
-      fontSize: 14.0,
+      fontSize: 14.0.sp,
     );
   }
 
@@ -25,7 +26,7 @@ class ToastUtils {
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.redAccent,
       textColor: Colors.white,
-      fontSize: 14.0,
+      fontSize: 14.0.sp,
     );
   }
 
@@ -37,7 +38,7 @@ class ToastUtils {
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.blueGrey,
       textColor: Colors.white,
-      fontSize: 14.0,
+      fontSize: 14.0.sp,
     );
   }
 }

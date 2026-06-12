@@ -14,11 +14,15 @@ class TimesheetApprovalRepositoryImpl implements ITimesheetApprovalRepository {
   TimesheetApprovalRepositoryImpl(this.remoteDataSource, this.networkInfo);
 
   @override
-  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingTimesheets(ApprovalCategory category) async {
+  Future<Either<Failure, List<ApprovalRequestEntity>>> getPendingTimesheets(
+    ApprovalCategory category,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final models = await remoteDataSource.getPendingTimesheets(category);
-        final entities = models.map((model) => model.toEntity(ApprovalType.timesheet)).toList();
+        final entities = models
+            .map((model) => model.toEntity(ApprovalType.timesheet))
+            .toList();
         return Right(entities);
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -27,10 +31,16 @@ class TimesheetApprovalRepositoryImpl implements ITimesheetApprovalRepository {
   }
 
   @override
-  Future<Either<Failure, String>> submitTimesheetWorkflowAction(String timesheetName, String action) async {
+  Future<Either<Failure, String>> submitTimesheetWorkflowAction(
+    String timesheetName,
+    String action,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final message = await remoteDataSource.submitTimesheetWorkflowAction(timesheetName, action);
+        final message = await remoteDataSource.submitTimesheetWorkflowAction(
+          timesheetName,
+          action,
+        );
         return Right(message);
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -38,9 +48,10 @@ class TimesheetApprovalRepositoryImpl implements ITimesheetApprovalRepository {
     });
   }
 
-
   @override
-  Future<Either<Failure, TimesheetApprovalEntity>> getTimesheetDetails(String timesheetId) async {
+  Future<Either<Failure, TimesheetApprovalEntity>> getTimesheetDetails(
+    String timesheetId,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final model = await remoteDataSource.getTimesheetDetails(timesheetId);
@@ -52,7 +63,9 @@ class TimesheetApprovalRepositoryImpl implements ITimesheetApprovalRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> syncTimesheetWeekWise(Map<String, dynamic> payload) async {
+  Future<Either<Failure, bool>> syncTimesheetWeekWise(
+    Map<String, dynamic> payload,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final success = await remoteDataSource.syncTimesheetWeekWise(payload);
@@ -86,5 +99,4 @@ class TimesheetApprovalRepositoryImpl implements ITimesheetApprovalRepository {
       }
     });
   }
-
 }

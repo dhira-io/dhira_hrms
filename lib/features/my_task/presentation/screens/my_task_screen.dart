@@ -69,15 +69,24 @@ class _MyTaskViewState extends State<MyTaskView> {
             loading: () => const Center(child: CircularProgressIndicator()),
             loaded: (tasks, hasReachedMax) {
               if (tasks.isEmpty) {
-                return Center(child: Text(l10n.noTasksFound, style: AppTextStyle.bodyMedium));
+                return Center(
+                  child: Text(
+                    l10n.noTasksFound,
+                    style: AppTextStyle.bodyMedium,
+                  ),
+                );
               }
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<TaskBloc>().add(const TaskEvent.loadTasksRequested(isRefresh: true));
+                  context.read<TaskBloc>().add(
+                    const TaskEvent.loadTasksRequested(isRefresh: true),
+                  );
                 },
                 child: ListView.builder(
                   controller: _scrollController,
-                  padding: const EdgeInsets.symmetric(vertical: AppConstants.p8),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: AppConstants.p8,
+                  ),
                   itemCount: hasReachedMax ? tasks.length : tasks.length + 1,
                   itemBuilder: (context, index) {
                     if (index >= tasks.length) {
@@ -93,7 +102,8 @@ class _MyTaskViewState extends State<MyTaskView> {
                 ),
               );
             },
-            error: (message) => Center(child: Text(message, style: AppTextStyle.error)),
+            error: (message) =>
+                Center(child: Text(message, style: AppTextStyle.error)),
             orElse: () => const SizedBox.shrink(),
           );
         },
@@ -101,5 +111,3 @@ class _MyTaskViewState extends State<MyTaskView> {
     );
   }
 }
-
-

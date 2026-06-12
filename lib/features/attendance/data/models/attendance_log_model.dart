@@ -36,14 +36,14 @@ abstract class AttendanceLogModel with _$AttendanceLogModel {
         label: entity.label,
       );
   AttendanceLogEntity toEntity() => AttendanceLogEntity(
-        date: date,
-        dayName: dayName,
-        monthAbbr: monthAbbr,
-        dayNumber: dayNumber,
-        status: status,
-        inTime: inTime,
-        outTime: outTime,
-        workingHours: workingHours,
-        label: label,
-      );
+    date: date,
+    dayName: dayName,
+    monthAbbr: monthAbbr,
+    dayNumber: dayNumber,
+    status: status,
+    inTime: inTime,
+    outTime: outTime,
+    workingHours: workingHours,
+    label: label,
+  );
 }

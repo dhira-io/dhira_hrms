@@ -36,7 +36,11 @@ abstract class ILeaveRepository {
     String? attachmentUrl,
   });
 
-  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(String employeeId, String todayDate, String gender);
+  Future<Either<Failure, LeaveBalanceEntity>> getLeaveBalance(
+    String employeeId,
+    String todayDate,
+    String gender,
+  );
 
   Future<Either<Failure, LeaveStatisticsEntity>> getLeaveStatistics({
     required String employeeId,
@@ -44,7 +48,8 @@ abstract class ILeaveRepository {
     required String toDate,
   });
 
-  Future<Either<Failure, List<OverlapLeaveEntity>>> getApprovedLeavesSameProject({
+  Future<Either<Failure, List<OverlapLeaveEntity>>>
+  getApprovedLeavesSameProject({
     required String employeeId,
     required String fromDate,
     required String toDate,

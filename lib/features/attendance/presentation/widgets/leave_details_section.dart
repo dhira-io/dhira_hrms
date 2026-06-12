@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/features/attendance/domain/entities/leave_details_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -31,6 +32,7 @@ class LeaveDetailsSection extends StatelessWidget {
                 style: AppTextStyle.h3.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
+                  fontSize: AppConstants.fs15.sp,
                 ),
               ),
             ],
@@ -38,40 +40,48 @@ class LeaveDetailsSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppConstants.p20),
-                child: Container(
-            padding: const EdgeInsets.all(AppConstants.p20),
-            decoration: BoxDecoration(
-              color: AppColors.of(context).surfaceContainerLowest,
-              borderRadius: BorderRadius.circular(AppConstants.r16),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.textPrimary.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p20,
                 ),
-              ],
-            ),
-            child: Column(
-              children: [
-                for (int i = 0; i < details.leaveAllocation.length; i++) ...[
-                  _LeaveItem(
-                    title: details.leaveAllocation.keys.elementAt(i),
-                    allocation: details.leaveAllocation.values.elementAt(i),
+                child: Container(
+                  padding: const EdgeInsets.all(AppConstants.p20),
+                  decoration: BoxDecoration(
+                    color: AppColors.of(context).surfaceContainerLowest,
+                    borderRadius: BorderRadius.circular(AppConstants.r16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.textPrimary.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                  if (i < details.leaveAllocation.length - 1)
-                    const SizedBox(height: 24),
-                ],
-              ],
-            ),
-            ),
+                  child: Column(
+                    children: [
+                      for (
+                        int i = 0;
+                        i < details.leaveAllocation.length;
+                        i++
+                      ) ...[
+                        _LeaveItem(
+                          title: details.leaveAllocation.keys.elementAt(i),
+                          allocation: details.leaveAllocation.values.elementAt(
+                            i,
+                          ),
+                        ),
+                        if (i < details.leaveAllocation.length - 1)
+                          SizedBox(height: 24.h),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
-    const SizedBox(height: AppConstants.p24),
+        ),
+        const SizedBox(height: AppConstants.p24),
       ],
     );
   }
@@ -119,9 +129,9 @@ class _LeaveItem extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         ClipRRect(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(4.r),
           child: LinearProgressIndicator(
             value: progress,
             backgroundColor: theme.track,
@@ -135,60 +145,60 @@ class _LeaveItem extends StatelessWidget {
 
   _LeaveTheme _getThemeForLeave(BuildContext context, String title) {
     final t = title.toLowerCase();
-    final colors = AppColors.of(context);
     if (t.contains(LeaveType.bereavement)) {
       return _LeaveTheme(
-        track: colors.bereavementTrack,
-        progress: colors.bereavementProgress,
-        countText: colors.bereavementText,
+        track: AppColors.of(context).bereavementTrack,
+        progress: AppColors.of(context).bereavementProgress,
+        countText: AppColors.of(context).bereavementText,
       );
     } else if (t.contains(LeaveType.casual)) {
       return _LeaveTheme(
-        track: colors.casualTrack,
-        progress: colors.casualProgress,
-        countText: colors.casualText,
+        track: AppColors.of(context).casualTrack,
+        progress: AppColors.of(context).casualProgress,
+        countText: AppColors.of(context).casualText,
       );
-    } else if (t.contains(LeaveType.earned) || t.contains(LeaveType.privileged)) {
+    } else if (t.contains(LeaveType.earned) ||
+        t.contains(LeaveType.privileged)) {
       return _LeaveTheme(
-        track: colors.earnedTrack,
-        progress: colors.earnedProgress,
-        countText: colors.earnedText,
+        track: AppColors.of(context).earnedTrack,
+        progress: AppColors.of(context).earnedProgress,
+        countText: AppColors.of(context).earnedText,
       );
     } else if (t.contains(LeaveType.paternity)) {
       return _LeaveTheme(
-        track: colors.paternityTrack,
-        progress: colors.paternityProgress,
-        countText: colors.paternityText,
+        track: AppColors.of(context).paternityTrack,
+        progress: AppColors.of(context).paternityProgress,
+        countText: AppColors.of(context).paternityText,
       );
     } else if (t.contains(LeaveType.maternity)) {
       return _LeaveTheme(
-        track: colors.maternityTrack,
-        progress: colors.maternityProgress,
-        countText: colors.maternityText,
+        track: AppColors.of(context).maternityTrack,
+        progress: AppColors.of(context).maternityProgress,
+        countText: AppColors.of(context).maternityText,
       );
     } else if (t.contains(LeaveType.restricted)) {
       return _LeaveTheme(
-        track: colors.restrictedTrack,
-        progress: colors.restrictedProgress,
-        countText: colors.restrictedText,
+        track: AppColors.of(context).restrictedTrack,
+        progress: AppColors.of(context).restrictedProgress,
+        countText: AppColors.of(context).restrictedText,
       );
     } else if (t.contains(LeaveType.sick)) {
       return _LeaveTheme(
-        track: colors.sickTrack,
-        progress: colors.sickProgress,
-        countText: colors.sickText,
+        track: AppColors.of(context).sickTrack,
+        progress: AppColors.of(context).sickProgress,
+        countText: AppColors.of(context).sickText,
       );
     } else if (t.contains(LeaveType.compensatory)) {
       return _LeaveTheme(
-        track: colors.compensatoryTrack,
-        progress: colors.compensatoryProgress,
-        countText: colors.compensatoryText,
+        track: AppColors.of(context).compensatoryTrack,
+        progress: AppColors.of(context).compensatoryProgress,
+        countText: AppColors.of(context).compensatoryText,
       );
     } else {
       return _LeaveTheme(
-        track: colors.border,
-        progress: colors.primary,
-        countText: colors.primary,
+        track: AppColors.of(context).border,
+        progress: AppColors.of(context).primary,
+        countText: AppColors.of(context).primary,
       );
     }
   }

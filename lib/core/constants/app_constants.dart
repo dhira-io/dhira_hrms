@@ -1,5 +1,202 @@
 class AppConstants {
+  static const List<String> nationalities = [
+    'Afghan',
+    'Albanian',
+    'Algerian',
+    'American',
+    'Andorran',
+    'Angolan',
+    'Antiguans',
+    'Argentinean',
+    'Armenian',
+    'Australian',
+    'Austrian',
+    'Azerbaijani',
+    'Bahamian',
+    'Bahraini',
+    'Bangladeshi',
+    'Barbadian',
+    'Barbudans',
+    'Batswana',
+    'Belarusian',
+    'Belgian',
+    'Belizean',
+    'Beninese',
+    'Bhutanese',
+    'Bolivian',
+    'Bosnian',
+    'Brazilian',
+    'British',
+    'Bruneian',
+    'Bulgarian',
+    'Burkinabe',
+    'Burmese',
+    'Burundian',
+    'Cambodian',
+    'Cameroonian',
+    'Canadian',
+    'Cape Verdean',
+    'Central African',
+    'Chadian',
+    'Chilean',
+    'Chinese',
+    'Colombian',
+    'Comoran',
+    'Congolese',
+    'Costa Rican',
+    'Croatian',
+    'Cuban',
+    'Cypriot',
+    'Czech',
+    'Danish',
+    'Djibouti',
+    'Dominican',
+    'Dutch',
+    'East Timorese',
+    'Ecuadorean',
+    'Egyptian',
+    'Emirian',
+    'Equatorial Guinean',
+    'Eritrean',
+    'Estonian',
+    'Ethiopian',
+    'Fijian',
+    'Filipino',
+    'Finnish',
+    'French',
+    'Gabonese',
+    'Gambian',
+    'Georgian',
+    'German',
+    'Ghanaian',
+    'Greek',
+    'Grenadian',
+    'Guatemalan',
+    'Guinea-Bissauan',
+    'Guinean',
+    'Guyanese',
+    'Haitian',
+    'Herzegovinian',
+    'Honduran',
+    'Hungarian',
+    'I-Kiribati',
+    'Icelander',
+    'Indian',
+    'Indonesian',
+    'Iranian',
+    'Iraqi',
+    'Irish',
+    'Israeli',
+    'Italian',
+    'Ivorian',
+    'Jamaican',
+    'Japanese',
+    'Jordanian',
+    'Kazakhstani',
+    'Kenyan',
+    'Kittian and Nevisian',
+    'Kuwaiti',
+    'Kyrgyz',
+    'Laotian',
+    'Latvian',
+    'Lebanese',
+    'Liberian',
+    'Libyan',
+    'Liechtensteiner',
+    'Lithuanian',
+    'Luxembourger',
+    'Macedonian',
+    'Malagasy',
+    'Malawian',
+    'Malaysian',
+    'Maldivan',
+    'Malian',
+    'Maltese',
+    'Marshallese',
+    'Mauritanian',
+    'Mauritian',
+    'Mexican',
+    'Micronesian',
+    'Moldovan',
+    'Monacan',
+    'Mongolian',
+    'Moroccan',
+    'Mosotho',
+    'Motswana',
+    'Mozambican',
+    'Namibian',
+    'Nauruan',
+    'Nepalese',
+    'New Zealander',
+    'Nicaraguan',
+    'Nigerian',
+    'Nigerien',
+    'North Korean',
+    'Northern Irish',
+    'Norwegian',
+    'Omani',
+    'Pakistani',
+    'Palauan',
+    'Panamanian',
+    'Papua New Guinean',
+    'Paraguayan',
+    'Peruvian',
+    'Polish',
+    'Portuguese',
+    'Qatari',
+    'Romanian',
+    'Russian',
+    'Rwandan',
+    'Saint Lucian',
+    'Salvadoran',
+    'Samoan',
+    'San Marinese',
+    'Sao Tomean',
+    'Saudi',
+    'Scottish',
+    'Senegalese',
+    'Serbian',
+    'Seychellois',
+    'Sierra Leonean',
+    'Singaporean',
+    'Slovakian',
+    'Slovenian',
+    'Solomon Islander',
+    'Somali',
+    'South African',
+    'South Korean',
+    'Spanish',
+    'Sri Lankan',
+    'Sudanese',
+    'Surinamer',
+    'Swazi',
+    'Swedish',
+    'Swiss',
+    'Syrian',
+    'Taiwanese',
+    'Tajik',
+    'Tanzanian',
+    'Thai',
+    'Togolese',
+    'Tongan',
+    'Trinidadian or Tobagonian',
+    'Tunisian',
+    'Turkish',
+    'Tuvaluan',
+    'Ugandan',
+    'Ukrainian',
+    'Uruguayan',
+    'Uzbekistani',
+    'Venezuelan',
+    'Vietnamese',
+    'Welsh',
+    'Yemenite',
+    'Zambian',
+    'Zimbabwean',
+  ];
+
   // Padding
+  static const double p2 = 2.0;
   static const double p4 = 4.0;
   static const double p6 = 6.0;
   static const double p8 = 8.0;
@@ -24,6 +221,7 @@ class AppConstants {
   static const double p150 = 150.0;
   static const double p180 = 180.0;
   static const double p250 = 250.0;
+  static const double p320 = 320.0;
 
   // Border Radius
   static const double r2 = 2.0;
@@ -60,6 +258,9 @@ class AppConstants {
   static const String dateFormatDayMonthYear = 'dd MMM yyyy';
   static const int decimalPlaces = 2;
 
+  // Screen layout ratios
+  static const double getStartedTopRatio = 0.58;
+
   // Design
   static const double opacityMedium = 0.3;
   static const double opacityLow = 0.1;
@@ -91,7 +292,7 @@ class AppConstants {
     '.xlsx',
     '.xlxx',
     '.xls',
-    '.csv'
+    '.csv',
   ];
 
   // Storage Paths (Android)
@@ -104,16 +305,33 @@ class AppConstants {
   static const int docStatusSubmitted = 1;
 
   // Font Sizes
+  static const double fs1 = 1.0;
+  static const double fs2 = 2.0;
+  static const double fs3 = 3.0;
+  static const double fs4 = 4.0;
+  static const double fs5 = 5.0;
+  static const double fs6 = 6.0;
+  static const double fs7 = 7.0;
+  static const double fs8 = 8.0;
+  static const double fs9 = 9.0;
   static const double fs10 = 10.0;
   static const double fs11 = 11.0;
   static const double fs12 = 12.0;
   static const double fs13 = 13.0;
   static const double fs14 = 14.0;
+  static const double fs15 = 15.0;
   static const double fs16 = 16.0;
+  static const double fs17 = 17.0;
   static const double fs18 = 18.0;
+  static const double fs19 = 19.0;
   static const double fs20 = 20.0;
+  static const double fs21 = 21.0;
+  static const double fs22 = 22.0;
+  static const double fs23 = 23.0;
   static const double fs24 = 24.0;
   static const double fs32 = 32.0;
+  static const double fs25 = 25.0;
+  static const double fs33 = 33.0;
   static const double fs36 = 36.0;
 
   // File Upload
@@ -132,6 +350,18 @@ class AppConstants {
   static const String hundredPercent = '100%';
   static const String passwordResetSent =
       "Password reset instructions sent to your email";
+  static const String sessionUnauthenticated = 'unauthenticated';
+  static const String microsoftAccountNotRegistered =
+      'Your Microsoft account is not registered with DHIRA HRMS. Please contact your administrator for access';
+  static const String employeeRecordNotFound = 'Employee record not found';
+  static const String couldNotLaunchMsLogin =
+      'Could not launch Microsoft login URL';
+  static const String invalidSsoResponse = 'Invalid SSO Response';
+  static const String invalidOtp = 'Invalid OTP';
+  static const double lineHeightNormal = 1.4;
+  static const double dividerHeight = 1.0;
+  static const double paginationThreshold = 0.9;
+  static const double letterSpacingLarge = 1.2;
 }
 
 class AttendanceStatus {
@@ -256,10 +486,6 @@ class TimesheetApiKeys {
   static const String changes = 'changes';
 }
 
-class AppFormats {
-  static const String dateWithDay = 'EEEE, dd-MM-yyyy';
-}
-
 class ApprovalStatus {
   static const String pending = 'Pending';
   static const String approved = 'Approved';
@@ -273,4 +499,8 @@ class ApprovalActions {
   static const String cancel = 'Cancel';
 }
 
-
+class ProjectStatus {
+  static const String active = 'Active';
+  static const String inactive = 'Inactive';
+  static const List<String> values = [active, inactive];
+}

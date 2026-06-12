@@ -15,6 +15,7 @@ import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart
 import 'package:get/get.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/notifications/presentation/widgets/notification_bell.dart';
+import 'package:dhira_hrms/core/utils/string_utils.dart';
 
 class AppHeader extends StatefulWidget {
   final bool showName;
@@ -66,12 +67,12 @@ class _AppHeaderState extends State<AppHeader> {
                     child: BlocBuilder<ProfileBloc, ProfileState>(
                       builder: (context, profileState) {
                         final profileImage = profileState.maybeWhen(
-                          loaded: (profile) => profile.userImage,
+                          loaded: (profile, resume) => profile.userImage,
                           orElse: () => user?.userImage,
                         );
 
                         final fullName = profileState.maybeWhen(
-                          loaded: (profile) => profile.fullName,
+                          loaded: (profile, resume) => profile.fullName,
                           orElse: () => user?.fullName,
                         );
 
@@ -87,15 +88,25 @@ class _AppHeaderState extends State<AppHeader> {
                                 color: AppColors.of(context).primaryFixed,
                               ),
                               clipBehavior: Clip.antiAlias,
-                              child: (profileImage != null && profileImage.isNotEmpty)
+                              child:
+                                  (profileImage != null &&
+                                      profileImage.isNotEmpty)
                                   ? Image.network(
-                                      profileImage.startsWith(AppConstants.httpPrefix)
+                                      profileImage.startsWith(
+                                            AppConstants.httpPrefix,
+                                          )
                                           ? profileImage
                                           : "$baseUrl$profileImage",
                                       fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => const Image(
+                                        image: AssetImage(AppAssets.defaultProfile),
+                                        fit: BoxFit.cover,
+                                      ),
                                     )
                                   : const Image(
-                                      image: AssetImage(AppAssets.defaultProfile),
+                                      image: AssetImage(
+                                        AppAssets.defaultProfile,
+                                      ),
                                       fit: BoxFit.cover,
                                     ),
                             ),
@@ -113,7 +124,10 @@ class _AppHeaderState extends State<AppHeader> {
                                   //   ),
                                   // ),
                                   Text(
-                                    fullName ?? AppLocalizations.of(context)!.employeeName,
+                                    fullName ??
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.employeeName,
                                     style: AppTextStyle.bodyMedium.copyWith(
                                       color: AppColors.of(context).onSurface,
                                       fontWeight: FontWeight.w700,
@@ -135,9 +149,11 @@ class _AppHeaderState extends State<AppHeader> {
           ),
         ),
         Container(
-          height: 1,
+          height: AppConstants.dividerHeight,
           width: double.infinity,
-          color: AppColors.of(context).outlineVariant.withValues(alpha: AppConstants.opacityMedium),
+          color: AppColors.of(
+            context,
+          ).outlineVariant.withValues(alpha: AppConstants.opacityMedium),
         ),
       ],
     );

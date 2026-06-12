@@ -14,19 +14,24 @@ class OrganizationBloc extends Bloc<OrganizationEvent, OrganizationState> {
   }) : super(const OrganizationState.initial()) {
     on<OrganizationEvent>((event, emit) async {
       await event.when(
-        started: () => _onLoadOrganizationsRequested(emit), // load organizations by default
+        started: () => _onLoadOrganizationsRequested(
+          emit,
+        ), // load organizations by default
         loadOrganizationsRequested: () => _onLoadOrganizationsRequested(emit),
         loadChartRequested: () => _onLoadChartRequested(emit),
       );
     });
   }
 
-  Future<void> _onLoadOrganizationsRequested(Emitter<OrganizationState> emit) async {
+  Future<void> _onLoadOrganizationsRequested(
+    Emitter<OrganizationState> emit,
+  ) async {
     emit(const OrganizationState.loading());
     final result = await getOrganizationsUseCase();
     result.fold(
       (failure) => emit(OrganizationState.error(failure.message)),
-      (organizations) => emit(OrganizationState.organizationsLoaded(organizations)),
+      (organizations) =>
+          emit(OrganizationState.organizationsLoaded(organizations)),
     );
   }
 

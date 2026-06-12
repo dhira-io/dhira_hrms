@@ -10,7 +10,8 @@ class SecureLogger {
       lineLength: 120, // Width of the output
       colors: true, // Colorful log messages
       printEmojis: true, // Print an emoji for each log message
-      dateTimeFormat: DateTimeFormat.dateAndTime, // Should each log print contain a timestamp
+      dateTimeFormat: DateTimeFormat
+          .dateAndTime, // Should each log print contain a timestamp
     ),
   );
 
@@ -52,9 +53,18 @@ class SecureLogger {
   }
 
   /// Log a message at level [Level.error].
-  static void e(String message, {dynamic data, dynamic error, StackTrace? stackTrace}) {
+  static void e(
+    String message, {
+    dynamic data,
+    dynamic error,
+    StackTrace? stackTrace,
+  }) {
     if (kDebugMode) {
-      _logger.e(_formatMessage(message, data), error: error, stackTrace: stackTrace);
+      _logger.e(
+        _formatMessage(message, data),
+        error: error,
+        stackTrace: stackTrace,
+      );
     }
   }
 

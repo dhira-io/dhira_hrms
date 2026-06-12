@@ -8,7 +8,8 @@ class MockNotificationRepositoryImpl implements INotificationRepository {
     NotificationEntity(
       id: '1',
       title: 'Leave Approved',
-      description: 'Your leave request for 25th Oct has been approved by John Doe.',
+      description:
+          'Your leave request for 25th Oct has been approved by John Doe.',
       time: DateTime.now().subtract(const Duration(hours: 1)),
       type: NotificationType.leave,
       isRead: false,
@@ -17,7 +18,8 @@ class MockNotificationRepositoryImpl implements INotificationRepository {
     NotificationEntity(
       id: '2',
       title: 'Timesheet Reminder',
-      description: 'Please ensure your weekly timesheet is submitted before EOD.',
+      description:
+          'Please ensure your weekly timesheet is submitted before EOD.',
       time: DateTime.now().subtract(const Duration(hours: 2)),
       type: NotificationType.timesheet,
       isRead: true,
@@ -26,7 +28,8 @@ class MockNotificationRepositoryImpl implements INotificationRepository {
     NotificationEntity(
       id: '3',
       title: 'Policy Updated',
-      description: "The 'Remote Work Policy' has been revised. Tap to view the document.",
+      description:
+          "The 'Remote Work Policy' has been revised. Tap to view the document.",
       time: DateTime.now().subtract(const Duration(days: 1)),
       type: NotificationType.policy,
       isRead: true,
@@ -91,12 +94,20 @@ class MockNotificationRepositoryImpl implements INotificationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> storeFcmToken({required String token, required String deviceId, required String platform}) async {
+  Future<Either<Failure, void>> storeFcmToken({
+    required String token,
+    required String deviceId,
+    required String platform,
+  }) async {
     return const Right(null);
   }
 
   @override
-  Future<Either<Failure, void>> deactivateDevice({required String token, required String deviceId, required String platform}) async {
+  Future<Either<Failure, void>> deactivateDevice({
+    required String token,
+    required String deviceId,
+    required String platform,
+  }) async {
     return const Right(null);
   }
 }

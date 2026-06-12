@@ -92,7 +92,7 @@ abstract class PerformanceState with _$PerformanceState {
   Map<KraEntity, List<KpiEntity>> get kraGroups {
     if (selectedGoal == null) return {};
     final Map<KraEntity, List<KpiEntity>> groups = {
-      for (var kra in selectedGoal!.kras) kra: []
+      for (var kra in selectedGoal!.kras) kra: [],
     };
     for (var kpi in selectedGoal!.kpis) {
       KraEntity? matchingKra;

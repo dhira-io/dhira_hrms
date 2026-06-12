@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -38,9 +40,9 @@ class TeamEvaluationMetricCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.of(context).black.withValues(
-              alpha: AppConstants.opacityExtraLow / 2,
-            ),
+            color: AppColors.of(
+              context,
+            ).black.withValues(alpha: AppConstants.opacityExtraLow / 2),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -53,7 +55,7 @@ class TeamEvaluationMetricCard extends StatelessWidget {
               left: -16,
               top: -16,
               bottom: -16,
-              child: Container(width: 4, color: accentBarColor),
+              child: Container(width: 4.w, color: accentBarColor),
             ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,25 +70,25 @@ class TeamEvaluationMetricCard extends StatelessWidget {
                     ),
                     child: Icon(icon, color: iconColor, size: 14),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
                   Expanded(
                     child: Text(
                       title.toUpperCase(),
                       style: AppTextStyle.labelSmall.copyWith(
                         color: AppColors.of(context).onSurfaceVariant,
                         fontWeight: FontWeight.w600,
-                        fontSize: AppConstants.fs10,
+                        fontSize: AppConstants.fs9.sp,
                         letterSpacing: 0.5,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               Text(
                 value,
                 style: AppTextStyle.h1Bold.copyWith(
-                  fontSize: AppConstants.fs24,
+                  fontSize: AppConstants.fs22.sp,
                   color: AppColors.of(context).onSurface.withValues(
                     alpha: value == '00' ? AppConstants.opacityMedium : 1.0,
                   ),
@@ -130,9 +132,9 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppConstants.r20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.of(context).black.withValues(
-              alpha: AppConstants.opacityExtraLow / 1.5,
-            ),
+            color: AppColors.of(
+              context,
+            ).black.withValues(alpha: AppConstants.opacityExtraLow / 1.5),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -141,15 +143,15 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20.w),
             child: Column(
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 48,
-                      height: 48,
+                      width: 48.w,
+                      height: 48.h,
                       decoration: BoxDecoration(
                         color: AppColors.of(context).secondaryContainer,
                         shape: BoxShape.circle,
@@ -157,11 +159,17 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                       alignment: Alignment.center,
                       child: name == null
                           ? Shimmer.fromColors(
-                              baseColor: AppColors.of(context).surfaceContainerLow,
-                              highlightColor: AppColors.of(context).surfaceContainer,
+                              baseColor: AppColors.of(
+                                context,
+                              ).surfaceContainerLow,
+                              highlightColor: AppColors.of(
+                                context,
+                              ).surfaceContainer,
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: AppColors.of(context).surfaceContainerLow,
+                                  color: AppColors.of(
+                                    context,
+                                  ).surfaceContainerLow,
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -169,26 +177,34 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                           : Text(
                               name!.getInitials,
                               style: AppTextStyle.labelLarge.copyWith(
-                                color: AppColors.of(context).onSecondaryContainer,
+                                color: AppColors.of(
+                                  context,
+                                ).onSecondaryContainer,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (name == null)
                             Shimmer.fromColors(
-                              baseColor: AppColors.of(context).surfaceContainerLow,
-                              highlightColor: AppColors.of(context).surfaceContainer,
+                              baseColor: AppColors.of(
+                                context,
+                              ).surfaceContainerLow,
+                              highlightColor: AppColors.of(
+                                context,
+                              ).surfaceContainer,
                               child: Container(
-                                width: 120,
-                                height: 16,
+                                width: 120.w,
+                                height: 16.h,
                                 decoration: BoxDecoration(
-                                  color: AppColors.of(context).surfaceContainerLow,
-                                  borderRadius: BorderRadius.circular(4),
+                                  color: AppColors.of(
+                                    context,
+                                  ).surfaceContainerLow,
+                                  borderRadius: BorderRadius.circular(4.r),
                                 ),
                               ),
                             )
@@ -198,10 +214,10 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                               style: AppTextStyle.labelLarge.copyWith(
                                 color: AppColors.of(context).onSurface,
                                 fontWeight: FontWeight.bold,
-                                fontSize: AppConstants.fs16,
+                                fontSize: AppConstants.fs14.sp,
                               ),
                             ),
-                          const SizedBox(height: 2),
+                          SizedBox(height: 2.h),
                           Text(
                             '$empId • $role',
                             style: AppTextStyle.bodySmall.copyWith(
@@ -234,7 +250,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                                   PerformanceStatus.submitted.toLowerCase()
                               ? AppColors.of(context).success
                               : AppColors.of(context).warning,
-                          fontSize: AppConstants.fs10,
+                          fontSize: AppConstants.fs8.sp,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 0.5,
                         ),
@@ -243,7 +259,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                   ],
                 ),
                 if (submittedAt case final date?) ...[
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
                   Row(
                     children: [
                       Icon(
@@ -251,7 +267,7 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                         size: 14,
                         color: AppColors.of(context).onSurfaceVariant,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Text(
                         l10n.submittedOn(
                           date.format(AppConstants.dateDisplayFormat),
@@ -263,44 +279,11 @@ class TeamEvaluationEmployeeCard extends StatelessWidget {
                     ],
                   ),
                 ],
-                const SizedBox(height: 20),
-                Container(
+                SizedBox(height: 20.h),
+                CommonButton(
+                  text: l10n.review,
+                  onPressed: onReview,
                   width: double.infinity,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppConstants.r12),
-                    gradient: LinearGradient(
-                      colors: [AppColors.of(context).primary, AppColors.of(context).primaryContainer],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.of(context).primary.withValues(
-                          alpha: AppConstants.opacitySlight,
-                        ),
-                        blurRadius: 16,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: ElevatedButton(
-                    onPressed: onReview,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.of(context).transparent,
-                      foregroundColor: AppColors.of(context).white,
-                      shadowColor: AppColors.of(context).transparent,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppConstants.r12),
-                      ),
-                    ),
-                    child: Text(
-                      l10n.review,
-                      style: AppTextStyle.labelMedium.copyWith(
-                        color: AppColors.of(context).white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
                 ),
               ],
             ),

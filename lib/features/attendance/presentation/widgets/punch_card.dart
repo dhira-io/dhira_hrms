@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_action_buttons.dart';
 import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_card_skeleton.dart';
 import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_header.dart';
@@ -63,11 +64,23 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
   }
 
   Timer? _timer;
-  final Stopwatch _stopwatch = Stopwatch();
-  Duration _baseDuration = Duration.zero;
+  int _workedSeconds = 0;
+  int? _serverTimeMs;
   bool _isPunchedIn = false;
   bool _isOnBreak = false;
   String? _firstIn;
+
+  int get _computedWorkedSeconds {
+    if (!_isPunchedIn || _isOnBreak) {
+      return _workedSeconds;
+    }
+    if (_serverTimeMs == null) {
+      return _workedSeconds;
+    }
+    final nowMs = DateTime.now().millisecondsSinceEpoch;
+    final elapsedSeconds = (nowMs - _serverTimeMs!) ~/ 1000;
+    return _workedSeconds + elapsedSeconds;
+  }
 
   @override
   void initState() {
@@ -76,8 +89,8 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-          if (_stopwatch.isRunning && mounted) {
-            setState(() {}); // Trigger rebuild to update stopwatch text
+          if (mounted) {
+            setState(() {}); // Trigger rebuild to update time text visually
           }
         });
 
@@ -96,10 +109,9 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
 
     // Sync with existing state if already loaded
     bloc.state.maybeWhen(
-      loaded:
-          (status, logs, calendarEvents, _, __, _, _, _, _, _) {
-            _handleStatusLoaded(status, l10n);
-          },
+      loaded: (status, logs, calendarEvents, _, __, _, _, _, _, _) {
+        _handleStatusLoaded(status, l10n);
+      },
       orElse: () {},
     );
 
@@ -117,19 +129,8 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
         _isPunchedIn = status.punchedIn;
         _isOnBreak = status.onBreak;
         _firstIn = status.firstIn;
-
-        final totalWorkedSeconds = status.workedSeconds ?? 0;
-        _baseDuration = Duration(seconds: totalWorkedSeconds);
-
-        // Reset stopwatch so it starts fresh from 0
-        _stopwatch.reset();
-
-        // Keep stopwatch running state in sync with status
-        if (_isPunchedIn && !_isOnBreak) {
-          _stopwatch.start();
-        } else {
-          _stopwatch.stop();
-        }
+        _workedSeconds = status.workedSeconds ?? 0;
+        _serverTimeMs = status.serverTimeMs;
       });
     }
   }
@@ -139,11 +140,11 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     _stopPolling();
-    _stopwatch.stop();
     super.dispose();
   }
 
-  String _formatDuration(Duration d) {
+  String _formatDuration(int seconds) {
+    final d = Duration(seconds: seconds);
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes = twoDigits(d.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(d.inSeconds.remainder(60));
@@ -160,24 +161,12 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
           current.mapOrNull(loaded: (_) => true, error: (_) => true) == true,
       listener: (context, state) {
         state.maybeWhen(
-          loaded:
-              (
-                status,
-                logs,
-                calendarEvents,
-                _,
-                __,
-                _,
-                _,
-                _,
-                _,
-                _,
-              ) {
-                _handleStatusLoaded(status, l10n);
-                if (status.message != null && status.message!.isNotEmpty) {
-                  ToastUtils.showSuccess(status.message!);
-                }
-              },
+          loaded: (status, logs, calendarEvents, _, __, _, _, _, _, _) {
+            _handleStatusLoaded(status, l10n);
+            if (status.message != null && status.message!.isNotEmpty) {
+              ToastUtils.showSuccess(status.message!);
+            }
+          },
           error: (message, events, _, __, _, _, _, _, _) {
             ToastUtils.showError(message);
           },
@@ -185,9 +174,7 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
         );
       },
       builder: (context, state) {
-        final timeFormatted = _formatDuration(
-          _baseDuration + _stopwatch.elapsed,
-        );
+        final timeFormatted = _formatDuration(_computedWorkedSeconds);
         final loadingType = state.mapOrNull(loading: (s) => s.actionType);
 
         if (state.mapOrNull(loading: (s) => s.actionType) ==
@@ -210,11 +197,11 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
             decoration: widget.showBackground
                 ? BoxDecoration(
                     color: AppColors.of(context).surfaceContainerLowest,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                     border: (widget.showDateAndTime || _isPunchedIn)
                         ? Border.all(
                             color: AppColors.of(context).profileBadgeBorder,
-                            width: 1,
+                            width: 1.w,
                           )
                         : null,
                   )
@@ -229,15 +216,15 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
                     timeFormatted: timeFormatted,
                     dateFormatted: dateFormatted,
                   ),
-                  const SizedBox(height: 16),
+                        SizedBox(height: 16.h),
                 ],
                 PunchActionButtonRow(
                   padding: widget.showDateAndTime
                       ? null
                       : (_isPunchedIn
-                            ? const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 8,
+                            ?       EdgeInsets.symmetric(
+                                horizontal: 8.w,
+                                vertical: 8.h,
                               )
                             : EdgeInsets.zero),
                   breakButtonColor: widget.breakButtonColor,
@@ -260,9 +247,9 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
 
   void _onPunchIn(BuildContext context) {
     setState(() {
-      if (!_stopwatch.isRunning) {
-        _stopwatch.start();
-      }
+      _isPunchedIn = true;
+      _isOnBreak = false;
+      _serverTimeMs = DateTime.now().millisecondsSinceEpoch;
     });
     context.read<AttendanceBloc>().add(
       const AttendanceEvent.punchInRequested(),
@@ -270,17 +257,14 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
   }
 
   void _onPunchOut(BuildContext context) {
-    final currentTotal = _baseDuration + _stopwatch.elapsed;
-    if (currentTotal.inMinutes < (9 * 60 + 30)) {
+    final currentTotalMinutes = _computedWorkedSeconds ~/ 60;
+    if (currentTotalMinutes < (9 * 60 + 30)) {
       showPunchOutDialog(
         context: context,
-        baseDuration: _baseDuration,
-        stopwatch: _stopwatch,
+        getWorkedSeconds: () => _computedWorkedSeconds,
         onConfirm: () {
           setState(() {
-            if (_stopwatch.isRunning) {
-              _stopwatch.stop();
-            }
+            _isPunchedIn = false;
           });
           context.read<AttendanceBloc>().add(
             const AttendanceEvent.punchOutRequested(),
@@ -289,9 +273,7 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
       );
     } else {
       setState(() {
-        if (_stopwatch.isRunning) {
-          _stopwatch.stop();
-        }
+        _isPunchedIn = false;
       });
       context.read<AttendanceBloc>().add(
         const AttendanceEvent.punchOutRequested(),

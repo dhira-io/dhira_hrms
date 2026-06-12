@@ -16,7 +16,7 @@ import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_card_section.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_date_range_pickers.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_file_upload_section.dart';
-import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_guidelines.dart';
+import 'package:dhira_hrms/core/widgets/common_guidelines.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_half_day_details.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_half_day_toggle.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_overlap_section.dart';
@@ -70,7 +70,9 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     _fromDate = DateTime.tryParse(widget.leave.fromDate);
     _toDate = DateTime.tryParse(widget.leave.toDate);
     _isHalfDay = widget.leave.halfDay == 1;
-    _halfDayDate = widget.leave.halfDayDate != null ? DateTime.tryParse(widget.leave.halfDayDate!) : null;
+    _halfDayDate = widget.leave.halfDayDate != null
+        ? DateTime.tryParse(widget.leave.halfDayDate!)
+        : null;
     _daySegment = widget.leave.halfDaySegment;
     _reasonController.text = widget.leave.description ?? "";
     if (widget.leave.fileUrl != null && widget.leave.fileUrl!.isNotEmpty) {
@@ -79,17 +81,21 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.formInitialized(
-          leaveId: widget.leave.name,
-          fileUrl: widget.leave.fileUrl,
-        ));
+        context.read<LeaveApprovalBloc>().add(
+          LeaveApprovalEvent.formInitialized(
+            leaveId: widget.leave.name,
+            fileUrl: widget.leave.fileUrl,
+          ),
+        );
         _refreshBalance();
         if (_fromDate != null && _toDate != null) {
-          context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.statisticsRequested(
-                employeeId: widget.employeeId,
-                fromDate: _fromDate!.format(),
-                toDate: _toDate!.format(),
-              ));
+          context.read<LeaveApprovalBloc>().add(
+            LeaveApprovalEvent.statisticsRequested(
+              employeeId: widget.employeeId,
+              fromDate: _fromDate!.format(),
+              toDate: _toDate!.format(),
+            ),
+          );
           _checkOverlap();
         }
       }
@@ -105,29 +111,38 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
 
   void _refreshStatistics() {
     if (_fromDate != null && _toDate != null) {
-      context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.statisticsRequested(
-            employeeId: widget.employeeId,
-            fromDate: _fromDate!.format(),
-            toDate: _toDate!.format(),
-          ));
+      context.read<LeaveApprovalBloc>().add(
+        LeaveApprovalEvent.statisticsRequested(
+          employeeId: widget.employeeId,
+          fromDate: _fromDate!.format(),
+          toDate: _toDate!.format(),
+        ),
+      );
     }
     _refreshBalance();
   }
 
   void _refreshBalance() {
-    context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.balanceRequested(
-          employeeId: widget.employeeId,
-          todayDate: (_fromDate ?? DateTime.now()).format(),
-          gender: _gender,
-        ));
+    context.read<LeaveApprovalBloc>().add(
+      LeaveApprovalEvent.balanceRequested(
+        employeeId: widget.employeeId,
+        todayDate: (_fromDate ?? DateTime.now()).format(),
+        gender: _gender,
+      ),
+    );
   }
 
-  double get _totalDays => LeaveDateTimeUtils.calculateTotalDays(_fromDate, _toDate, _isHalfDay);
+  double get _totalDays =>
+      LeaveDateTimeUtils.calculateTotalDays(_fromDate, _toDate, _isHalfDay);
 
   bool get _isSickLeave => _leaveType == LeaveTypes.sickLeave;
   bool get _requiresSupportingDocs => _isSickLeave && _totalDays > 2;
 
-  bool get _isSickLeaveDateInvalid => LeaveDateTimeUtils.isSickLeaveDateInvalid(_fromDate, _toDate, _isSickLeave);
+  bool get _isSickLeaveDateInvalid => LeaveDateTimeUtils.isSickLeaveDateInvalid(
+    _fromDate,
+    _toDate,
+    _isSickLeave,
+  );
 
   Future<void> _selectDate(BuildContext context, bool isFromDate) async {
     if (!isFromDate && _fromDate == null) {
@@ -145,27 +160,41 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       final bounds = LeaveDateTimeUtils.getFromDateBounds(_leaveType);
       firstDate = bounds.firstDate;
       lastDate = bounds.lastDate;
-      initial = (_fromDate != null &&
-          !_fromDate!.isBefore(firstDate) &&
-          !_fromDate!.isAfter(lastDate))
+      initial =
+          (_fromDate != null &&
+              !_fromDate!.isBefore(firstDate) &&
+              !_fromDate!.isAfter(lastDate))
           ? _fromDate!
-          : (today.isBefore(firstDate) ? firstDate : (today.isAfter(lastDate) ? lastDate : today));
+          : (today.isBefore(firstDate)
+                ? firstDate
+                : (today.isAfter(lastDate) ? lastDate : today));
     } else {
       firstDate = _fromDate!;
       lastDate = LeaveDateTimeUtils.getLastDate(_isSickLeave);
 
       // Ensure initial is within bounds
-      final validInitial = (_toDate != null && !_toDate!.isBefore(firstDate) && !_toDate!.isAfter(lastDate))
+      final validInitial =
+          (_toDate != null &&
+              !_toDate!.isBefore(firstDate) &&
+              !_toDate!.isAfter(lastDate))
           ? _toDate!
           : (firstDate.isAfter(lastDate) ? lastDate : firstDate);
       initial = validInitial;
     }
 
-    _cachedHolidays = context.read<LeaveApprovalBloc>().state.statistics?.details.appliedLeaves
-        .whereType<Map<String, dynamic>>()
-        .where((e) => e['is_holiday'] == true)
-        .map<DateTime>((e) => DateUtils.dateOnly(DateTime.parse(e['date'] as String)))
-        .toList() ??
+    _cachedHolidays =
+        context
+            .read<LeaveApprovalBloc>()
+            .state
+            .statistics
+            ?.details
+            .appliedLeaves
+            .whereType<Map<String, dynamic>>()
+            .where((e) => e['is_holiday'] == true)
+            .map<DateTime>(
+              (e) => DateUtils.dateOnly(DateTime.parse(e['date'] as String)),
+            )
+            .toList() ??
         <DateTime>[];
 
     final DateTime? picked = await showDatePicker(
@@ -178,7 +207,8 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
 
     if (picked == null) return;
 
-    if (LeaveDateTimeUtils.isWeekend(picked) || LeaveDateTimeUtils.isHoliday(picked, _cachedHolidays)) {
+    if (LeaveDateTimeUtils.isWeekend(picked) ||
+        LeaveDateTimeUtils.isHoliday(picked, _cachedHolidays)) {
       ToastUtils.showError(AppLocalizations.of(context)!.weekendHolidayError);
       return;
     }
@@ -219,11 +249,13 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       setState(() {
         _hideOverlapAfterSubmit = false;
       });
-      context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.overlapLeavesRequested(
-        employeeId: widget.employeeId,
-        fromDate: _fromDate!.format(),
-        toDate: _toDate!.format(),
-      ));
+      context.read<LeaveApprovalBloc>().add(
+        LeaveApprovalEvent.overlapLeavesRequested(
+          employeeId: widget.employeeId,
+          fromDate: _fromDate!.format(),
+          toDate: _toDate!.format(),
+        ),
+      );
     }
   }
 
@@ -249,7 +281,8 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     if (!FileValidationUtils.canUploadMore(
       currentCount: _uploadCount,
       l10n: l10n,
-    )) return;
+    ))
+      return;
 
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -259,10 +292,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     if (result != null && result.files.single.path != null) {
       final file = result.files.single;
 
-      if (!FileValidationUtils.validateFile(
-        file: file,
-        l10n: l10n,
-      )) return;
+      if (!FileValidationUtils.validateFile(file: file, l10n: l10n)) return;
 
       setState(() => _uploadCount++);
 
@@ -270,7 +300,9 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       final extension = p.extension(finalPath).toLowerCase();
       if (['.jpg', '.jpeg', '.png'].contains(extension)) {
         final imageCompressService = Get.find<ImageCompressService>();
-        final compressedFile = await imageCompressService.compressImage(finalPath);
+        final compressedFile = await imageCompressService.compressImage(
+          finalPath,
+        );
         if (compressedFile != null) {
           finalPath = compressedFile.path;
         }
@@ -279,16 +311,17 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       setState(() => _selectedFileName = file.name);
 
       if (mounted) {
-        context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.uploadFileRequested(
-          filePath: finalPath,
-          fileName: file.name,
-        ));
+        context.read<LeaveApprovalBloc>().add(
+          LeaveApprovalEvent.uploadFileRequested(
+            filePath: finalPath,
+            fileName: file.name,
+          ),
+        );
       }
     }
   }
 
   void _submitForm() {
-
     if (_formKey.currentState!.validate()) {
       setState(() {
         _hideOverlapAfterSubmit = true;
@@ -296,24 +329,29 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
       final String fromStr = (_fromDate ?? DateTime.now()).format();
       final String toStr = (_toDate ?? DateTime.now()).format();
 
-      context.read<LeaveApprovalBloc>().add(LeaveApprovalEvent.updateRequested(
-        leaveId: widget.leave.name,
-        employeeId: widget.leave.employee,
-        employeeName: widget.leave.employeeName,
-        leaveType: _leaveType!,
-        fromDate: fromStr,
-        toDate: toStr,
-        reason: _reasonController.text,
-        halfDay: _isHalfDay ? 1 : 0,
-        halfDayDate: _isHalfDay && _halfDayDate != null ? _halfDayDate!.format() : null,
-        halfDaySegment: _isHalfDay ? _daySegment : null,
-        totalleavedays: _totalDays,
-        workflowState: LeaveStatusConstants.pending,
-        attachment: context.read<LeaveApprovalBloc>().state.uploadedFileUrl ??
-            (widget.leave.fileUrl?.isAbsoluteUrl == true
-                ? Uri.parse(widget.leave.fileUrl!).path
-                : widget.leave.fileUrl),
-      ));
+      context.read<LeaveApprovalBloc>().add(
+        LeaveApprovalEvent.updateRequested(
+          leaveId: widget.leave.name,
+          employeeId: widget.leave.employee,
+          employeeName: widget.leave.employeeName,
+          leaveType: _leaveType!,
+          fromDate: fromStr,
+          toDate: toStr,
+          reason: _reasonController.text,
+          halfDay: _isHalfDay ? 1 : 0,
+          halfDayDate: _isHalfDay && _halfDayDate != null
+              ? _halfDayDate!.format()
+              : null,
+          halfDaySegment: _isHalfDay ? _daySegment : null,
+          totalleavedays: _totalDays,
+          workflowState: LeaveStatusConstants.pending,
+          attachment:
+              context.read<LeaveApprovalBloc>().state.uploadedFileUrl ??
+              (widget.leave.fileUrl?.isAbsoluteUrl == true
+                  ? Uri.parse(widget.leave.fileUrl!).path
+                  : widget.leave.fileUrl),
+        ),
+      );
     }
   }
 
@@ -382,17 +420,18 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                       LeaveHalfDayDetails(
                         l10n: l10n,
                         daySegment: _daySegment,
-                        onSegmentChanged: (val) => setState(() => _daySegment = val),
+                        onSegmentChanged: (val) =>
+                            setState(() => _daySegment = val),
                         halfDayDate: _halfDayDate,
                         onDateTap: () => _selectHalfDayDate(context),
-                        isDateReadOnly: (_fromDate != null && _toDate != null && _fromDate == _toDate),
+                        isDateReadOnly:
+                            (_fromDate != null &&
+                            _toDate != null &&
+                            _fromDate == _toDate),
                       ),
                     ],
                     const SizedBox(height: AppConstants.p20),
-                    LeaveReasonField(
-                      l10n: l10n,
-                      controller: _reasonController,
-                    ),
+                    LeaveReasonField(l10n: l10n, controller: _reasonController),
                   ],
                 ),
               ),
@@ -407,17 +446,32 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                     onPickFile: _pickAndUploadFile,
                   ),
                 ),
-                const SizedBox(height: AppConstants.p24),
+                //    const SizedBox(height: AppConstants.p16),
               ],
-              LeaveGuidelines(l10n: l10n),
-              const SizedBox(height: AppConstants.p24),
-              LeaveOverlapSection(hideOverlapAfterSubmit: _hideOverlapAfterSubmit),
-              const SizedBox(height: AppConstants.p32),
+              CommonGuidelines(
+                title: l10n.leaveRequestGuidelines,
+                items: [
+                  l10n.guideline1,
+                  l10n.guideline2,
+                  l10n.guideline3,
+                  l10n.guideline4,
+                  l10n.guideline5,
+                  l10n.guideline6,
+                ],
+              ),
+              const SizedBox(height: AppConstants.p10),
+              LeaveOverlapSection(
+                hideOverlapAfterSubmit: _hideOverlapAfterSubmit,
+              ),
+              const SizedBox(height: AppConstants.p16),
               LeaveActionButtons(
                 l10n: l10n,
                 state: state,
                 onSubmit: _submitForm,
-                disableSubmit: (_requiresSupportingDocs && state.uploadedFileUrl == null) || _isSickLeaveDateInvalid,
+                disableSubmit:
+                    (_requiresSupportingDocs &&
+                        state.uploadedFileUrl == null) ||
+                    _isSickLeaveDateInvalid,
               ),
             ],
           ),
@@ -426,4 +480,3 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
     );
   }
 }
-

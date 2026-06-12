@@ -8,10 +8,7 @@ import 'package:flutter/material.dart';
 class CommentItem extends StatelessWidget {
   final CommentEntity comment;
 
-  const CommentItem({
-    super.key,
-    required this.comment,
-  });
+  const CommentItem({super.key, required this.comment});
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +29,20 @@ class CommentItem extends StatelessWidget {
                 Expanded(
                   child: Text(
                     comment.commentBy ?? comment.owner,
-                    style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Text(
-                  DateTimeUtils.formatDate(comment.creation, pattern: 'dd-MM-yyyy'),
-                  style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant),
+                  DateTimeUtils.formatDate(
+                    comment.creation,
+                    pattern: 'dd-MM-yyyy',
+                  ),
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).onSurfaceVariant,
+                  ),
                 ),
               ],
             ),

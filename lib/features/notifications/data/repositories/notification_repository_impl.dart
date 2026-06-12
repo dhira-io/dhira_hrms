@@ -6,15 +6,20 @@ import '../../domain/repositories/notification_repository.dart';
 import '../datasources/notification_remote_data_source.dart';
 
 class NotificationRepositoryImpl implements INotificationRepository {
-
   final NotificationRemoteDataSource remoteDataSource;
 
   NotificationRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, List<NotificationEntity>>> getNotifications({int? limit, int? offset}) async {
+  Future<Either<Failure, List<NotificationEntity>>> getNotifications({
+    int? limit,
+    int? offset,
+  }) async {
     try {
-      final models = await remoteDataSource.getNotifications(limit: limit, offset: offset);
+      final models = await remoteDataSource.getNotifications(
+        limit: limit,
+        offset: offset,
+      );
       final entities = models.map((model) => model.toEntity()).toList();
       return Right(entities);
     } on ServerException catch (e) {
@@ -49,9 +54,17 @@ class NotificationRepositoryImpl implements INotificationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> storeFcmToken({required String token, required String deviceId, required String platform}) async {
+  Future<Either<Failure, void>> storeFcmToken({
+    required String token,
+    required String deviceId,
+    required String platform,
+  }) async {
     try {
-      await remoteDataSource.storeFcmToken(token: token, deviceId: deviceId, platform: platform);
+      await remoteDataSource.storeFcmToken(
+        token: token,
+        deviceId: deviceId,
+        platform: platform,
+      );
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
@@ -61,9 +74,17 @@ class NotificationRepositoryImpl implements INotificationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deactivateDevice({required String token, required String deviceId, required String platform}) async {
+  Future<Either<Failure, void>> deactivateDevice({
+    required String token,
+    required String deviceId,
+    required String platform,
+  }) async {
     try {
-      await remoteDataSource.deactivateDevice(token: token, deviceId: deviceId, platform: platform);
+      await remoteDataSource.deactivateDevice(
+        token: token,
+        deviceId: deviceId,
+        platform: platform,
+      );
       return const Right(null);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
@@ -72,6 +93,3 @@ class NotificationRepositoryImpl implements INotificationRepository {
     }
   }
 }
-
-
-

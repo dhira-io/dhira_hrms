@@ -1,12 +1,20 @@
 import 'package:dhira_hrms/features/approvals/domain/usecases/get_pending_requests_usecase.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
+import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_punch_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/submit_regularization_use_case.dart';
 import 'package:dhira_hrms/features/performance/data/datasources/performance_remote_datasource.dart';
 import 'package:dhira_hrms/features/performance/data/repositories/performance_repository_impl.dart';
 import 'package:dhira_hrms/features/performance/domain/repositories/i_performance_repository.dart';
 import 'package:dhira_hrms/features/performance/domain/usecases/get_active_pms_cycle_usecase.dart';
 import 'package:dhira_hrms/features/performance/domain/usecases/update_goal_usecase.dart';
+
+import '../../features/payslip/data/datasources/payslip_remote_datasource.dart';
+import '../../features/payslip/data/repositories/payslip_repository_impl.dart';
+import '../../features/payslip/domain/repositories/i_payslip_repository.dart';
+import '../../features/payslip/domain/usecases/get_payslips_usecase.dart';
+import '../../features/payslip/domain/usecases/get_payslip_detail_usecase.dart';
+import '../../features/payslip/presentation/bloc/payslip_bloc.dart';
 
 import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
@@ -54,7 +62,6 @@ import '../../features/auth/domain/usecases/verify_otp_usecase.dart';
 import '../../features/auth/domain/usecases/resend_otp_usecase.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/bloc/login_cubit.dart';
-import '../../features/auth/presentation/bloc/forgot_password_cubit.dart';
 import '../../features/auth/presentation/bloc/otp_verification_cubit.dart';
 import '../../features/auth/presentation/bloc/sso_cubit.dart';
 
@@ -121,7 +128,27 @@ import '../../features/profile/data/repositories/profile_repository_impl.dart';
 import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_avatar_usecase.dart';
 import '../../features/profile/domain/usecases/change_password_usecase.dart';
+import '../../features/profile/domain/usecases/update_profile_details_usecase.dart';
+import '../../features/profile/domain/usecases/get_nationalities_usecase.dart';
+import '../../features/profile/domain/usecases/delete_profile_image_usecase.dart';
+import '../../features/profile/domain/usecases/get_employee_resume_usecase.dart';
+import '../../features/profile/domain/usecases/search_skills_usecase.dart';
+import '../../features/profile/domain/usecases/save_sub_skills_for_skill_usecase.dart';
+import '../../features/profile/domain/usecases/search_designations_usecase.dart';
+import '../../features/profile/domain/usecases/search_projects_usecase.dart';
+import '../../features/profile/domain/usecases/search_employees_usecase.dart';
+import '../../features/profile/domain/usecases/get_country_codes_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
+import '../../features/profile/presentation/bloc/country_code_cubit.dart';
+import '../../features/profile/presentation/bloc/nationality_cubit.dart';
+import '../../features/profile/presentation/bloc/location_search_cubit.dart';
+import '../../features/profile/domain/usecases/search_locations_usecase.dart';
+import '../../features/profile/domain/usecases/get_sub_skills_usecase.dart';
+import '../../features/profile/domain/usecases/upsert_resume_row_usecase.dart';
+import '../../features/profile/domain/usecases/delete_resume_row_usecase.dart';
+import '../../features/profile/domain/usecases/update_employee_resume_usecase.dart';
+import '../../features/profile/domain/usecases/update_employee_sub_skills_usecase.dart';
+import '../../features/profile/domain/usecases/update_employee_project_assignments_usecase.dart';
 // Performance
 import '../../features/performance/domain/usecases/get_job_family_usecase.dart';
 import '../../features/performance/domain/usecases/get_pms_goals_usecase.dart';
@@ -146,7 +173,6 @@ import '../../features/performance/presentation/cubit/team_evaluation/team_evalu
 import '../../features/settings/presentation/bloc/settings_cubit.dart';
 import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
 import '../../features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Approvals
 import '../../features/approvals/data/datasources/approvals_remote_datasource.dart';
@@ -181,7 +207,6 @@ import '../../features/approvals/presentation/bloc/approvals_bloc.dart';
 import '../../features/notifications/data/datasources/notification_remote_data_source.dart';
 import '../../features/notifications/data/repositories/notification_repository_impl.dart';
 import '../../features/notifications/domain/repositories/notification_repository.dart';
-import '../../features/notifications/domain/entities/notification_entity.dart';
 import '../../features/notifications/domain/usecases/get_notifications_usecase.dart';
 import '../../features/notifications/domain/usecases/mark_all_read_usecase.dart';
 import '../../features/notifications/domain/usecases/mark_read_usecase.dart';
@@ -207,7 +232,10 @@ class DependencyInjection {
 
     // Core (Logger, Network, etc.)
     Get.lazyPut<Logger>(() => Logger(), fenix: true);
-    Get.lazyPut<ImageCompressService>(() => ImageCompressService(), fenix: true);
+    Get.lazyPut<ImageCompressService>(
+      () => ImageCompressService(),
+      fenix: true,
+    );
     Get.lazyPut<Connectivity>(() => Connectivity(), fenix: true);
     Get.lazyPut<NetworkInfo>(
       () => NetworkInfoImpl(Get.find<Connectivity>()),
@@ -221,10 +249,7 @@ class DependencyInjection {
       () => AuthInterceptor(sharedPrefs, Get.find<SessionManager>()),
       fenix: true,
     );
-    Get.lazyPut<LoggingInterceptor>(
-      () => LoggingInterceptor(),
-      fenix: true,
-    );
+    Get.lazyPut<LoggingInterceptor>(() => LoggingInterceptor(), fenix: true);
 
     // Dio
     Get.lazyPut<Dio>(() {
@@ -326,9 +351,7 @@ class DependencyInjection {
 
     // Attendance Feature
     Get.lazyPut<IAttendanceRemoteDataSource>(
-      () => AttendanceRemoteDataSourceImpl(
-        dioClient: Get.find<DioClient>(),
-      ),
+      () => AttendanceRemoteDataSourceImpl(dioClient: Get.find<DioClient>()),
       fenix: true,
     );
     Get.lazyPut<IAttendanceRepository>(
@@ -364,6 +387,10 @@ class DependencyInjection {
     );
     Get.lazyPut<GetAttendanceMonthSummaryUseCase>(
       () => GetAttendanceMonthSummaryUseCase(Get.find<IAttendanceRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetAttendancePunchSummaryUseCase>(
+      () => GetAttendancePunchSummaryUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
     Get.lazyPut<attendance_leave.GetLeaveDetailsUseCase>(
@@ -507,6 +534,74 @@ class DependencyInjection {
     );
     Get.lazyPut<ChangePasswordUseCase>(
       () => ChangePasswordUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateProfileDetailsUseCase>(
+      () => UpdateProfileDetailsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<DeleteProfileImageUseCase>(
+      () => DeleteProfileImageUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetEmployeeResumeUseCase>(
+      () => GetEmployeeResumeUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SearchSkillsUseCase>(
+      () => SearchSkillsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SearchDesignationsUseCase>(
+      () => SearchDesignationsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetNationalitiesUseCase>(
+      () => GetNationalitiesUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SearchProjectsUseCase>(
+      () => SearchProjectsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SearchEmployeesUseCase>(
+      () => SearchEmployeesUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetSubSkillsUseCase>(
+      () => GetSubSkillsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SaveSubSkillsForSkillUseCase>(
+      () => SaveSubSkillsForSkillUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpsertResumeRowUseCase>(
+      () => UpsertResumeRowUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<DeleteResumeRowUseCase>(
+      () => DeleteResumeRowUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateEmployeeResumeUseCase>(
+      () => UpdateEmployeeResumeUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateEmployeeSubSkillsUseCase>(
+      () => UpdateEmployeeSubSkillsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateEmployeeProjectAssignmentsUseCase>(
+      () => UpdateEmployeeProjectAssignmentsUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCountryCodesUseCase>(
+      () => GetCountryCodesUseCase(Get.find<IProfileRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SearchLocationsUseCase>(
+      () => SearchLocationsUseCase(Get.find<IProfileRepository>()),
       fenix: true,
     );
 
@@ -698,7 +793,8 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<GetActiveSelfAssessmentIdUseCase>(
-      () => GetActiveSelfAssessmentIdUseCase(Get.find<IPerformanceRepository>()),
+      () =>
+          GetActiveSelfAssessmentIdUseCase(Get.find<IPerformanceRepository>()),
       fenix: true,
     );
     Get.lazyPut<GetSelfAssessmentDetailsUseCase>(
@@ -766,7 +862,9 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<DeactivateDeviceUseCase>(
-      () => DeactivateDeviceUseCase(repository: Get.find<INotificationRepository>()),
+      () => DeactivateDeviceUseCase(
+        repository: Get.find<INotificationRepository>(),
+      ),
       fenix: true,
     );
 
@@ -838,7 +936,7 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<DeepLinkService>(
-      () => DeepLinkService(Get.find<SSOCubit>()),
+      () => DeepLinkService(),
       fenix: true,
     );
 
@@ -899,9 +997,31 @@ class DependencyInjection {
         getProfileUseCase: Get.find<GetProfileUseCase>(),
         updateAvatarUseCase: Get.find<UpdateAvatarUseCase>(),
         changePasswordUseCase: Get.find<ChangePasswordUseCase>(),
+        updateProfileDetailsUseCase: Get.find<UpdateProfileDetailsUseCase>(),
+        deleteProfileImageUseCase: Get.find<DeleteProfileImageUseCase>(),
+        getEmployeeResumeUseCase: Get.find<GetEmployeeResumeUseCase>(),
+        upsertResumeRowUseCase: Get.find<UpsertResumeRowUseCase>(),
+        deleteResumeRowUseCase: Get.find<DeleteResumeRowUseCase>(),
+        updateEmployeeResumeUseCase: Get.find<UpdateEmployeeResumeUseCase>(),
+        updateEmployeeSubSkillsUseCase: Get.find<UpdateEmployeeSubSkillsUseCase>(),
+        saveSubSkillsForSkillUseCase: Get.find<SaveSubSkillsForSkillUseCase>(),
+        updateEmployeeProjectAssignmentsUseCase: Get.find<UpdateEmployeeProjectAssignmentsUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
         imageCompressService: Get.find<ImageCompressService>(),
       ),
+      fenix: true,
+    );
+
+    Get.lazyPut<CountryCodeCubit>(
+      () => CountryCodeCubit(Get.find<GetCountryCodesUseCase>()),
+      fenix: true,
+    );
+    Get.lazyPut<NationalityCubit>(
+      () => NationalityCubit(Get.find<GetNationalitiesUseCase>()),
+      fenix: true,
+    );
+    Get.lazyPut<LocationSearchCubit>(
+      () => LocationSearchCubit(Get.find<SearchLocationsUseCase>()),
       fenix: true,
     );
 
@@ -1019,6 +1139,35 @@ class DependencyInjection {
     Get.lazyPut<FileOperationCubit>(
       () => FileOperationCubit(
         dioClient: Get.find<DioClient>(),
+        localStorageService: Get.find<LocalStorageService>(),
+      ),
+      fenix: true,
+    );
+
+    // Payslip
+    Get.lazyPut<PayslipRemoteDataSource>(
+      () => PayslipRemoteDataSourceImpl(Get.find<DioClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<IPayslipRepository>(
+      () => PayslipRepositoryImpl(
+        remoteDataSource: Get.find<PayslipRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetPayslipsUseCase>(
+      () => GetPayslipsUseCase(Get.find<IPayslipRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetPayslipDetailUseCase>(
+      () => GetPayslipDetailUseCase(Get.find<IPayslipRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<PayslipBloc>(
+      () => PayslipBloc(
+        getPayslipsUseCase: Get.find<GetPayslipsUseCase>(),
+        getPayslipDetailUseCase: Get.find<GetPayslipDetailUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
       ),
       fenix: true,

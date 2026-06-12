@@ -14,4 +14,8 @@ class StorageConstants {
   static const String sid = 'sid';
   static const String systemUser = 'system_user';
   static const String gender = 'gender';
+  static const String isFirstTime = 'is_first_time';
+  static const String rememberMe = 'remember_me';
+  static const String rememberMeEmail = 'remember_me_email';
+  static const String rememberMePassword = 'remember_me_password';
 }
