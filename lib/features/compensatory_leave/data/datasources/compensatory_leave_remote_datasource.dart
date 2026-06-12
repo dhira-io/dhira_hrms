@@ -1,5 +1,4 @@
 import 'package:dhira_hrms/core/network/dio_client.dart';
-import 'package:logger/logger.dart';
 import 'package:dhira_hrms/features/compensatory_leave/data/constants/compensatory_leave_api_constants.dart';
 import 'package:dhira_hrms/features/compensatory_leave/data/models/compensatory_leave_summary_model.dart';
 import 'package:dhira_hrms/features/compensatory_leave/data/models/compensatory_leave_eligible_date_model.dart';
@@ -21,18 +20,13 @@ abstract class ICompensatoryLeaveRemoteDataSource {
 class CompensatoryLeaveRemoteDataSourceImpl
     implements ICompensatoryLeaveRemoteDataSource {
   final DioClient dioClient;
-  final Logger logger;
 
-  CompensatoryLeaveRemoteDataSourceImpl({
-    required this.dioClient,
-    required this.logger,
-  });
+  CompensatoryLeaveRemoteDataSourceImpl({required this.dioClient});
 
   @override
   Future<CompensatoryLeaveSummaryModel> getCompensatoryLeaveSummary(
     String employeeId,
   ) async {
-    logger.i("Fetching compensatory leave summary for employee: $employeeId");
     final response = await dioClient.get(
       CompensatoryLeaveApiConstants.getSummary,
       queryParameters: {'employee': employeeId},
@@ -49,7 +43,6 @@ class CompensatoryLeaveRemoteDataSourceImpl
   Future<List<CompensatoryLeaveEligibleDateModel>> getEligibleDates(
     String employeeId,
   ) async {
-    logger.i("Fetching eligible dates for employee: $employeeId");
     final now = DateTime.now();
     final fromDate = "${now.year}-01-01";
     final toDate =
@@ -77,7 +70,6 @@ class CompensatoryLeaveRemoteDataSourceImpl
     required String employeeId,
     required CompensatoryLeaveRequestModel request,
   }) async {
-    logger.i("Submitting request for employee: $employeeId");
     final response = await dioClient.post(
       CompensatoryLeaveApiConstants.submitRequest,
       data: {'employee': employeeId, ...request.toJson()},

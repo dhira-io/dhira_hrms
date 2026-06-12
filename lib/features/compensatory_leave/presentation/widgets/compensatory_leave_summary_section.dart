@@ -92,9 +92,7 @@ class CompensatoryLeaveSummarySection extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 10.w),
-              const Expanded(
-                child: SizedBox(),
-              ),
+              const Expanded(child: SizedBox()),
             ],
           ),
         ),

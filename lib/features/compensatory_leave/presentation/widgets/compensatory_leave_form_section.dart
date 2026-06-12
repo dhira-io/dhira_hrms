@@ -51,6 +51,51 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                   prev.selectedDate != curr.selectedDate ||
                   prev.eligibleDates != curr.eligibleDates,
               builder: (context, state) {
+                if (state.eligibleDates.isEmpty) {
+                  return TextFormField(
+                    initialValue: l10n.noEligibleDates,
+                    readOnly: true,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      color: AppColors.of(context).textSecondary,
+                    ),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.of(context).surfaceContainerLow,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: AppConstants.p16.w,
+                        vertical: AppConstants.p12.h,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                        borderSide: BorderSide(
+                          color: AppColors.of(context).border,
+                          width: 1.w,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                        borderSide: BorderSide(
+                          color: AppColors.of(context).border,
+                          width: 1.w,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                        borderSide: BorderSide(
+                          color: AppColors.of(context).border,
+                          width: 1.w,
+                        ),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.event_busy,
+                        color: AppColors.of(
+                          context,
+                        ).textSecondary.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  );
+                }
+
                 return DropdownButtonFormField<
                   CompensatoryLeaveEligibleDateEntity
                 >(
@@ -68,12 +113,12 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                     ),
                   ),
                   items: state.eligibleDates.map((dateEntity) {
-                    return DropdownMenuItem(
-                      value: dateEntity,
-                      child: Text(dateEntity.displayLabel),
-                    );
+                    return DropdownMenuItem<
+                      CompensatoryLeaveEligibleDateEntity
+                    >(value: dateEntity, child: Text(dateEntity.displayLabel));
                   }).toList(),
                   onChanged: (selected) {
+                    if (selected == null) return;
                     FocusScope.of(context).unfocus();
                     context.read<CompensatoryLeaveBloc>().add(
                       CompensatoryLeaveEvent.dateSelected(selected),
@@ -199,12 +244,6 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                     fontSize: AppConstants.fs12.sp,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
-                SizedBox(width: 4.w),
-                Icon(
-                  Icons.help_outline_rounded,
-                  color: AppColors.of(context).outline,
-                  size: 14.sp,
                 ),
               ],
             ),
@@ -644,7 +683,9 @@ class CompensatoryLeaveFormLabel extends StatelessWidget {
           if (isRequired)
             TextSpan(
               text: ' *',
-              style: TextStyle(color: AppColors.of(context).error),
+              style: AppTextStyle.bodyMedium.copyWith(
+                color: AppColors.of(context).error,
+              ),
             ),
         ],
       ),

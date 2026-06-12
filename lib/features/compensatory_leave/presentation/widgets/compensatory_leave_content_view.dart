@@ -83,7 +83,7 @@ class CompensatoryLeaveContentView extends StatelessWidget {
                     vertical: 16.h,
                   ),
                   child: Column(
-                    children:  [
+                    children: [
                       CompensatoryLeaveSummarySection(),
                       SizedBox(height: 10.h),
                       CompensatoryLeaveFormSection(),

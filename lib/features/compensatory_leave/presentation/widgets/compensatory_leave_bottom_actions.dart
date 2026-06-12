@@ -40,27 +40,26 @@ class CompensatoryLeaveBottomActions extends StatelessWidget {
           ),
           SizedBox(width: 12.w),
           Expanded(
-            child:
-                BlocSelector<
-                  CompensatoryLeaveBloc,
-                  CompensatoryLeaveState,
-                  bool
-                >(
-                  selector: (state) => state.isActionLoading,
-                  builder: (context, isActionLoading) {
-                    return CommonButton(
-                      text: l10n.submitRequest,
-                      isLoading: isActionLoading,
-                      onPressed: isActionLoading
-                          ? null
-                          : () {
-                              context.read<CompensatoryLeaveBloc>().add(
-                                const CompensatoryLeaveEvent.submitRequested(),
-                              );
-                            },
-                    );
-                  },
-                ),
+            child: BlocBuilder<CompensatoryLeaveBloc, CompensatoryLeaveState>(
+              buildWhen: (prev, curr) =>
+                  prev.isActionLoading != curr.isActionLoading ||
+                  prev.selectedDate != curr.selectedDate,
+              builder: (context, state) {
+                final isDisabled =
+                    state.isActionLoading || state.selectedDate == null;
+                return CommonButton(
+                  text: l10n.submitRequest,
+                  isLoading: state.isActionLoading,
+                  onPressed: isDisabled
+                      ? null
+                      : () {
+                          context.read<CompensatoryLeaveBloc>().add(
+                            const CompensatoryLeaveEvent.submitRequested(),
+                          );
+                        },
+                );
+              },
+            ),
           ),
         ],
       ),

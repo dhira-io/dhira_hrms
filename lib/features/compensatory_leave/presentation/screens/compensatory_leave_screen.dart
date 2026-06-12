@@ -8,6 +8,7 @@ import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compens
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_event.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_state.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/widgets/compensatory_leave_content_view.dart';
+import 'package:dhira_hrms/features/compensatory_leave/domain/constants/compensatory_leave_constants.dart';
 import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 
@@ -54,7 +55,12 @@ class _CompensatoryLeaveScreenState extends State<CompensatoryLeaveScreen> {
                 ToastUtils.showSuccess(l10n.compOffSubmitSuccess);
                 AppRouter.navigateToRaisedRequests(ApprovalType.compOff);
               } else if (state.errorMessage != null) {
-                ToastUtils.showError(state.errorMessage!);
+                final message =
+                    state.errorMessage ==
+                        CompensatoryLeaveConstants.errorEmployeeIdNotFound
+                    ? l10n.employeeIdNotFound
+                    : state.errorMessage!;
+                ToastUtils.showError(message);
               }
             },
             child: const CompensatoryLeaveContentView(),

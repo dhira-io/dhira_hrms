@@ -19,4 +19,7 @@ class CompensatoryLeaveConstants {
   static const String workTypePayloadOvertime = "Overtime";
   static const String leaveTypeCompOff = "Compensatory Off";
   static const String autoFilledReason = "Auto-filled reason";
+
+  // Error Constants
+  static const String errorEmployeeIdNotFound = "EMPLOYEE_ID_NOT_FOUND";
 }

@@ -80,7 +80,7 @@ class CompensatoryLeaveBloc
           workedHours: state.workedHours,
           projects: state.projects,
           selectedProject: state.selectedProject,
-          errorMessage: "Employee ID not found",
+          errorMessage: CompensatoryLeaveConstants.errorEmployeeIdNotFound,
         ),
       );
       return;
