@@ -5,5 +5,3 @@ class CompensatoryLeaveApiConstants {
       "api/method/dhira_hrms.api.compensatory_leave_request.get_eligible_compoff_dates";
   static const String submitRequest = "api/resource/Compensatory Leave Request";
 }
-
-

@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/core/services/local_storage_service.dart';
 import 'package:dhira_hrms/features/timesheet/domain/usecases/get_projects_usecase.dart';
@@ -44,9 +43,6 @@ class CompensatoryLeaveBloc
     CompensatoryLeaveStarted event,
     Emitter<CompensatoryLeaveState> emit,
   ) async {
-    developer.log(
-      "CompensatoryLeaveBloc: Started with ID = ${event.compensatoryLeaveId}",
-    );
     emit(
       state.copyWith(
         status: CompensatoryLeaveStatus.loading,
@@ -69,7 +65,6 @@ class CompensatoryLeaveBloc
     CompensatoryLeaveFetchRequested event,
     Emitter<CompensatoryLeaveState> emit,
   ) async {
-    developer.log("CompensatoryLeaveBloc: Fetch requested");
     final empId = localStorageService.getEmpId() ?? '';
     if (empId.isEmpty) {
       emit(
@@ -196,7 +191,6 @@ class CompensatoryLeaveBloc
     CompensatoryLeaveDateSelected event,
     Emitter<CompensatoryLeaveState> emit,
   ) {
-    developer.log("CompensatoryLeaveBloc: Date selected = ${event.date?.date}");
     final selectedDate = event.date;
     final currentState = _ensureNonErrorState(state);
     emit(
@@ -212,9 +206,6 @@ class CompensatoryLeaveBloc
     CompensatoryLeaveProjectSelected event,
     Emitter<CompensatoryLeaveState> emit,
   ) {
-    developer.log(
-      "CompensatoryLeaveBloc: Project selected = ${event.project?.projectName}",
-    );
     final selectedProject = event.project;
     final currentState = _ensureNonErrorState(state);
     emit(currentState.copyWith(selectedProject: selectedProject));
@@ -224,9 +215,6 @@ class CompensatoryLeaveBloc
     CompensatoryLeaveTimesheetFillChanged event,
     Emitter<CompensatoryLeaveState> emit,
   ) {
-    developer.log(
-      "CompensatoryLeaveBloc: Timesheet fill changed = ${event.type}",
-    );
     final currentState = _ensureNonErrorState(state);
     emit(currentState.copyWith(timesheetFill: event.type));
   }
@@ -251,7 +239,6 @@ class CompensatoryLeaveBloc
     CompensatoryLeaveWorkTypeChanged event,
     Emitter<CompensatoryLeaveState> emit,
   ) {
-    developer.log("CompensatoryLeaveBloc: Work type changed = ${event.type}");
     final currentState = _ensureNonErrorState(state);
     emit(currentState.copyWith(workType: event.type));
   }
@@ -260,7 +247,14 @@ class CompensatoryLeaveBloc
     CompensatoryLeaveSubmitRequested event,
     Emitter<CompensatoryLeaveState> emit,
   ) async {
-    developer.log("CompensatoryLeaveBloc: Submit requested");
+    // Clear any previous error state so that BlocListener can trigger again if the exact same error happens.
+    emit(
+      state.copyWith(
+        status: CompensatoryLeaveStatus.loaded,
+        errorMessage: null,
+      ),
+    );
+
     final previous = state;
     final empId = localStorageService.getEmpId() ?? '';
 
@@ -374,8 +368,10 @@ class CompensatoryLeaveBloc
             ]
           : [],
       customWorkType:
-          state.workType == CompensatoryLeaveConstants.workTypeDisplayHoliday
+          state.workType == CompensatoryLeaveConstants.workTypeHoliday
           ? CompensatoryLeaveConstants.workTypePayloadHoliday
+          : state.workType == CompensatoryLeaveConstants.workTypeOvertime
+          ? CompensatoryLeaveConstants.workTypePayloadOvertime
           : CompensatoryLeaveConstants.workTypePayloadWeekend,
       employee: empId,
       employeeName: empName,
@@ -389,8 +385,6 @@ class CompensatoryLeaveBloc
       workFromDate: state.selectedDate!.date,
     );
 
-    developer.log("CompensatoryLeaveBloc: Submit Payload: $requestEntity");
-
     final result = await submitCompensatoryLeaveRequestUseCase(
       employeeId: empId,
       request: requestEntity,
@@ -398,9 +392,6 @@ class CompensatoryLeaveBloc
 
     result.fold(
       (failure) {
-        developer.log(
-          "CompensatoryLeaveBloc: Submit failed: ${failure.message}",
-        );
         emit(previous.copyWith(isActionLoading: false));
         emit(
           state.copyWith(
@@ -421,7 +412,6 @@ class CompensatoryLeaveBloc
         );
       },
       (success) {
-        developer.log("CompensatoryLeaveBloc: Submit succeeded");
         emit(
           state.copyWith(
             status: CompensatoryLeaveStatus.success,
@@ -448,4 +438,3 @@ class CompensatoryLeaveBloc
     );
   }
 }
-

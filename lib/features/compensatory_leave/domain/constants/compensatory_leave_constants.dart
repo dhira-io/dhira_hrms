@@ -16,6 +16,7 @@ class CompensatoryLeaveConstants {
   static const String workTypeDisplayHoliday = "Holiday";
   static const String workTypePayloadWeekend = "Weekend Work";
   static const String workTypePayloadHoliday = "Holiday Work";
+  static const String workTypePayloadOvertime = "Overtime";
   static const String leaveTypeCompOff = "Compensatory Off";
   static const String autoFilledReason = "Auto-filled reason";
 }

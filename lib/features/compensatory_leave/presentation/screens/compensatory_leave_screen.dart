@@ -38,24 +38,27 @@ class _CompensatoryLeaveScreenState extends State<CompensatoryLeaveScreen> {
     return SafeArea(
       top: false,
       bottom: false,
-      child: Scaffold(
-        backgroundColor: AppColors.of(context).background,
-        appBar: CommonAppBar(title: l10n.compensatoryLeaveRequest),
-        body: BlocListener<CompensatoryLeaveBloc, CompensatoryLeaveState>(
-          listenWhen: (prev, curr) =>
-              (prev.status != curr.status &&
-                  curr.status == CompensatoryLeaveStatus.success) ||
-              (prev.errorMessage != curr.errorMessage &&
-                  curr.errorMessage != null),
-          listener: (context, state) {
-            if (state.status == CompensatoryLeaveStatus.success) {
-              ToastUtils.showSuccess(l10n.actionSuccess);
-              AppRouter.navigateToRaisedRequests(ApprovalType.compOff);
-            } else if (state.errorMessage != null) {
-              ToastUtils.showError(state.errorMessage!);
-            }
-          },
-          child: const CompensatoryLeaveContentView(),
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          backgroundColor: AppColors.of(context).background,
+          appBar: CommonAppBar(title: l10n.compensatoryLeaveRequest),
+          body: BlocListener<CompensatoryLeaveBloc, CompensatoryLeaveState>(
+            listenWhen: (prev, curr) =>
+                (prev.status != curr.status &&
+                    curr.status == CompensatoryLeaveStatus.success) ||
+                (prev.errorMessage != curr.errorMessage &&
+                    curr.errorMessage != null),
+            listener: (context, state) {
+              if (state.status == CompensatoryLeaveStatus.success) {
+                ToastUtils.showSuccess(l10n.compOffSubmitSuccess);
+                AppRouter.navigateToRaisedRequests(ApprovalType.compOff);
+              } else if (state.errorMessage != null) {
+                ToastUtils.showError(state.errorMessage!);
+              }
+            },
+            child: const CompensatoryLeaveContentView(),
+          ),
         ),
       ),
     );

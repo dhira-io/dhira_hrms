@@ -171,5 +171,3 @@ class CompensatoryLeaveSummaryCard extends StatelessWidget {
     );
   }
 }
-
-

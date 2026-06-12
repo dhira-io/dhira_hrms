@@ -179,6 +179,7 @@
   "editLeaveApplication": "Edit Leave Application",
   "leaveSubmitSuccess": "Leave application submitted successfully",
   "actionSuccess": "Action successful",
+  "compOffSubmitSuccess": "Compensatory Leave Request submitted successfully",
   "searchLeaveHint": "Search employees or leave types",
   "duration": "Duration",
   "totalDays": "Total Days",

@@ -74,6 +74,7 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                     );
                   }).toList(),
                   onChanged: (selected) {
+                    FocusScope.of(context).unfocus();
                     context.read<CompensatoryLeaveBloc>().add(
                       CompensatoryLeaveEvent.dateSelected(selected),
                     );
@@ -224,6 +225,7 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                                   CompensatoryLeaveConstants.timesheetFillAuto,
                               groupValue: timesheetFill,
                               onChanged: (val) {
+                                FocusScope.of(context).unfocus();
                                 if (val != null) {
                                   context.read<CompensatoryLeaveBloc>().add(
                                     CompensatoryLeaveEvent.timesheetFillChanged(
@@ -257,6 +259,7 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                                   .timesheetFillManual,
                               groupValue: timesheetFill,
                               onChanged: (val) {
+                                FocusScope.of(context).unfocus();
                                 if (val != null) {
                                   context.read<CompensatoryLeaveBloc>().add(
                                     CompensatoryLeaveEvent.timesheetFillChanged(
@@ -324,6 +327,7 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                               );
                             }).toList(),
                             onChanged: (selected) {
+                              FocusScope.of(context).unfocus();
                               context.read<CompensatoryLeaveBloc>().add(
                                 CompensatoryLeaveEvent.projectSelected(
                                   selected,
@@ -447,9 +451,7 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
               builder: (context, timesheetFill) {
                 return CompensatoryLeaveFormLabel(
                   text: l10n.reasonExtraWork,
-                  isRequired:
-                      timesheetFill ==
-                      CompensatoryLeaveConstants.timesheetFillManual,
+                  isRequired: true,
                 );
               },
             ),
@@ -528,6 +530,7 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                       value: CompensatoryLeaveConstants.workTypeWeekend,
                       selectedValue: workType,
                       onTap: () {
+                        FocusScope.of(context).unfocus();
                         context.read<CompensatoryLeaveBloc>().add(
                           CompensatoryLeaveEvent.workTypeChanged(
                             CompensatoryLeaveConstants.workTypeWeekend,
@@ -545,6 +548,7 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                       value: CompensatoryLeaveConstants.workTypeHoliday,
                       selectedValue: workType,
                       onTap: () {
+                        FocusScope.of(context).unfocus();
                         context.read<CompensatoryLeaveBloc>().add(
                           CompensatoryLeaveEvent.workTypeChanged(
                             CompensatoryLeaveConstants.workTypeHoliday,
@@ -562,6 +566,7 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                       value: CompensatoryLeaveConstants.workTypeOvertime,
                       selectedValue: workType,
                       onTap: () {
+                        FocusScope.of(context).unfocus();
                         context.read<CompensatoryLeaveBloc>().add(
                           CompensatoryLeaveEvent.workTypeChanged(
                             CompensatoryLeaveConstants.workTypeOvertime,
@@ -725,5 +730,3 @@ class CompensatoryLeaveFormSelectionCard extends StatelessWidget {
     );
   }
 }
-
-

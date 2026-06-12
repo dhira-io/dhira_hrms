@@ -179,6 +179,7 @@
   "editLeaveApplication": "छुट्टी का आवेदन संपादित करें",
   "leaveSubmitSuccess": "छुट्टी का आवेदन सफलतापूर्वक जमा किया गया",
   "actionSuccess": "कार्य सफलतापूर्वक संपन्न हुआ",
+  "compOffSubmitSuccess": "प्रतिपूरक अवकाश अनुरोध सफलतापूर्वक सबमिट किया गया",
   "searchLeaveHint": "कर्मचारी या छुट्टी के प्रकार खोजें",
   "duration": "अवधि",
   "totalDays": "कुल दिन",

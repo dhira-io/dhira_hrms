@@ -33,6 +33,7 @@ class CompensatoryLeaveEligibleDateModel
     String mappedWorkType = eligibilityType.toLowerCase();
     if (mappedWorkType == 'holiday_work') mappedWorkType = 'holiday';
     if (mappedWorkType == 'weekend_work') mappedWorkType = 'weekend';
+    if (mappedWorkType == 'overtime_work') mappedWorkType = 'overtime';
 
     return CompensatoryLeaveEligibleDateEntity(
       date: date,

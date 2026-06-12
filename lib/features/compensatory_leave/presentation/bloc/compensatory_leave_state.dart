@@ -27,4 +27,3 @@ class CompensatoryLeaveState with _$CompensatoryLeaveState {
     String? errorMessage,
   }) = _CompensatoryLeaveState;
 }
-
