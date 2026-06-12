@@ -134,7 +134,6 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return BlocConsumer<LoginCubit, LoginState>(
@@ -168,7 +167,7 @@ class _LoginFormState extends State<LoginForm> {
                       width: 40.w,
                       height: 4.h,
                       decoration: BoxDecoration(
-                        color: colors.gray400,
+                        color: AppColors.of(context).gray400,
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                     ),
@@ -180,7 +179,7 @@ class _LoginFormState extends State<LoginForm> {
                     child: Text(
                       l10n.signInToYourAccountTitle,
                       style: AppTextStyle.headlineSmall.copyWith(
-                        color: colors.black,
+                        color: AppColors.of(context).textPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: 22.sp,
                       ),
@@ -194,7 +193,7 @@ class _LoginFormState extends State<LoginForm> {
                       l10n.enterEmailAndPasswordBelow,
                       textAlign: TextAlign.center,
                       style: AppTextStyle.bodyMedium.copyWith(
-                        color: colors.textSecondary,
+                        color: AppColors.of(context).textSecondary,
                       ),
                     ),
                   ),
@@ -204,7 +203,7 @@ class _LoginFormState extends State<LoginForm> {
                   Text(
                     l10n.email,
                     style: AppTextStyle.loginLabel.copyWith(
-                      color: colors.textPrimary,
+                      color: AppColors.of(context).textPrimary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -216,12 +215,12 @@ class _LoginFormState extends State<LoginForm> {
                     focusNode: emailFocusNode,
                     keyboardType: TextInputType.emailAddress,
                     style: AppTextStyle.bodyMedium.copyWith(
-                      color: colors.textPrimary,
+                      color: AppColors.of(context).textPrimary,
                     ),
                     decoration: InputDecoration(
                       hintText: 'name@example.com',
                       hintStyle: AppTextStyle.bodyMedium.copyWith(
-                        color: colors.gray400,
+                        color: AppColors.of(context).gray400,
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       contentPadding:       EdgeInsets.symmetric(
@@ -229,25 +228,25 @@ class _LoginFormState extends State<LoginForm> {
                         vertical: 10.h,
                       ),
                       filled: true,
-                      fillColor: colors.surfaceContainerLowest,
+                      fillColor: AppColors.of(context).surfaceContainerLowest,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
                         borderSide: BorderSide(
-                          color: colors.gray400,
+                          color: AppColors.of(context).gray400,
                           width: 1.w,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
                         borderSide: BorderSide(
-                          color: colors.gray400,
+                          color: AppColors.of(context).gray400,
                           width: 1.w,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
                         borderSide: BorderSide(
-                          color: colors.primaryContainer,
+                          color: AppColors.of(context).primaryContainer,
                           width: 1.5.w,
                         ),
                       ),
@@ -271,7 +270,7 @@ class _LoginFormState extends State<LoginForm> {
                   Text(
                     l10n.password,
                     style: AppTextStyle.loginLabel.copyWith(
-                      color: colors.textPrimary,
+                      color: AppColors.of(context).textPrimary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -284,12 +283,12 @@ class _LoginFormState extends State<LoginForm> {
                     focusNode: passwordFocusNode,
                     obscureText: !_isPasswordVisible,
                     style: AppTextStyle.bodyMedium.copyWith(
-                      color: colors.textPrimary,
+                      color: AppColors.of(context).textPrimary,
                     ),
                     decoration: InputDecoration(
                       hintText: '••••••••',
                       hintStyle: AppTextStyle.bodyMedium.copyWith(
-                        color: colors.gray400,
+                        color: AppColors.of(context).gray400,
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       contentPadding:       EdgeInsets.symmetric(
@@ -297,25 +296,25 @@ class _LoginFormState extends State<LoginForm> {
                         vertical: 11.h,
                       ),
                       filled: true,
-                      fillColor: colors.surfaceContainerLowest,
+                      fillColor: AppColors.of(context).surfaceContainerLowest,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.r),
                         borderSide: BorderSide(
-                          color: colors.gray400,
+                          color: AppColors.of(context).gray400,
                           width: 1.w,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.r),
                         borderSide: BorderSide(
-                          color: colors.gray400,
+                          color: AppColors.of(context).gray400,
                           width: 1.w,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.r),
                         borderSide: BorderSide(
-                          color: colors.primaryContainer,
+                          color: AppColors.of(context).primaryContainer,
                           width: 1.5.w,
                         ),
                       ),
@@ -324,7 +323,7 @@ class _LoginFormState extends State<LoginForm> {
                           _isPasswordVisible
                               ? Icons.visibility
                               : Icons.visibility_off,
-                          color: colors.gray400,
+                          color: AppColors.of(context).gray400,
                           size: 20,
                         ),
                         onPressed: () {
@@ -366,12 +365,12 @@ class _LoginFormState extends State<LoginForm> {
                                   _rememberMe = val ?? false;
                                 });
                               },
-                              activeColor: colors.primaryContainer,
+                              activeColor: AppColors.of(context).primaryContainer,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4.r),
                               ),
                               side: BorderSide(
-                                color: colors.gray400,
+                                color: AppColors.of(context).gray400,
                                 width: 1.5.w,
                               ),
                             ),
@@ -382,7 +381,7 @@ class _LoginFormState extends State<LoginForm> {
                           Text(
                             l10n.rememberMe,
                             style: AppTextStyle.bodySmall.copyWith(
-                              color: colors.textPrimary,
+                              color: AppColors.of(context).textPrimary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -399,7 +398,7 @@ class _LoginFormState extends State<LoginForm> {
                         child: Text(
                           l10n.forgotPassword,
                           style: AppTextStyle.loginForgotPassword.copyWith(
-                            color: colors.primaryContainer,
+                            color: AppColors.of(context).primaryContainer,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -423,19 +422,19 @@ class _LoginFormState extends State<LoginForm> {
                   Row(
                     children: [
                       Expanded(
-                        child: Divider(color: colors.border, thickness: 1),
+                        child: Divider(color: AppColors.of(context).border, thickness: 1),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         child: Text(
                           l10n.orLoginWith,
                           style: AppTextStyle.loginOrWith.copyWith(
-                            color: colors.gray400,
+                            color: AppColors.of(context).gray400,
                           ),
                         ),
                       ),
                       Expanded(
-                        child: Divider(color: colors.border, thickness: 1),
+                        child: Divider(color: AppColors.of(context).border, thickness: 1),
                       ),
                     ],
                   ),
@@ -466,7 +465,7 @@ class _LoginFormState extends State<LoginForm> {
                         child: Text(
                           l10n.privacyPolicy,
                           style: AppTextStyle.bodySmall.copyWith(
-                            color: colors.textSecondary,
+                            color: AppColors.of(context).textSecondary,
                           ),
                         ),
                       ),
@@ -475,7 +474,7 @@ class _LoginFormState extends State<LoginForm> {
                         child: Text(
                           l10n.termsOfService,
                           style: AppTextStyle.bodySmall.copyWith(
-                            color: colors.textSecondary,
+                            color: AppColors.of(context).textSecondary,
                           ),
                         ),
                       ),
@@ -484,7 +483,7 @@ class _LoginFormState extends State<LoginForm> {
                         child: Text(
                           l10n.support,
                           style: AppTextStyle.bodySmall.copyWith(
-                            color: colors.textSecondary,
+                            color: AppColors.of(context).textSecondary,
                           ),
                         ),
                       ),

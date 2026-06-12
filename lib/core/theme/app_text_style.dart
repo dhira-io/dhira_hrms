@@ -157,28 +157,28 @@ class AppTextStyle {
   static TextStyle get loginOrWith => GoogleFonts.inter(
     fontSize: 10.sp,
     fontWeight: FontWeight.w500,
-    height: 16 / 12,
+    height: 16.h / 12,
     letterSpacing: 0.0,
   );
 
   static TextStyle get loginOffice365Text => GoogleFonts.inter(
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
-    height: 24 / 16,
+    height: 24.h / 16,
     letterSpacing: 0.0,
   );
 
   static TextStyle get getStartedTitle => GoogleFonts.inter(
     fontSize: 20.sp,
     fontWeight: FontWeight.w600,
-    height: 1.3,
+    height: 1.3.h,
     letterSpacing: 0.0,
   );
 
   static TextStyle get getStartedSubtitle => GoogleFonts.inter(
     fontSize: 11.sp,
     fontWeight: FontWeight.w500,
-    height: 1.3,
+    height: 1.3.h,
     letterSpacing: 0.0,
   );
 }
