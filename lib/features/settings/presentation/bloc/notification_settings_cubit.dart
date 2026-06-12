@@ -26,6 +26,10 @@ class NotificationSettingsCubit extends Cubit<NotificationSettingsState> {
     }
   }
 
+  void clearError() {
+    emit(state.copyWith(errorMessage: null));
+  }
+
   Future<void> toggleItem(String sectionId, String itemId, bool value) async {
     if (state.settings == null || state.isActionLoading) return;
 

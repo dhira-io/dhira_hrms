@@ -37,24 +37,38 @@ class _NotificationPreferencesScreenState
 
   String _getLocalizedText(BuildContext context, String key) {
     final l10n = AppLocalizations.of(context)!;
-    // Map of keys to l10n getters
-    final map = {
-      NotificationSettingsConstants.l10nPushNotifications: l10n.pushNotifications,
-      NotificationSettingsConstants.l10nEmailAlerts: l10n.emailAlerts,
-      NotificationSettingsConstants.l10nAttendance: l10n.attendance,
-      NotificationSettingsConstants.l10nLeave: l10n.leave,
-      NotificationSettingsConstants.l10nTimesheetReminders: l10n.timesheetReminders,
-      NotificationSettingsConstants.l10nGeneralAnnouncements: l10n.generalAnnouncements,
-      NotificationSettingsConstants.l10nAttendancePushDesc: l10n.attendancePushDesc,
-      NotificationSettingsConstants.l10nLeavePushDesc: l10n.leavePushDesc,
-      NotificationSettingsConstants.l10nTimesheetPushDesc: l10n.timesheetPushDesc,
-      NotificationSettingsConstants.l10nGeneralPushDesc: l10n.generalPushDesc,
-      NotificationSettingsConstants.l10nAttendanceEmailDesc: l10n.attendanceEmailDesc,
-      NotificationSettingsConstants.l10nLeaveEmailDesc: l10n.leaveEmailDesc,
-      NotificationSettingsConstants.l10nTimesheetEmailDesc: l10n.timesheetEmailDesc,
-      NotificationSettingsConstants.l10nGeneralEmailDesc: l10n.generalEmailDesc,
-    };
-    return map[key] ?? key;
+    switch (key) {
+      case NotificationSettingsConstants.l10nPushNotifications:
+        return l10n.pushNotifications;
+      case NotificationSettingsConstants.l10nEmailAlerts:
+        return l10n.emailAlerts;
+      case NotificationSettingsConstants.l10nAttendance:
+        return l10n.attendance;
+      case NotificationSettingsConstants.l10nLeave:
+        return l10n.leave;
+      case NotificationSettingsConstants.l10nTimesheetReminders:
+        return l10n.timesheetReminders;
+      case NotificationSettingsConstants.l10nGeneralAnnouncements:
+        return l10n.generalAnnouncements;
+      case NotificationSettingsConstants.l10nAttendancePushDesc:
+        return l10n.attendancePushDesc;
+      case NotificationSettingsConstants.l10nLeavePushDesc:
+        return l10n.leavePushDesc;
+      case NotificationSettingsConstants.l10nTimesheetPushDesc:
+        return l10n.timesheetPushDesc;
+      case NotificationSettingsConstants.l10nGeneralPushDesc:
+        return l10n.generalPushDesc;
+      case NotificationSettingsConstants.l10nAttendanceEmailDesc:
+        return l10n.attendanceEmailDesc;
+      case NotificationSettingsConstants.l10nLeaveEmailDesc:
+        return l10n.leaveEmailDesc;
+      case NotificationSettingsConstants.l10nTimesheetEmailDesc:
+        return l10n.timesheetEmailDesc;
+      case NotificationSettingsConstants.l10nGeneralEmailDesc:
+        return l10n.generalEmailDesc;
+      default:
+        return key;
+    }
   }
 
   @override
@@ -68,6 +82,7 @@ class _NotificationPreferencesScreenState
         listener: (context, state) {
           if (state.errorMessage != null) {
             ToastUtils.showError(state.errorMessage!);
+            context.read<NotificationSettingsCubit>().clearError();
           }
         },
         builder: (context, state) {

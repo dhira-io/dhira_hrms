@@ -29,9 +29,6 @@ class NotificationSettingsRepository
     }
   }
 
-  @override
-  Future<void> saveSettings(NotificationSettingsEntity settings) async {
-  }
 
   @override
   Future<void> updateItem(String field, bool value) async {
