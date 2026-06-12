@@ -1414,8 +1414,8 @@
     }
   },
   "empty": "Empty",
-  "failedToRefresh": "Failed to refresh: {error}"
-, "taskWorkDescription": "Task/work description", "taskWorkDescriptionHint": "Production deployment" }
+  "failedToRefresh": "Failed to refresh: {error}",
+   "taskWorkDescription": "Task/work description", "taskWorkDescriptionHint": "Production deployment" }
     "sunday": "Sunday",
     "fileSizeError": "File size must be less than {size}MB",
     "missedPunch": "Missed Punch",

@@ -1353,7 +1353,7 @@
   "pageNumber": "पृष्ठ {currentPage}",
   "empty": "खाली",
   "failedToRefresh": "ताज़ा करने में विफल: {error}"
-, "taskWorkDescription": "Task/work description", "taskWorkDescriptionHint": "Production deployment" }
+, "taskWorkDescription": "Task/work description", "taskWorkDescriptionHint": "Production deployment",
     "sunday": "रविवार",
     "fileSizeError": "फ़ाइल का आकार {size}MB से कम होना चाहिए",
     "missedPunch": "पंच छूट गया",
