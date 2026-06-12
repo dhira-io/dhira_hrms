@@ -1117,6 +1117,12 @@
     "deleteCertificationConfirmation": "Are you sure you want to delete this certification?",
     "policies": "Policies",
     "policyHub": "Policy Hub",
-    "policyHubSubtitle": "Centralized company policies and guidelines"
+    "policyHubSubtitle": "Centralized company policies and guidelines",
+    "searchPolicies": "Search policies...",
+    "showing": "Showing",
+    "policiesCount": "policies",
+    "readPolicy": "Read Policy",
+    "view": "View"
 }
+
 

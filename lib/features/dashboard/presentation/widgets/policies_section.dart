@@ -35,7 +35,7 @@ class PoliciesSection extends StatelessWidget {
                 iconBgColor: AppColors.of(context).iconbgblue,
                 iconColor: AppColors.of(context).primary,
                 onTap: () {
-                  // context.push(AppRouter.policyHubPath); // TODO: implement navigation to Policy Hub
+                  context.push(AppRouter.policyPath);
                 },
               ),
             ),
