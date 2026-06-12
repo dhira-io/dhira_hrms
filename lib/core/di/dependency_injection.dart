@@ -102,6 +102,14 @@ import '../../features/leave/domain/usecases/update_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_statistics_usecase.dart';
 import '../../features/leave/domain/usecases/upload_file_usecase.dart';
 
+// Compensatory Leave
+import '../../features/compensatory_leave/data/datasources/compensatory_leave_remote_datasource.dart';
+import '../../features/compensatory_leave/data/repositories/compensatory_leave_repository_impl.dart';
+import '../../features/compensatory_leave/domain/repositories/i_compensatory_leave_repository.dart';
+import '../../features/compensatory_leave/domain/usecases/get_compensatory_leave_summary_usecase.dart';
+import '../../features/compensatory_leave/domain/usecases/get_compensatory_leave_eligible_dates_usecase.dart';
+import '../../features/compensatory_leave/domain/usecases/submit_compensatory_leave_request_usecase.dart';
+
 // Timesheet
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
 import '../../features/timesheet/data/datasources/timesheet_remote_datasource.dart';
@@ -419,6 +427,34 @@ class DependencyInjection {
     );
     Get.lazyPut<UploadFileUseCase>(
       () => UploadFileUseCase(Get.find<ILeaveRepository>()),
+      fenix: true,
+    );
+
+    // Compensatory Leave Feature
+    Get.lazyPut<ICompensatoryLeaveRemoteDataSource>(
+      () => CompensatoryLeaveRemoteDataSourceImpl(
+        dioClient: Get.find<DioClient>(),
+        logger: Get.find<Logger>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<ICompensatoryLeaveRepository>(
+      () => CompensatoryLeaveRepositoryImpl(
+        remoteDataSource: Get.find<ICompensatoryLeaveRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetCompensatoryLeaveSummaryUseCase>(
+      () => GetCompensatoryLeaveSummaryUseCase(Get.find<ICompensatoryLeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCompensatoryLeaveEligibleDatesUseCase>(
+      () => GetCompensatoryLeaveEligibleDatesUseCase(Get.find<ICompensatoryLeaveRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SubmitCompensatoryLeaveRequestUseCase>(
+      () => SubmitCompensatoryLeaveRequestUseCase(Get.find<ICompensatoryLeaveRepository>()),
       fenix: true,
     );
 

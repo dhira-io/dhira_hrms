@@ -7,6 +7,7 @@ import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/utils/toast_utils.dart';
 import 'action_card.dart';
 
 class EmployeeActionsSection extends StatelessWidget {
@@ -61,25 +62,27 @@ class EmployeeActionsSection extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  /*Expanded(
+                  Expanded(
                     child: ActionCard(
                       iconPath: AppAssets.comofficon,
-                      label: l10n.compensatoryOff,
-                      subtitle: l10n.compOffSubtitle,
+                      label: l10n.compensatoryLeave,
+                      subtitle: l10n.requestCompensatoryLeave,
                       iconBgColor: AppColors.of(context).bereavementTrack,
                       iconColor: AppColors.of(context).compofficon,
-                      onTap: () {},
+                      onTap: () => context.push(AppRouter.compensatoryLeavePath),
                     ),
                   ),
-                  const SizedBox(width: AppConstants.p16),*/
-                  ActionCard(
-                    iconPath: AppAssets.attendanceIcon,
-                    label: l10n.attendanceRegularization,
-                    subtitle: l10n.empattendanceRegSubtitle,
-                    iconBgColor: AppColors.of(context).attendancebg,
-                    iconColor: AppColors.of(context).attendanceicon,
-                    onTap: () =>
-                        context.push(AppRouter.attendanceRegularizationPath),
+                  const SizedBox(width: AppConstants.p16),
+                  Expanded(
+                    child: ActionCard(
+                      iconPath: AppAssets.attendanceIcon,
+                      label: l10n.attendanceRegularization,
+                      subtitle: l10n.empattendanceRegSubtitle,
+                      iconBgColor: AppColors.of(context).attendancebg,
+                      iconColor: AppColors.of(context).attendanceicon,
+                      onTap: () =>
+                          context.push(AppRouter.attendanceRegularizationPath),
+                    ),
                   ),
                 ],
               ),
