@@ -452,7 +452,6 @@ class DependencyInjection {
     Get.lazyPut<ICompensatoryLeaveRemoteDataSource>(
       () => CompensatoryLeaveRemoteDataSourceImpl(
         dioClient: Get.find<DioClient>(),
-        logger: Get.find<Logger>(),
       ),
       fenix: true,
     );
@@ -464,15 +463,21 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<GetCompensatoryLeaveSummaryUseCase>(
-      () => GetCompensatoryLeaveSummaryUseCase(Get.find<ICompensatoryLeaveRepository>()),
+      () => GetCompensatoryLeaveSummaryUseCase(
+        Get.find<ICompensatoryLeaveRepository>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<GetCompensatoryLeaveEligibleDatesUseCase>(
-      () => GetCompensatoryLeaveEligibleDatesUseCase(Get.find<ICompensatoryLeaveRepository>()),
+      () => GetCompensatoryLeaveEligibleDatesUseCase(
+        Get.find<ICompensatoryLeaveRepository>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<SubmitCompensatoryLeaveRequestUseCase>(
-      () => SubmitCompensatoryLeaveRequestUseCase(Get.find<ICompensatoryLeaveRepository>()),
+      () => SubmitCompensatoryLeaveRequestUseCase(
+        Get.find<ICompensatoryLeaveRepository>(),
+      ),
       fenix: true,
     );
 
@@ -606,7 +611,9 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<UpdateEmployeeProjectAssignmentsUseCase>(
-      () => UpdateEmployeeProjectAssignmentsUseCase(Get.find<IProfileRepository>()),
+      () => UpdateEmployeeProjectAssignmentsUseCase(
+        Get.find<IProfileRepository>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<GetCountryCodesUseCase>(
@@ -948,10 +955,7 @@ class DependencyInjection {
       ),
       fenix: true,
     );
-    Get.lazyPut<DeepLinkService>(
-      () => DeepLinkService(),
-      fenix: true,
-    );
+    Get.lazyPut<DeepLinkService>(() => DeepLinkService(), fenix: true);
 
     // Attendance BLoC remains global as it's used in multiple tabs
     Get.lazyPut<AttendanceBloc>(
@@ -1016,9 +1020,11 @@ class DependencyInjection {
         upsertResumeRowUseCase: Get.find<UpsertResumeRowUseCase>(),
         deleteResumeRowUseCase: Get.find<DeleteResumeRowUseCase>(),
         updateEmployeeResumeUseCase: Get.find<UpdateEmployeeResumeUseCase>(),
-        updateEmployeeSubSkillsUseCase: Get.find<UpdateEmployeeSubSkillsUseCase>(),
+        updateEmployeeSubSkillsUseCase:
+            Get.find<UpdateEmployeeSubSkillsUseCase>(),
         saveSubSkillsForSkillUseCase: Get.find<SaveSubSkillsForSkillUseCase>(),
-        updateEmployeeProjectAssignmentsUseCase: Get.find<UpdateEmployeeProjectAssignmentsUseCase>(),
+        updateEmployeeProjectAssignmentsUseCase:
+            Get.find<UpdateEmployeeProjectAssignmentsUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
         imageCompressService: Get.find<ImageCompressService>(),
       ),
