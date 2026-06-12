@@ -40,54 +40,63 @@ class CompensatoryLeaveSummarySection extends StatelessWidget {
           ),
         ),
         SizedBox(height: 10.h),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10.w,
-            mainAxisSpacing: 10.h,
-            childAspectRatio: 1.9,
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: CompensatoryLeaveSummaryCard(
+                  title: l10n.availableBalance,
+                  value:
+                      "${formatValue(summary.availableBalance)} ${l10n.daysLabel.toLowerCase()}",
+                  icon: Icons.calendar_today_outlined,
+                  textColor: AppColors.of(context).primary,
+                  bgColor: AppColors.of(context).infoBg,
+                  borderColor: AppColors.of(context).infoBorder,
+                  subtitle: l10n.daysLabel,
+                ),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: CompensatoryLeaveSummaryCard(
+                  title: l10n.raisedRequests,
+                  value:
+                      "${formatValue(summary.raisedRequest)} ${l10n.daysLabel.toLowerCase()}",
+                  icon: Icons.mail_outline_rounded,
+                  textColor: AppColors.of(context).pendingStatusText,
+                  bgColor: AppColors.of(context).pendingStatusBg,
+                  borderColor: AppColors.of(context).warningBorder,
+                  subtitle: l10n.pendingApproval,
+                ),
+              ),
+            ],
           ),
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return CompensatoryLeaveSummaryCard(
-                title: l10n.availableBalance,
-                value:
-                    "${formatValue(summary.availableBalance)} ${l10n.daysLabel.toLowerCase()}",
-                icon: Icons.calendar_today_outlined,
-                textColor: AppColors.of(context).primary,
-                bgColor: AppColors.of(context).infoBg,
-                borderColor: AppColors.of(context).infoBorder,
-                subtitle: l10n.daysLabel,
-              );
-            } else if (index == 1) {
-              return CompensatoryLeaveSummaryCard(
-                title: l10n.raisedRequests,
-                value:
-                    "${formatValue(summary.raisedRequest)} ${l10n.daysLabel.toLowerCase()}",
-                icon: Icons.mail_outline_rounded,
-                textColor: AppColors.of(context).pendingStatusText,
-                bgColor: AppColors.of(context).pendingStatusBg,
-                borderColor: AppColors.of(context).warningBorder,
-                subtitle: l10n.pendingApproval,
-              );
-            } else {
-              return CompensatoryLeaveSummaryCard(
-                title: l10n.expiringSoon,
-                value:
-                    "${formatValue(summary.expiringSoon)} ${l10n.daysLabel.toLowerCase()}",
-                icon: Icons.warning_amber_rounded,
-                textColor: AppColors.of(context).rejectedText,
-                bgColor: AppColors.of(context).rejectedBg,
-                borderColor: AppColors.of(context).errorBorder,
-                subtitle: summary.expiringSoon > 0
-                    ? l10n.expiresInDays(summary.expiringSoon.toInt())
-                    : l10n.noExpiry,
-              );
-            }
-          },
+        ),
+        SizedBox(height: 10.h),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: CompensatoryLeaveSummaryCard(
+                  title: l10n.expiringSoon,
+                  value:
+                      "${formatValue(summary.expiringSoon)} ${l10n.daysLabel.toLowerCase()}",
+                  icon: Icons.warning_amber_rounded,
+                  textColor: AppColors.of(context).rejectedText,
+                  bgColor: AppColors.of(context).rejectedBg,
+                  borderColor: AppColors.of(context).errorBorder,
+                  subtitle: summary.expiringSoon > 0
+                      ? l10n.expiresInDays(summary.expiringSoon.toInt())
+                      : l10n.noExpiry,
+                ),
+              ),
+              SizedBox(width: 10.w),
+              const Expanded(
+                child: SizedBox(),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -135,10 +144,10 @@ class CompensatoryLeaveSummaryCard extends StatelessWidget {
                   title,
                   style: AppTextStyle.bodySmall.copyWith(
                     color: AppColors.of(context).textSecondary,
-                    fontSize: AppConstants.fs9.sp,
+                    fontSize: AppConstants.fs11.sp,
                     fontWeight: FontWeight.w500,
                   ),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -161,9 +170,9 @@ class CompensatoryLeaveSummaryCard extends StatelessWidget {
             subtitle,
             style: AppTextStyle.bodySmall.copyWith(
               color: AppColors.of(context).textSecondary,
-              fontSize: AppConstants.fs8.sp,
+              fontSize: AppConstants.fs9.sp,
             ),
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ],
