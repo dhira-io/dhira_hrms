@@ -10,6 +10,7 @@ import '../widgets/notification_section_widget.dart';
 import '../widgets/notification_toggle_item_widget.dart';
 import '../widgets/notification_preferences_skeleton.dart';
 import '../../../../core/widgets/common_app_bar.dart';
+import '../../../../core/utils/toast_utils.dart';
 
 import '../../data/constants/notification_settings_constants.dart';
 
@@ -66,9 +67,7 @@ class _NotificationPreferencesScreenState
       body: BlocConsumer<NotificationSettingsCubit, NotificationSettingsState>(
         listener: (context, state) {
           if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage!)),
-            );
+            ToastUtils.showError(state.errorMessage!);
           }
         },
         builder: (context, state) {
