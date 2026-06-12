@@ -170,6 +170,8 @@ import '../../features/performance/presentation/cubit/team_evaluation/team_evalu
 import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../../features/settings/presentation/bloc/settings_cubit.dart';
 import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
+import '../../features/settings/domain/repositories/notification_settings_repository.dart';
+import '../../features/settings/data/repositories/notification_settings_repository_impl.dart';
 import '../../features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 
 // Approvals
@@ -1109,8 +1111,12 @@ class DependencyInjection {
       ),
       fenix: true,
     );
+    Get.lazyPut<INotificationSettingsRepository>(
+      () => NotificationSettingsRepository(Get.find<DioClient>()),
+      fenix: true,
+    );
     Get.lazyPut<NotificationSettingsCubit>(
-      () => NotificationSettingsCubit(),
+      () => NotificationSettingsCubit(Get.find<INotificationSettingsRepository>()),
       fenix: true,
     );
     Get.lazyPut<FileOperationCubit>(

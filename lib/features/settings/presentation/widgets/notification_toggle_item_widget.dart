@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import 'notification_item_shimmer.dart';
 
 class NotificationToggleItemWidget extends StatelessWidget {
   final String title;
   final String description;
   final bool value;
   final ValueChanged<bool> onToggle;
+  final bool isLoading;
+  final bool isDisabled;
 
   const NotificationToggleItemWidget({
     super.key,
@@ -15,10 +18,16 @@ class NotificationToggleItemWidget extends StatelessWidget {
     required this.description,
     required this.value,
     required this.onToggle,
+    this.isLoading = false,
+    this.isDisabled = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const NotificationItemShimmer();
+    }
+
     return Padding(
       padding:       EdgeInsets.symmetric(vertical: 12.0.h),
       child: Row(
@@ -50,7 +59,7 @@ class NotificationToggleItemWidget extends StatelessWidget {
             scale: 0.8,
             child: CupertinoSwitch(
               value: value,
-              onChanged: onToggle,
+              onChanged: isDisabled ? null : onToggle,
               activeTrackColor: AppColors.of(context).primary,
               inactiveTrackColor: AppColors.of(context).surfaceContainerHighest,
             ),

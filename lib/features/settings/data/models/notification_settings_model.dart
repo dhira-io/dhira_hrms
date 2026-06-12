@@ -34,6 +34,7 @@ abstract class NotificationItemModel with _$NotificationItemModel {
     required String title,
     required String description,
     required bool value,
+    @Default(false) bool isLoading,
   }) = _NotificationItemModel;
 
   factory NotificationItemModel.fromJson(Map<String, dynamic> json) =>
@@ -61,6 +62,7 @@ extension NotificationItemModelMapper on NotificationItemModel {
     title: title,
     description: description,
     value: value,
+    isLoading: isLoading,
   );
 }
 
@@ -85,5 +87,6 @@ extension NotificationItemEntityMapper on NotificationItemEntity {
     title: title,
     description: description,
     value: value,
+    isLoading: isLoading,
   );
 }

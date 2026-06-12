@@ -1,103 +1,119 @@
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../data/models/notification_settings_model.dart';
+import '../../../../core/network/dio_client.dart';
+import '../constants/notification_settings_api_constants.dart';
+import '../constants/notification_settings_constants.dart';
 import '../../domain/entities/notification_settings_entity.dart';
 import '../../domain/repositories/notification_settings_repository.dart';
 
 class NotificationSettingsRepository
     implements INotificationSettingsRepository {
-  final SharedPreferences _prefs;
-  static const String _key = 'notification_settings';
+  final DioClient _dioClient;
 
-  NotificationSettingsRepository(this._prefs);
+  NotificationSettingsRepository(this._dioClient);
 
   @override
   Future<NotificationSettingsEntity> getSettings() async {
-    final String? jsonString = _prefs.getString(_key);
-    if (jsonString != null) {
-      try {
-        final Map<String, dynamic> jsonMap = json.decode(jsonString);
-        return NotificationSettingsModel.fromJson(jsonMap).toEntity();
-      } catch (e) {
-        // Fallback to initial if decoding fails
+    try {
+      final response = await _dioClient.get(NotificationSettingsApiConstants.getPreferences);
+      final data = response.data['message'];
+      
+      if (data == null || data is! Map<String, dynamic>) {
+        return NotificationSettingsEntity.initial().copyWith(
+          sections: _createDefaultSections({}), // Return default structure with empty data
+        );
       }
+      
+      return _mapApiToEntity(data);
+    } catch (e) {
+      // Re-throw to be caught by Cubit
+      rethrow;
     }
-    return _getInitialSettings();
   }
 
   @override
   Future<void> saveSettings(NotificationSettingsEntity settings) async {
-    final model = settings.toModel();
-    final jsonString = json.encode(model.toJson());
-    await _prefs.setString(_key, jsonString);
   }
 
-  NotificationSettingsEntity _getInitialSettings() {
-    return const NotificationSettingsEntity(
-      sections: [
-        NotificationSectionEntity(
-          id: 'push',
-          title: 'pushNotifications',
-          iconKey: 'notifications_active',
-          items: [
-            NotificationItemEntity(
-              id: 'push_attendance',
-              title: 'attendance',
-              description: 'attendancePushDesc',
-              value: true,
-            ),
-            NotificationItemEntity(
-              id: 'push_leave',
-              title: 'leave',
-              description: 'leavePushDesc',
-              value: true,
-            ),
-            NotificationItemEntity(
-              id: 'push_timesheet',
-              title: 'timesheetReminders',
-              description: 'timesheetPushDesc',
-              value: false,
-            ),
-            NotificationItemEntity(
-              id: 'push_general',
-              title: 'generalAnnouncements',
-              description: 'generalPushDesc',
-              value: true,
-            ),
-          ],
-        ),
-        NotificationSectionEntity(
-          id: 'email',
-          title: 'emailAlerts',
-          iconKey: 'mail',
-          items: [
-            NotificationItemEntity(
-              id: 'email_attendance',
-              title: 'attendance',
-              description: 'attendanceEmailDesc',
-              value: false,
-            ),
-            NotificationItemEntity(
-              id: 'email_leave',
-              title: 'leave',
-              description: 'leaveEmailDesc',
-              value: true,
-            ),
-            NotificationItemEntity(
-              id: 'email_timesheet',
-              title: 'timesheetReminders',
-              description: 'timesheetEmailDesc',
-              value: true,
-            ),
-            NotificationItemEntity(
-              id: 'email_general',
-              title: 'generalAnnouncements',
-              description: 'generalEmailDesc',
-              value: true,
-            ),
-          ],
-        ),
-      ],
+  @override
+  Future<void> updateItem(String field, bool value) async {
+    await _dioClient.post(
+      NotificationSettingsApiConstants.updatePreference,
+      data: {
+        NotificationSettingsConstants.apiKeyField: field,
+        NotificationSettingsConstants.apiKeyValue: value ? 1 : 0,
+      },
     );
+  }
+
+  NotificationSettingsEntity _mapApiToEntity(Map<String, dynamic> data) {
+    return NotificationSettingsEntity(
+      sections: _createDefaultSections(data),
+    );
+  }
+
+  List<NotificationSectionEntity> _createDefaultSections(Map<String, dynamic> data) {
+    return [
+      NotificationSectionEntity(
+        id: NotificationSettingsConstants.sectionPush,
+        title: NotificationSettingsConstants.l10nPushNotifications,
+        iconKey: NotificationSettingsConstants.iconNotificationsActive,
+        items: [
+          NotificationItemEntity(
+            id: NotificationSettingsConstants.pushAttendance,
+            title: NotificationSettingsConstants.l10nAttendance,
+            description: NotificationSettingsConstants.l10nAttendancePushDesc,
+            value: data[NotificationSettingsConstants.pushAttendance] == 1,
+          ),
+          NotificationItemEntity(
+            id: NotificationSettingsConstants.pushLeave,
+            title: NotificationSettingsConstants.l10nLeave,
+            description: NotificationSettingsConstants.l10nLeavePushDesc,
+            value: data[NotificationSettingsConstants.pushLeave] == 1,
+          ),
+          NotificationItemEntity(
+            id: NotificationSettingsConstants.pushTimesheet,
+            title: NotificationSettingsConstants.l10nTimesheetReminders,
+            description: NotificationSettingsConstants.l10nTimesheetPushDesc,
+            value: data[NotificationSettingsConstants.pushTimesheet] == 1,
+          ),
+          NotificationItemEntity(
+            id: NotificationSettingsConstants.pushCompOff,
+            title: NotificationSettingsConstants.l10nGeneralAnnouncements,
+            description: NotificationSettingsConstants.l10nGeneralPushDesc,
+            value: data[NotificationSettingsConstants.pushCompOff] == 1,
+          ),
+        ],
+      ),
+      NotificationSectionEntity(
+        id: NotificationSettingsConstants.sectionEmail,
+        title: NotificationSettingsConstants.l10nEmailAlerts,
+        iconKey: NotificationSettingsConstants.iconMail,
+        items: [
+          NotificationItemEntity(
+            id: NotificationSettingsConstants.emailAttendance,
+            title: NotificationSettingsConstants.l10nAttendance,
+            description: NotificationSettingsConstants.l10nAttendanceEmailDesc,
+            value: data[NotificationSettingsConstants.emailAttendance] == 1,
+          ),
+          NotificationItemEntity(
+            id: NotificationSettingsConstants.emailLeave,
+            title: NotificationSettingsConstants.l10nLeave,
+            description: NotificationSettingsConstants.l10nLeaveEmailDesc,
+            value: data[NotificationSettingsConstants.emailLeave] == 1,
+          ),
+          NotificationItemEntity(
+            id: NotificationSettingsConstants.emailTimesheet,
+            title: NotificationSettingsConstants.l10nTimesheetReminders,
+            description: NotificationSettingsConstants.l10nTimesheetEmailDesc,
+            value: data[NotificationSettingsConstants.emailTimesheet] == 1,
+          ),
+          NotificationItemEntity(
+            id: NotificationSettingsConstants.emailCompOff,
+            title: NotificationSettingsConstants.l10nGeneralAnnouncements,
+            description: NotificationSettingsConstants.l10nGeneralEmailDesc,
+            value: data[NotificationSettingsConstants.emailCompOff] == 1,
+          ),
+        ],
+      ),
+    ];
   }
 }
