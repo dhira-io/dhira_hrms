@@ -1114,5 +1114,9 @@
     "deleteKeyProjectConfirmation": "Are you sure you want to delete this key project?",
     "deleteLanguageConfirmation": "Are you sure you want to delete this language?",
     "deleteEducationConfirmation": "Are you sure you want to delete this education?",
-    "deleteCertificationConfirmation": "Are you sure you want to delete this certification?"
+    "deleteCertificationConfirmation": "Are you sure you want to delete this certification?",
+    "policies": "Policies",
+    "policyHub": "Policy Hub",
+    "policyHubSubtitle": "Centralized company policies and guidelines"
 }
+

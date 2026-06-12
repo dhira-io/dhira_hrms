@@ -74,6 +74,8 @@ class _DashboardViewState extends State<DashboardView> {
       attendanceSubtitle: l10n.viewAttendanceRecords,
       leaderBoardTitle: l10n.leadersBoard,
       leaderBoardSubtitle: l10n.organizationHierarchy,
+      policyHubTitle: l10n.policyHub,
+      policyHubSubtitle: l10n.policyHubSubtitle,
     );
   }
 
