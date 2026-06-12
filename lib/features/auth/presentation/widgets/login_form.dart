@@ -103,7 +103,7 @@ class _LoginFormState extends State<LoginForm> {
       AppRouter.commonWebViewPath,
       extra: {
         'url': SettingsWebViewUrls.privacyAndSecurity,
-        'title': l10n.dataProcessingAgreement,
+        'title': l10n.privacyPolicy,
       },
     );
   }
@@ -162,15 +162,53 @@ class _LoginFormState extends State<LoginForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Top Drag Handle Indicator
+                  Center(
+                    child: Container(
+                      width: 40.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: colors.gray400,
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+
+                  // Heading
+                  Center(
+                    child: Text(
+                      l10n.signInToYourAccountTitle,
+                      style: AppTextStyle.headlineSmall.copyWith(
+                        color: colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22.sp,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+
+                  // Subheading
+                  Center(
+                    child: Text(
+                      l10n.enterEmailAndPasswordBelow,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.bodyMedium.copyWith(
+                        color: colors.textSecondary,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+
                   /// Email Label
                   Text(
                     l10n.email,
                     style: AppTextStyle.loginLabel.copyWith(
                       color: colors.textPrimary,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-
-                        SizedBox(height: 8.h),
+                  SizedBox(height: 8.h),
 
                   /// Email Field
                   TextFormField(
@@ -181,7 +219,7 @@ class _LoginFormState extends State<LoginForm> {
                       color: colors.textPrimary,
                     ),
                     decoration: InputDecoration(
-                      hintText: l10n.enterEmail,
+                      hintText: 'name@example.com',
                       hintStyle: AppTextStyle.bodyMedium.copyWith(
                         color: colors.gray400,
                       ),
@@ -227,17 +265,18 @@ class _LoginFormState extends State<LoginForm> {
                     },
                   ),
 
-                        SizedBox(height: 20.h),
+                  SizedBox(height: 16.h),
 
                   /// Password Label
                   Text(
                     l10n.password,
                     style: AppTextStyle.loginLabel.copyWith(
                       color: colors.textPrimary,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
 
-                        SizedBox(height: 8.h),
+                  SizedBox(height: 8.h),
 
                   /// Password Field
                   TextFormField(
@@ -308,7 +347,7 @@ class _LoginFormState extends State<LoginForm> {
                     },
                   ),
 
-                        SizedBox(height: 16.h),
+                  SizedBox(height: 8.h),
 
                   /// Remember Me + Forgot Password
                   Row(
@@ -338,13 +377,13 @@ class _LoginFormState extends State<LoginForm> {
                             ),
                           ),
 
-                                SizedBox(width: 8.w),
+                          SizedBox(width: 8.w),
 
                           Text(
                             l10n.rememberMe,
                             style: AppTextStyle.bodySmall.copyWith(
-                              color: colors.textSecondary,
-                              fontWeight: FontWeight.w500,
+                              color: colors.textPrimary,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -361,13 +400,14 @@ class _LoginFormState extends State<LoginForm> {
                           l10n.forgotPassword,
                           style: AppTextStyle.loginForgotPassword.copyWith(
                             color: colors.primaryContainer,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ],
                   ),
 
-                        SizedBox(height: 32.h),
+                  SizedBox(height: 20.h),
 
                   /// Login Button
                   CommonButton(
@@ -377,7 +417,7 @@ class _LoginFormState extends State<LoginForm> {
                     width: double.infinity,
                   ),
 
-                        SizedBox(height: 24.h),
+                  SizedBox(height: 16.h),
 
                   /// Divider
                   Row(
@@ -386,7 +426,7 @@ class _LoginFormState extends State<LoginForm> {
                         child: Divider(color: colors.border, thickness: 1),
                       ),
                       Padding(
-                        padding:       EdgeInsets.symmetric(horizontal: 16.w),
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
                         child: Text(
                           l10n.orLoginWith,
                           style: AppTextStyle.loginOrWith.copyWith(
@@ -400,7 +440,7 @@ class _LoginFormState extends State<LoginForm> {
                     ],
                   ),
 
-                        SizedBox(height: 24.h),
+                  SizedBox(height: 16.h),
 
                   /// Microsoft Login
                   CommonButton(
@@ -415,50 +455,40 @@ class _LoginFormState extends State<LoginForm> {
                     },
                   ),
 
-                        SizedBox(height: 48.h),
+                  SizedBox(height: 24.h),
 
-                  /// Terms & Privacy
-                  Center(
-                    child: Padding(
-                      padding:       EdgeInsets.symmetric(horizontal: 16.w),
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
+                  /// Terms & Privacy Links
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: _openPrivacy,
+                        child: Text(
+                          l10n.privacyPolicy,
                           style: AppTextStyle.bodySmall.copyWith(
-                            color: colors.gray400,
-                            fontSize: 12.sp,
-                            height: 1.4.h,
+                            color: colors.textSecondary,
                           ),
-                          children: [
-                            TextSpan(text: l10n.bySigningUpAgree),
-
-                            TextSpan(
-                              text: l10n.termsOfService,
-                              recognizer: _termsRecognizer,
-                              style: AppTextStyle.bodySmall.copyWith(
-                                color: colors.primaryContainer,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12.sp,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-
-                            TextSpan(text: l10n.andText),
-
-                            TextSpan(
-                              text: l10n.dataProcessingAgreement,
-                              recognizer: _privacyRecognizer,
-                              style: AppTextStyle.bodySmall.copyWith(
-                                color: colors.primaryContainer,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12.sp,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ],
                         ),
                       ),
-                    ),
+                      GestureDetector(
+                        onTap: _openTerms,
+                        child: Text(
+                          l10n.termsOfService,
+                          style: AppTextStyle.bodySmall.copyWith(
+                            color: colors.textSecondary,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {}, // Add support link if needed
+                        child: Text(
+                          l10n.support,
+                          style: AppTextStyle.bodySmall.copyWith(
+                            color: colors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
