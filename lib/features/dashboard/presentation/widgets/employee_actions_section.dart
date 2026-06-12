@@ -67,7 +67,7 @@ class EmployeeActionsSection extends StatelessWidget {
                       iconPath: AppAssets.comofficon,
                       label: l10n.compensatoryLeave,
                       subtitle: l10n.requestCompensatoryLeave,
-                      iconBgColor: AppColors.of(context).bereavementTrack,
+                      iconBgColor: AppColors.of(context).iconbggreen,
                       iconColor: AppColors.of(context).compofficon,
                       onTap: () => context.push(AppRouter.compensatoryLeavePath),
                     ),

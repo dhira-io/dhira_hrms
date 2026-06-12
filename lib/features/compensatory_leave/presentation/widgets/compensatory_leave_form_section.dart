@@ -719,7 +719,7 @@ class CompensatoryLeaveFormSelectionCard extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.of(context).infoBg
+              ? AppColors.of(context).primary.withValues(alpha: 0.15)
               : AppColors.of(context).surfaceContainerLowest,
           borderRadius: BorderRadius.circular(8.r),
           border: Border.all(
