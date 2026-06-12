@@ -5,7 +5,8 @@ part 'compensatory_leave_eligible_date_model.freezed.dart';
 part 'compensatory_leave_eligible_date_model.g.dart';
 
 @freezed
-class CompensatoryLeaveEligibleDateModel with _$CompensatoryLeaveEligibleDateModel {
+class CompensatoryLeaveEligibleDateModel
+    with _$CompensatoryLeaveEligibleDateModel {
   const factory CompensatoryLeaveEligibleDateModel({
     required String date,
     @JsonKey(name: 'working_hours') required double workingHours,
@@ -14,8 +15,9 @@ class CompensatoryLeaveEligibleDateModel with _$CompensatoryLeaveEligibleDateMod
 
   const CompensatoryLeaveEligibleDateModel._();
 
-  factory CompensatoryLeaveEligibleDateModel.fromJson(Map<String, dynamic> json) =>
-      _$CompensatoryLeaveEligibleDateModelFromJson(json);
+  factory CompensatoryLeaveEligibleDateModel.fromJson(
+    Map<String, dynamic> json,
+  ) => _$CompensatoryLeaveEligibleDateModelFromJson(json);
 
   CompensatoryLeaveEligibleDateEntity toEntity() {
     String formattedDate = date;

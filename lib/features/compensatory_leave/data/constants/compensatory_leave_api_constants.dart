@@ -6,16 +6,4 @@ class CompensatoryLeaveApiConstants {
   static const String submitRequest = "api/resource/Compensatory Leave Request";
 }
 
-class CompensatoryLeaveConstants {
-  // Work type values
-  static const String workTypeWeekend = "weekend";
-  static const String workTypeHoliday = "holiday";
-  static const String workTypeOvertime = "overtime";
 
-  // Timesheet fill mode values
-  static const String timesheetFillAuto = "auto";
-  static const String timesheetFillManual = "manual";
-
-  // UI Constants
-  static const String hoursUnit = "hrs";
-}

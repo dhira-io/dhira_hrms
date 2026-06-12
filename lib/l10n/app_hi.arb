@@ -265,6 +265,7 @@
   "balanceSummary": "शेष सारांश",
   "availableBalance": "उपलब्ध शेष",
   "expiringSoon": "जल्द ही समाप्त होने वाला",
+  "expiresInDays": "{days} दिनों में समाप्त हो रहा है",
   "noExpiry": "कोई समाप्ति नहीं",
   "workDetails": "काम का विवरण",
   "workDetailsSub": "अपने काम के अनुसार विवरण दर्ज करें",

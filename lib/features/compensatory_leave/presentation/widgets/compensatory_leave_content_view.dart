@@ -4,14 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
-import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_bloc.dart';
-import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_event.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_state.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/widgets/compensatory_leave_summary_section.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/widgets/compensatory_leave_form_section.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/widgets/compensatory_leave_skeleton.dart';
+import 'package:dhira_hrms/features/compensatory_leave/presentation/widgets/compensatory_leave_bottom_actions.dart';
+import 'package:dhira_hrms/features/compensatory_leave/presentation/widgets/compensatory_leave_error_view.dart';
 
 class CompensatoryLeaveContentView extends StatelessWidget {
   const CompensatoryLeaveContentView({super.key});
@@ -19,12 +19,31 @@ class CompensatoryLeaveContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocSelector<CompensatoryLeaveBloc, CompensatoryLeaveState, bool>(
-      selector: (state) => state.isLoading && state.summary == null,
-      builder: (context, showLoader) {
-        if (showLoader) {
-          return const CompensatoryLeaveSkeleton();
+    return BlocBuilder<CompensatoryLeaveBloc, CompensatoryLeaveState>(
+      buildWhen: (prev, curr) =>
+          (prev.summary == null) != (curr.summary == null) ||
+          (prev.status == CompensatoryLeaveStatus.failure &&
+                  prev.summary == null) !=
+              (curr.status == CompensatoryLeaveStatus.failure &&
+                  curr.summary == null) ||
+          (prev.status == CompensatoryLeaveStatus.loading &&
+                  prev.summary == null) !=
+              (curr.status == CompensatoryLeaveStatus.loading &&
+                  curr.summary == null),
+      builder: (context, state) {
+        if (state.status == CompensatoryLeaveStatus.loading ||
+            state.status == CompensatoryLeaveStatus.initial) {
+          if (state.summary == null) {
+            return const CompensatoryLeaveSkeleton();
+          }
         }
+
+        if (state.status == CompensatoryLeaveStatus.failure &&
+            state.summary == null) {
+          return CompensatoryLeaveErrorView(errorMessage: state.errorMessage);
+        }
+
+        if (state.summary == null) return const SizedBox.shrink();
 
         return Column(
           children: [
@@ -64,69 +83,16 @@ class CompensatoryLeaveContentView extends StatelessWidget {
                     vertical: 16.h,
                   ),
                   child: Column(
-                    children: [
-                      const CompensatoryLeaveSummarySection(),
-                      const CompensatoryLeaveFormSection(),
+                    children: const [
+                      CompensatoryLeaveSummarySection(),
+                      CompensatoryLeaveFormSection(),
                     ],
                   ),
                 ),
               ),
             ),
             // Footer Actions
-            Container(
-              padding: EdgeInsets.only(
-                left: 16.w,
-                right: 16.w,
-                top: 16.h,
-                bottom: MediaQuery.paddingOf(context).bottom > 0
-                    ? MediaQuery.paddingOf(context).bottom + 8.h
-                    : 16.h,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.of(context).surfaceContainerLowest,
-                border: Border(
-                  top: BorderSide(
-                    color: AppColors.of(context).border,
-                    width: 1.w,
-                  ),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CommonButton(
-                      text: l10n.cancel,
-                      variant: ButtonVariant.outlined,
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child:
-                        BlocSelector<
-                          CompensatoryLeaveBloc,
-                          CompensatoryLeaveState,
-                          bool
-                        >(
-                          selector: (state) => state.isActionLoading,
-                          builder: (context, isActionLoading) {
-                            return CommonButton(
-                              text: l10n.submitRequest,
-                              isLoading: isActionLoading,
-                              onPressed: isActionLoading
-                                  ? null
-                                  : () {
-                                      context.read<CompensatoryLeaveBloc>().add(
-                                        const CompensatoryLeaveEvent.submitRequested(),
-                                      );
-                                    },
-                            );
-                          },
-                        ),
-                  ),
-                ],
-              ),
-            ),
+            const CompensatoryLeaveBottomActions(),
           ],
         );
       },

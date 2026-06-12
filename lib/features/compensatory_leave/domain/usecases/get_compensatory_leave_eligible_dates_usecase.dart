@@ -8,7 +8,9 @@ class GetCompensatoryLeaveEligibleDatesUseCase {
 
   GetCompensatoryLeaveEligibleDatesUseCase(this.repository);
 
-  Future<Either<Failure, List<CompensatoryLeaveEligibleDateEntity>>> call(String employeeId) {
+  Future<Either<Failure, List<CompensatoryLeaveEligibleDateEntity>>> call(
+    String employeeId,
+  ) {
     return repository.getEligibleDates(employeeId);
   }
 }

@@ -83,8 +83,8 @@ class CompensatoryLeaveSummarySection extends StatelessWidget {
                 bgColor: AppColors.of(context).rejectedBg,
                 borderColor: AppColors.of(context).errorBorder,
                 subtitle: summary.expiringSoon > 0
-                    ? "Expires in ${summary.expiringSoon} days"
-                    : "No expiring soon",
+                    ? l10n.expiresInDays(summary.expiringSoon.toInt())
+                    : l10n.noExpiry,
               );
             }
           },
@@ -171,3 +171,5 @@ class CompensatoryLeaveSummaryCard extends StatelessWidget {
     );
   }
 }
+
+

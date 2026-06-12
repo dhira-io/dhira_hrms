@@ -7,7 +7,8 @@ part 'compensatory_leave_request_entity.freezed.dart';
 class CompensatoryLeaveRequestEntity with _$CompensatoryLeaveRequestEntity {
   const factory CompensatoryLeaveRequestEntity({
     required String customAutofill,
-    required List<CompensatoryLeaveTimesheetDetailEntity> customTimesheetDetails,
+    required List<CompensatoryLeaveTimesheetDetailEntity>
+    customTimesheetDetails,
     required String customWorkType,
     required String employee,
     required String employeeName,

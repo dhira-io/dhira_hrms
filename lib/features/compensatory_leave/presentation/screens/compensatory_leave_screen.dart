@@ -43,18 +43,19 @@ class _CompensatoryLeaveScreenState extends State<CompensatoryLeaveScreen> {
         appBar: CommonAppBar(title: l10n.compensatoryLeaveRequest),
         body: BlocListener<CompensatoryLeaveBloc, CompensatoryLeaveState>(
           listenWhen: (prev, curr) =>
-              (prev.isSuccess != curr.isSuccess && curr.isSuccess) ||
+              (prev.status != curr.status &&
+                  curr.status == CompensatoryLeaveStatus.success) ||
               (prev.errorMessage != curr.errorMessage &&
                   curr.errorMessage != null),
           listener: (context, state) {
-            if (state.isSuccess) {
+            if (state.status == CompensatoryLeaveStatus.success) {
               ToastUtils.showSuccess(l10n.actionSuccess);
               AppRouter.navigateToRaisedRequests(ApprovalType.compOff);
             } else if (state.errorMessage != null) {
               ToastUtils.showError(state.errorMessage!);
             }
           },
-          child: CompensatoryLeaveContentView(),
+          child: const CompensatoryLeaveContentView(),
         ),
       ),
     );

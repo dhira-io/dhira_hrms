@@ -5,7 +5,8 @@ part 'compensatory_leave_timesheet_detail_model.freezed.dart';
 part 'compensatory_leave_timesheet_detail_model.g.dart';
 
 @freezed
-class CompensatoryLeaveTimesheetDetailModel with _$CompensatoryLeaveTimesheetDetailModel {
+class CompensatoryLeaveTimesheetDetailModel
+    with _$CompensatoryLeaveTimesheetDetailModel {
   const CompensatoryLeaveTimesheetDetailModel._();
 
   const factory CompensatoryLeaveTimesheetDetailModel({
@@ -15,10 +16,13 @@ class CompensatoryLeaveTimesheetDetailModel with _$CompensatoryLeaveTimesheetDet
     @JsonKey(name: 'spent_hours') required double spentHours,
   }) = _CompensatoryLeaveTimesheetDetailModel;
 
-  factory CompensatoryLeaveTimesheetDetailModel.fromJson(Map<String, dynamic> json) =>
-      _$CompensatoryLeaveTimesheetDetailModelFromJson(json);
+  factory CompensatoryLeaveTimesheetDetailModel.fromJson(
+    Map<String, dynamic> json,
+  ) => _$CompensatoryLeaveTimesheetDetailModelFromJson(json);
 
-  factory CompensatoryLeaveTimesheetDetailModel.fromEntity(CompensatoryLeaveTimesheetDetailEntity entity) {
+  factory CompensatoryLeaveTimesheetDetailModel.fromEntity(
+    CompensatoryLeaveTimesheetDetailEntity entity,
+  ) {
     return CompensatoryLeaveTimesheetDetailModel(
       projectActivity: entity.projectActivity,
       task: entity.task,

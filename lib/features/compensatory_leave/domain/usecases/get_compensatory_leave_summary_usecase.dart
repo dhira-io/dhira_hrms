@@ -8,7 +8,9 @@ class GetCompensatoryLeaveSummaryUseCase {
 
   GetCompensatoryLeaveSummaryUseCase(this.repository);
 
-  Future<Either<Failure, CompensatoryLeaveSummaryEntity>> call(String employeeId) {
+  Future<Either<Failure, CompensatoryLeaveSummaryEntity>> call(
+    String employeeId,
+  ) {
     return repository.getCompensatoryLeaveSummary(employeeId);
   }
 }

@@ -8,6 +8,7 @@ import 'package:dhira_hrms/features/compensatory_leave/domain/entities/compensat
 import 'package:dhira_hrms/features/compensatory_leave/domain/usecases/get_compensatory_leave_summary_usecase.dart';
 import 'package:dhira_hrms/features/compensatory_leave/domain/usecases/get_compensatory_leave_eligible_dates_usecase.dart';
 import 'package:dhira_hrms/features/compensatory_leave/domain/usecases/submit_compensatory_leave_request_usecase.dart';
+import 'package:dhira_hrms/features/compensatory_leave/domain/constants/compensatory_leave_constants.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_event.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_state.dart';
 
@@ -27,7 +28,7 @@ class CompensatoryLeaveBloc
     required this.submitCompensatoryLeaveRequestUseCase,
     required this.localStorageService,
     required this.getProjectsUseCase,
-  }) : super(const CompensatoryLeaveState.initial()) {
+  }) : super(const CompensatoryLeaveState()) {
     on<CompensatoryLeaveStarted>(_onStarted);
     on<CompensatoryLeaveFetchRequested>(_onFetchRequested);
     on<CompensatoryLeaveDateSelected>(_onDateSelected);
@@ -47,7 +48,8 @@ class CompensatoryLeaveBloc
       "CompensatoryLeaveBloc: Started with ID = ${event.compensatoryLeaveId}",
     );
     emit(
-      CompensatoryLeaveState.loading(
+      state.copyWith(
+        status: CompensatoryLeaveStatus.loading,
         initialCompensatoryLeaveId: event.compensatoryLeaveId,
         summary: state.summary,
         eligibleDates: state.eligibleDates,
@@ -71,7 +73,8 @@ class CompensatoryLeaveBloc
     final empId = localStorageService.getEmpId() ?? '';
     if (empId.isEmpty) {
       emit(
-        CompensatoryLeaveState.error(
+        state.copyWith(
+          status: CompensatoryLeaveStatus.failure,
           initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
           summary: state.summary,
           eligibleDates: state.eligibleDates,
@@ -95,7 +98,8 @@ class CompensatoryLeaveBloc
     summaryResult.fold(
       (failure) {
         emit(
-          CompensatoryLeaveState.error(
+          state.copyWith(
+            status: CompensatoryLeaveStatus.failure,
             initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
             summary: state.summary,
             eligibleDates: state.eligibleDates,
@@ -114,7 +118,8 @@ class CompensatoryLeaveBloc
         datesResult.fold(
           (failure) {
             emit(
-              CompensatoryLeaveState.error(
+              state.copyWith(
+                status: CompensatoryLeaveStatus.failure,
                 initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
                 summary: summary,
                 eligibleDates: state.eligibleDates,
@@ -133,7 +138,8 @@ class CompensatoryLeaveBloc
             projectsResult.fold(
               (failure) {
                 emit(
-                  CompensatoryLeaveState.error(
+                  state.copyWith(
+                    status: CompensatoryLeaveStatus.failure,
                     initialCompensatoryLeaveId:
                         state.initialCompensatoryLeaveId,
                     summary: summary,
@@ -151,7 +157,8 @@ class CompensatoryLeaveBloc
               },
               (projects) {
                 emit(
-                  CompensatoryLeaveState.loaded(
+                  state.copyWith(
+                    status: CompensatoryLeaveStatus.loaded,
                     initialCompensatoryLeaveId:
                         state.initialCompensatoryLeaveId,
                     summary: summary,
@@ -173,25 +180,30 @@ class CompensatoryLeaveBloc
     );
   }
 
+  CompensatoryLeaveState _ensureNonErrorState(
+    CompensatoryLeaveState currentState,
+  ) {
+    if (currentState.status == CompensatoryLeaveStatus.failure) {
+      return currentState.copyWith(
+        status: CompensatoryLeaveStatus.loaded,
+        errorMessage: null,
+      );
+    }
+    return currentState;
+  }
+
   void _onDateSelected(
     CompensatoryLeaveDateSelected event,
     Emitter<CompensatoryLeaveState> emit,
   ) {
     developer.log("CompensatoryLeaveBloc: Date selected = ${event.date?.date}");
     final selectedDate = event.date;
+    final currentState = _ensureNonErrorState(state);
     emit(
-      state.maybeMap(
-        loaded: (s) => s.copyWith(
-          selectedDate: selectedDate,
-          workedHours: selectedDate?.workedHours ?? 0.0,
-          workType: selectedDate?.workType ?? s.workType,
-        ),
-        success: (s) => s.copyWith(
-          selectedDate: selectedDate,
-          workedHours: selectedDate?.workedHours ?? 0.0,
-          workType: selectedDate?.workType ?? s.workType,
-        ),
-        orElse: () => state,
+      currentState.copyWith(
+        selectedDate: selectedDate,
+        workedHours: selectedDate?.workedHours ?? 0.0,
+        workType: selectedDate?.workType ?? currentState.workType,
       ),
     );
   }
@@ -204,13 +216,8 @@ class CompensatoryLeaveBloc
       "CompensatoryLeaveBloc: Project selected = ${event.project?.projectName}",
     );
     final selectedProject = event.project;
-    emit(
-      state.maybeMap(
-        loaded: (s) => s.copyWith(selectedProject: selectedProject),
-        success: (s) => s.copyWith(selectedProject: selectedProject),
-        orElse: () => state,
-      ),
-    );
+    final currentState = _ensureNonErrorState(state);
+    emit(currentState.copyWith(selectedProject: selectedProject));
   }
 
   void _onTimesheetFillChanged(
@@ -220,39 +227,24 @@ class CompensatoryLeaveBloc
     developer.log(
       "CompensatoryLeaveBloc: Timesheet fill changed = ${event.type}",
     );
-    emit(
-      state.maybeMap(
-        loaded: (s) => s.copyWith(timesheetFill: event.type),
-        success: (s) => s.copyWith(timesheetFill: event.type),
-        orElse: () => state,
-      ),
-    );
+    final currentState = _ensureNonErrorState(state);
+    emit(currentState.copyWith(timesheetFill: event.type));
   }
 
   void _onTaskDescriptionChanged(
     CompensatoryLeaveTaskDescriptionChanged event,
     Emitter<CompensatoryLeaveState> emit,
   ) {
-    emit(
-      state.maybeMap(
-        loaded: (s) => s.copyWith(taskDescription: event.description),
-        success: (s) => s.copyWith(taskDescription: event.description),
-        orElse: () => state,
-      ),
-    );
+    final currentState = _ensureNonErrorState(state);
+    emit(currentState.copyWith(taskDescription: event.description));
   }
 
   void _onReasonChanged(
     CompensatoryLeaveReasonChanged event,
     Emitter<CompensatoryLeaveState> emit,
   ) {
-    emit(
-      state.maybeMap(
-        loaded: (s) => s.copyWith(reason: event.reason),
-        success: (s) => s.copyWith(reason: event.reason),
-        orElse: () => state,
-      ),
-    );
+    final currentState = _ensureNonErrorState(state);
+    emit(currentState.copyWith(reason: event.reason));
   }
 
   void _onWorkTypeChanged(
@@ -260,13 +252,8 @@ class CompensatoryLeaveBloc
     Emitter<CompensatoryLeaveState> emit,
   ) {
     developer.log("CompensatoryLeaveBloc: Work type changed = ${event.type}");
-    emit(
-      state.maybeMap(
-        loaded: (s) => s.copyWith(workType: event.type),
-        success: (s) => s.copyWith(workType: event.type),
-        orElse: () => state,
-      ),
-    );
+    final currentState = _ensureNonErrorState(state);
+    emit(currentState.copyWith(workType: event.type));
   }
 
   Future<void> _onSubmitRequested(
@@ -279,7 +266,8 @@ class CompensatoryLeaveBloc
 
     if (state.selectedDate == null) {
       emit(
-        CompensatoryLeaveState.error(
+        state.copyWith(
+          status: CompensatoryLeaveStatus.failure,
           initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
           summary: state.summary,
           eligibleDates: state.eligibleDates,
@@ -297,9 +285,11 @@ class CompensatoryLeaveBloc
       return;
     }
 
-    if (state.timesheetFill == 'manual' && state.selectedProject == null) {
+    if (state.timesheetFill == CompensatoryLeaveConstants.timesheetFillManual &&
+        state.selectedProject == null) {
       emit(
-        CompensatoryLeaveState.error(
+        state.copyWith(
+          status: CompensatoryLeaveStatus.failure,
           initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
           summary: state.summary,
           eligibleDates: state.eligibleDates,
@@ -317,9 +307,32 @@ class CompensatoryLeaveBloc
       return;
     }
 
-    if (state.timesheetFill == 'manual' && state.reason.trim().isEmpty) {
+    if (state.timesheetFill == CompensatoryLeaveConstants.timesheetFillManual &&
+        state.taskDescription.trim().isEmpty) {
       emit(
-        CompensatoryLeaveState.error(
+        state.copyWith(
+          status: CompensatoryLeaveStatus.failure,
+          initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
+          summary: state.summary,
+          eligibleDates: state.eligibleDates,
+          selectedDate: state.selectedDate,
+          timesheetFill: state.timesheetFill,
+          taskDescription: state.taskDescription,
+          reason: state.reason,
+          workType: state.workType,
+          workedHours: state.workedHours,
+          projects: state.projects,
+          selectedProject: state.selectedProject,
+          errorMessage: "Please enter a task/work description",
+        ),
+      );
+      return;
+    }
+
+    if (state.reason.trim().isEmpty) {
+      emit(
+        state.copyWith(
+          status: CompensatoryLeaveStatus.failure,
           initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
           summary: state.summary,
           eligibleDates: state.eligibleDates,
@@ -337,12 +350,7 @@ class CompensatoryLeaveBloc
       return;
     }
 
-    emit(
-      state.maybeMap(
-        loaded: (s) => s.copyWith(isActionLoading: true),
-        orElse: () => state,
-      ),
-    );
+    emit(state.copyWith(isActionLoading: true));
 
     final empName =
         localStorageService.getEmpName() ??
@@ -350,8 +358,12 @@ class CompensatoryLeaveBloc
         '';
 
     final requestEntity = CompensatoryLeaveRequestEntity(
-      customAutofill: state.timesheetFill == 'manual' ? "0" : "1",
-      customTimesheetDetails: state.timesheetFill == 'manual'
+      customAutofill:
+          state.timesheetFill == CompensatoryLeaveConstants.timesheetFillManual
+          ? "0"
+          : "1",
+      customTimesheetDetails:
+          state.timesheetFill == CompensatoryLeaveConstants.timesheetFillManual
           ? [
               CompensatoryLeaveTimesheetDetailEntity(
                 projectActivity: state.selectedProject?.name ?? '',
@@ -361,18 +373,23 @@ class CompensatoryLeaveBloc
               ),
             ]
           : [],
-      customWorkType: state.workType == 'Holiday'
-          ? 'Holiday Work'
-          : 'Weekend Work',
+      customWorkType:
+          state.workType == CompensatoryLeaveConstants.workTypeDisplayHoliday
+          ? CompensatoryLeaveConstants.workTypePayloadHoliday
+          : CompensatoryLeaveConstants.workTypePayloadWeekend,
       employee: empId,
       employeeName: empName,
       leaveType: 'Compensatory Off',
-      reason: state.timesheetFill == 'auto' && state.reason.isEmpty
-          ? "Auto-filled reason"
+      reason:
+          state.timesheetFill == CompensatoryLeaveConstants.timesheetFillAuto &&
+              state.reason.isEmpty
+          ? CompensatoryLeaveConstants.autoFilledReason
           : state.reason,
       workEndDate: state.selectedDate!.date,
       workFromDate: state.selectedDate!.date,
     );
+
+    developer.log("CompensatoryLeaveBloc: Submit Payload: $requestEntity");
 
     final result = await submitCompensatoryLeaveRequestUseCase(
       employeeId: empId,
@@ -384,14 +401,10 @@ class CompensatoryLeaveBloc
         developer.log(
           "CompensatoryLeaveBloc: Submit failed: ${failure.message}",
         );
+        emit(previous.copyWith(isActionLoading: false));
         emit(
-          previous.maybeMap(
-            loaded: (s) => s.copyWith(isActionLoading: false),
-            orElse: () => previous,
-          ),
-        );
-        emit(
-          CompensatoryLeaveState.error(
+          state.copyWith(
+            status: CompensatoryLeaveStatus.failure,
             initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
             summary: state.summary,
             eligibleDates: state.eligibleDates,
@@ -410,7 +423,8 @@ class CompensatoryLeaveBloc
       (success) {
         developer.log("CompensatoryLeaveBloc: Submit succeeded");
         emit(
-          CompensatoryLeaveState.success(
+          state.copyWith(
+            status: CompensatoryLeaveStatus.success,
             initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
             summary:
                 state.summary ??
@@ -434,3 +448,4 @@ class CompensatoryLeaveBloc
     );
   }
 }
+

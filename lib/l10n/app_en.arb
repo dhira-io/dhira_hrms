@@ -265,6 +265,14 @@
   "balanceSummary": "Balance Summary",
   "availableBalance": "Available Balance",
   "expiringSoon": "Expiring Soon",
+  "expiresInDays": "Expires in {days} days",
+  "@expiresInDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "noExpiry": "No expiry",
   "workDetails": "Work Details",
   "workDetailsSub": "Enter the details as per your worked",

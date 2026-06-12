@@ -11,31 +11,10 @@ import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compens
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_state.dart';
 import 'package:dhira_hrms/features/compensatory_leave/domain/entities/compensatory_leave_eligible_date_entity.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
-import 'package:dhira_hrms/features/compensatory_leave/data/constants/compensatory_leave_api_constants.dart';
+import 'package:dhira_hrms/features/compensatory_leave/domain/constants/compensatory_leave_constants.dart';
 
-class CompensatoryLeaveFormSection extends StatefulWidget {
+class CompensatoryLeaveFormSection extends StatelessWidget {
   const CompensatoryLeaveFormSection({super.key});
-
-  @override
-  State<CompensatoryLeaveFormSection> createState() =>
-      _CompensatoryLeaveFormSectionState();
-}
-
-class _CompensatoryLeaveFormSectionState
-    extends State<CompensatoryLeaveFormSection> {
-  final TextEditingController _reasonController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _reasonController.text = context.read<CompensatoryLeaveBloc>().state.reason;
-  }
-
-  @override
-  void dispose() {
-    _reasonController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -229,12 +208,9 @@ class _CompensatoryLeaveFormSectionState
               ],
             ),
             SizedBox(height: 10.h),
-            BlocBuilder<CompensatoryLeaveBloc, CompensatoryLeaveState>(
-              buildWhen: (prev, curr) =>
-                  prev.timesheetFill != curr.timesheetFill ||
-                  prev.projects != curr.projects ||
-                  prev.selectedProject != curr.selectedProject,
-              builder: (context, state) {
+            BlocSelector<CompensatoryLeaveBloc, CompensatoryLeaveState, String>(
+              selector: (state) => state.timesheetFill,
+              builder: (context, timesheetFill) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -246,7 +222,7 @@ class _CompensatoryLeaveFormSectionState
                             Radio<String>(
                               value:
                                   CompensatoryLeaveConstants.timesheetFillAuto,
-                              groupValue: state.timesheetFill,
+                              groupValue: timesheetFill,
                               onChanged: (val) {
                                 if (val != null) {
                                   context.read<CompensatoryLeaveBloc>().add(
@@ -279,7 +255,7 @@ class _CompensatoryLeaveFormSectionState
                             Radio<String>(
                               value: CompensatoryLeaveConstants
                                   .timesheetFillManual,
-                              groupValue: state.timesheetFill,
+                              groupValue: timesheetFill,
                               onChanged: (val) {
                                 if (val != null) {
                                   context.read<CompensatoryLeaveBloc>().add(
@@ -307,7 +283,7 @@ class _CompensatoryLeaveFormSectionState
                         ),
                       ],
                     ),
-                    if (state.timesheetFill ==
+                    if (timesheetFill ==
                         CompensatoryLeaveConstants.timesheetFillManual) ...[
                       SizedBox(height: 10.h),
                       CompensatoryLeaveFormLabel(
@@ -315,80 +291,95 @@ class _CompensatoryLeaveFormSectionState
                         isRequired: true,
                       ),
                       SizedBox(height: 8.h),
-                      DropdownButtonFormField<ProjectEntity>(
-                        isExpanded: true,
-                        isDense: false,
-                        initialValue: state.selectedProject,
-                        dropdownColor: AppColors.of(
-                          context,
-                        ).surfaceContainerLowest,
-                        style: AppTextStyle.bodyMedium.copyWith(
-                          color: AppColors.of(context).onSurface,
-                        ),
-                        hint: Text(
-                          l10n.selectProject,
-                          style: AppTextStyle.bodyMedium.copyWith(
-                            color: AppColors.of(
+                      BlocBuilder<
+                        CompensatoryLeaveBloc,
+                        CompensatoryLeaveState
+                      >(
+                        buildWhen: (prev, curr) =>
+                            prev.projects != curr.projects ||
+                            prev.selectedProject != curr.selectedProject,
+                        builder: (context, state) {
+                          return DropdownButtonFormField<ProjectEntity>(
+                            isExpanded: true,
+                            isDense: false,
+                            initialValue: state.selectedProject,
+                            dropdownColor: AppColors.of(
                               context,
-                            ).outline.withValues(alpha: 0.6),
-                          ),
-                        ),
-                        items: state.projects.map((project) {
-                          return DropdownMenuItem(
-                            value: project,
-                            child: Text(project.projectName),
-                          );
-                        }).toList(),
-                        onChanged: (selected) {
-                          context.read<CompensatoryLeaveBloc>().add(
-                            CompensatoryLeaveEvent.projectSelected(selected),
+                            ).surfaceContainerLowest,
+                            style: AppTextStyle.bodyMedium.copyWith(
+                              color: AppColors.of(context).onSurface,
+                            ),
+                            hint: Text(
+                              l10n.selectProject,
+                              style: AppTextStyle.bodyMedium.copyWith(
+                                color: AppColors.of(
+                                  context,
+                                ).outline.withValues(alpha: 0.6),
+                              ),
+                            ),
+                            items: state.projects.map((project) {
+                              return DropdownMenuItem(
+                                value: project,
+                                child: Text(project.projectName),
+                              );
+                            }).toList(),
+                            onChanged: (selected) {
+                              context.read<CompensatoryLeaveBloc>().add(
+                                CompensatoryLeaveEvent.projectSelected(
+                                  selected,
+                                ),
+                              );
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              filled: true,
+                              fillColor: AppColors.of(
+                                context,
+                              ).surfaceContainerLowest,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: AppConstants.p16.w,
+                                vertical: 0,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                                borderSide: BorderSide(
+                                  color: AppColors.of(context).border,
+                                  width: 1.w,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                                borderSide: BorderSide(
+                                  color: AppColors.of(context).border,
+                                  width: 1.w,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                                borderSide: BorderSide(
+                                  color: AppColors.of(context).primary,
+                                  width: 1.w,
+                                ),
+                              ),
+                            ),
+                            icon: Icon(
+                              Icons.arrow_drop_down,
+                              color: AppColors.of(context).outline,
+                            ),
                           );
                         },
-                        decoration: InputDecoration(
-                          isDense: true,
-                          filled: true,
-                          fillColor: AppColors.of(
-                            context,
-                          ).surfaceContainerLowest,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: AppConstants.p16.w,
-                            vertical: 0,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                            borderSide: BorderSide(
-                              color: AppColors.of(context).border,
-                              width: 1.w,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                            borderSide: BorderSide(
-                              color: AppColors.of(context).border,
-                              width: 1.w,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                            borderSide: BorderSide(
-                              color: AppColors.of(context).primary,
-                              width: 1.w,
-                            ),
-                          ),
-                        ),
-                        icon: Icon(
-                          Icons.arrow_drop_down,
-                          color: AppColors.of(context).outline,
-                        ),
                       ),
                       SizedBox(height: 10.h),
                       CompensatoryLeaveFormLabel(
                         text: l10n.taskWorkDescription,
-                        isRequired: false,
+                        isRequired: true,
                       ),
                       SizedBox(height: 8.h),
                       TextFormField(
-                        initialValue: state.taskDescription,
+                        initialValue: context
+                            .read<CompensatoryLeaveBloc>()
+                            .state
+                            .taskDescription,
                         onChanged: (val) {
                           context.read<CompensatoryLeaveBloc>().add(
                             CompensatoryLeaveEvent.taskDescriptionChanged(val),
@@ -464,7 +455,7 @@ class _CompensatoryLeaveFormSectionState
             ),
             SizedBox(height: 8.h),
             TextFormField(
-              controller: _reasonController,
+              initialValue: context.read<CompensatoryLeaveBloc>().state.reason,
               maxLines: 3,
               onChanged: (val) {
                 context.read<CompensatoryLeaveBloc>().add(
@@ -734,3 +725,5 @@ class CompensatoryLeaveFormSelectionCard extends StatelessWidget {
     );
   }
 }
+
+

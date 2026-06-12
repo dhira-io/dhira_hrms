@@ -9,7 +9,8 @@ part 'compensatory_leave_request_model.g.dart';
 class CompensatoryLeaveRequestModel with _$CompensatoryLeaveRequestModel {
   const factory CompensatoryLeaveRequestModel({
     @JsonKey(name: 'custom_autofill') required String customAutofill,
-    @JsonKey(name: 'custom_timesheet_details') required List<CompensatoryLeaveTimesheetDetailModel> customTimesheetDetails,
+    @JsonKey(name: 'custom_timesheet_details')
+    required List<CompensatoryLeaveTimesheetDetailModel> customTimesheetDetails,
     @JsonKey(name: 'custom_work_type') required String customWorkType,
     required String employee,
     @JsonKey(name: 'employee_name') required String employeeName,
@@ -24,10 +25,14 @@ class CompensatoryLeaveRequestModel with _$CompensatoryLeaveRequestModel {
   factory CompensatoryLeaveRequestModel.fromJson(Map<String, dynamic> json) =>
       _$CompensatoryLeaveRequestModelFromJson(json);
 
-  factory CompensatoryLeaveRequestModel.fromEntity(CompensatoryLeaveRequestEntity entity) {
+  factory CompensatoryLeaveRequestModel.fromEntity(
+    CompensatoryLeaveRequestEntity entity,
+  ) {
     return CompensatoryLeaveRequestModel(
       customAutofill: entity.customAutofill,
-      customTimesheetDetails: entity.customTimesheetDetails.map((e) => CompensatoryLeaveTimesheetDetailModel.fromEntity(e)).toList(),
+      customTimesheetDetails: entity.customTimesheetDetails
+          .map((e) => CompensatoryLeaveTimesheetDetailModel.fromEntity(e))
+          .toList(),
       customWorkType: entity.customWorkType,
       employee: entity.employee,
       employeeName: entity.employeeName,
@@ -41,7 +46,9 @@ class CompensatoryLeaveRequestModel with _$CompensatoryLeaveRequestModel {
   CompensatoryLeaveRequestEntity toEntity() {
     return CompensatoryLeaveRequestEntity(
       customAutofill: customAutofill,
-      customTimesheetDetails: customTimesheetDetails.map((e) => e.toEntity()).toList(),
+      customTimesheetDetails: customTimesheetDetails
+          .map((e) => e.toEntity())
+          .toList(),
       customWorkType: customWorkType,
       employee: employee,
       employeeName: employeeName,
