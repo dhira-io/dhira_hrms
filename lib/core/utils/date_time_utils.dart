@@ -52,8 +52,8 @@ class DateTimeUtils {
   }
 
   /// Formats date to 'MMMM' (e.g., October)
-  static String formatToMonthName(DateTime date) {
-    return date.format(dateFormatMonthOnly);
+  static String formatToMonthName(DateTime date, [String? locale]) {
+    return date.format(dateFormatMonthOnly, locale);
   }
 
   /// Formats date to 'dd-MM-yy' (e.g., 01-05-26)
@@ -77,13 +77,13 @@ class DateTimeUtils {
   }
 
   /// Returns 1-letter abbreviation of the day (e.g., M, T)
-  static String formatTo1LetterDay(DateTime date) {
-    return DateFormat.E().format(date).substring(0, 1);
+  static String formatTo1LetterDay(DateTime date, [String? locale]) {
+    return DateFormat.E(locale).format(date).substring(0, 1);
   }
 
   /// Returns 3-letter abbreviation of the day in uppercase (e.g., MON, TUE)
-  static String formatToDayAbbrFull(DateTime date) {
-    return DateFormat.E().format(date).toUpperCase();
+  static String formatToDayAbbrFull(DateTime date, [String? locale]) {
+    return DateFormat.E(locale).format(date).toUpperCase();
   }
 
   /// Returns today's date formatted dynamically.
