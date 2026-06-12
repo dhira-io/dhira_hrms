@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
@@ -80,13 +81,10 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               SizedBox(
                 width: double.infinity,
                 height: 50.h,
-                child: ElevatedButton(
-                  onPressed: isLoading ? null : _submit,
-                  child: isLoading
-                      ? CircularProgressIndicator(
-                          color: AppColors.of(context).surface,
-                        )
-                      : Text(l10n.changePassword.toUpperCase()),
+                child: CommonButton(
+                  text: l10n.changePassword.toUpperCase(),
+                  isLoading: isLoading,
+                  onPressed: _submit,
                 ),
               ),
             ],

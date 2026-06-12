@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
 
@@ -25,9 +24,7 @@ class ProfileSkeleton extends StatelessWidget {
                       Container(
                         width: 80.w,
                         height: 80.w,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
                         child: ClipOval(
                           child: ShimmerLoading(height: 80.w, width: 80.w),
                         ),
@@ -42,9 +39,17 @@ class ProfileSkeleton extends StatelessWidget {
                             SizedBox(height: 8.h),
                             Row(
                               children: [
-                                ShimmerLoading(height: 18.h, width: 60.w, borderRadius: 4),
+                                ShimmerLoading(
+                                  height: 18.h,
+                                  width: 60.w,
+                                  borderRadius: 4,
+                                ),
                                 SizedBox(width: 8.w),
-                                ShimmerLoading(height: 18.h, width: 60.w, borderRadius: 4),
+                                ShimmerLoading(
+                                  height: 18.h,
+                                  width: 60.w,
+                                  borderRadius: 4,
+                                ),
                               ],
                             ),
                           ],
@@ -59,7 +64,13 @@ class ProfileSkeleton extends StatelessWidget {
                     children: [
                       ShimmerLoading(height: 14.h, width: 60.w),
                       SizedBox(width: 16.w),
-                      Expanded(child: ShimmerLoading(height: 6.h, width: double.infinity, borderRadius: 3)),
+                      Expanded(
+                        child: ShimmerLoading(
+                          height: 6.h,
+                          width: double.infinity,
+                          borderRadius: 3,
+                        ),
+                      ),
                       SizedBox(width: 12.w),
                       ShimmerLoading(height: 14.h, width: 30.w),
                     ],
@@ -69,7 +80,13 @@ class ProfileSkeleton extends StatelessWidget {
                     children: [
                       ShimmerLoading(height: 14.h, width: 60.w),
                       SizedBox(width: 16.w),
-                      Expanded(child: ShimmerLoading(height: 6.h, width: double.infinity, borderRadius: 3)),
+                      Expanded(
+                        child: ShimmerLoading(
+                          height: 6.h,
+                          width: double.infinity,
+                          borderRadius: 3,
+                        ),
+                      ),
                       SizedBox(width: 12.w),
                       ShimmerLoading(height: 14.h, width: 30.w),
                     ],
@@ -106,7 +123,9 @@ class ProfileSkeleton extends StatelessWidget {
                             topRight: Radius.circular(12.r),
                           ),
                         ),
-                        child: Center(child: ShimmerLoading(height: 16.h, width: 80.w)),
+                        child: Center(
+                          child: ShimmerLoading(height: 16.h, width: 80.w),
+                        ),
                       ),
                     ),
                     Expanded(
@@ -120,7 +139,9 @@ class ProfileSkeleton extends StatelessWidget {
                             topRight: Radius.circular(12.r),
                           ),
                         ),
-                        child: Center(child: ShimmerLoading(height: 16.h, width: 120.w)),
+                        child: Center(
+                          child: ShimmerLoading(height: 16.h, width: 120.w),
+                        ),
                       ),
                     ),
                   ],
@@ -135,13 +156,21 @@ class ProfileSkeleton extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      ShimmerLoading(height: 20.w, width: 20.w, borderRadius: 10),
+                      ShimmerLoading(
+                        height: 20.w,
+                        width: 20.w,
+                        borderRadius: 10,
+                      ),
                       SizedBox(width: 8.w),
                       ShimmerLoading(height: 20.h, width: 150.w),
                     ],
                   ),
                   SizedBox(height: 12.h),
-                  ShimmerLoading(height: 60.h, width: double.infinity, borderRadius: 8),
+                  ShimmerLoading(
+                    height: 60.h,
+                    width: double.infinity,
+                    borderRadius: 8,
+                  ),
                   SizedBox(height: 16.h),
                   Row(
                     children: [

@@ -86,6 +86,8 @@ class CommonButton extends StatelessWidget {
         button = OutlinedButton(
           onPressed: isLoading ? null : onPressed,
           style: OutlinedButton.styleFrom(
+            minimumSize: Size.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             side: BorderSide(
               color: AppColors.of(context).gray400,
               width: 1.0.w,
@@ -109,6 +111,8 @@ class CommonButton extends StatelessWidget {
         button = TextButton(
           onPressed: isLoading ? null : onPressed,
           style: TextButton.styleFrom(
+            minimumSize: Size.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
@@ -130,6 +134,8 @@ class CommonButton extends StatelessWidget {
         button = ElevatedButton(
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
+            minimumSize: Size.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             backgroundColor:
                 backgroundColor ??
                 (variant == ButtonVariant.secondary

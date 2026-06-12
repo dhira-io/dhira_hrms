@@ -12,6 +12,7 @@ class CommonAlertDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final VoidCallback? onCancel;
   final Color? confirmButtonColor;
+  final bool isLoading;
 
   const CommonAlertDialog({
     super.key,
@@ -22,6 +23,7 @@ class CommonAlertDialog extends StatelessWidget {
     required this.onConfirm,
     this.onCancel,
     this.confirmButtonColor,
+    this.isLoading = false,
   });
 
   static Future<T?> show<T>({
@@ -33,6 +35,7 @@ class CommonAlertDialog extends StatelessWidget {
     required VoidCallback onConfirm,
     VoidCallback? onCancel,
     Color? confirmButtonColor,
+    bool isLoading = false,
   }) {
     return showDialog<T>(
       context: context,
@@ -45,6 +48,7 @@ class CommonAlertDialog extends StatelessWidget {
           onConfirm: onConfirm,
           onCancel: onCancel,
           confirmButtonColor: confirmButtonColor,
+          isLoading: isLoading,
         );
       },
     );
@@ -94,10 +98,13 @@ class CommonAlertDialog extends StatelessWidget {
             CommonButton(
               text: confirmText,
               onPressed: () {
-                Navigator.pop(context);
-                onConfirm();
+                if (!isLoading) {
+                  Navigator.pop(context);
+                  onConfirm();
+                }
               },
               width: double.infinity,
+              isLoading: isLoading,
               padding: const EdgeInsets.symmetric(vertical: AppConstants.p12),
               backgroundColor: confirmButtonColor,
             ),

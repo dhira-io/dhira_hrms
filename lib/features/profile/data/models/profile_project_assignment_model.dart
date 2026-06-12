@@ -10,8 +10,12 @@ abstract class ProfileProjectAssignmentModel
   const factory ProfileProjectAssignmentModel({
     @JsonKey(name: 'project_name') required String projectName,
     @JsonKey(name: 'report_to_name') String? projectLead,
-    @JsonKey(name: 'creation') String? startDate,
-    @JsonKey(name: 'modified') String? endDate,
+    @JsonKey(name: 'report_to') String? reportTo,
+    @JsonKey(name: 'start_date') String? startDate,
+    @JsonKey(name: 'end_date') String? endDate,
+    @JsonKey(name: 'role') String? role,
+    @JsonKey(name: 'allocation') double? allocation,
+    @JsonKey(name: 'status') String? status,
   }) = _ProfileProjectAssignmentModel;
 
   const ProfileProjectAssignmentModel._();
@@ -23,8 +27,12 @@ abstract class ProfileProjectAssignmentModel
     return ProfileProjectAssignmentEntity(
       projectName: projectName,
       projectLead: projectLead,
+      reportTo: reportTo,
       startDate: startDate,
       endDate: endDate,
+      role: role,
+      allocation: allocation,
+      status: status,
     );
   }
 }

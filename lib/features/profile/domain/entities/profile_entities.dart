@@ -33,10 +33,15 @@ abstract class ProfileEntity with _$ProfileEntity {
     String? docType,
     String? namingSeries,
     String? emergencyContact,
+    String? emergencyContactName,
+    String? nationality,
     List<ProfileProjectAssignmentEntity>? projectAssignments,
     String? empId,
     String? currentAddress,
     String? permanentAddress,
+    String? currentLocation,
+    String? professionalSummary,
+    String? awardsAndAchievements,
   }) = _ProfileEntity;
 
   const ProfileEntity._();

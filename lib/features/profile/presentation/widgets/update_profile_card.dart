@@ -13,7 +13,7 @@ class UpdateProfileCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding:       EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: isDark
             ? AppColors.of(context).profileInfoCardBg
@@ -28,7 +28,7 @@ class UpdateProfileCard extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding:       EdgeInsets.all(8.w),
+            padding: EdgeInsets.all(8.w),
             decoration: BoxDecoration(
               color: AppColors.of(context).surfaceContainerLowest,
               borderRadius: BorderRadius.circular(8.r),
@@ -48,7 +48,7 @@ class UpdateProfileCard extends StatelessWidget {
               size: 24,
             ),
           ),
-                SizedBox(width: 16.w),
+          SizedBox(width: 16.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +62,7 @@ class UpdateProfileCard extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                      SizedBox(height: 4.h),
+                SizedBox(height: 4.h),
                 Text(
                   l10n.updateProfileInstructions,
                   style: AppTextStyle.bodySmall.copyWith(

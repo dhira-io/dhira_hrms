@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/bloc/theme_cubit.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
-import '../../../auth/presentation/bloc/auth_event.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../profile/presentation/bloc/profile_bloc.dart';
 import '../../../profile/presentation/bloc/profile_state.dart';
@@ -45,8 +44,8 @@ class SettingsBody extends StatelessWidget {
               BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, profileState) {
                   final profile = profileState.maybeWhen(
-                    loaded: (profile) => profile,
-                    uploading: (profile) => profile,
+                    loaded: (profile, resume) => profile,
+                    uploading: (profile, resume) => profile,
                     orElse: () => null,
                   );
                   return SettingsProfileCard(
