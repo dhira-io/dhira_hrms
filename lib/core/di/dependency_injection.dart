@@ -22,7 +22,6 @@ import '../../features/policy/domain/repositories/i_policy_repository.dart';
 import '../../features/policy/domain/usecases/get_policies_usecase.dart';
 import '../../features/policy/domain/usecases/get_policy_pdf_usecase.dart';
 import '../../features/policy/presentation/bloc/policy_bloc.dart';
-import '../../features/policy/presentation/cubit/policy_pdf_cubit.dart';
 
 import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
@@ -1187,9 +1186,6 @@ class DependencyInjection {
       () => GetPolicyPdfUseCase(Get.find<IPolicyRepository>()),
       fenix: true,
     );
-    Get.lazyPut<PolicyPdfCubit>(
-      () => PolicyPdfCubit(Get.find<GetPolicyPdfUseCase>()),
-      fenix: true,
-    );
+    // PolicyPdfCubit is instantiated manually in the bottom sheet, so it's not registered here.
   }
 }

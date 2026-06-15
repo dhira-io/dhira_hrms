@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/features/policy/presentation/bloc/policy_bloc.dart';
-import 'package:dhira_hrms/features/policy/presentation/bloc/policy_event.dart';
 import 'package:dhira_hrms/features/policy/presentation/bloc/policy_state.dart';
 import 'package:dhira_hrms/features/policy/presentation/widgets/policy_content_view.dart';
 import 'package:dhira_hrms/features/policy/presentation/widgets/policy_skeleton.dart';
@@ -18,15 +17,6 @@ class PolicyScreen extends StatefulWidget {
 }
 
 class _PolicyScreenState extends State<PolicyScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        context.read<PolicyBloc>().add(const PolicyEvent.started());
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

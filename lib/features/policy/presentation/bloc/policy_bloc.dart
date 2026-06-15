@@ -83,7 +83,12 @@ class PolicyBloc extends Bloc<PolicyEvent, PolicyState> {
     if (query.isEmpty) return policies;
     final lowerQuery = query.toLowerCase();
     return policies.where((policy) {
-      return policy.title.toLowerCase().contains(lowerQuery);
+      final titleLower = policy.title.toLowerCase();
+      if (lowerQuery.length == 1) {
+        final words = titleLower.split(RegExp(r'\s+'));
+        return words.any((word) => word.startsWith(lowerQuery));
+      }
+      return titleLower.contains(lowerQuery);
     }).toList();
   }
 }

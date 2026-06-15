@@ -13,7 +13,7 @@ class PolicyCardItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final policy = context.watch<PolicyEntity>();
+    final policy = context.read<PolicyEntity>();
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
@@ -122,6 +122,7 @@ class PolicyCardItemWidget extends StatelessWidget {
   }
 
   void _showPdfBottomSheet(BuildContext context, PolicyEntity policy) {
+    FocusManager.instance.primaryFocus?.unfocus();
     PolicyPdfBottomSheet.show(context, policy);
   }
 }

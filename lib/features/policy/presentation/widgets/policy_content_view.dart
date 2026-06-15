@@ -8,9 +8,11 @@ import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/policy/presentation/bloc/policy_bloc.dart';
 import 'package:dhira_hrms/features/policy/presentation/bloc/policy_event.dart';
 import 'package:dhira_hrms/features/policy/presentation/bloc/policy_state.dart';
+import 'dart:async';
 import 'package:dhira_hrms/features/policy/domain/entities/policy_entity.dart';
 import 'package:dhira_hrms/features/policy/presentation/widgets/policy_list_item_widget.dart';
 import 'package:dhira_hrms/features/policy/presentation/widgets/policy_card_item_widget.dart';
+import 'package:dhira_hrms/core/widgets/common_empty_view.dart';
 import 'package:provider/provider.dart';
 
 class PolicyContentView extends StatefulWidget {
@@ -22,19 +24,26 @@ class PolicyContentView extends StatefulWidget {
 
 class _PolicyContentViewState extends State<PolicyContentView> {
   final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
+
   @override
   void dispose() {
     _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
   void _onSearchChanged(String value) {
-    context.read<PolicyBloc>().add(PolicyEvent.searchQueryChanged(value));
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        context.read<PolicyBloc>().add(PolicyEvent.searchQueryChanged(value));
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -64,9 +73,9 @@ class _PolicyContentViewState extends State<PolicyContentView> {
                       builder: (context, state) {
                         if (state.filteredPolicies.isEmpty) {
                           return Center(
-                            child: Text(
-                              l10n.noResultsFound,
-                              style: AppTextStyle.bodyMedium,
+                            child: CommonEmptyView(
+                              message: AppLocalizations.of(context)!.noResultsFound,
+                              icon: Icons.search_off_rounded,
                             ),
                           );
                         }
@@ -241,7 +250,7 @@ class _PolicyControlsRow extends StatelessWidget {
                       InkWell(
                         onTap: state.isGridView
                             ? () {
-                                FocusScope.of(context).unfocus();
+                                FocusManager.instance.primaryFocus?.unfocus();
                                 context.read<PolicyBloc>().add(
                                   const PolicyEvent.toggleViewMode(),
                                 );
@@ -269,7 +278,7 @@ class _PolicyControlsRow extends StatelessWidget {
                       InkWell(
                         onTap: !state.isGridView
                             ? () {
-                                FocusScope.of(context).unfocus();
+                                FocusManager.instance.primaryFocus?.unfocus();
                                 context.read<PolicyBloc>().add(
                                   const PolicyEvent.toggleViewMode(),
                                 );

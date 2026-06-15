@@ -5,6 +5,7 @@ import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/core/utils/number_utils.dart';
 import 'package:dhira_hrms/features/policy/domain/entities/policy_entity.dart';
 import 'package:dhira_hrms/features/policy/presentation/bottom_sheets/policy_pdf_bottom_sheet.dart';
 
@@ -14,9 +15,9 @@ class PolicyListItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final index = context.read<int>();
-    final policy = context.watch<PolicyEntity>();
+    final policy = context.read<PolicyEntity>();
     final l10n = AppLocalizations.of(context)!;
-    final slNo = (index + 1).toString().padLeft(2, '0');
+    final slNo = NumberUtils.formatSerialNumber(index);
 
     return Container(
       decoration: BoxDecoration(
@@ -78,7 +79,10 @@ class PolicyListItemWidget extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: InkWell(
-              onTap: () => PolicyPdfBottomSheet.show(context, policy),
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                PolicyPdfBottomSheet.show(context, policy);
+              },
               borderRadius: BorderRadius.circular(AppConstants.r8),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
