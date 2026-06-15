@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dhira_hrms/features/compensatory_leave/domain/entities/compensatory_leave_eligible_date_entity.dart';
+import 'package:dhira_hrms/features/compensatory_leave/domain/constants/compensatory_leave_constants.dart';
 
 part 'compensatory_leave_eligible_date_model.freezed.dart';
 part 'compensatory_leave_eligible_date_model.g.dart';
@@ -37,7 +38,7 @@ class CompensatoryLeaveEligibleDateModel
 
     return CompensatoryLeaveEligibleDateEntity(
       date: date,
-      displayLabel: "$formattedDate ($hoursString Hours)",
+      displayLabel: "$formattedDate ($hoursString)",
       workedHours: workingHours,
       workType: mappedWorkType,
     );

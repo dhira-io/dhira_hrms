@@ -113,9 +113,21 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                     ),
                   ),
                   items: state.eligibleDates.map((dateEntity) {
+                    String formattedDate = dateEntity.date;
+                    final parts = dateEntity.date.split('-');
+                    if (parts.length == 3) {
+                      formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}";
+                    }
+                    final hoursString =
+                        dateEntity.workedHours == dateEntity.workedHours.toInt()
+                        ? dateEntity.workedHours.toInt().toString()
+                        : dateEntity.workedHours.toStringAsFixed(1);
+                    final label =
+                        "$formattedDate ($hoursString ${l10n.hoursUnit})";
+
                     return DropdownMenuItem<
                       CompensatoryLeaveEligibleDateEntity
-                    >(value: dateEntity, child: Text(dateEntity.displayLabel));
+                    >(value: dateEntity, child: Text(label));
                   }).toList(),
                   onChanged: (selected) {
                     if (selected == null) return;
@@ -183,8 +195,8 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                 return TextFormField(
                   key: ValueKey(workedHours),
                   initialValue: workedHours > 0
-                      ? '$workedHours ${CompensatoryLeaveConstants.hoursUnit}'
-                      : '0.0 ${CompensatoryLeaveConstants.hoursUnit}',
+                      ? '${workedHours.toString()} ${l10n.hoursUnit}'
+                      : '0.0 ${l10n.hoursUnit}',
                   readOnly: true,
                   style: AppTextStyle.bodyMedium.copyWith(
                     color: AppColors.of(context).textSecondary,

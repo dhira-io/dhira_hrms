@@ -273,7 +273,7 @@ class CompensatoryLeaveBloc
           workedHours: state.workedHours,
           projects: state.projects,
           selectedProject: state.selectedProject,
-          errorMessage: "Please select a work date",
+          errorMessage: CompensatoryLeaveConstants.errorPleaseSelectWorkDate,
         ),
       );
       return;
@@ -295,7 +295,7 @@ class CompensatoryLeaveBloc
           workedHours: state.workedHours,
           projects: state.projects,
           selectedProject: state.selectedProject,
-          errorMessage: "Please select a project",
+          errorMessage: CompensatoryLeaveConstants.errorPleaseSelectProject,
         ),
       );
       return;
@@ -317,7 +317,8 @@ class CompensatoryLeaveBloc
           workedHours: state.workedHours,
           projects: state.projects,
           selectedProject: state.selectedProject,
-          errorMessage: "Please enter a task/work description",
+          errorMessage:
+              CompensatoryLeaveConstants.errorPleaseEnterTaskDescription,
         ),
       );
       return;
@@ -338,7 +339,7 @@ class CompensatoryLeaveBloc
           workedHours: state.workedHours,
           projects: state.projects,
           selectedProject: state.selectedProject,
-          errorMessage: "Please enter a reason for extra work",
+          errorMessage: CompensatoryLeaveConstants.errorPleaseEnterReason,
         ),
       );
       return;
@@ -354,8 +355,8 @@ class CompensatoryLeaveBloc
     final requestEntity = CompensatoryLeaveRequestEntity(
       customAutofill:
           state.timesheetFill == CompensatoryLeaveConstants.timesheetFillManual
-          ? "0"
-          : "1",
+          ? CompensatoryLeaveConstants.customAutofillManual
+          : CompensatoryLeaveConstants.customAutofillAuto,
       customTimesheetDetails:
           state.timesheetFill == CompensatoryLeaveConstants.timesheetFillManual
           ? [
@@ -375,7 +376,7 @@ class CompensatoryLeaveBloc
           : CompensatoryLeaveConstants.workTypePayloadWeekend,
       employee: empId,
       employeeName: empName,
-      leaveType: 'Compensatory Off',
+      leaveType: CompensatoryLeaveConstants.leaveTypeCompOff,
       reason:
           state.timesheetFill == CompensatoryLeaveConstants.timesheetFillAuto &&
               state.reason.isEmpty

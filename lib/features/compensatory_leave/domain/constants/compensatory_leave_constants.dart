@@ -19,7 +19,15 @@ class CompensatoryLeaveConstants {
   static const String workTypePayloadOvertime = "Overtime";
   static const String leaveTypeCompOff = "Compensatory Off";
   static const String autoFilledReason = "Auto-filled reason";
+  static const String customAutofillManual = "0";
+  static const String customAutofillAuto = "1";
 
   // Error Constants
-  static const String errorEmployeeIdNotFound = "EMPLOYEE_ID_NOT_FOUND";
+  // these are internal error codes — UI maps them to localized messages
+  static const String errorEmployeeIdNotFound = "error.employee_id_not_found";
+  static const String errorPleaseSelectWorkDate = "error.select_work_date";
+  static const String errorPleaseSelectProject = "error.select_project";
+  static const String errorPleaseEnterTaskDescription =
+      "error.enter_task_description";
+  static const String errorPleaseEnterReason = "error.enter_reason";
 }

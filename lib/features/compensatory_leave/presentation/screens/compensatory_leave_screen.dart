@@ -55,12 +55,25 @@ class _CompensatoryLeaveScreenState extends State<CompensatoryLeaveScreen> {
                 ToastUtils.showSuccess(l10n.compOffSubmitSuccess);
                 AppRouter.navigateToRaisedRequests(ApprovalType.compOff);
               } else if (state.errorMessage != null) {
+                final err = state.errorMessage!;
                 final message =
-                    state.errorMessage ==
-                        CompensatoryLeaveConstants.errorEmployeeIdNotFound
+                    err == CompensatoryLeaveConstants.errorEmployeeIdNotFound
                     ? l10n.employeeIdNotFound
-                    : state.errorMessage!;
-                ToastUtils.showError(message);
+                    : err ==
+                          CompensatoryLeaveConstants.errorPleaseSelectWorkDate
+                    ? l10n.selectWorkDateError
+                    : err == CompensatoryLeaveConstants.errorPleaseSelectProject
+                    ? l10n.selectProjectValidation
+                    : err ==
+                          CompensatoryLeaveConstants
+                              .errorPleaseEnterTaskDescription
+                    ? l10n.taskValidation
+                    : err;
+                ToastUtils.showError(
+                  err == CompensatoryLeaveConstants.errorPleaseEnterReason
+                      ? l10n.enterReasonForExtraWork
+                      : message,
+                );
               }
             },
             child: const CompensatoryLeaveContentView(),
