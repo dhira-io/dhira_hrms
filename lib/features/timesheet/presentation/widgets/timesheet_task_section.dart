@@ -26,6 +26,12 @@ class TimesheetTaskSection extends StatefulWidget {
 class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
   bool _isExpanded = false;
 
+  void _openAddTask(BuildContext context) {
+    final bloc = context.read<TimesheetBloc>();
+    final timesheetId = bloc.state.currentWeekActiveId ?? bloc.state.initialTimesheetId ?? '0';
+    AddTaskBottomSheet.show(context, timesheetId: timesheetId);
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -41,45 +47,42 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
         final selectedDate = state.selectedDate;
         final isLoading = state.status == TimesheetStateStatus.loading;
 
-        final title =
-            (selectedDate != null && !DateTimeUtils.isToday(selectedDate))
-            ? l10n.timesheetDateTasks(
-                DateTimeUtils.formatDate(selectedDate, pattern: 'EEEE, MMM d'),
-              )
-            : l10n.timesheetTodaysTasks;
-
-        final displayCount = _isExpanded
-            ? assignments.length
-            : min(2, assignments.length);
+        final displayCount = _isExpanded ? assignments.length : min(2, assignments.length);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(title, style: AppTextStyle.h3.copyWith(fontSize: 14.sp)),
-                      SizedBox(width: 8.w),
-                Container(
-                  padding:       EdgeInsets.symmetric(
-                    horizontal: 6.w,
-                    vertical: 2.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.of(context).primaryFixed,
-                    borderRadius: BorderRadius.circular(6.r),
-                  ),
-                  child: Text(
-                    isLoading ? "0" : assignments.length.toString(),
-                    style: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.of(context).onPrimaryFixedVariant,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10.sp,
-                    ),
+                Text(
+                  l10n.taskEntries,
+                  style: TextStyle(
+                    color: AppColors.of(context).textPrimary,
+                    fontSize: 14.sp,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
+                if (assignments.isNotEmpty && !isLoading)
+                  InkWell(
+                    onTap: () => _openAddTask(context),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      child: Text(
+                        l10n.addTask,
+                        style: TextStyle(
+                          color: AppColors.of(context).primaryContainer,
+                          fontSize: 14.sp,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
-                  SizedBox(height: 12.h),
+            SizedBox(height: 16.h),
             if (isLoading)
               ListView.builder(
                 shrinkWrap: true,
@@ -90,13 +93,62 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                 },
               )
             else if (assignments.isEmpty)
-              Center(
-                child: Padding(
-                  padding:       EdgeInsets.symmetric(vertical: 20.h),
-                  child: Text(
-                    l10n.timesheetNoTasksForDay,
-                    style: AppTextStyle.bodySmall,
-                  ),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 16.w),
+                decoration: BoxDecoration(
+                  color: AppColors.of(context).surfaceContainerLowest,
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: AppColors.of(context).border),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      l10n.noTasksLogged,
+                      style: TextStyle(
+                        color: AppColors.of(context).textPrimary,
+                        fontSize: 14.sp,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                    Text(
+                      l10n.logWorkHoursPrompt,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppColors.of(context).textSecondary,
+                        fontSize: 14.sp,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => _openAddTask(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.of(context).primaryContainer,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          l10n.addTask,
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               )
             else ...[
@@ -111,9 +163,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                     index: index,
                     onEdit: (task, index) {
                       final bloc = context.read<TimesheetBloc>();
-                      final realIndex = bloc.state.editAssignments.indexOf(
-                        task,
-                      );
+                      final realIndex = bloc.state.editAssignments.indexOf(task);
                       bloc.add(
                         TimesheetEvent.editTaskRequested(
                           task: task,
@@ -143,36 +193,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
 
                       if (confirmed && context.mounted) {
                         FocusManager.instance.primaryFocus?.unfocus();
-
-                        final bloc = context.read<TimesheetBloc>();
-                        final tasksForWeek = bloc.state.editAssignments
-                            .where((e) => e.parent == task.parent)
-                            .toList();
-
-                        final isLastTask = tasksForWeek.length == 1;
-                        if (isLastTask) {
-                          bloc.add(
-                            TimesheetEvent.deleteTimesheetRequested(
-                              timesheetName: task.parent ?? "",
-                            ),
-                          );
-                          return;
-                        }
-
-                        if (task.name != null) {
-                          bloc.add(
-                            TimesheetEvent.deleteEntryRequested(
-                              name: task.name!,
-                              parent: task.parent ?? "",
-                              date: task.date ?? "",
-                            ),
-                          );
-                        } else {
-                          final updated = List<ProjectAssignmentEntity>.from(
-                            bloc.state.editAssignments,
-                          )..remove(task);
-                          bloc.add(TimesheetEvent.assignmentsChanged(updated));
-                        }
+                        context.read<TimesheetBloc>().add(TimesheetEvent.deleteTaskRequested(task: task));
                       }
                     },
                   );

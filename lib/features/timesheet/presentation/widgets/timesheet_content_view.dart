@@ -5,11 +5,12 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'timesheet_bottom_actions.dart';
-import 'timesheet_stats_bento.dart';
+import 'timesheet_new_header.dart';
+import 'timesheet_weekly_range.dart';
+import 'timesheet_daily_progress.dart';
 import 'timesheet_task_section.dart';
-import 'timesheet_week_selector.dart';
 
 class TimesheetContentView extends StatelessWidget {
   const TimesheetContentView({super.key});
@@ -50,22 +51,14 @@ class TimesheetContentView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const TimesheetBentoStats(),
-                const SizedBox(height: AppConstants.p12),
-                const TimesheetWeekSelector(),
-                const SizedBox(height: AppConstants.p12),
+                const TimesheetNewHeader(),
+                SizedBox(height: 24.h),
+                const TimesheetWeeklyRange(),
+                SizedBox(height: 24.h),
+                const TimesheetDailyProgress(),
+                SizedBox(height: 24.h),
                 const TimesheetTaskSection(),
-                if (state.hasDraftTasksInSelectedWeek) ...[
-                  const SizedBox(height: AppConstants.p24),
-                  TimesheetBottomActions(
-                    onSubmit: () {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      context.read<TimesheetBloc>().add(
-                        const TimesheetEvent.submitWeeklyRequested(),
-                      );
-                    },
-                  ),
-                ],
+                SizedBox(height: 80.h), // Padding for bottom submit bar
               ],
             ),
           ),

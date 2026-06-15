@@ -55,6 +55,10 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required String date,
   }) = TimesheetDeleteEntryRequested;
 
+  const factory TimesheetEvent.deleteTaskRequested({
+    required ProjectAssignmentEntity task,
+  }) = TimesheetDeleteTaskRequested;
+
   const factory TimesheetEvent.deleteTimesheetRequested({
     required String timesheetName,
   }) = TimesheetDeleteTimesheetRequested;

@@ -2,6 +2,7 @@ import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
@@ -92,7 +93,10 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
-        appBar: CommonAppBar(title: l10n.timesheetEntry),
+        appBar: CommonAppBar(
+          title: l10n.timesheetEntry,
+          subtitle: l10n.trackWeeklyWorkHours,
+        ),
         body: SafeArea(
           child: GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -126,20 +130,33 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            AddTaskBottomSheet.show(context, timesheetId: widget.timesheetId);
+        bottomNavigationBar: BlocBuilder<TimesheetBloc, TimesheetState>(
+          buildWhen: (previous, current) =>
+              previous.hasDraftTasksInSelectedWeek != current.hasDraftTasksInSelectedWeek ||
+              previous.isSubmitWeeklyLoading != current.isSubmitWeeklyLoading,
+          builder: (context, state) {
+            if (!state.hasDraftTasksInSelectedWeek) return const SizedBox.shrink();
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              decoration: BoxDecoration(
+                color: AppColors.of(context).surfaceContainerLowest,
+                border: Border(top: BorderSide(color: AppColors.of(context).border)),
+              ),
+              child: SafeArea(
+                child: CommonButton(
+                  text: l10n.submitWeeklyTimesheet,
+                  width: double.infinity,
+                  isLoading: state.isSubmitWeeklyLoading,
+                  onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    context.read<TimesheetBloc>().add(
+                      const TimesheetEvent.submitWeeklyRequested(),
+                    );
+                  },
+                ),
+              ),
+            );
           },
-          backgroundColor: AppColors.of(context).primaryContainer,
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Icon(
-            Icons.add_task,
-            color: AppColors.of(context).white,
-            size: 24,
-          ),
         ),
       ),
     );

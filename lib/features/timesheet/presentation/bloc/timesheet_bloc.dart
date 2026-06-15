@@ -61,6 +61,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     on<TimesheetSubmitWeeklyRequested>(_onSubmitWeeklyRequested);
     on<TimesheetFetchMonthWiseRequested>(_onFetchMonthWiseRequested);
     on<TimesheetDeleteEntryRequested>(_onDeleteEntryRequested);
+    on<TimesheetDeleteTaskRequested>(_onDeleteTaskRequested);
     on<TimesheetDeleteTimesheetRequested>(_onDeleteTimesheetRequested);
     on<TimesheetFetchOverviewRequested>(_onFetchOverviewRequested);
     on<TimesheetEditTaskRequested>(_onEditTaskRequested);
@@ -97,6 +98,41 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     emit(
       _ensureNonErrorState(state.copyWith(editAssignments: event.assignments)),
     );
+  }
+
+  void _onDeleteTaskRequested(
+    TimesheetDeleteTaskRequested event,
+    Emitter<TimesheetState> emit,
+  ) {
+    final task = event.task;
+    final tasksForWeek = state.editAssignments
+        .where((e) => e.parent == task.parent)
+        .toList();
+
+    final isLastTask = tasksForWeek.length == 1;
+    if (isLastTask) {
+      add(
+        TimesheetEvent.deleteTimesheetRequested(
+          timesheetName: task.parent ?? "",
+        ),
+      );
+      return;
+    }
+
+    if (task.name != null) {
+      add(
+        TimesheetEvent.deleteEntryRequested(
+          name: task.name!,
+          parent: task.parent ?? "",
+          date: task.date ?? "",
+        ),
+      );
+    } else {
+      final updated = List<ProjectAssignmentEntity>.from(
+        state.editAssignments,
+      )..remove(task);
+      add(TimesheetEvent.assignmentsChanged(updated));
+    }
   }
 
   void _onDaySelected(

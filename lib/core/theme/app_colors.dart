@@ -132,6 +132,30 @@ class AppColors {
   static const Color charcoal = Color(0xFF101828);
   static const Color slateGrey = Color(0xFF475467);
 
+  // Timesheet HTML Colors
+  static const Color colorBlue50 = Color(0xFFEFF6FF);
+  static const Color colorBlue200 = Color(0xFFBEDBFF);
+  static const Color colorBlue300 = Color(0xFF8EC5FF);
+  static const Color colorBlue400 = Color(0xFF51A2FF);
+  static const Color colorBlue500 = Color(0xFF2B7FFF);
+  static const Color colorBlue600 = Color(0xFF155DFC);
+  static const Color colorNeutral100 = Color(0xFFF5F5F5);
+  static const Color colorNeutral200 = Color(0xFFE5E5E5);
+  static const Color colorNeutral400 = Color(0xFFA1A1A1);
+  static const Color colorGreen50 = Color(0xFFF0FDF4);
+  static const Color colorGreen200 = Color(0xFFB9F8CF);
+  static const Color colorGreen300 = Color(0xFF7BF1A8);
+  static const Color colorGreen600 = Color(0xFF00A63E);
+  static const Color colorGreen700 = Color(0xFF008236);
+  static const Color colorOrange50 = Color(0xFFFFF7ED);
+  static const Color colorOrange200 = Color(0xFFFFD6A8);
+  static const Color colorOrange300 = Color(0xFFFFB86A);
+  static const Color colorOrange400 = Color(0xFFFF8904);
+  static const Color colorOrange500 = Color(0xFFFF6900);
+  static const Color colorOrange600 = Color(0xFFF54A00);
+  static const Color colorEmerald400 = Color(0xFF00D492);
+  static const Color colorEmerald500 = Color(0xFF00BC7D);
+  static const Color colorRed500 = Color(0xFFFB2C36);
   static const Color purpleHoliday = Color(0xFF9810FA);
   static const Color blueAttendance = Color(0xFF3B82F6);
 
