@@ -8,9 +8,8 @@ abstract class ICompensatoryLeaveRepository {
   Future<Either<Failure, CompensatoryLeaveSummaryEntity>>
   getCompensatoryLeaveSummary(String employeeId);
   Future<Either<Failure, List<CompensatoryLeaveEligibleDateEntity>>>
-  getEligibleDates(String employeeId);
-  Future<Either<Failure, bool>> submitCompensatoryLeaveRequest({
-    required String employeeId,
-    required CompensatoryLeaveRequestEntity request,
-  });
+  getEligibleDates(String employeeId, String fromDate, String toDate);
+  Future<Either<Failure, bool>> submitCompensatoryLeaveRequest(
+    CompensatoryLeaveRequestEntity request,
+  );
 }

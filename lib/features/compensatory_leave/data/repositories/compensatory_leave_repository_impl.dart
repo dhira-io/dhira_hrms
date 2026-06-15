@@ -34,10 +34,10 @@ class CompensatoryLeaveRepositoryImpl implements ICompensatoryLeaveRepository {
 
   @override
   Future<Either<Failure, List<CompensatoryLeaveEligibleDateEntity>>>
-  getEligibleDates(String employeeId) async {
+  getEligibleDates(String employeeId, String fromDate, String toDate) async {
     return networkInfo.connectedAndRun(() async {
       try {
-        final models = await remoteDataSource.getEligibleDates(employeeId);
+        final models = await remoteDataSource.getEligibleDates(employeeId, fromDate, toDate);
         return Right(models.map((e) => e.toEntity()).toList());
       } catch (e) {
         return Left(Failure.fromException(e));
@@ -46,16 +46,14 @@ class CompensatoryLeaveRepositoryImpl implements ICompensatoryLeaveRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> submitCompensatoryLeaveRequest({
-    required String employeeId,
-    required CompensatoryLeaveRequestEntity request,
-  }) async {
+  Future<Either<Failure, bool>> submitCompensatoryLeaveRequest(
+    CompensatoryLeaveRequestEntity request,
+  ) async {
     return networkInfo.connectedAndRun(() async {
       try {
         final model = CompensatoryLeaveRequestModel.fromEntity(request);
         final success = await remoteDataSource.submitCompensatoryLeaveRequest(
-          employeeId: employeeId,
-          request: model,
+          model,
         );
         return Right(success);
       } catch (e) {

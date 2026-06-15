@@ -9,12 +9,8 @@ class SubmitCompensatoryLeaveRequestUseCase {
   SubmitCompensatoryLeaveRequestUseCase(this.repository);
 
   Future<Either<Failure, bool>> call({
-    required String employeeId,
     required CompensatoryLeaveRequestEntity request,
-  }) {
-    return repository.submitCompensatoryLeaveRequest(
-      employeeId: employeeId,
-      request: request,
-    );
+  }) async {
+    return repository.submitCompensatoryLeaveRequest(request);
   }
 }

@@ -10,6 +10,11 @@ import 'package:dhira_hrms/features/compensatory_leave/domain/usecases/submit_co
 import 'package:dhira_hrms/features/compensatory_leave/domain/constants/compensatory_leave_constants.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_event.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_state.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dartz/dartz.dart';
+import 'package:dhira_hrms/core/error/failures.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
+import 'package:dhira_hrms/features/compensatory_leave/domain/entities/compensatory_leave_eligible_date_entity.dart';
 
 class CompensatoryLeaveBloc
     extends Bloc<CompensatoryLeaveEvent, CompensatoryLeaveState> {
@@ -47,15 +52,6 @@ class CompensatoryLeaveBloc
       state.copyWith(
         status: CompensatoryLeaveStatus.loading,
         initialCompensatoryLeaveId: event.compensatoryLeaveId,
-        summary: state.summary,
-        eligibleDates: state.eligibleDates,
-        timesheetFill: state.timesheetFill,
-        taskDescription: state.taskDescription,
-        reason: state.reason,
-        workType: state.workType,
-        workedHours: state.workedHours,
-        projects: state.projects,
-        selectedProject: state.selectedProject,
       ),
     );
     add(const CompensatoryLeaveEvent.fetchRequested());
@@ -70,41 +66,27 @@ class CompensatoryLeaveBloc
       emit(
         state.copyWith(
           status: CompensatoryLeaveStatus.failure,
-          initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
-          summary: state.summary,
-          eligibleDates: state.eligibleDates,
-          timesheetFill: state.timesheetFill,
-          taskDescription: state.taskDescription,
-          reason: state.reason,
-          workType: state.workType,
-          workedHours: state.workedHours,
-          projects: state.projects,
-          selectedProject: state.selectedProject,
           errorMessage: CompensatoryLeaveConstants.errorEmployeeIdNotFound,
         ),
       );
       return;
     }
 
-    final summaryResult = await getCompensatoryLeaveSummaryUseCase(empId);
-    final datesResult = await getCompensatoryLeaveEligibleDatesUseCase(empId);
-    final projectsResult = await getProjectsUseCase();
+    final results = await Future.wait([
+      getCompensatoryLeaveSummaryUseCase(empId),
+      getCompensatoryLeaveEligibleDatesUseCase(empId),
+      getProjectsUseCase(),
+    ]);
+
+    final summaryResult = results[0] as Either<Failure, CompensatoryLeaveSummaryEntity>;
+    final datesResult = results[1] as Either<Failure, List<CompensatoryLeaveEligibleDateEntity>>;
+    final projectsResult = results[2] as Either<Failure, List<ProjectEntity>>;
 
     summaryResult.fold(
       (failure) {
         emit(
           state.copyWith(
             status: CompensatoryLeaveStatus.failure,
-            initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
-            summary: state.summary,
-            eligibleDates: state.eligibleDates,
-            timesheetFill: state.timesheetFill,
-            taskDescription: state.taskDescription,
-            reason: state.reason,
-            workType: state.workType,
-            workedHours: state.workedHours,
-            projects: state.projects,
-            selectedProject: state.selectedProject,
             errorMessage: failure.message,
           ),
         );
@@ -115,16 +97,7 @@ class CompensatoryLeaveBloc
             emit(
               state.copyWith(
                 status: CompensatoryLeaveStatus.failure,
-                initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
                 summary: summary,
-                eligibleDates: state.eligibleDates,
-                timesheetFill: state.timesheetFill,
-                taskDescription: state.taskDescription,
-                reason: state.reason,
-                workType: state.workType,
-                workedHours: state.workedHours,
-                projects: state.projects,
-                selectedProject: state.selectedProject,
                 errorMessage: failure.message,
               ),
             );
@@ -135,17 +108,8 @@ class CompensatoryLeaveBloc
                 emit(
                   state.copyWith(
                     status: CompensatoryLeaveStatus.failure,
-                    initialCompensatoryLeaveId:
-                        state.initialCompensatoryLeaveId,
                     summary: summary,
                     eligibleDates: dates,
-                    timesheetFill: state.timesheetFill,
-                    taskDescription: state.taskDescription,
-                    reason: state.reason,
-                    workType: state.workType,
-                    workedHours: state.workedHours,
-                    projects: state.projects,
-                    selectedProject: state.selectedProject,
                     errorMessage: failure.message,
                   ),
                 );
@@ -154,17 +118,9 @@ class CompensatoryLeaveBloc
                 emit(
                   state.copyWith(
                     status: CompensatoryLeaveStatus.loaded,
-                    initialCompensatoryLeaveId:
-                        state.initialCompensatoryLeaveId,
                     summary: summary,
                     eligibleDates: dates,
-                    timesheetFill: state.timesheetFill,
-                    taskDescription: state.taskDescription,
-                    reason: state.reason,
-                    workType: state.workType,
-                    workedHours: state.workedHours,
                     projects: projects,
-                    selectedProject: state.selectedProject,
                   ),
                 );
               },
@@ -262,17 +218,6 @@ class CompensatoryLeaveBloc
       emit(
         state.copyWith(
           status: CompensatoryLeaveStatus.failure,
-          initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
-          summary: state.summary,
-          eligibleDates: state.eligibleDates,
-          selectedDate: state.selectedDate,
-          timesheetFill: state.timesheetFill,
-          taskDescription: state.taskDescription,
-          reason: state.reason,
-          workType: state.workType,
-          workedHours: state.workedHours,
-          projects: state.projects,
-          selectedProject: state.selectedProject,
           errorMessage: CompensatoryLeaveConstants.errorPleaseSelectWorkDate,
         ),
       );
@@ -284,17 +229,6 @@ class CompensatoryLeaveBloc
       emit(
         state.copyWith(
           status: CompensatoryLeaveStatus.failure,
-          initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
-          summary: state.summary,
-          eligibleDates: state.eligibleDates,
-          selectedDate: state.selectedDate,
-          timesheetFill: state.timesheetFill,
-          taskDescription: state.taskDescription,
-          reason: state.reason,
-          workType: state.workType,
-          workedHours: state.workedHours,
-          projects: state.projects,
-          selectedProject: state.selectedProject,
           errorMessage: CompensatoryLeaveConstants.errorPleaseSelectProject,
         ),
       );
@@ -306,17 +240,6 @@ class CompensatoryLeaveBloc
       emit(
         state.copyWith(
           status: CompensatoryLeaveStatus.failure,
-          initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
-          summary: state.summary,
-          eligibleDates: state.eligibleDates,
-          selectedDate: state.selectedDate,
-          timesheetFill: state.timesheetFill,
-          taskDescription: state.taskDescription,
-          reason: state.reason,
-          workType: state.workType,
-          workedHours: state.workedHours,
-          projects: state.projects,
-          selectedProject: state.selectedProject,
           errorMessage:
               CompensatoryLeaveConstants.errorPleaseEnterTaskDescription,
         ),
@@ -328,17 +251,6 @@ class CompensatoryLeaveBloc
       emit(
         state.copyWith(
           status: CompensatoryLeaveStatus.failure,
-          initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
-          summary: state.summary,
-          eligibleDates: state.eligibleDates,
-          selectedDate: state.selectedDate,
-          timesheetFill: state.timesheetFill,
-          taskDescription: state.taskDescription,
-          reason: state.reason,
-          workType: state.workType,
-          workedHours: state.workedHours,
-          projects: state.projects,
-          selectedProject: state.selectedProject,
           errorMessage: CompensatoryLeaveConstants.errorPleaseEnterReason,
         ),
       );
@@ -387,7 +299,6 @@ class CompensatoryLeaveBloc
     );
 
     final result = await submitCompensatoryLeaveRequestUseCase(
-      employeeId: empId,
       request: requestEntity,
     );
 
@@ -397,17 +308,6 @@ class CompensatoryLeaveBloc
         emit(
           state.copyWith(
             status: CompensatoryLeaveStatus.failure,
-            initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
-            summary: state.summary,
-            eligibleDates: state.eligibleDates,
-            selectedDate: state.selectedDate,
-            timesheetFill: state.timesheetFill,
-            taskDescription: state.taskDescription,
-            reason: state.reason,
-            workType: state.workType,
-            workedHours: state.workedHours,
-            projects: state.projects,
-            selectedProject: state.selectedProject,
             errorMessage: failure.message,
           ),
         );
@@ -416,7 +316,6 @@ class CompensatoryLeaveBloc
         emit(
           state.copyWith(
             status: CompensatoryLeaveStatus.success,
-            initialCompensatoryLeaveId: state.initialCompensatoryLeaveId,
             summary:
                 state.summary ??
                 const CompensatoryLeaveSummaryEntity(
@@ -424,18 +323,26 @@ class CompensatoryLeaveBloc
                   raisedRequest: 0,
                   expiringSoon: 0,
                 ),
-            eligibleDates: state.eligibleDates,
-            selectedDate: state.selectedDate,
-            timesheetFill: state.timesheetFill,
-            taskDescription: state.taskDescription,
-            reason: state.reason,
-            workType: state.workType,
-            workedHours: state.workedHours,
-            projects: state.projects,
-            selectedProject: state.selectedProject,
           ),
         );
       },
     );
+  }
+
+  static String getLocalizedErrorMessage(String error, AppLocalizations l10n) {
+    switch (error) {
+      case CompensatoryLeaveConstants.errorEmployeeIdNotFound:
+        return l10n.employeeIdNotFound;
+      case CompensatoryLeaveConstants.errorPleaseSelectWorkDate:
+        return l10n.selectWorkDateError;
+      case CompensatoryLeaveConstants.errorPleaseSelectProject:
+        return l10n.selectProjectValidation;
+      case CompensatoryLeaveConstants.errorPleaseEnterTaskDescription:
+        return l10n.taskValidation;
+      case CompensatoryLeaveConstants.errorPleaseEnterReason:
+        return l10n.enterReasonForExtraWork;
+      default:
+        return error;
+    }
   }
 }

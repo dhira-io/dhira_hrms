@@ -11,6 +11,9 @@ class GetCompensatoryLeaveEligibleDatesUseCase {
   Future<Either<Failure, List<CompensatoryLeaveEligibleDateEntity>>> call(
     String employeeId,
   ) {
-    return repository.getEligibleDates(employeeId);
+    final now = DateTime.now();
+    final fromDate = "${now.year}-01-01";
+    final toDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    return repository.getEligibleDates(employeeId, fromDate, toDate);
   }
 }

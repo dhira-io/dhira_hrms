@@ -12,6 +12,7 @@ import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compens
 import 'package:dhira_hrms/features/compensatory_leave/domain/entities/compensatory_leave_eligible_date_entity.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
 import 'package:dhira_hrms/features/compensatory_leave/domain/constants/compensatory_leave_constants.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 
 class CompensatoryLeaveFormSection extends StatelessWidget {
   const CompensatoryLeaveFormSection({super.key});
@@ -113,11 +114,10 @@ class CompensatoryLeaveFormSection extends StatelessWidget {
                     ),
                   ),
                   items: state.eligibleDates.map((dateEntity) {
-                    String formattedDate = dateEntity.date;
-                    final parts = dateEntity.date.split('-');
-                    if (parts.length == 3) {
-                      formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}";
-                    }
+                    final formattedDate = DateTimeUtils.formatDateString(
+                      dateEntity.date,
+                      pattern: 'dd-MM-yyyy',
+                    );
                     final hoursString =
                         dateEntity.workedHours == dateEntity.workedHours.toInt()
                         ? dateEntity.workedHours.toInt().toString()

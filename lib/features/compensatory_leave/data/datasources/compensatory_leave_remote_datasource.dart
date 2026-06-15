@@ -10,11 +10,12 @@ abstract class ICompensatoryLeaveRemoteDataSource {
   );
   Future<List<CompensatoryLeaveEligibleDateModel>> getEligibleDates(
     String employeeId,
+    String fromDate,
+    String toDate,
   );
-  Future<bool> submitCompensatoryLeaveRequest({
-    required String employeeId,
-    required CompensatoryLeaveRequestModel request,
-  });
+  Future<bool> submitCompensatoryLeaveRequest(
+    CompensatoryLeaveRequestModel request,
+  );
 }
 
 class CompensatoryLeaveRemoteDataSourceImpl
@@ -42,11 +43,9 @@ class CompensatoryLeaveRemoteDataSourceImpl
   @override
   Future<List<CompensatoryLeaveEligibleDateModel>> getEligibleDates(
     String employeeId,
+    String fromDate,
+    String toDate,
   ) async {
-    final now = DateTime.now();
-    final fromDate = "${now.year}-01-01";
-    final toDate =
-        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     final response = await dioClient.post(
       CompensatoryLeaveApiConstants.getEligibleDates,
       data: {'employee': employeeId, 'from_date': fromDate, 'to_date': toDate},
@@ -66,13 +65,12 @@ class CompensatoryLeaveRemoteDataSourceImpl
   }
 
   @override
-  Future<bool> submitCompensatoryLeaveRequest({
-    required String employeeId,
-    required CompensatoryLeaveRequestModel request,
-  }) async {
+  Future<bool> submitCompensatoryLeaveRequest(
+    CompensatoryLeaveRequestModel request,
+  ) async {
     final response = await dioClient.post(
       CompensatoryLeaveApiConstants.submitRequest,
-      data: {'employee': employeeId, ...request.toJson()},
+      data: request.toJson(),
     );
     final message = response.data['message'];
     if (message != null &&
