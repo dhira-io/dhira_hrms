@@ -67,7 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: const PerformanceSection(),
                           ),
                           SizedBox(height: 24.h),
-                          const PoliciesSection(),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppConstants.p20.w,
+                            ),
+                            child: const PoliciesSection(),
+                          ),
 
                           SizedBox(height: 30.h),
                         ],
