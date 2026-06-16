@@ -187,6 +187,8 @@ import '../../features/settings/presentation/bloc/settings_cubit.dart';
 import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
 import '../../features/settings/domain/repositories/notification_settings_repository.dart';
 import '../../features/settings/data/repositories/notification_settings_repository_impl.dart';
+import '../../features/settings/domain/usecases/get_notification_settings_usecase.dart';
+import '../../features/settings/domain/usecases/update_notification_settings_usecase.dart';
 import '../../features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 
 // Approvals
@@ -1161,12 +1163,24 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<INotificationSettingsRepository>(
-      () => NotificationSettingsRepository(Get.find<DioClient>()),
+      () => NotificationSettingsRepository(
+        Get.find<DioClient>(),
+        Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetNotificationSettingsUseCase>(
+      () => GetNotificationSettingsUseCase(Get.find<INotificationSettingsRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateNotificationSettingsUseCase>(
+      () => UpdateNotificationSettingsUseCase(Get.find<INotificationSettingsRepository>()),
       fenix: true,
     );
     Get.lazyPut<NotificationSettingsCubit>(
       () => NotificationSettingsCubit(
-        Get.find<INotificationSettingsRepository>(),
+        Get.find<GetNotificationSettingsUseCase>(),
+        Get.find<UpdateNotificationSettingsUseCase>(),
         Get.find<GetApprovalsAccessUseCase>(),
       ),
       fenix: true,

@@ -1,44 +1,54 @@
+import 'package:dartz/dartz.dart';
+import '../../../../core/error/failures.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/network/network_info.dart';
 import '../constants/notification_settings_api_constants.dart';
 import '../constants/notification_settings_constants.dart';
 import '../../domain/entities/notification_settings_entity.dart';
 import '../../domain/repositories/notification_settings_repository.dart';
 
-class NotificationSettingsRepository
-    implements INotificationSettingsRepository {
+class NotificationSettingsRepository implements INotificationSettingsRepository {
   final DioClient _dioClient;
+  final NetworkInfo _networkInfo;
 
-  NotificationSettingsRepository(this._dioClient);
+  NotificationSettingsRepository(this._dioClient, this._networkInfo);
 
   @override
-  Future<NotificationSettingsEntity> getSettings() async {
-    try {
-      final response = await _dioClient.get(NotificationSettingsApiConstants.getPreferences);
-      final data = response.data['message'];
-      
-      if (data == null || data is! Map<String, dynamic>) {
-        return NotificationSettingsEntity.initial().copyWith(
-          sections: _createDefaultSections({}), // Return default structure with empty data
-        );
+  Future<Either<Failure, NotificationSettingsEntity>> getSettings() async {
+    return _networkInfo.connectedAndRun(() async {
+      try {
+        final response = await _dioClient.get(NotificationSettingsApiConstants.getPreferences);
+        final data = response.data['message'];
+        
+        if (data == null || data is! Map<String, dynamic>) {
+          return Right(NotificationSettingsEntity.initial().copyWith(
+            sections: _createDefaultSections({}),
+          ));
+        }
+        
+        return Right(_mapApiToEntity(data));
+      } catch (e) {
+        return Left(Failure.fromException(e));
       }
-      
-      return _mapApiToEntity(data);
-    } catch (e) {
-      // Re-throw to be caught by Cubit
-      rethrow;
-    }
+    });
   }
 
-
   @override
-  Future<void> updateItem(String field, bool value) async {
-    await _dioClient.post(
-      NotificationSettingsApiConstants.updatePreference,
-      data: {
-        NotificationSettingsConstants.apiKeyField: field,
-        NotificationSettingsConstants.apiKeyValue: value ? 1 : 0,
-      },
-    );
+  Future<Either<Failure, void>> updateItem(String field, bool value) async {
+    return _networkInfo.connectedAndRun(() async {
+      try {
+        await _dioClient.post(
+          NotificationSettingsApiConstants.updatePreference,
+          data: {
+            NotificationSettingsConstants.apiKeyField: field,
+            NotificationSettingsConstants.apiKeyValue: value ? 1 : 0,
+          },
+        );
+        return const Right(null);
+      } catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
   }
 
   NotificationSettingsEntity _mapApiToEntity(Map<String, dynamic> data) {
