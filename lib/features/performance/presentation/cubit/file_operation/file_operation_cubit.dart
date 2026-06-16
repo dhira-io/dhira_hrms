@@ -59,8 +59,9 @@ class FileOperationCubit extends Cubit<FileOperationState> {
   Future<void> downloadFile(
     String url,
     String fileName,
-    AppLocalizations l10n,
-  ) async {
+    AppLocalizations l10n, {
+    bool appendTimestamp = true,
+  }) async {
     emit(const FileOperationState.downloading());
     try {
       String? downloadPath;
@@ -106,14 +107,16 @@ class FileOperationCubit extends Cubit<FileOperationState> {
           .last;
 
       // Append timestamp to avoid PathExistsException if a file with same name exists
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final nameParts = rawFileName.split('.');
-      String finalFileName;
-      if (nameParts.length > 1) {
-        final extension = nameParts.removeLast();
-        finalFileName = "${nameParts.join('.')}_$timestamp.$extension";
-      } else {
-        finalFileName = "${rawFileName}_$timestamp";
+      String finalFileName = rawFileName;
+      if (appendTimestamp) {
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+        final nameParts = rawFileName.split('.');
+        if (nameParts.length > 1) {
+          final extension = nameParts.removeLast();
+          finalFileName = "${nameParts.join('.')}_$timestamp.$extension";
+        } else {
+          finalFileName = "${rawFileName}_$timestamp";
+        }
       }
 
       final savePath =

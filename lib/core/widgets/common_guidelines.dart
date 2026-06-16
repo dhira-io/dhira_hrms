@@ -69,7 +69,7 @@ class _GuidelineItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: AppConstants.p6),
+          margin: const EdgeInsets.only(top: AppConstants.p2),
           width: 6.w,
           height: 6.h,
           decoration: BoxDecoration(

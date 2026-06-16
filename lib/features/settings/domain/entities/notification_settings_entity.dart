@@ -29,5 +29,6 @@ abstract class NotificationItemEntity with _$NotificationItemEntity {
     required String title,
     required String description,
     required bool value,
+    @Default(false) bool isLoading,
   }) = _NotificationItemEntity;
 }
