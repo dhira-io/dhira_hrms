@@ -109,6 +109,14 @@ import '../../features/leave/domain/usecases/update_leave_usecase.dart';
 import '../../features/leave/domain/usecases/get_leave_statistics_usecase.dart';
 import '../../features/leave/domain/usecases/upload_file_usecase.dart';
 
+// Compensatory Leave
+import '../../features/compensatory_leave/data/datasources/compensatory_leave_remote_datasource.dart';
+import '../../features/compensatory_leave/data/repositories/compensatory_leave_repository_impl.dart';
+import '../../features/compensatory_leave/domain/repositories/i_compensatory_leave_repository.dart';
+import '../../features/compensatory_leave/domain/usecases/get_compensatory_leave_summary_usecase.dart';
+import '../../features/compensatory_leave/domain/usecases/get_compensatory_leave_eligible_dates_usecase.dart';
+import '../../features/compensatory_leave/domain/usecases/submit_compensatory_leave_request_usecase.dart';
+
 // Timesheet
 import '../../features/timesheet/domain/repositories/timesheet_repository.dart';
 import '../../features/timesheet/data/datasources/timesheet_remote_datasource.dart';
@@ -177,6 +185,8 @@ import '../../features/performance/presentation/cubit/team_evaluation/team_evalu
 import '../../features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
 import '../../features/settings/presentation/bloc/settings_cubit.dart';
 import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
+import '../../features/settings/domain/repositories/notification_settings_repository.dart';
+import '../../features/settings/data/repositories/notification_settings_repository_impl.dart';
 import '../../features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 
 // Approvals
@@ -447,6 +457,39 @@ class DependencyInjection {
       fenix: true,
     );
 
+    // Compensatory Leave Feature
+    Get.lazyPut<ICompensatoryLeaveRemoteDataSource>(
+      () => CompensatoryLeaveRemoteDataSourceImpl(
+        dioClient: Get.find<DioClient>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<ICompensatoryLeaveRepository>(
+      () => CompensatoryLeaveRepositoryImpl(
+        remoteDataSource: Get.find<ICompensatoryLeaveRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetCompensatoryLeaveSummaryUseCase>(
+      () => GetCompensatoryLeaveSummaryUseCase(
+        Get.find<ICompensatoryLeaveRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetCompensatoryLeaveEligibleDatesUseCase>(
+      () => GetCompensatoryLeaveEligibleDatesUseCase(
+        Get.find<ICompensatoryLeaveRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<SubmitCompensatoryLeaveRequestUseCase>(
+      () => SubmitCompensatoryLeaveRequestUseCase(
+        Get.find<ICompensatoryLeaveRepository>(),
+      ),
+      fenix: true,
+    );
+
     // Timesheet Feature
     Get.lazyPut<TimesheetRemoteDataSource>(
       () => TimesheetRemoteDataSourceImpl(Get.find<DioClient>()),
@@ -577,7 +620,9 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<UpdateEmployeeProjectAssignmentsUseCase>(
-      () => UpdateEmployeeProjectAssignmentsUseCase(Get.find<IProfileRepository>()),
+      () => UpdateEmployeeProjectAssignmentsUseCase(
+        Get.find<IProfileRepository>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<GetCountryCodesUseCase>(
@@ -919,10 +964,7 @@ class DependencyInjection {
       ),
       fenix: true,
     );
-    Get.lazyPut<DeepLinkService>(
-      () => DeepLinkService(),
-      fenix: true,
-    );
+    Get.lazyPut<DeepLinkService>(() => DeepLinkService(), fenix: true);
 
     // Attendance BLoC remains global as it's used in multiple tabs
     Get.lazyPut<AttendanceBloc>(
@@ -987,9 +1029,11 @@ class DependencyInjection {
         upsertResumeRowUseCase: Get.find<UpsertResumeRowUseCase>(),
         deleteResumeRowUseCase: Get.find<DeleteResumeRowUseCase>(),
         updateEmployeeResumeUseCase: Get.find<UpdateEmployeeResumeUseCase>(),
-        updateEmployeeSubSkillsUseCase: Get.find<UpdateEmployeeSubSkillsUseCase>(),
+        updateEmployeeSubSkillsUseCase:
+            Get.find<UpdateEmployeeSubSkillsUseCase>(),
         saveSubSkillsForSkillUseCase: Get.find<SaveSubSkillsForSkillUseCase>(),
-        updateEmployeeProjectAssignmentsUseCase: Get.find<UpdateEmployeeProjectAssignmentsUseCase>(),
+        updateEmployeeProjectAssignmentsUseCase:
+            Get.find<UpdateEmployeeProjectAssignmentsUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
         imageCompressService: Get.find<ImageCompressService>(),
       ),
@@ -1116,8 +1160,12 @@ class DependencyInjection {
       ),
       fenix: true,
     );
+    Get.lazyPut<INotificationSettingsRepository>(
+      () => NotificationSettingsRepository(Get.find<DioClient>()),
+      fenix: true,
+    );
     Get.lazyPut<NotificationSettingsCubit>(
-      () => NotificationSettingsCubit(),
+      () => NotificationSettingsCubit(Get.find<INotificationSettingsRepository>()),
       fenix: true,
     );
     Get.lazyPut<FileOperationCubit>(

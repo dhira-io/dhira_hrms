@@ -32,6 +32,8 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
+import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_bloc.dart';
+import 'package:dhira_hrms/features/compensatory_leave/presentation/screens/compensatory_leave_screen.dart';
 import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
 
 import 'package:dhira_hrms/features/performance/presentation/screens/self_assessment_screen.dart';
@@ -81,6 +83,7 @@ class AppRouter {
   static const String myActionPath = '/myaction';
   static const String attendanceRegularizationPath =
       '/attendance-regularization';
+  static const String compensatoryLeavePath = '/compensatory-leave';
 
   static const String performanceGoalSetupPath = '/performance-goal-setup';
   static const String performanceSelfAssessmentPath =
@@ -139,6 +142,18 @@ class AppRouter {
         ApprovalsEvent.categoryChanged(type, category),
       );
 
+      Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
+      router.go(dashboardPath);
+    } catch (e) {
+      router.go(dashboardPath);
+    }
+  }
+
+  static void navigateToRaisedRequests(ApprovalType type) {
+    try {
+      Get.find<ApprovalsBloc>().add(
+        ApprovalsEvent.categoryChanged(type, ApprovalCategory.raised),
+      );
       Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
       router.go(dashboardPath);
     } catch (e) {
@@ -477,6 +492,19 @@ class AppRouter {
             imageCompressService: Get.find(),
           ),
           child: const AttendanceRegularizationScreen(),
+        ),
+      ),
+      GoRoute(
+        path: compensatoryLeavePath,
+        builder: (context, state) => BlocProvider(
+          create: (context) => CompensatoryLeaveBloc(
+            getCompensatoryLeaveSummaryUseCase: Get.find(),
+            getCompensatoryLeaveEligibleDatesUseCase: Get.find(),
+            submitCompensatoryLeaveRequestUseCase: Get.find(),
+            localStorageService: Get.find(),
+            getProjectsUseCase: Get.find(),
+          ),
+          child: const CompensatoryLeaveScreen(),
         ),
       ),
 
