@@ -2019,7 +2019,6 @@
     "deleteKeyProjectConfirmation": "क्या आप वाकई इस प्रमुख परियोजना को हटाना चाहते हैं?",
     "deleteLanguageConfirmation": "क्या आप वाकई इस भाषा को हटाना चाहते हैं?",
     "deleteEducationConfirmation": "क्या आप वाकई इस शिक्षा विवरण को हटाना चाहते हैं?",
-    "deleteCertificationConfirmation": "क्या आप वाकई इस प्रमाणपत्र को हटाना चाहते हैं?",
     "searchForSomething": "कुछ खोजें",
     "notClockedIn": "क्लॉक-इन नहीं किया",
     "readyToStartYourDay": "क्या आप अपना दिन शुरू करने के लिए तैयार हैं",
@@ -2028,9 +2027,7 @@
     "daysPresentTitle": "उपस्थित दिन",
     "currentMonth": "वर्तमान महीना",
     "leaveBalanceTitle": "छुट्टी का बैलेंस",
-    "upcomingDhiraHoliday": "आगामी DHIRA अवकाश"
-    "deleteCertificationConfirmation": "क्या आप वाकई इस प्रमाणपत्र को हटाना चाहते हैं?"
-,
+    "upcomingDhiraHoliday": "आगामी DHIRA अवकाश",
     "policies": "नीतियां",
     "policyHub": "नीति हब",
     "policyHubSubtitle": "केन्द्रीकृत कंपनी नीतियां और दिशा-निर्देश",
