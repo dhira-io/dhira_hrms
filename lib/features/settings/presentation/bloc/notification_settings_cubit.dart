@@ -1,100 +1,88 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/notification_settings_entity.dart';
+import '../../domain/repositories/notification_settings_repository.dart';
 import 'notification_settings_state.dart';
 
 class NotificationSettingsCubit extends Cubit<NotificationSettingsState> {
-  NotificationSettingsCubit()
-    : super(NotificationSettingsState(settings: _getStaticSettings()));
+  final INotificationSettingsRepository _repository;
 
-  static NotificationSettingsEntity _getStaticSettings() {
-    return const NotificationSettingsEntity(
-      sections: [
-        NotificationSectionEntity(
-          id: 'push',
-          title: 'pushNotifications',
-          iconKey: 'notifications_active',
-          items: [
-            NotificationItemEntity(
-              id: 'push_attendance',
-              title: 'attendance',
-              description: 'attendancePushDesc',
-              value: true,
-            ),
-            NotificationItemEntity(
-              id: 'push_leave',
-              title: 'leave',
-              description: 'leavePushDesc',
-              value: true,
-            ),
-            NotificationItemEntity(
-              id: 'push_timesheet',
-              title: 'timesheetReminders',
-              description: 'timesheetPushDesc',
-              value: false,
-            ),
-            NotificationItemEntity(
-              id: 'push_general',
-              title: 'generalAnnouncements',
-              description: 'generalPushDesc',
-              value: true,
-            ),
-          ],
-        ),
-        NotificationSectionEntity(
-          id: 'email',
-          title: 'emailAlerts',
-          iconKey: 'mail',
-          items: [
-            NotificationItemEntity(
-              id: 'email_attendance',
-              title: 'attendance',
-              description: 'attendanceEmailDesc',
-              value: false,
-            ),
-            NotificationItemEntity(
-              id: 'email_leave',
-              title: 'leave',
-              description: 'leaveEmailDesc',
-              value: true,
-            ),
-            NotificationItemEntity(
-              id: 'email_timesheet',
-              title: 'timesheetReminders',
-              description: 'timesheetEmailDesc',
-              value: true,
-            ),
-            NotificationItemEntity(
-              id: 'email_general',
-              title: 'generalAnnouncements',
-              description: 'generalEmailDesc',
-              value: true,
-            ),
-          ],
-        ),
-      ],
-    );
+  NotificationSettingsCubit(this._repository)
+      : super(const NotificationSettingsState()) {
+    loadSettings();
   }
 
-  void toggleItem(String sectionId, String itemId, bool value) {
-    if (state.settings == null) return;
+  Future<void> loadSettings() async {
+    emit(state.copyWith(isLoading: true, errorMessage: null));
+    try {
+      final settings = await _repository.getSettings();
+      emit(state.copyWith(isLoading: false, settings: settings));
+    } catch (e) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
 
+  void clearError() {
+    emit(state.copyWith(errorMessage: null));
+  }
+
+  Future<void> toggleItem(String sectionId, String itemId, bool value) async {
+    if (state.settings == null || state.isActionLoading) return;
+
+    // Set individual item loading state
+    final updatedSettings = _updateItemLoadingState(itemId, true);
+    emit(state.copyWith(settings: updatedSettings, isActionLoading: true));
+
+    try {
+      // The itemId in entity matches the API field name
+      await _repository.updateItem(itemId, value);
+
+      // Update local state value and reset loading
+      final finalSettings = _updateItemValue(itemId, value);
+      emit(state.copyWith(settings: finalSettings, isActionLoading: false));
+    } catch (e) {
+      // Reset loading on error
+      final resetSettings = _updateItemLoadingState(itemId, false);
+      emit(
+        state.copyWith(
+          settings: resetSettings,
+          isActionLoading: false,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
+  NotificationSettingsEntity _updateItemLoadingState(
+    String itemId,
+    bool isLoading,
+  ) {
     final updatedSections = state.settings!.sections.map((section) {
-      if (section.id == sectionId) {
-        final updatedItems = section.items.map((item) {
-          if (item.id == itemId) {
-            return item.copyWith(value: value);
-          }
-          return item;
-        }).toList();
-        return section.copyWith(items: updatedItems);
-      }
-      return section;
+      final updatedItems = section.items.map((item) {
+        if (item.id == itemId) {
+          return item.copyWith(isLoading: isLoading);
+        }
+        return item;
+      }).toList();
+      return section.copyWith(items: updatedItems);
     }).toList();
+    return state.settings!.copyWith(sections: updatedSections);
+  }
 
-    emit(
-      state.copyWith(
-        settings: state.settings!.copyWith(sections: updatedSections),
-      ),
-    );
+  NotificationSettingsEntity _updateItemValue(String itemId, bool value) {
+    final updatedSections = state.settings!.sections.map((section) {
+      final updatedItems = section.items.map((item) {
+        if (item.id == itemId) {
+          return item.copyWith(value: value, isLoading: false);
+        }
+        return item;
+      }).toList();
+      return section.copyWith(items: updatedItems);
+    }).toList();
+    return state.settings!.copyWith(sections: updatedSections);
   }
 }

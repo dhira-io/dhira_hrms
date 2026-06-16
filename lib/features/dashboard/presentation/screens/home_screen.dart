@@ -14,6 +14,8 @@ import '../widgets/home_employee_actions.dart';
 import '../widgets/home_quick_stats.dart';
 import '../widgets/performance_section.dart';
 import '../widgets/salary_section.dart';
+import '../widgets/policies_section.dart';
+import 'package:dhira_hrms/core/widgets/app_header.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -64,6 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             child: const PerformanceSection(),
                           ),
+                          SizedBox(height: 24.h),
+                          const PoliciesSection(),
+
                           SizedBox(height: 30.h),
                         ],
                       ),

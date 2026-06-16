@@ -67,7 +67,7 @@ class ActionCard extends StatelessWidget {
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: AppConstants.fs12.sp,
+                  fontSize: AppConstants.fs11.sp,
                   height: 1.2.h,
                 ),
                 maxLines: 2,

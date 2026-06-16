@@ -24,15 +24,15 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
                 ShimmerLoading(height: 20.h, width: 200.w, borderRadius: 4),
                 SizedBox(height: 40.h),
 
-          _buildSectionSkeleton(),
-                SizedBox(height: 32.h),
-          _buildSectionSkeleton(),
+          _buildSectionSkeleton(context),
+          SizedBox(height: 32.h),
+          _buildSectionSkeleton(context),
         ],
       ),
     );
   }
 
-  Widget _buildSectionSkeleton() {
+  Widget _buildSectionSkeleton(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -46,14 +46,23 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
               SizedBox(height: 16.h),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: AppColors.slate200),
+            color: AppColors.of(context).surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(12.r),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.of(context).onSurface.withValues(alpha: 0.04),
+                blurRadius: 32,
+                offset: const Offset(0, 12),
+              ),
+            ],
           ),
           child: Column(
             children: [
               _buildItemSkeleton(),
-                    Divider(height: 1.h, color: AppColors.slate100),
+              Divider(
+                height: 1.h,
+                color: AppColors.of(context).surfaceContainerHigh,
+              ),
               _buildItemSkeleton(),
             ],
           ),

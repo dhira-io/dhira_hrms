@@ -20,10 +20,14 @@ class DashboardCubit extends Cubit<DashboardState> {
     String timesheetSubtitle,
     String leaveTitle,
     String leaveSubtitle,
+    String compensatoryLeaveTitle,
+    String compensatoryLeaveSubtitle,
     String attendanceTitle,
     String attendanceSubtitle,
     String leaderBoardTitle,
     String leaderBoardSubtitle,
+    String policyHubTitle,
+    String policyHubSubtitle,
   ) {
     final employeeActions = [
       DashboardItem(
@@ -39,6 +43,13 @@ class DashboardCubit extends Cubit<DashboardState> {
         assetImagePath: AppAssets.leaveIcon,
         bgColorValue: AppColors.iconbggreen.toARGB32(),
         route: AppRouter.applyLeavePath,
+      ),
+      DashboardItem(
+        title: compensatoryLeaveTitle,
+        subtitle: compensatoryLeaveSubtitle,
+        assetImagePath: AppAssets.comofficon,
+        bgColorValue: AppColors.iconbggreen.toARGB32(),
+        route: AppRouter.compensatoryLeavePath,
       ),
       DashboardItem(
         title: attendanceTitle,
@@ -59,12 +70,24 @@ class DashboardCubit extends Cubit<DashboardState> {
       ),
     ];
 
+    final policies = [
+      DashboardItem(
+        title: policyHubTitle,
+        subtitle: policyHubSubtitle,
+        assetImagePath: AppAssets.servicechart,
+        bgColorValue: AppColors.iconbgblue.toARGB32(),
+        route: '', // To be filled later or handled
+      ),
+    ];
+
     emit(
       state.copyWith(
         allEmployeeActions: employeeActions,
         allCompanyInfo: companyInfo,
+        allPolicies: policies,
         filteredEmployeeActions: employeeActions,
         filteredCompanyInfo: companyInfo,
+        filteredPolicies: policies,
         isLoading: false,
       ),
     );
@@ -75,20 +98,28 @@ class DashboardCubit extends Cubit<DashboardState> {
     required String timesheetSubtitle,
     required String leaveTitle,
     required String leaveSubtitle,
+    required String compensatoryLeaveTitle,
+    required String compensatoryLeaveSubtitle,
     required String attendanceTitle,
     required String attendanceSubtitle,
     required String leaderBoardTitle,
     required String leaderBoardSubtitle,
+    required String policyHubTitle,
+    required String policyHubSubtitle,
   }) {
     _initItems(
       timesheetTitle,
       timesheetSubtitle,
       leaveTitle,
       leaveSubtitle,
+      compensatoryLeaveTitle,
+      compensatoryLeaveSubtitle,
       attendanceTitle,
       attendanceSubtitle,
       leaderBoardTitle,
       leaderBoardSubtitle,
+      policyHubTitle,
+      policyHubSubtitle,
     );
   }
 
@@ -119,6 +150,7 @@ class DashboardCubit extends Cubit<DashboardState> {
           searchQuery: query,
           filteredEmployeeActions: state.allEmployeeActions,
           filteredCompanyInfo: state.allCompanyInfo,
+          filteredPolicies: state.allPolicies,
         ),
       );
       return;
@@ -140,11 +172,20 @@ class DashboardCubit extends Cubit<DashboardState> {
         )
         .toList();
 
+    final filteredPolicies = state.allPolicies
+        .where(
+          (item) =>
+              item.title.toLowerCase().contains(lower) ||
+              item.subtitle.toLowerCase().contains(lower),
+        )
+        .toList();
+
     emit(
       state.copyWith(
         searchQuery: query,
         filteredEmployeeActions: filteredActions,
         filteredCompanyInfo: filteredInfo,
+        filteredPolicies: filteredPolicies,
       ),
     );
   }

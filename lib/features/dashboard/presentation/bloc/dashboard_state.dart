@@ -9,8 +9,10 @@ abstract class DashboardState with _$DashboardState {
   const factory DashboardState({
     @Default([]) List<DashboardItem> allEmployeeActions,
     @Default([]) List<DashboardItem> allCompanyInfo,
+    @Default([]) List<DashboardItem> allPolicies,
     @Default([]) List<DashboardItem> filteredEmployeeActions,
     @Default([]) List<DashboardItem> filteredCompanyInfo,
+    @Default([]) List<DashboardItem> filteredPolicies,
     @Default('') String searchQuery,
     @Default(true) bool isLoading,
     @Default(false) bool isProfileMenuOpen,
