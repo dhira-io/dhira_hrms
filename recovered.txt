@@ -1,0 +1,21 @@
+                    Expanded(
+                      child: TextFormField(
+                        controller: fromC,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          labelText: "FROM DATE",
+                          hintText: "dd-mm-yyyy",
+                          suffixIcon: Icon(Icons.calendar_today_outlined, size: 20),
+                        ),
+                        onTap: () async {
+                          final date = await showDatePicker(
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime(2100),
+                          );
+                          if (picked != null) {
+                            fromC.text = DateTimeUtils.formatDate(picked, pattern: "dd-MM-yyyy");
+                          }
+                        },

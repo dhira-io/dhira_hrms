@@ -138,6 +138,7 @@
     "draft": "Draft",
     "saved": "Saved",
     "edit": "Edit",
+    "back": "Back",
     "leaveBalance": "Leave Balance",
     "weekHours": "Week Hours",
     "daysCount": "{count} days",
@@ -149,6 +150,26 @@
     "forgotPasswordInstructions": "Enter your email address and we'll send you a link to reset your password.",
     "sendResetLink": "Send Reset Link",
     "passwordResetSent": "Password reset instructions sent to your email",
+    "resetViaEmail": "Reset via Email",
+    "resetEmailSubtitle": "Enter your registered work email address. We'll send you a secure password reset link.",
+    "workEmailAddress": "Work Email Address",
+    "backToLogin": "Back to Login",
+    "accountNotFound": "We couldn't find a account with this email address. please check and try again.",
+    "checkYourInbox": "Check Your Inbox",
+    "passwordResetSentTo": "A password reset link has been sent to {email}. Please check your inbox.",
+    "@passwordResetSentTo": {
+      "placeholders": {
+        "email": {
+          "type": "String",
+          "example": "abc@123.com"
+        }
+      }
+    },
+    "didntReceiveEmail": "Didn't receive the email?",
+    "checkSpamFolder": "Check spam folder",
+    "verifyEmailAddress": "Verify your email address",
+    "requestAnotherLink": "Request another link",
+    "resendLink": "Resend Link",
     "verifyOtp": "Verify OTP",
     "enterOtpSentTo": "Enter OTP sent to {email}",
     "resendOtp": "Resend OTP",

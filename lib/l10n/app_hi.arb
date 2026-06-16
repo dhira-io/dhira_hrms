@@ -138,6 +138,7 @@
     "draft": "ड्राफ्ट",
     "saved": "सहेजा गया",
     "edit": "संपादित करें",
+    "back": "Back",
     "leaveBalance": "छुट्टी का शेष",
     "weekHours": "सप्ताह के घंटे",
     "daysCount": "{count} दिन",
@@ -149,6 +150,26 @@
     "forgotPasswordInstructions": "अपना ईमेल पता दर्ज करें और हम आपको अपना पासवर्ड रीसेट करने के लिए एक लिंक भेजेंगे।",
     "sendResetLink": "रीसेट लिंक भेजें",
     "passwordResetSent": "पासवर्ड रीसेट निर्देश आपके ईमेल पर भेज दिए गए हैं",
+    "resetViaEmail": "Reset via Email",
+    "resetEmailSubtitle": "Enter your registered work email address. We'll send you a secure password reset link.",
+    "workEmailAddress": "Work Email Address",
+    "backToLogin": "Back to Login",
+    "accountNotFound": "We couldn't find a account with this email address. please check and try again.",
+    "checkYourInbox": "Check Your Inbox",
+    "passwordResetSentTo": "A password reset link has been sent to {email}. Please check your inbox.",
+    "@passwordResetSentTo": {
+      "placeholders": {
+        "email": {
+          "type": "String",
+          "example": "abc@123.com"
+        }
+      }
+    },
+    "didntReceiveEmail": "Didn't receive the email?",
+    "checkSpamFolder": "Check spam folder",
+    "verifyEmailAddress": "Verify your email address",
+    "requestAnotherLink": "Request another link",
+    "resendLink": "Resend Link",
     "verifyOtp": "ओटीपी सत्यापित करें",
     "enterOtpSentTo": "{email} पर भेजे गए ओटीपी को दर्ज करें",
     "resendOtp": "ओटीपी पुनः भेजें",
