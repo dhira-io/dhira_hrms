@@ -11,9 +11,20 @@ import 'package:dhira_hrms/features/organization/presentation/screens/organizati
 import 'package:dhira_hrms/features/auth/presentation/screens/auth_callback_screen.dart'
     as dhira_auth_callback;
 import 'package:dhira_hrms/features/payslip/presentation/bloc/payslip_bloc.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/dashboard_cubit.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
+import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/settings/presentation/bloc/settings_cubit.dart';
+import 'package:dhira_hrms/features/payslip/presentation/bloc/payslip_bloc.dart';
+import 'package:get/get.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_detail_screen.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_list_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/bloc/performance_event.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
@@ -22,6 +33,8 @@ import 'package:dhira_hrms/features/onboarding/presentation/screens/welcome_scre
 import 'package:dhira_hrms/features/onboarding/presentation/screens/get_started_screen.dart';
 import 'package:dhira_hrms/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:dhira_hrms/features/onboarding/presentation/bloc/onboarding_cubit.dart';
+import 'package:dhira_hrms/features/settings/presentation/screens/settings_screen.dart';
+import 'package:dhira_hrms/features/settings/presentation/bloc/settings_cubit.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
@@ -30,6 +43,7 @@ import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
 import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:dhira_hrms/core/widgets/coming_soon_screen.dart';
 
 import 'package:dhira_hrms/features/performance/presentation/screens/self_assessment_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/goal_setup_page.dart';
@@ -92,6 +106,8 @@ class AppRouter {
   static const String commonWebViewPath = '/webview';
   static const String payslipPath = '/payslip';
   static const String payslipDetailPath = '/payslip-detail';
+  static const String settingsPath = '/settings';
+  static const String comingSoonPath = '/coming-soon';
 
   // Router Extra Keys
   static const String argEmployeeName = 'employeeName';
@@ -349,13 +365,44 @@ class AppRouter {
           child: const OnboardingScreen(),
         ),
       ),
+
+        GoRoute(
+          path: comingSoonPath,
+          builder: (context, state) {
+            final title = state.extra as String? ?? 'Coming Soon';
+            return ComingSoonScreen(title: title);
+          },
+        ),
       GoRoute(
         path: loginPath,
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: dashboardPath,
-        builder: (context, state) => const DashboardScreen(),
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider<BottomNavCubit>.value(value: Get.find<BottomNavCubit>()),
+            BlocProvider<DashboardCubit>.value(value: Get.find<DashboardCubit>()),
+            BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
+            BlocProvider<LeaveBloc>.value(value: Get.find<LeaveBloc>()),
+            BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
+            BlocProvider<ProfileBloc>.value(value: Get.find<ProfileBloc>()),
+            BlocProvider<ApprovalsBloc>.value(value: Get.find<ApprovalsBloc>()),
+            BlocProvider<PerformanceBloc>.value(
+              value: Get.find<PerformanceBloc>()
+                ..add(const PerformanceEvent.started()),
+            ),
+            BlocProvider<TeamEvaluationCubit>.value(
+              value: Get.find<TeamEvaluationCubit>(),
+            ),
+            BlocProvider<TeamEvaluationFilterCubit>.value(
+              value: Get.find<TeamEvaluationFilterCubit>(),
+            ),
+            BlocProvider<SettingsCubit>.value(value: Get.find<SettingsCubit>()),
+            BlocProvider<PayslipBloc>.value(value: Get.find<PayslipBloc>()),
+          ],
+          child: const DashboardScreen(),
+        ),
       ),
       GoRoute(
         path: authCallbackPath,
@@ -595,6 +642,13 @@ class AppRouter {
             child: PayslipDetailScreen(name: name),
           );
         },
+      ),
+      GoRoute(
+        path: settingsPath,
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<SettingsCubit>(),
+          child: const SettingsScreen(),
+        ),
       ),
     ],
   );

@@ -27,8 +27,9 @@ class PerformanceSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppConstants.p16),
-        BlocBuilder<PerformanceBloc, PerformanceState>(
-          builder: (context, state) {
+        BlocSelector<PerformanceBloc, PerformanceState, bool>(
+          selector: (state) => state.isManager,
+          builder: (context, isManager) {
             return Column(
               children: [
                 IntrinsicHeight(
@@ -62,7 +63,7 @@ class PerformanceSection extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (state.isManager) ...[
+                if (isManager) ...[
                   const SizedBox(height: AppConstants.p16),
                   IntrinsicHeight(
                     child: Row(

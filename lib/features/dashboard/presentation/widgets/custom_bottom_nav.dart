@@ -92,10 +92,10 @@ class CustomBottomNav extends StatelessWidget {
                       // ),
                       _buildNavItem(
                         context,
-                        index: BottomNavCubit.settingsIndex,
+                        index: BottomNavCubit.payslipIndex,
                         currentIndex: state,
-                        icon: Icons.settings_outlined,
-                        label: l10n.settings,
+                        icon: Icons.payments_outlined,
+                        label: l10n.payslip,
                       ),
                     ],
                   ),

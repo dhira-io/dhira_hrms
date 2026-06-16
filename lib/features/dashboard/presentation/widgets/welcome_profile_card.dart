@@ -100,8 +100,6 @@ class WelcomeProfileCard extends StatelessWidget {
                   PunchCard(
                     showDateAndTime: false,
                     padding: EdgeInsets.zero,
-                    breakButtonColor: AppColors.of(context).punchBreak,
-                    punchOutColor: AppColors.of(context).punchOut,
                   ),
                 ],
               );

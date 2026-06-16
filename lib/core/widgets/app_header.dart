@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/routing/app_router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,11 +21,15 @@ import 'package:dhira_hrms/core/utils/string_utils.dart';
 class AppHeader extends StatefulWidget {
   final bool showName;
   final bool showNotification;
+  final Color? backgroundColor;
+  final Color? iconColor;
 
   const AppHeader({
     super.key,
     this.showName = true,
     this.showNotification = true,
+    this.backgroundColor,
+    this.iconColor,
   });
 
   @override
@@ -52,109 +57,101 @@ class _AppHeaderState extends State<AppHeader> {
             horizontal: AppConstants.p20,
             vertical: AppConstants.p16,
           ),
-          color: AppColors.of(context).background,
-          child: Row(
+          color: widget.backgroundColor ?? AppColors.of(context).background,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, authState) {
-                  final user = authState.maybeWhen(
-                    authenticated: (user) => user,
-                    orElse: () => null,
-                  );
-
-                  return GestureDetector(
-                    onTap: () => context.push(AppRouter.profilePath),
-                    child: BlocBuilder<ProfileBloc, ProfileState>(
-                      builder: (context, profileState) {
-                        final profileImage = profileState.maybeWhen(
-                          loaded: (profile, resume) => profile.userImage,
-                          orElse: () => user?.userImage,
-                        );
-
-                        final fullName = profileState.maybeWhen(
-                          loaded: (profile, resume) => profile.fullName,
-                          orElse: () => user?.fullName,
-                        );
-
-                        final baseUrl = Get.find<DioClient>().baseUrl;
-
-                        return Row(
-                          children: [
-                            Container(
-                              width: AppConstants.p40,
-                              height: AppConstants.p40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.of(context).primaryFixed,
-                              ),
-                              clipBehavior: Clip.antiAlias,
-                              child:
-                                  (profileImage != null &&
-                                      profileImage.isNotEmpty)
-                                  ? Image.network(
-                                      profileImage.startsWith(
-                                            AppConstants.httpPrefix,
-                                          )
-                                          ? profileImage
-                                          : "$baseUrl$profileImage",
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) => const Image(
-                                        image: AssetImage(AppAssets.defaultProfile),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : const Image(
-                                      image: AssetImage(
-                                        AppAssets.defaultProfile,
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
-                            if (widget.showName) ...[
-                              const SizedBox(width: AppConstants.p12),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Text(
-                                  //   AppLocalizations.of(context)!.welcomeName,
-                                  //   style: AppTextStyle.bodySmall.copyWith(
-                                  //     color: AppColors.of(context).onSurfaceVariant,
-                                  //     fontWeight: FontWeight.w500,
-                                  //   ),
-                                  // ),
-                                  Text(
-                                    fullName ??
-                                        AppLocalizations.of(
-                                          context,
-                                        )!.employeeName,
-                                    style: AppTextStyle.bodyMedium.copyWith(
-                                      color: AppColors.of(context).onSurface,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ],
-                        );
-                      },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      color: widget.iconColor ?? AppColors.of(context).onSurface,
                     ),
-                  );
-                },
+                    onPressed: () {
+                      Scaffold.maybeOf(context)?.openDrawer();
+                    },
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (widget.showNotification) 
+                        NotificationBell(color: widget.iconColor),
+                      const SizedBox(width: AppConstants.p12),
+                      BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, authState) {
+                          final user = authState.maybeWhen(
+                            authenticated: (user) => user,
+                            orElse: () => null,
+                          );
+
+                          return GestureDetector(
+                            onTap: () => context.push(AppRouter.profilePath),
+                            child: BlocBuilder<ProfileBloc, ProfileState>(
+                              builder: (context, profileState) {
+                                final profileImage = profileState.maybeWhen(
+                                  loaded: (profile, resume) => profile.userImage,
+                                  orElse: () => user?.userImage,
+                                );
+                                final baseUrl = Get.find<DioClient>().baseUrl;
+
+                                return Container(
+                                  width: AppConstants.p32, // Adjusted size
+                                  height: AppConstants.p32,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.of(context).primaryFixed,
+                                  ),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: (profileImage != null &&
+                                          profileImage.isNotEmpty)
+                                      ? Image.network(
+                                          profileImage.startsWith(
+                                                  AppConstants.httpPrefix)
+                                              ? profileImage
+                                              : "$baseUrl$profileImage",
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error,
+                                                  stackTrace) =>
+                                              const Image(
+                                            image: AssetImage(
+                                                AppAssets.defaultProfile),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : const Image(
+                                          image: AssetImage(
+                                            AppAssets.defaultProfile,
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              const Spacer(),
-              if (widget.showNotification) const NotificationBell(),
+              Image.asset(
+                AppAssets.logo,
+                height: 28.h,
+                color: widget.iconColor,
+              ),
             ],
           ),
         ),
-        Container(
-          height: AppConstants.dividerHeight,
-          width: double.infinity,
-          color: AppColors.of(
-            context,
-          ).outlineVariant.withValues(alpha: AppConstants.opacityMedium),
-        ),
+        if (widget.backgroundColor == null)
+          Container(
+            height: AppConstants.dividerHeight,
+            width: double.infinity,
+            color: AppColors.of(
+              context,
+            ).outlineVariant.withValues(alpha: AppConstants.opacityMedium),
+          ),
       ],
     );
   }

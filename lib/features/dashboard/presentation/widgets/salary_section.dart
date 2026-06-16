@@ -6,7 +6,6 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
-import 'salary_action_card.dart';
 
 class SalarySection extends StatelessWidget {
   const SalarySection({super.key});

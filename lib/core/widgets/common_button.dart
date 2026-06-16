@@ -68,14 +68,19 @@ class CommonButton extends StatelessWidget {
                 ),
                 const SizedBox(width: AppConstants.p8),
               ],
-              Text(
-                text,
-                style: AppTextStyle.button.copyWith(
-                  color: _getTextColor(AppColors.of(context)),
-                  fontWeight: FontWeight.w600,
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    text,
+                    style: AppTextStyle.button.copyWith(
+                      color: _getTextColor(AppColors.of(context)),
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                ],
+                ),
+              ),
+            ],
               ),
       ),
     );
@@ -142,6 +147,12 @@ class CommonButton extends StatelessWidget {
                     ? AppColors.of(context).secondary
                     : AppColors.of(context).primaryContainer),
             foregroundColor: AppColors.of(context).white,
+            disabledBackgroundColor: (backgroundColor ??
+                    (variant == ButtonVariant.secondary
+                        ? AppColors.of(context).secondary
+                        : AppColors.of(context).primaryContainer))
+                .withValues(alpha: 0.6),
+            disabledForegroundColor: AppColors.of(context).white,
             elevation: 0,
             padding:
                 padding ??

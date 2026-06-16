@@ -55,7 +55,7 @@ class HomeActionSections extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: AppTextStyle.h2),
+        Text(title, style: AppTextStyle.h3),
               SizedBox(height: 16.h),
         if (items.isEmpty)
           Center(child: Text(l10n.noResultsFound))
