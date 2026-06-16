@@ -8,6 +8,7 @@ abstract class NotificationSettingsState with _$NotificationSettingsState {
   const factory NotificationSettingsState({
     @Default(false) bool isLoading,
     @Default(false) bool isActionLoading,
+    @Default(false) bool isManager,
     String? errorMessage,
     NotificationSettingsEntity? settings,
   }) = _NotificationSettingsState;

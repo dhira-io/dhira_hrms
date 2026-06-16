@@ -1165,7 +1165,10 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<NotificationSettingsCubit>(
-      () => NotificationSettingsCubit(Get.find<INotificationSettingsRepository>()),
+      () => NotificationSettingsCubit(
+        Get.find<INotificationSettingsRepository>(),
+        Get.find<GetApprovalsAccessUseCase>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<FileOperationCubit>(

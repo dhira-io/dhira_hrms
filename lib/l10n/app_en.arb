@@ -2120,7 +2120,14 @@
     "policiesCount": "policies",
     "readPolicy": "Read Policy",
     "view": "View",
-    "failedToLoadPdf": "Failed to load PDF file."
+    "failedToLoadPdf": "Failed to load PDF file.",
+    "personal": "Personal",
+    "notificationType": "Notification Type",
+    "compOffRequest": "Comp-Off Request",
+    "pushNotificationsDesc": "Real-time alerts delivered to your installed app",
+    "emailAlertsDesc": "Formal email notifications for your records",
+    "pushNotificationPreferenceSuccess": "Push Notification Preferences updated successfully",
+    "emailAlertsPreferenceSuccess": "Email Alerts Preferences updated successfully"
 }
 
 

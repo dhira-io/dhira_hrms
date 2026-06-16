@@ -2008,7 +2008,14 @@
     "policiesCount": "नीतियां",
     "readPolicy": "नीति पढ़ें",
     "view": "देखें",
-    "failedToLoadPdf": "PDF फ़ाइल लोड करने में विफल।"
+    "failedToLoadPdf": "PDF फ़ाइल लोड करने में विफल।",
+    "personal": "व्यक्तिगत",
+    "notificationType": "अधिसूचना प्रकार",
+    "compOffRequest": "प्रतिपूरक अवकाश अनुरोध",
+    "pushNotificationsDesc": "आपके इंस्टॉल किए गए ऐप पर वास्तविक समय के अलर्ट",
+    "emailAlertsDesc": "आपके रिकॉर्ड के लिए औपचारिक ईमेल सूचनाएं",
+    "pushNotificationPreferenceSuccess": "पुश नोटिफिकेशन प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
+    "emailAlertsPreferenceSuccess": "ईमेल अलर्ट प्राथमिकताएं सफलतापूर्वक अपडेट की गईं"
 }
 
 
