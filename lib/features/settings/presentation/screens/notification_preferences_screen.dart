@@ -105,7 +105,6 @@ class NotificationPreferencesTable extends StatelessWidget {
     required this.state,
   });
 
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -127,6 +126,14 @@ class NotificationPreferencesTable extends StatelessWidget {
             NotificationSettingsConstants.baseCompOff,
       },
     ];
+
+    final typeFlex = isManager ? 23 : 22;
+    final personalFlex = isManager ? 9 : 10;
+    final teamFlex = 7;
+
+    final colors = AppColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -137,16 +144,12 @@ class NotificationPreferencesTable extends StatelessWidget {
             Container(
               width: 32.w,
               height: 32.w,
-              decoration: const BoxDecoration(
-                color: Color(0xFFDBEAFE),
+              decoration: BoxDecoration(
+                color: colors.iconbgblue,
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Icon(
-                  icon,
-                  size: 18.w,
-                  color: AppColors.of(context).primaryContainer,
-                ),
+                child: Icon(icon, size: 18.w, color: colors.primaryContainer),
               ),
             ),
             SizedBox(width: 12.w),
@@ -158,7 +161,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                     title,
                     style: AppTextStyle.bodyLarge.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF020618),
+                      color: colors.textPrimary,
                     ),
                   ),
                 ],
@@ -171,9 +174,9 @@ class NotificationPreferencesTable extends StatelessWidget {
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: const Color(0xFFCAD5E2), width: 1.w),
+            border: Border.all(color: colors.border, width: 1.w),
           ),
           clipBehavior: Clip.antiAlias,
           child: Column(
@@ -182,35 +185,31 @@ class NotificationPreferencesTable extends StatelessWidget {
               Container(
                 height: 38.h,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEFF6FF),
+                  color: isDark ? colors.surfaceContainerLow : colors.infoBg,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(12.r),
                     topRight: Radius.circular(12.r),
                   ),
-                  border: const Border(
-                    bottom: BorderSide(color: Color(0xFFCAD5E2)),
-                  ),
+                  border: Border(bottom: BorderSide(color: colors.border)),
                 ),
                 child: Row(
                   children: [
                     Expanded(
-                      flex: 22,
+                      flex: typeFlex,
                       child: Container(
                         height: double.infinity,
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         decoration: BoxDecoration(
                           border: isManager
-                              ? const Border(
-                                  right: BorderSide(color: Color(0xFFCAD5E2)),
-                                )
+                              ? Border(right: BorderSide(color: colors.border))
                               : null,
                         ),
                         child: Text(
                           l10n.notificationType,
                           style: AppTextStyle.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF020618),
+                            color: colors.textPrimary,
                             fontSize: 12.sp,
                           ),
                         ),
@@ -218,23 +217,21 @@ class NotificationPreferencesTable extends StatelessWidget {
                     ),
 
                     Expanded(
-                      flex: 9,
+                      flex: personalFlex,
                       child: Container(
                         height: double.infinity,
                         alignment: Alignment.center,
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
                         decoration: BoxDecoration(
                           border: isManager
-                              ? const Border(
-                                  right: BorderSide(color: Color(0xFFCAD5E2)),
-                                )
+                              ? Border(right: BorderSide(color: colors.border))
                               : null,
                         ),
                         child: Text(
                           isManager ? l10n.personal : '',
                           style: AppTextStyle.bodySmall.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF020618),
+                            color: colors.textPrimary,
                             fontSize: 12.sp,
                           ),
                         ),
@@ -242,7 +239,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                     ),
                     if (isManager)
                       Expanded(
-                        flex: 7,
+                        flex: teamFlex,
                         child: Container(
                           height: double.infinity,
                           alignment: Alignment.center,
@@ -251,7 +248,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                             l10n.team,
                             style: AppTextStyle.bodySmall.copyWith(
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF020618),
+                              color: colors.textPrimary,
                               fontSize: 12.sp,
                             ),
                           ),
@@ -278,7 +275,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                 return Container(
                   height: 38.h,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: colors.surfaceContainerLowest,
                     borderRadius: isLast
                         ? BorderRadius.only(
                             bottomLeft: Radius.circular(12.r),
@@ -287,15 +284,13 @@ class NotificationPreferencesTable extends StatelessWidget {
                         : null,
                     border: isLast
                         ? null
-                        : const Border(
-                            bottom: BorderSide(color: Color(0xFFCAD5E2)),
-                          ),
+                        : Border(bottom: BorderSide(color: colors.border)),
                   ),
                   child: Row(
                     children: [
                       // Column 1: Row Title
                       Expanded(
-                        flex: 22,
+                        flex: typeFlex,
                         child: Container(
                           height: double.infinity,
                           alignment: Alignment.centerLeft,
@@ -305,7 +300,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                                 .read<NotificationSettingsCubit>()
                                 .getRowTitle(baseId, l10n),
                             style: AppTextStyle.bodySmall.copyWith(
-                              color: const Color(0xFF020618),
+                              color: colors.textPrimary,
                               fontSize: 12.sp,
                             ),
                           ),
@@ -313,7 +308,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                       ),
                       // Column 2: Personal Toggle
                       Expanded(
-                        flex: 9,
+                        flex: personalFlex,
                         child: Container(
                           height: double.infinity,
                           alignment: Alignment.center,
@@ -338,7 +333,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                       // Column 3: Team Toggle (if manager)
                       if (isManager)
                         Expanded(
-                          flex: 7,
+                          flex: teamFlex,
                           child: Container(
                             height: double.infinity,
                             alignment: Alignment.center,

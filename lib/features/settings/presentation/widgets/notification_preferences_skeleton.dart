@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class NotificationPreferencesSkeleton extends StatelessWidget {
   final bool isManager;
@@ -32,6 +33,9 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
     final personalFlex = isManager ? 7 : 10;
     final teamFlex = 7;
 
+    final colors = AppColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,8 +46,8 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
             Container(
               width: 32.w,
               height: 32.w,
-              decoration: const BoxDecoration(
-                color: Color(0xFFDBEAFE),
+              decoration: BoxDecoration(
+                color: colors.iconbgblue,
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -67,9 +71,9 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: const Color(0xFFCAD5E2), width: 1.w),
+            border: Border.all(color: colors.border, width: 1.w),
           ),
           clipBehavior: Clip.antiAlias,
           child: Column(
@@ -77,10 +81,10 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
               // Table Header Row
               Container(
                 height: 38.h,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFEFF6FF),
+                decoration: BoxDecoration(
+                  color: isDark ? colors.surfaceContainerLow : colors.infoBg,
                   border: Border(
-                    bottom: BorderSide(color: Color(0xFFCAD5E2)),
+                    bottom: BorderSide(color: colors.border),
                   ),
                 ),
                 child: Row(
@@ -93,8 +97,8 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         decoration: BoxDecoration(
                           border: isManager
-                              ? const Border(
-                                  right: BorderSide(color: Color(0xFFCAD5E2)),
+                              ? Border(
+                                  right: BorderSide(color: colors.border),
                                 )
                               : null,
                         ),
@@ -113,8 +117,8 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
                         decoration: BoxDecoration(
                           border: isManager
-                              ? const Border(
-                                  right: BorderSide(color: Color(0xFFCAD5E2)),
+                              ? Border(
+                                  right: BorderSide(color: colors.border),
                                 )
                               : null,
                         ),
@@ -150,11 +154,11 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
                 return Container(
                   height: 38.h,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: colors.surfaceContainerLowest,
                     border: isLast
                         ? null
-                        : const Border(
-                            bottom: BorderSide(color: Color(0xFFCAD5E2)),
+                        : Border(
+                            bottom: BorderSide(color: colors.border),
                           ),
                   ),
                   child: Row(
