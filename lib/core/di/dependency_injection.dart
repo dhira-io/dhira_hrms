@@ -16,6 +16,13 @@ import '../../features/payslip/domain/usecases/get_payslips_usecase.dart';
 import '../../features/payslip/domain/usecases/get_payslip_detail_usecase.dart';
 import '../../features/payslip/presentation/bloc/payslip_bloc.dart';
 
+import '../../features/policy/data/datasources/policy_remote_datasource.dart';
+import '../../features/policy/data/repositories/policy_repository_impl.dart';
+import '../../features/policy/domain/repositories/i_policy_repository.dart';
+import '../../features/policy/domain/usecases/get_policies_usecase.dart';
+import '../../features/policy/domain/usecases/get_policy_pdf_usecase.dart';
+import '../../features/policy/presentation/bloc/policy_bloc.dart';
+
 import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
@@ -1197,5 +1204,36 @@ class DependencyInjection {
       ),
       fenix: true,
     );
+
+    // Policy
+    Get.lazyPut<IPolicyRemoteDataSource>(
+      () => PolicyRemoteDataSourceImpl(
+        dioClient: Get.find<DioClient>(),
+        logger: Get.find<Logger>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<IPolicyRepository>(
+      () => PolicyRepositoryImpl(
+        remoteDataSource: Get.find<IPolicyRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetPoliciesUseCase>(
+      () => GetPoliciesUseCase(Get.find<IPolicyRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<PolicyBloc>(
+      () => PolicyBloc(
+        getPoliciesUseCase: Get.find<GetPoliciesUseCase>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetPolicyPdfUseCase>(
+      () => GetPolicyPdfUseCase(Get.find<IPolicyRepository>()),
+      fenix: true,
+    );
+    // PolicyPdfCubit is instantiated manually in the bottom sheet, so it's not registered here.
   }
 }

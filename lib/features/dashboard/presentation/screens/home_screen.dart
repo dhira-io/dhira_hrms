@@ -12,6 +12,7 @@ import '../widgets/quick_stats_section.dart';
 import '../widgets/employee_actions_section.dart';
 import '../widgets/performance_section.dart';
 import '../widgets/salary_section.dart';
+import '../widgets/policies_section.dart';
 import 'package:dhira_hrms/core/widgets/app_header.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -50,6 +51,8 @@ class HomeScreen extends StatelessWidget {
                           const PerformanceSection(),
                           const SizedBox(height: AppConstants.p20),
                           const SalarySection(),
+                          const SizedBox(height: AppConstants.p20),
+                          const PoliciesSection(),
                           const SizedBox(height: AppConstants.p10),
                         ]),
                       ),

@@ -2111,4 +2111,16 @@
     "deleteLanguageConfirmation": "Are you sure you want to delete this language?",
     "deleteEducationConfirmation": "Are you sure you want to delete this education?",
     "deleteCertificationConfirmation": "Are you sure you want to delete this certification?"
+,
+    "policies": "Policies",
+    "policyHub": "Policy Hub",
+    "policyHubSubtitle": "Centralized company policies and guidelines",
+    "searchPolicies": "Search policies...",
+    "showing": "Showing",
+    "policiesCount": "policies",
+    "readPolicy": "Read Policy",
+    "view": "View",
+    "failedToLoadPdf": "Failed to load PDF file."
 }
+
+
