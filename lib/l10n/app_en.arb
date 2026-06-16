@@ -1111,7 +1111,7 @@
   "dark": "Dark",
   "language": "Language",
   "notificationPreferences": "Notification Preferences",
-  "pushNotifications": "Push Notifications",
+  "pushNotifications": "Mobile Notifications",
   "emailAlerts": "Email Alerts",
   "notificationDesc": "Control how and when Dhira communicates with you. Tailor your alerts to stay informed without the noise.",
   "attendancePushDesc": "Instant alerts for check-in/out irregularities or missed punches.",
@@ -1670,7 +1670,7 @@
     "dark": "Dark",
     "language": "Language",
     "notificationPreferences": "Notification Preferences",
-    "pushNotifications": "Push Notifications",
+    "pushNotifications": "Mobile Notifications",
     "emailAlerts": "Email Alerts",
     "notificationDesc": "Control how and when Dhira communicates with you. Tailor your alerts to stay informed without the noise.",
     "attendancePushDesc": "Instant alerts for check-in/out irregularities or missed punches.",
@@ -2126,7 +2126,7 @@
     "compOffRequest": "Comp-Off Request",
     "pushNotificationsDesc": "Real-time alerts delivered to your installed app",
     "emailAlertsDesc": "Formal email notifications for your records",
-    "pushNotificationPreferenceSuccess": "Push Notification Preferences updated successfully",
+    "pushNotificationPreferenceSuccess": "Mobile Notification Preferences updated successfully",
     "emailAlertsPreferenceSuccess": "Email Alerts Preferences updated successfully"
 }
 
