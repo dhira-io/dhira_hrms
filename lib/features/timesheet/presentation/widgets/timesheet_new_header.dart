@@ -24,18 +24,23 @@ class TimesheetNewHeader extends StatelessWidget {
         final selectedDate = state.selectedDate ?? DateTime.now();
         final startOfWeek = DateTimeUtils.getStartOfWeek(selectedDate);
         final endOfWeek = startOfWeek.add(const Duration(days: 6));
-        
+
         final String rangeText;
         if (startOfWeek.month == endOfWeek.month) {
-          rangeText = '${DateFormat('MMM d').format(startOfWeek)} – ${endOfWeek.day}';
+          rangeText =
+              '${DateFormat('MMM d').format(startOfWeek)} – ${endOfWeek.day}';
         } else {
-          rangeText = '${DateFormat('MMM d').format(startOfWeek)} – ${DateFormat('MMM d').format(endOfWeek)}';
+          rangeText =
+              '${DateFormat('MMM d').format(startOfWeek)} – ${DateFormat('MMM d').format(endOfWeek)}';
         }
 
-        final isThisWeek = DateTimeUtils.isSameDay(startOfWeek, DateTimeUtils.getStartOfWeek(DateTime.now()));
-        
+        final isThisWeek = DateTimeUtils.isSameDay(
+          startOfWeek,
+          DateTimeUtils.getStartOfWeek(DateTime.now()),
+        );
+
         int dayOfYear = int.parse(DateFormat('D').format(startOfWeek));
-        int woy =  ((dayOfYear - startOfWeek.weekday + 10) / 7).floor();
+        int woy = ((dayOfYear - startOfWeek.weekday + 10) / 7).floor();
 
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
@@ -48,11 +53,16 @@ class TimesheetNewHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _ChevronButton(
-                icon: Icons.chevron_left,
-                onTap: DateTimeUtils.isWeekAllowed(startOfWeek.subtract(const Duration(days: 7)))
+                assetPath: 'assets/icons/chevron_left.png',
+                onTap:
+                    DateTimeUtils.isWeekAllowed(
+                      startOfWeek.subtract(const Duration(days: 7)),
+                    )
                     ? () {
                         FocusManager.instance.primaryFocus?.unfocus();
-                        context.read<TimesheetBloc>().add(const TimesheetEvent.previousWeekRequested());
+                        context.read<TimesheetBloc>().add(
+                          const TimesheetEvent.previousWeekRequested(),
+                        );
                       }
                     : null,
               ),
@@ -66,7 +76,7 @@ class TimesheetNewHeader extends StatelessWidget {
                         rangeText,
                         style: TextStyle(
                           color: AppColors.of(context).textPrimary,
-                          fontSize: 14.sp,
+                          fontSize: 12.sp,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w500,
                         ),
@@ -74,23 +84,28 @@ class TimesheetNewHeader extends StatelessWidget {
                       if (isThisWeek) ...[
                         SizedBox(width: 8.w),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8.w,
+                            vertical: 1.h,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.colorBlue50,
                             borderRadius: BorderRadius.circular(12.r),
-                            border: Border.all(color: AppColors.of(context).surfaceContainerLow),
+                            border: Border.all(
+                              color: AppColors.of(context).surfaceContainerLow,
+                            ),
                           ),
                           child: Text(
                             l10n.thisWeek,
                             style: TextStyle(
                               color: AppColors.colorBlue600,
-                              fontSize: 12.sp,
+                              fontSize: 10.sp,
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                      ]
+                      ],
                     ],
                   ),
                   SizedBox(height: 2.h),
@@ -106,11 +121,16 @@ class TimesheetNewHeader extends StatelessWidget {
                 ],
               ),
               _ChevronButton(
-                icon: Icons.chevron_right,
-                onTap: DateTimeUtils.isWeekAllowed(startOfWeek.add(const Duration(days: 7)))
+                assetPath: 'assets/icons/chevron_right.png',
+                onTap:
+                    DateTimeUtils.isWeekAllowed(
+                      startOfWeek.add(const Duration(days: 7)),
+                    )
                     ? () {
                         FocusManager.instance.primaryFocus?.unfocus();
-                        context.read<TimesheetBloc>().add(const TimesheetEvent.nextWeekRequested());
+                        context.read<TimesheetBloc>().add(
+                          const TimesheetEvent.nextWeekRequested(),
+                        );
                       }
                     : null,
               ),
@@ -123,26 +143,34 @@ class TimesheetNewHeader extends StatelessWidget {
 }
 
 class _ChevronButton extends StatelessWidget {
-  final IconData icon;
+  final String assetPath;
   final VoidCallback? onTap;
 
-  const _ChevronButton({required this.icon, required this.onTap});
+  const _ChevronButton({required this.assetPath, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(99.r),
-      child: Container(
-        padding: EdgeInsets.all(6.w),
-        decoration: BoxDecoration(
-          color: AppColors.colorNeutral100,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          icon,
-          size: 16.w,
-          color: AppColors.of(context).textSecondary,
+    final themeColors = AppColors.of(context);
+    final isEnabled = onTap != null;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(99.r),
+        child: Container(
+          padding: EdgeInsets.all(8.w),
+          decoration: BoxDecoration(
+            color: isEnabled
+                ? themeColors.slate100
+                : themeColors.slate100.withValues(alpha: 0.5),
+            shape: BoxShape.circle,
+          ),
+          child: Image.asset(
+            assetPath,
+            width: 16.w,
+            height: 16.w,
+            color: isEnabled ? themeColors.slate600 : themeColors.slate300,
+          ),
         ),
       ),
     );

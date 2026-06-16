@@ -13,7 +13,6 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_success_type.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/bottomsheet/add_task_bottom_sheet.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/utils/timesheet_error_mapper.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_content_view.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_error_view.dart';
@@ -112,7 +111,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                     state.editAssignments.isEmpty) {
                   return const TimesheetLoadingView();
                 }
-          
+
                 if (state.status == TimesheetStateStatus.error &&
                     state.editAssignments.isEmpty) {
                   return TimesheetErrorView(
@@ -124,7 +123,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                     },
                   );
                 }
-          
+
                 return const TimesheetContentView();
               },
             ),
@@ -132,27 +131,33 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         ),
         bottomNavigationBar: BlocBuilder<TimesheetBloc, TimesheetState>(
           buildWhen: (previous, current) =>
-              previous.hasDraftTasksInSelectedWeek != current.hasDraftTasksInSelectedWeek ||
+              previous.hasDraftTasksInSelectedWeek !=
+                  current.hasDraftTasksInSelectedWeek ||
               previous.isSubmitWeeklyLoading != current.isSubmitWeeklyLoading,
           builder: (context, state) {
-            if (!state.hasDraftTasksInSelectedWeek) return const SizedBox.shrink();
+            final hasDraft = state.hasDraftTasksInSelectedWeek;
             return Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
               decoration: BoxDecoration(
                 color: AppColors.of(context).surfaceContainerLowest,
-                border: Border(top: BorderSide(color: AppColors.of(context).border)),
+                border: Border(
+                  top: BorderSide(color: AppColors.of(context).border),
+                ),
               ),
               child: SafeArea(
                 child: CommonButton(
                   text: l10n.submitWeeklyTimesheet,
                   width: double.infinity,
                   isLoading: state.isSubmitWeeklyLoading,
-                  onPressed: () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    context.read<TimesheetBloc>().add(
-                      const TimesheetEvent.submitWeeklyRequested(),
-                    );
-                  },
+                  icon: Icons.check_circle_outlined,
+                  onPressed: hasDraft
+                      ? () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          context.read<TimesheetBloc>().add(
+                            const TimesheetEvent.submitWeeklyRequested(),
+                          );
+                        }
+                      : null,
                 ),
               ),
             );

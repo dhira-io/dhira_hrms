@@ -523,4 +523,29 @@ class DateTimeUtils {
     }
     return parts.join(' ');
   }
+
+  /// Returns the ISO 8601 week number for a given date.
+  static int getWeekOfYear(DateTime date) {
+    final dayUtc = DateTime.utc(date.year, date.month, date.day);
+    final weekday = dayUtc.weekday;
+    final thursday = dayUtc.add(Duration(days: 4 - weekday));
+    final firstDayOfYear = DateTime.utc(thursday.year, 1, 1);
+    final difference = thursday.difference(firstDayOfYear);
+    return (difference.inDays / 7).floor() + 1;
+  }
+
+  /// Formats the timesheet week range (e.g. "Jun 1 – 7" or "Jun 29 – Jul 5")
+  static String formatTimesheetWeekRange(DateTime date) {
+    final monday = getStartOfWeek(date);
+    final sunday = monday.add(const Duration(days: 6));
+    
+    if (monday.month == sunday.month) {
+      final monthStr = DateFormat('MMM').format(monday);
+      return "$monthStr ${monday.day} – ${sunday.day}";
+    } else {
+      final mondayMonthStr = DateFormat('MMM').format(monday);
+      final sundayMonthStr = DateFormat('MMM').format(sunday);
+      return "$mondayMonthStr ${monday.day} – $sundayMonthStr ${sunday.day}";
+    }
+  }
 }

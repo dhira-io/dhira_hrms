@@ -18,46 +18,78 @@ class TimesheetWeeklyRange extends StatelessWidget {
       builder: (context, state) {
         final l10n = AppLocalizations.of(context)!;
         final double logged = state.weeklyTotalHours;
-        const double target = 48.0; // The user requested 48h earlier
+        const double target = 48.0; // Target is 48.0 as requested
         final double remaining = (target - logged).clamp(0.0, target);
         final double percent = (logged / target).clamp(0.0, 1.0);
         final int percentInt = (percent * 100).toInt();
 
-        return Row(
-          children: [
-            Expanded(
-              child: _StatCard(
-                title: l10n.logged,
-                value: '${logged.toStringAsFixed(logged.truncateToDouble() == logged ? 0 : 1)}h',
-                subtitle: l10n.thisWeek,
-                valueColor: AppColors.colorBlue400,
-                bgColor: AppColors.colorBlue50,
-                borderColor: AppColors.colorBlue200,
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+          decoration: BoxDecoration(
+            color: AppColors.of(context).surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(color: AppColors.of(context).border),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.02),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
-            ),
-            SizedBox(width: 8.w),
-            Expanded(
-              child: _StatCard(
-                title: l10n.target,
-                value: '${target.toInt()}h',
-                subtitle: 'Mon-Sat', // Or localized
-                valueColor: AppColors.colorGreen600,
-                bgColor: AppColors.colorGreen50,
-                borderColor: AppColors.colorGreen200,
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Weekly Range',
+                style: TextStyle(
+                  color: AppColors.of(context).textPrimary,
+                  fontSize: 13.sp,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            SizedBox(width: 8.w),
-            Expanded(
-              child: _StatCard(
-                title: l10n.remaining,
-                value: '${remaining.toStringAsFixed(remaining.truncateToDouble() == remaining ? 0 : 1)}h',
-                subtitle: '$percentInt% complete',
-                valueColor: AppColors.colorOrange500,
-                bgColor: AppColors.colorOrange50,
-                borderColor: AppColors.colorOrange200,
+              SizedBox(height: 6.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: _StatCard(
+                      title: l10n.logged,
+                      value:
+                          '${logged.toStringAsFixed(logged.truncateToDouble() == logged ? 0 : 1)}h',
+                      subtitle: l10n.thisWeek,
+                      valueColor: AppColors.colorBlue400,
+                      bgColor: AppColors.colorBlue50,
+                      borderColor: AppColors.colorBlue200,
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: _StatCard(
+                      title: l10n.target,
+                      value: '${target.toInt()}h',
+                      subtitle: 'Mon-Fri', // Changed to Mon-Fri
+                      valueColor: AppColors.colorGreen600,
+                      bgColor: AppColors.colorGreen50,
+                      borderColor: AppColors.colorGreen200,
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: _StatCard(
+                      title: l10n.remaining,
+                      value:
+                          '${remaining.toStringAsFixed(remaining.truncateToDouble() == remaining ? 0 : 1)}h',
+                      subtitle: '$percentInt% complete',
+                      valueColor: AppColors.colorOrange500,
+                      bgColor: AppColors.colorOrange50,
+                      borderColor: AppColors.colorOrange200,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
