@@ -56,6 +56,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
               halfDayDate,
               halfDaySegment,
               total,
+              emergencyContactNumber,
             ) async => _onApplyRequested(
               id,
               name,
@@ -67,6 +68,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
               halfDayDate,
               halfDaySegment,
               total,
+              emergencyContactNumber,
               emit,
             ),
         updateRequested:
@@ -79,6 +81,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
               halfDayDate,
               halfDaySegment,
               total,
+              emergencyContactNumber,
             ) async => _onUpdateRequested(
               id,
               from,
@@ -88,6 +91,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
               halfDayDate,
               halfDaySegment,
               total,
+              emergencyContactNumber,
               emit,
             ),
         balanceRequested: (id, date, gender, isRefresh) async =>
@@ -126,6 +130,9 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         clearError: () async => emit(state.copyWith(errorMessage: null)),
         refreshRequested: (id, gender) async =>
             _onRefreshRequested(id, gender, emit),
+        stepChanged: (step) async => emit(state.copyWith(currentStep: step, errorMessage: null)),
+        emergencyContactToggled: (value) async => emit(state.copyWith(addEmergencyContact: value, errorMessage: null)),
+        emergencyContactNumberChanged: (number) async => emit(state.copyWith(emergencyContactNumber: number, errorMessage: null)),
       );
     });
   }
@@ -169,6 +176,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     Emitter<LeaveState> emit,
   ) async {
     if (state.isLoading) return;
@@ -184,6 +192,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       halfDayDate: halfDayDate,
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
+      emergencyContactNumber: emergencyContactNumber,
       attachmentUrl: state.uploadedFileUrl,
     );
 
@@ -214,6 +223,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     Emitter<LeaveState> emit,
   ) async {
     if (state.isLoading) return;
@@ -227,6 +237,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
       halfDayDate: halfDayDate,
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
+      emergencyContactNumber: emergencyContactNumber,
       attachmentUrl: state.uploadedFileUrl,
     );
 

@@ -1,7 +1,10 @@
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -9,10 +12,7 @@ import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
 import 'leave_apply/leave_overlap_section.dart';
-import '../../../../core/widgets/common_guidelines.dart';
-import 'leave_apply/leave_form_action_buttons.dart';
 import 'leave_apply/leave_form_fields.dart';
-import 'leave_apply/leave_form_elements.dart';
 import '../utils/leave_form_utils.dart';
 import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
 import 'package:file_picker/file_picker.dart';
@@ -23,6 +23,7 @@ class LeaveApplyForm extends StatefulWidget {
   final LeaveEntity? leave;
   final String empName;
   final String gender;
+  final ValueChanged<String> onNext;
 
   const LeaveApplyForm({
     super.key,
@@ -30,13 +31,14 @@ class LeaveApplyForm extends StatefulWidget {
     this.leave,
     required this.empName,
     required this.gender,
+    required this.onNext,
   });
 
   @override
-  State<LeaveApplyForm> createState() => _LeaveApplyFormState();
+  State<LeaveApplyForm> createState() => LeaveApplyFormState();
 }
 
-class _LeaveApplyFormState extends State<LeaveApplyForm> {
+class LeaveApplyFormState extends State<LeaveApplyForm> {
   final _formKey = GlobalKey<FormState>();
   final _toDateKey = GlobalKey<FormFieldState<DateTime>>();
   final TextEditingController _reasonController = TextEditingController();
@@ -48,23 +50,25 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
 
     // Initialize form state from BLoC
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Trigger types fetch if empty
-      if (bloc.state.leaveTypes.isEmpty &&
-          !bloc.state.isLoading &&
-          !bloc.state.isInitialLoading) {
-        bloc.add(const LeaveEvent.typesRequested());
-      }
+      if (mounted) {
+        // Trigger types fetch if empty
+        if (bloc.state.leaveTypes.isEmpty &&
+            !bloc.state.isLoading &&
+            !bloc.state.isInitialLoading) {
+          bloc.add(const LeaveEvent.typesRequested());
+        }
 
-      bloc.add(
-        LeaveEvent.formInitialized(
-          leave: widget.leave,
-          employeeName: widget.empName,
-          gender: widget.gender,
-        ),
-      );
+        bloc.add(
+          LeaveEvent.formInitialized(
+            leave: widget.leave,
+            employeeName: widget.empName,
+            gender: widget.gender,
+          ),
+        );
 
-      if (widget.leave != null) {
-        _checkOverlap();
+        if (widget.leave != null) {
+          _checkOverlap();
+        }
       }
     });
 
@@ -193,55 +197,11 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     }
   }
 
-  void _submitForm() {
+  void _handleNext() {
     if (_formKey.currentState!.validate()) {
       final bloc = context.read<LeaveBloc>();
-      final state = bloc.state;
       bloc.add(const LeaveEvent.overlapHiddenStatusChanged(true));
-
-      final fromStr = (state.fromDate ?? DateTime.now()).format();
-      final toStr = (state.toDate ?? DateTime.now()).format();
-      final totalDays = LeaveFormUtils.computeTotalDays(
-        fromDate: state.fromDate,
-        toDate: state.toDate,
-        isHalfDay: state.isHalfDay,
-      );
-
-      if (widget.leave == null) {
-        bloc.add(
-          LeaveEvent.applyRequested(
-            employeeId: widget.employeeId,
-            employeeName: widget.empName.isEmpty
-                ? AppLocalizations.of(context)!.user
-                : widget.empName,
-            leaveType: state.selectedLeaveType!,
-            fromDate: fromStr,
-            toDate: toStr,
-            reason: _reasonController.text,
-            halfDay: state.isHalfDay ? 1 : 0,
-            halfDayDate: state.isHalfDay && state.halfDayDate != null
-                ? state.halfDayDate!.format()
-                : null,
-            halfDaySegment: state.isHalfDay ? state.daySegment : null,
-            totalleavedays: totalDays,
-          ),
-        );
-      } else {
-        bloc.add(
-          LeaveEvent.updateRequested(
-            leaveId: widget.leave!.name,
-            fromDate: fromStr,
-            toDate: toStr,
-            reason: _reasonController.text,
-            halfDay: state.isHalfDay ? 1 : 0,
-            halfDayDate: state.isHalfDay && state.halfDayDate != null
-                ? state.halfDayDate!.format()
-                : null,
-            halfDaySegment: state.isHalfDay ? state.daySegment : null,
-            totalleavedays: totalDays,
-          ),
-        );
-      }
+      widget.onNext(_reasonController.text);
     }
   }
 
@@ -268,47 +228,45 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
               if (state.isInitialLoading)
                 const LeaveFormSkeleton()
               else ...[
-                LeaveFormSectionTitle(title: l10n.requestDetails),
-                const SizedBox(height: AppConstants.p16),
-                LeaveFormFields(
-                  state: state,
-                  gender: widget.gender,
-                  totalDays: totalDays,
-                  requiresDocs: requiresDocs,
-                  reasonController: _reasonController,
-                  toDateKey: _toDateKey,
-                  onSelectDate: _selectDate,
-                  onSelectHalfDayDate: _selectHalfDayDate,
-                  onPickAndUploadFile: _pickAndUploadFile,
+                Container(
+                  padding: EdgeInsets.all(AppConstants.p16.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.of(context).primary.withValues(alpha: 0.02),
+                    borderRadius: BorderRadius.circular(AppConstants.r12.r),
+                    border: Border.all(
+                      color: AppColors.of(context).primary.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: LeaveFormFields(
+                    state: state,
+                    gender: widget.gender,
+                    totalDays: totalDays,
+                    requiresDocs: requiresDocs,
+                    reasonController: _reasonController,
+                    toDateKey: _toDateKey,
+                    callbacks: LeaveFormCallbacks(
+                      onSelectDate: _selectDate,
+                      onSelectHalfDayDate: _selectHalfDayDate,
+                      onPickAndUploadFile: _pickAndUploadFile,
+                    ),
+                  ),
                 ),
-                const SizedBox(height: AppConstants.p24),
-                CommonGuidelines(
-                  title: l10n.leaveRequestGuidelines,
-                  items: [
-                    l10n.guideline1,
-                    l10n.guideline2,
-                    l10n.guideline3,
-                    l10n.guideline4,
-                    l10n.guideline5,
-                    l10n.guideline6,
-                  ],
-                ),
-                const SizedBox(height: AppConstants.p24),
+
+                SizedBox(height: AppConstants.p24.h),
                 LeaveOverlapSection(
                   overlapLeaves: state.overlapLeaves,
                   hideOverlapAfterSubmit: state.hideOverlapAfterSubmit,
                 ),
               ],
-              const SizedBox(height: AppConstants.p32),
-              LeaveFormActionButtons(
-                onCancel: () => Navigator.pop(context),
-                onSubmit: _submitForm,
-                isLoading: state.isLoading,
-                isSubmitDisabled:
-                    state.isInitialLoading ||
-                    state.isLoading ||
-                    state.isUploading ||
-                    (requiresDocs && state.uploadedFileUrl == null),
+              SizedBox(height: AppConstants.p32.h),
+              SizedBox(
+                width: double.infinity,
+                child: CommonButton(
+                  text: l10n.nextText,
+                  onPressed: (state.isInitialLoading || state.isUploading || (requiresDocs && state.uploadedFileUrl == null))
+                      ? null
+                      : _handleNext,
+                ),
               ),
             ],
           ),

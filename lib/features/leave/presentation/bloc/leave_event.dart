@@ -19,6 +19,7 @@ abstract class LeaveEvent with _$LeaveEvent {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
   }) = _ApplyRequested;
 
   const factory LeaveEvent.updateRequested({
@@ -30,6 +31,7 @@ abstract class LeaveEvent with _$LeaveEvent {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
   }) = _UpdateRequested;
 
   const factory LeaveEvent.typesRequested({@Default(false) bool isRefresh}) =
@@ -81,4 +83,8 @@ abstract class LeaveEvent with _$LeaveEvent {
     required String employeeId,
     required String gender,
   }) = _RefreshRequested;
+
+  const factory LeaveEvent.stepChanged(int step) = _StepChanged;
+  const factory LeaveEvent.emergencyContactToggled(bool value) = _EmergencyContactToggled;
+  const factory LeaveEvent.emergencyContactNumberChanged(String number) = _EmergencyContactNumberChanged;
 }

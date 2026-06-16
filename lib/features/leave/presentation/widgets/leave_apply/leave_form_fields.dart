@@ -8,12 +8,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'leave_date_picker_field.dart';
-import 'leave_type_dropdown.dart';
+import 'leave_type_selection_grid.dart';
 import 'half_day_toggle.dart';
 import 'leave_reason_field.dart';
 import 'leave_supporting_docs_upload.dart';
 import 'leave_form_elements.dart';
+
+class LeaveFormCallbacks {
+  final Future<void> Function(BuildContext, bool) onSelectDate;
+  final Future<void> Function(BuildContext) onSelectHalfDayDate;
+  final Future<void> Function() onPickAndUploadFile;
+
+  LeaveFormCallbacks({
+    required this.onSelectDate,
+    required this.onSelectHalfDayDate,
+    required this.onPickAndUploadFile,
+  });
+}
 
 class LeaveFormFields extends StatelessWidget {
   final LeaveState state;
@@ -22,9 +35,7 @@ class LeaveFormFields extends StatelessWidget {
   final bool requiresDocs;
   final TextEditingController reasonController;
   final GlobalKey<FormFieldState<DateTime>> toDateKey;
-  final Future<void> Function(BuildContext, bool) onSelectDate;
-  final Future<void> Function(BuildContext) onSelectHalfDayDate;
-  final Future<void> Function() onPickAndUploadFile;
+  final LeaveFormCallbacks callbacks;
 
   const LeaveFormFields({
     super.key,
@@ -34,9 +45,7 @@ class LeaveFormFields extends StatelessWidget {
     required this.requiresDocs,
     required this.reasonController,
     required this.toDateKey,
-    required this.onSelectDate,
-    required this.onSelectHalfDayDate,
-    required this.onPickAndUploadFile,
+    required this.callbacks,
   });
 
   @override
@@ -48,15 +57,16 @@ class LeaveFormFields extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Leave Type
-        LeaveFormLabel(label: l10n.leaveType),
-        LeaveTypeDropdown(
-          value: state.selectedLeaveType,
+        LeaveFormLabel(label: l10n.leaveType, isRequired: true),
+        LeaveTypeSelectionGrid(
+          selectedLeaveType: state.selectedLeaveType,
           leaveTypes: state.leaveTypes,
+          balance: state.balance,
           gender: gender,
           onChanged: (val) => bloc.add(LeaveEvent.leaveTypeChanged(val)),
           validator: (val) => val == null ? l10n.required : null,
         ),
-        const SizedBox(height: AppConstants.p20),
+        SizedBox(height: AppConstants.p20.h),
 
         // Half Day Toggle
         HalfDayToggle(
@@ -75,7 +85,7 @@ class LeaveFormFields extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  LeaveFormLabel(label: l10n.fromDate),
+                  LeaveFormLabel(label: l10n.fromDate, isRequired: true),
                   FormField<DateTime>(
                     key: ValueKey('fromDate_${state.isHalfDay}'),
                     initialValue: state.fromDate,
@@ -88,7 +98,7 @@ class LeaveFormFields extends StatelessWidget {
                             ? ""
                             : state.fromDate!.format(),
                         onTap: () async {
-                          await onSelectDate(context, true);
+                          await callbacks.onSelectDate(context, true);
                           field.didChange(state.fromDate);
                         },
                         errorText: field.errorText,
@@ -98,12 +108,12 @@ class LeaveFormFields extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: AppConstants.p16),
+            SizedBox(width: AppConstants.p16.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  LeaveFormLabel(label: l10n.toDate),
+                  LeaveFormLabel(label: l10n.toDate, isRequired: !state.isHalfDay),
                   FormField<DateTime>(
                     key: ValueKey('toDate_${state.isHalfDay}'),
                     initialValue: state.toDate,
@@ -120,7 +130,7 @@ class LeaveFormFields extends StatelessWidget {
                         onTap: state.isHalfDay
                             ? null
                             : () async {
-                                await onSelectDate(context, false);
+                                await callbacks.onSelectDate(context, false);
                                 field.didChange(state.toDate);
                               },
                         isReadOnly: state.isHalfDay,
@@ -133,7 +143,7 @@ class LeaveFormFields extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: AppConstants.p20),
+        SizedBox(height: AppConstants.p20.h),
 
         if (state.isHalfDay) ...[
           Row(
@@ -156,7 +166,7 @@ class LeaveFormFields extends StatelessWidget {
                                   state.fromDate == state.toDate)
                               ? null
                               : () async {
-                                  await onSelectHalfDayDate(context);
+                                  await callbacks.onSelectHalfDayDate(context);
                                   field.didChange(state.halfDayDate);
                                 },
                           isReadOnly:
@@ -170,7 +180,7 @@ class LeaveFormFields extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: AppConstants.p16),
+              SizedBox(width: AppConstants.p16.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,11 +237,11 @@ class LeaveFormFields extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppConstants.p20),
+          SizedBox(height: AppConstants.p20.h),
         ],
 
         // Reason
-        LeaveFormLabel(label: l10n.reasonForLeave),
+        LeaveFormLabel(label: l10n.reasonForLeave, isRequired: true),
         LeaveReasonField(
           controller: reasonController,
           validator: (val) => val == null || val.isEmpty ? l10n.required : null,
@@ -246,10 +256,12 @@ class LeaveFormFields extends StatelessWidget {
             uploadedFileUrl: state.uploadedFileUrl,
             uploadError: state.uploadError,
             selectedFileName: state.selectedFileName,
-            onPickFile: onPickAndUploadFile,
+            onPickFile: callbacks.onPickAndUploadFile,
           ),
           const SizedBox(height: AppConstants.p20),
         ],
+
+
       ],
     );
   }
