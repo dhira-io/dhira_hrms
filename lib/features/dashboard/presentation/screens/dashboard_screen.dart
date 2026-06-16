@@ -70,6 +70,8 @@ class _DashboardViewState extends State<DashboardView> {
       timesheetSubtitle: l10n.logYourHours,
       leaveTitle: l10n.leave,
       leaveSubtitle: l10n.requestTimeOff,
+      compensatoryLeaveTitle: l10n.compensatoryLeave,
+      compensatoryLeaveSubtitle: l10n.requestCompensatoryLeave,
       attendanceTitle: l10n.attendance,
       attendanceSubtitle: l10n.viewAttendanceRecords,
       leaderBoardTitle: l10n.leadersBoard,
