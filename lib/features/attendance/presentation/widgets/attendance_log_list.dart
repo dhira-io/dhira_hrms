@@ -267,6 +267,7 @@ class _CalendarHeader extends StatelessWidget {
             l10n.attendanceCalendar,
             style: AppTextStyle.h3.copyWith(
               fontWeight: FontWeight.w800,
+              fontSize: 12.sp,
               color: AppColors.of(context).darkSlate,
               height: 1.1.h,
             ),
