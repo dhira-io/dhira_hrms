@@ -38,25 +38,6 @@ class LeaveReviewStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            GestureDetector(
-              onTap: onBack,
-              behavior: HitTestBehavior.opaque,
-              child: Padding(
-                padding: EdgeInsets.only(right: 8.w, top: 4.h, bottom: 4.h),
-                child: Icon(Icons.arrow_back_ios, size: 16.sp),
-              ),
-            ),
-            SizedBox(width: AppConstants.p8.w),
-            Text(
-              l10n.reviewDetails,
-              style: AppTextStyle.h3.copyWith(fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        SizedBox(height: AppConstants.p24.h),
-        
         ReviewDetailCard(
           title: l10n.leaveDetails,
           child: Column(
@@ -106,6 +87,20 @@ class LeaveReviewStep extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: CommonButton(
+            text: l10n.editDetails,
+            variant: ButtonVariant.outlined,
+            textStyle: AppTextStyle.bodyMedium.copyWith(
+              color: AppColors.darkText,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+            ),
+            onPressed: onBack,
+          ),
+        ),
+        SizedBox(height: AppConstants.p16.h),
+        SizedBox(
+          width: double.infinity,
+          child: CommonButton(
             text: l10n.submitRequest,
             onPressed: onSubmit,
             isLoading: state.isLoading,
@@ -131,7 +126,7 @@ class ReviewDetailCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.of(context).surfaceContainerHighest.withValues(alpha: 0.3),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.r16.r),
         border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5)),
       ),

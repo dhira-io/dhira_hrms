@@ -13,7 +13,6 @@ class LeaveReasonField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return TextFormField(
       controller: controller,
       maxLines: 3,
@@ -24,15 +23,14 @@ class LeaveReasonField extends StatelessWidget {
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
         ),
-        filled: true,
-        fillColor: Colors.white,
+        filled: false,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),
-          borderSide: const BorderSide(color: Color(0xFF90A1B9), width: 1.0),
+          borderSide: const BorderSide(color: AppColors.slateBorder, width: 1.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),
-          borderSide: const BorderSide(color: Color(0xFF90A1B9), width: 1.0),
+          borderSide: const BorderSide(color: AppColors.slateBorder, width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),

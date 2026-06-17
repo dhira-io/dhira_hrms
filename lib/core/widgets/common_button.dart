@@ -19,6 +19,7 @@ class CommonButton extends StatelessWidget {
     this.padding,
     this.borderRadius,
     this.backgroundColor,
+    this.textStyle,
   });
 
   final String text;
@@ -31,18 +32,16 @@ class CommonButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
   final Color? backgroundColor;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    Widget buttonChild = SizedBox(
-      height: 20,
-      child: Center(
-        child: isLoading
-            ? SizedBox(
-                width: 20.w,
-                height: 20.h,
+    Widget buttonChild = isLoading
+        ? SizedBox(
+            width: 20.w,
+            height: 20.h,
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 variant == ButtonVariant.outlined ||
@@ -70,15 +69,13 @@ class CommonButton extends StatelessWidget {
               ],
               Text(
                 text,
-                style: AppTextStyle.button.copyWith(
+                style: textStyle ?? AppTextStyle.button.copyWith(
                   color: _getTextColor(AppColors.of(context)),
                   fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+                ),
               ),
-      ),
-    );
+            ],
+          );
 
     Widget button;
     switch (variant) {

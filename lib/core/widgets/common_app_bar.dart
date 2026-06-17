@@ -44,6 +44,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
+          if (subtitle != null && subtitle!.isNotEmpty)
             Text(
               subtitle!,
               style: AppTextStyle.bodySmall.copyWith(

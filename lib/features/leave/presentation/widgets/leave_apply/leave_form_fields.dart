@@ -75,7 +75,7 @@ class LeaveFormFields extends StatelessWidget {
             bloc.add(LeaveEvent.halfDayToggled(val));
           },
         ),
-        const SizedBox(height: AppConstants.p20),
+        SizedBox(height: AppConstants.p20.h),
 
         // Date Range
         Column(
@@ -214,8 +214,7 @@ class LeaveFormFields extends StatelessWidget {
                       onChanged: (val) =>
                           bloc.add(LeaveEvent.daySegmentChanged(val)),
                       decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
+                        filled: false,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: AppConstants.p16,
                           vertical: AppConstants.p18,
@@ -258,14 +257,14 @@ class LeaveFormFields extends StatelessWidget {
           controller: reasonController,
           validator: (val) {
             if (val == null || val.isEmpty) return l10n.required;
-            if (val.trim().length < 10) return 'Minimum 10 characters required';
+            if (val.trim().length < 10) return l10n.minimumCharactersRequired;
             return null;
           },
         ),
         Padding(
           padding: EdgeInsets.only(top: AppConstants.p4.h),
           child: Text(
-            'Min 10 characters',
+            l10n.minimumCharactersRequired,
             style: AppTextStyle.bodySmall.copyWith(
               color: AppColors.of(context).slateText,
             ),
@@ -283,7 +282,7 @@ class LeaveFormFields extends StatelessWidget {
             selectedFileName: state.selectedFileName,
             onPickFile: callbacks.onPickAndUploadFile,
           ),
-          const SizedBox(height: AppConstants.p20),
+          SizedBox(height: AppConstants.p20.h),
         ],
 
 

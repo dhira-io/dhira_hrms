@@ -24,6 +24,7 @@ class AppColors {
   static const Color outlineVariant = Color(0xFFC3C5D9);
   static const Color onSecondaryFixedVariant = Color(0xFF3F484F);
   static const Color primaryBlue = Color(0xff1100CC);
+  static const Color darkText = Color(0xFF0F172B);
 
   // HTML Mockup Colors
   static const Color onPrimary = Color(0xffffffff);
