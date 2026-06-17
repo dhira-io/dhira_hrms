@@ -131,9 +131,9 @@ class ReviewDetailCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.of(context).surfaceContainerHighest.withOpacity(0.3),
+        color: AppColors.of(context).surfaceContainerHighest.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(AppConstants.r16.r),
-        border: Border.all(color: AppColors.of(context).outlineVariant.withOpacity(0.5)),
+        border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5)),
       ),
       padding: EdgeInsets.all(AppConstants.p16.h),
       child: Column(

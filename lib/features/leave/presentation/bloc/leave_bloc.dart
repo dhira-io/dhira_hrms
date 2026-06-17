@@ -12,7 +12,6 @@ import '../../domain/usecases/upload_file_usecase.dart';
 import 'leave_event.dart';
 import 'leave_state.dart';
 import '../utils/leave_form_utils.dart';
-import '../../domain/entities/leave_entity.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 import '../../../../core/services/image_compress_service.dart';
@@ -20,9 +19,6 @@ import '../../../../core/utils/file_validation_utils.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/leave_entities.dart';
-import '../../domain/entities/leave_type_entity.dart';
-import '../../domain/entities/leave_balance_entity.dart';
-import '../../domain/entities/leave_statistics_entity.dart';
 
 class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   final GetLeaveTypesUseCase getLeaveTypesUseCase;

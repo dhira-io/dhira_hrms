@@ -13,10 +13,7 @@ import '../bloc/leave_bloc.dart';
 import '../bloc/leave_state.dart';
 import '../bloc/leave_event.dart';
 import '../widgets/leave_apply_form.dart';
-import '../widgets/leave_stats_grid.dart';
-import '../widgets/leave_balance_overview_card.dart';
 import '../../../../core/utils/date_time_utils.dart';
-
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/widgets/common_app_bar.dart';
 import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
@@ -28,14 +25,6 @@ import '../widgets/leave_apply/leave_stepper_header.dart';
 import '../widgets/leave_apply/leave_review_step.dart';
 import '../widgets/leave_apply/leave_confirmation_step.dart';
 import '../utils/leave_form_utils.dart';
-
-import '../../domain/usecases/get_leave_types_usecase.dart';
-import '../../domain/usecases/get_leave_balance_usecase.dart';
-import '../../domain/usecases/get_leave_statistics_usecase.dart';
-import '../../domain/usecases/submit_leave_usecase.dart';
-import '../../domain/usecases/update_leave_usecase.dart';
-import '../../domain/usecases/get_overlap_leaves_usecase.dart';
-import '../../domain/usecases/upload_file_usecase.dart';
 
 class ApplyLeaveScreen extends StatefulWidget {
   final String employeeId;

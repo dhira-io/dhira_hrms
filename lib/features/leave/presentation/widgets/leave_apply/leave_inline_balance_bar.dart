@@ -57,7 +57,7 @@ class LeaveInlineBalanceBar extends StatelessWidget {
         const SizedBox(height: AppConstants.p8),
         LinearProgressIndicator(
           value: progress,
-          backgroundColor: AppColors.of(context).outlineVariant.withOpacity(0.5),
+          backgroundColor: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
           color: AppColors.of(context).primary,
           minHeight: 8,
           borderRadius: BorderRadius.circular(4),

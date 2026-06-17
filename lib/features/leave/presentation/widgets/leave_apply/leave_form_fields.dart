@@ -187,7 +187,7 @@ class LeaveFormFields extends StatelessWidget {
                   children: [
                     LeaveFormLabel(label: l10n.daySegment),
                     DropdownButtonFormField<String>(
-                      value: state.daySegment,
+                      initialValue: state.daySegment,
                       dropdownColor: AppColors.of(
                         context,
                       ).surfaceContainerHighest,

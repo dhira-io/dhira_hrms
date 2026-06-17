@@ -29,7 +29,7 @@ class LeaveConfirmationStep extends StatelessWidget {
           height: 80.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.of(context).primary.withOpacity(0.1),
+            color: AppColors.of(context).primary.withValues(alpha: 0.1),
           ),
           child: Center(
             child: Container(

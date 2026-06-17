@@ -28,11 +28,11 @@ class LeaveTypeSelectionGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     // Filter leave types based on gender
     final filteredTypes = leaveTypes.where((type) {
-      if (gender.toLowerCase() == 'male' &&
-          type.leaveTypeName.toLowerCase().contains('maternity')) {
+      if (gender.toLowerCase() == Gender.male &&
+          type.leaveTypeName.toLowerCase().contains(LeaveType.maternity)) {
         return false;
-      } else if (gender.toLowerCase() == 'female' &&
-          type.leaveTypeName.toLowerCase().contains('paternity')) {
+      } else if (gender.toLowerCase() == Gender.female &&
+          type.leaveTypeName.toLowerCase().contains(LeaveType.paternity)) {
         return false;
       }
       return true;

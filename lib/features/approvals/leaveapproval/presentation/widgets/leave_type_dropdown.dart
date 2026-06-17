@@ -28,11 +28,11 @@ class LeaveTypeDropdown extends StatelessWidget {
     final filteredLeaveTypes = state.leaveTypes.where((type) {
       final typeName = type.name.toLowerCase();
       final userGender = gender.toLowerCase();
-      if (userGender == 'male' &&
+      if (userGender == Gender.male &&
           typeName.contains(LeaveTypes.maternityLeave.toLowerCase())) {
         return false;
       }
-      if (userGender == 'female' &&
+      if (userGender == Gender.female &&
           typeName.contains(LeaveTypes.paternityLeave.toLowerCase())) {
         return false;
       }
