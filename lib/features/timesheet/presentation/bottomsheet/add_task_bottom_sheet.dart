@@ -12,6 +12,7 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_success_type.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -465,8 +466,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             SizedBox(height: 12.h),
                             StatLabel(text: l10n.supportingDocumentLabel),
                             state.isUploading
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
+                                ? ShimmerLoading(
+                                    height: 60.h,
+                                    width: double.infinity,
+                                    borderRadius: 14.r,
                                   )
                                 : TimesheetUploadCard(
                                     onTap: () {

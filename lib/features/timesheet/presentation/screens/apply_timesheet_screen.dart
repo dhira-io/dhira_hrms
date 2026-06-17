@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
@@ -133,8 +134,14 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           buildWhen: (previous, current) =>
               previous.hasDraftTasksInSelectedWeek !=
                   current.hasDraftTasksInSelectedWeek ||
-              previous.isSubmitWeeklyLoading != current.isSubmitWeeklyLoading,
+              previous.isSubmitWeeklyLoading != current.isSubmitWeeklyLoading ||
+              previous.status != current.status ||
+              previous.editAssignments.isEmpty !=
+                  current.editAssignments.isEmpty,
           builder: (context, state) {
+            final isLoading = state.status == TimesheetStateStatus.initial ||
+                (state.status == TimesheetStateStatus.loading &&
+                    state.editAssignments.isEmpty);
             final hasDraft = state.hasDraftTasksInSelectedWeek;
             return Container(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
@@ -145,20 +152,26 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                 ),
               ),
               child: SafeArea(
-                child: CommonButton(
-                  text: l10n.submitWeeklyTimesheet,
-                  width: double.infinity,
-                  isLoading: state.isSubmitWeeklyLoading,
-                  icon: Icons.check_circle_outlined,
-                  onPressed: hasDraft
-                      ? () {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          context.read<TimesheetBloc>().add(
-                            const TimesheetEvent.submitWeeklyRequested(),
-                          );
-                        }
-                      : null,
-                ),
+                child: isLoading
+                    ? ShimmerLoading(
+                        height: 48.h,
+                        width: double.infinity,
+                        borderRadius: 12.r,
+                      )
+                    : CommonButton(
+                        text: l10n.submitWeeklyTimesheet,
+                        width: double.infinity,
+                        isLoading: state.isSubmitWeeklyLoading,
+                        icon: Icons.check_circle_outlined,
+                        onPressed: hasDraft
+                            ? () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                context.read<TimesheetBloc>().add(
+                                  const TimesheetEvent.submitWeeklyRequested(),
+                                );
+                              }
+                            : null,
+                      ),
               ),
             );
           },
