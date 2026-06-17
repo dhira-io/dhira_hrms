@@ -13,6 +13,9 @@ import 'package:dhira_hrms/features/auth/presentation/screens/auth_callback_scre
 import 'package:dhira_hrms/features/payslip/presentation/bloc/payslip_bloc.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_detail_screen.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_list_screen.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_bloc.dart';
+import 'package:dhira_hrms/features/policy/presentation/bloc/policy_event.dart';
+import 'package:dhira_hrms/features/policy/presentation/screens/policy_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
@@ -95,6 +98,7 @@ class AppRouter {
   static const String commonWebViewPath = '/webview';
   static const String payslipPath = '/payslip';
   static const String payslipDetailPath = '/payslip-detail';
+  static const String policyPath = '/policy';
 
   // Router Extra Keys
   static const String argEmployeeName = 'employeeName';
@@ -623,6 +627,13 @@ class AppRouter {
             child: PayslipDetailScreen(name: name),
           );
         },
+      ),
+      GoRoute(
+        path: policyPath,
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<PolicyBloc>()..add(const PolicyEvent.started()),
+          child: const PolicyScreen(),
+        ),
       ),
     ],
   );

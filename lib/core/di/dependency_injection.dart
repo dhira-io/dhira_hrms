@@ -16,6 +16,13 @@ import '../../features/payslip/domain/usecases/get_payslips_usecase.dart';
 import '../../features/payslip/domain/usecases/get_payslip_detail_usecase.dart';
 import '../../features/payslip/presentation/bloc/payslip_bloc.dart';
 
+import '../../features/policy/data/datasources/policy_remote_datasource.dart';
+import '../../features/policy/data/repositories/policy_repository_impl.dart';
+import '../../features/policy/domain/repositories/i_policy_repository.dart';
+import '../../features/policy/domain/usecases/get_policies_usecase.dart';
+import '../../features/policy/domain/usecases/get_policy_pdf_usecase.dart';
+import '../../features/policy/presentation/bloc/policy_bloc.dart';
+
 import '../../features/leave/domain/usecases/get_overlap_leaves_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
@@ -180,6 +187,8 @@ import '../../features/settings/presentation/bloc/settings_cubit.dart';
 import '../../features/settings/presentation/bloc/notification_settings_cubit.dart';
 import '../../features/settings/domain/repositories/notification_settings_repository.dart';
 import '../../features/settings/data/repositories/notification_settings_repository_impl.dart';
+import '../../features/settings/domain/usecases/get_notification_settings_usecase.dart';
+import '../../features/settings/domain/usecases/update_notification_settings_usecase.dart';
 import '../../features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 
 // Approvals
@@ -1154,11 +1163,26 @@ class DependencyInjection {
       fenix: true,
     );
     Get.lazyPut<INotificationSettingsRepository>(
-      () => NotificationSettingsRepository(Get.find<DioClient>()),
+      () => NotificationSettingsRepository(
+        Get.find<DioClient>(),
+        Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetNotificationSettingsUseCase>(
+      () => GetNotificationSettingsUseCase(Get.find<INotificationSettingsRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdateNotificationSettingsUseCase>(
+      () => UpdateNotificationSettingsUseCase(Get.find<INotificationSettingsRepository>()),
       fenix: true,
     );
     Get.lazyPut<NotificationSettingsCubit>(
-      () => NotificationSettingsCubit(Get.find<INotificationSettingsRepository>()),
+      () => NotificationSettingsCubit(
+        Get.find<GetNotificationSettingsUseCase>(),
+        Get.find<UpdateNotificationSettingsUseCase>(),
+        Get.find<GetApprovalsAccessUseCase>(),
+      ),
       fenix: true,
     );
     Get.lazyPut<FileOperationCubit>(
@@ -1197,5 +1221,36 @@ class DependencyInjection {
       ),
       fenix: true,
     );
+
+    // Policy
+    Get.lazyPut<IPolicyRemoteDataSource>(
+      () => PolicyRemoteDataSourceImpl(
+        dioClient: Get.find<DioClient>(),
+        logger: Get.find<Logger>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<IPolicyRepository>(
+      () => PolicyRepositoryImpl(
+        remoteDataSource: Get.find<IPolicyRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetPoliciesUseCase>(
+      () => GetPoliciesUseCase(Get.find<IPolicyRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<PolicyBloc>(
+      () => PolicyBloc(
+        getPoliciesUseCase: Get.find<GetPoliciesUseCase>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetPolicyPdfUseCase>(
+      () => GetPolicyPdfUseCase(Get.find<IPolicyRepository>()),
+      fenix: true,
+    );
+    // PolicyPdfCubit is instantiated manually in the bottom sheet, so it's not registered here.
   }
 }

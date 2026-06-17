@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 
 class NotificationToggleItemWidget extends StatelessWidget {
   final String title;
@@ -36,8 +36,8 @@ class NotificationToggleItemWidget extends StatelessWidget {
                   title,
                   style: AppTextStyle.labelLarge.copyWith(
                     color: AppColors.of(context).onSurface.withValues(
-                          alpha: (isLoading || isDisabled) ? 0.6 : 1.0,
-                        ),
+                      alpha: (isLoading || isDisabled) ? 0.6 : 1.0,
+                    ),
                   ),
                 ),
                 SizedBox(height: 4.h),
@@ -45,8 +45,8 @@ class NotificationToggleItemWidget extends StatelessWidget {
                   description,
                   style: AppTextStyle.bodySmall.copyWith(
                     color: AppColors.of(context).onSurfaceVariant.withValues(
-                          alpha: (isLoading || isDisabled) ? 0.6 : 1.0,
-                        ),
+                      alpha: (isLoading || isDisabled) ? 0.6 : 1.0,
+                    ),
                     height: 1.4.h,
                   ),
                 ),

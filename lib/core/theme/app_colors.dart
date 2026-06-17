@@ -21,6 +21,7 @@ class AppColors {
   static const Color textSecondary = Color(0xff4B5563);
   static const Color border = Color(0xffE5E7EB);
   static const Color bordergrey = Color(0xffE9E9E9);
+  static const Color tableBorder = Color(0xFFCAD5E2);
   static const Color outlineVariant = Color(0xFFC3C5D9);
   static const Color onSecondaryFixedVariant = Color(0xFF3F484F);
   static const Color primaryBlue = Color(0xff1100CC);
@@ -270,6 +271,7 @@ class AppColors {
   static const Color _darkTextPrimary = Color(0xFFE1E1E1);
   static const Color _darkTextSecondary = Color(0xFFA0A0A0);
   static const Color _darkBorder = Color(0xFF3A3A3A);
+  static const Color _darkTableBorder = Color(0xFF3A3A3A);
   static const Color _darkSurfaceContainerLowest = Color(0xFF1A1A1A);
   static const Color _darkSurfaceContainerLow = Color(0xFF252525);
   static const Color _darkSurfaceContainerHigh = Color(0xFF333333);
@@ -361,6 +363,7 @@ class AppColorsResolved {
   final Color textSecondary;
   final Color border;
   final Color bordergrey;
+  final Color tableBorder;
   final Color outlineVariant;
   final Color onSecondaryFixedVariant;
   final Color primaryBlue;
@@ -538,6 +541,7 @@ class AppColorsResolved {
     required this.textSecondary,
     required this.border,
     required this.bordergrey,
+    required this.tableBorder,
     required this.outlineVariant,
     required this.onSecondaryFixedVariant,
     required this.primaryBlue,
@@ -714,6 +718,7 @@ class AppColorsResolved {
     textSecondary: AppColors.textSecondary,
     border: AppColors.border,
     bordergrey: AppColors.bordergrey,
+    tableBorder: AppColors.tableBorder,
     outlineVariant: AppColors.outlineVariant,
     onSecondaryFixedVariant: AppColors.onSecondaryFixedVariant,
     primaryBlue: AppColors.primaryBlue,
@@ -890,6 +895,7 @@ class AppColorsResolved {
     textSecondary: AppColors._darkTextSecondary,
     border: AppColors._darkBorder,
     bordergrey: AppColors.bordergrey,
+    tableBorder: AppColors._darkTableBorder,
     outlineVariant: AppColors._darkOutlineVariant,
     onSecondaryFixedVariant: AppColors.onSecondaryFixedVariant,
     primaryBlue: AppColors.primaryBlue,
