@@ -8,6 +8,7 @@ import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/settings/presentation/bloc/notification_settings_cubit.dart';
 import 'package:dhira_hrms/features/settings/domain/entities/notification_settings_entity.dart';
 import 'package:dhira_hrms/features/settings/data/constants/notification_settings_constants.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 
 class NotificationPreferencesTable extends StatelessWidget {
   final String title;
@@ -80,7 +81,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                   Text(
                     title,
                     style: AppTextStyle.bodyLarge.copyWith(
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w800,
                       color: colors.textPrimary,
                     ),
                   ),
@@ -96,7 +97,7 @@ class NotificationPreferencesTable extends StatelessWidget {
           decoration: BoxDecoration(
             color: colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: colors.border, width: 1.w),
+            border: Border.all(color: colors.tableBorder, width: 1.w),
           ),
           clipBehavior: Clip.antiAlias,
           child: Column(
@@ -110,7 +111,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                     topLeft: Radius.circular(12.r),
                     topRight: Radius.circular(12.r),
                   ),
-                  border: Border(bottom: BorderSide(color: colors.border)),
+                  border: Border(bottom: BorderSide(color: colors.tableBorder)),
                 ),
                 child: Row(
                   children: [
@@ -122,15 +123,17 @@ class NotificationPreferencesTable extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         decoration: BoxDecoration(
                           border: isManager
-                              ? Border(right: BorderSide(color: colors.border))
+                              ? Border(
+                                  right: BorderSide(color: colors.tableBorder),
+                                )
                               : null,
                         ),
                         child: Text(
                           l10n.notificationType,
                           style: AppTextStyle.bodySmall.copyWith(
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w800,
                             color: colors.textPrimary,
-                            fontSize: 12.sp,
+                            fontSize: 11.sp,
                           ),
                         ),
                       ),
@@ -144,15 +147,17 @@ class NotificationPreferencesTable extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
                         decoration: BoxDecoration(
                           border: isManager
-                              ? Border(right: BorderSide(color: colors.border))
+                              ? Border(
+                                  right: BorderSide(color: colors.tableBorder),
+                                )
                               : null,
                         ),
                         child: Text(
                           isManager ? l10n.personal : '',
                           style: AppTextStyle.bodySmall.copyWith(
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w800,
                             color: colors.textPrimary,
-                            fontSize: 12.sp,
+                            fontSize: 11.sp,
                           ),
                         ),
                       ),
@@ -167,9 +172,9 @@ class NotificationPreferencesTable extends StatelessWidget {
                           child: Text(
                             l10n.team,
                             style: AppTextStyle.bodySmall.copyWith(
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w800,
                               color: colors.textPrimary,
-                              fontSize: 12.sp,
+                              fontSize: 11.sp,
                             ),
                           ),
                         ),
@@ -204,7 +209,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                         : null,
                     border: isLast
                         ? null
-                        : Border(bottom: BorderSide(color: colors.border)),
+                        : Border(bottom: BorderSide(color: colors.tableBorder)),
                   ),
                   child: Row(
                     children: [
@@ -221,7 +226,7 @@ class NotificationPreferencesTable extends StatelessWidget {
                                 .getRowTitle(baseId, l10n),
                             style: AppTextStyle.bodySmall.copyWith(
                               color: colors.textPrimary,
-                              fontSize: 12.sp,
+                              fontSize: 11.sp,
                             ),
                           ),
                         ),
@@ -301,16 +306,7 @@ class _CustomToggleSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return SizedBox(
-        width: 16.w,
-        height: 16.w,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(
-            AppColors.of(context).primaryContainer,
-          ),
-        ),
-      );
+      return ShimmerLoading(width: 36.w, height: 20.w, borderRadius: 9999);
     }
 
     final isClickable = onChanged != null;
@@ -319,7 +315,7 @@ class _CustomToggleSwitch extends StatelessWidget {
       onTap: isClickable ? () => onChanged!(!value) : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width: 36.w,
+        width: 33.w,
         height: 20.w,
         padding: EdgeInsets.all(2.w),
         decoration: BoxDecoration(
@@ -333,11 +329,11 @@ class _CustomToggleSwitch extends StatelessWidget {
           width: 16.w,
           height: 16.w,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(9999),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
+                color: AppColors.of(context).onSurface.withValues(alpha: 0.1),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),

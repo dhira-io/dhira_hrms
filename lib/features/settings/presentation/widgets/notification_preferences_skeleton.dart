@@ -73,7 +73,7 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
           decoration: BoxDecoration(
             color: colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: colors.border, width: 1.w),
+            border: Border.all(color: colors.tableBorder, width: 1.w),
           ),
           clipBehavior: Clip.antiAlias,
           child: Column(
@@ -84,7 +84,7 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isDark ? colors.surfaceContainerLow : colors.infoBg,
                   border: Border(
-                    bottom: BorderSide(color: colors.border),
+                    bottom: BorderSide(color: colors.tableBorder),
                   ),
                 ),
                 child: Row(
@@ -98,7 +98,7 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
                         decoration: BoxDecoration(
                           border: isManager
                               ? Border(
-                                  right: BorderSide(color: colors.border),
+                                  right: BorderSide(color: colors.tableBorder),
                                 )
                               : null,
                         ),
@@ -118,7 +118,7 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
                         decoration: BoxDecoration(
                           border: isManager
                               ? Border(
-                                  right: BorderSide(color: colors.border),
+                                  right: BorderSide(color: colors.tableBorder),
                                 )
                               : null,
                         ),
@@ -158,7 +158,7 @@ class NotificationPreferencesSkeleton extends StatelessWidget {
                     border: isLast
                         ? null
                         : Border(
-                            bottom: BorderSide(color: colors.border),
+                            bottom: BorderSide(color: colors.tableBorder),
                           ),
                   ),
                   child: Row(
