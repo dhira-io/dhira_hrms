@@ -1110,8 +1110,8 @@
   "light": "Light",
   "dark": "Dark",
   "language": "Language",
-  "notificationPreferences": "Notification Preferences",
-  "pushNotifications": "Push Notifications",
+  "notificationPreferences": "Notification Settings",
+  "pushNotifications": "Mobile Notifications",
   "emailAlerts": "Email Alerts",
   "notificationDesc": "Control how and when Dhira communicates with you. Tailor your alerts to stay informed without the noise.",
   "attendancePushDesc": "Instant alerts for check-in/out irregularities or missed punches.",
@@ -1670,8 +1670,8 @@
     "light": "Light",
     "dark": "Dark",
     "language": "Language",
-    "notificationPreferences": "Notification Preferences",
-    "pushNotifications": "Push Notifications",
+    "notificationPreferences": "Notification Settings",
+    "pushNotifications": "Mobile Notifications",
     "emailAlerts": "Email Alerts",
     "notificationDesc": "Control how and when Dhira communicates with you. Tailor your alerts to stay informed without the noise.",
     "attendancePushDesc": "Instant alerts for check-in/out irregularities or missed punches.",
@@ -2140,7 +2140,14 @@
     "policiesCount": "policies",
     "readPolicy": "Read Policy",
     "view": "View",
-    "failedToLoadPdf": "Failed to load PDF file."
+    "failedToLoadPdf": "Failed to load PDF file.",
+    "personal": "Personal",
+    "notificationType": "Notification Type",
+    "compOffRequest": "Comp-Off Request",
+    "pushNotificationsDesc": "Real-time alerts delivered to your installed app",
+    "emailAlertsDesc": "Formal email notifications for your records",
+    "pushNotificationPreferenceSuccess": "Mobile Notification Preferences updated successfully",
+    "emailAlertsPreferenceSuccess": "Email Alerts Preferences updated successfully"
 }
 
 
