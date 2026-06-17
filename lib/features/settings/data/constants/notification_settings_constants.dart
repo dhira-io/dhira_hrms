@@ -40,4 +40,14 @@ class NotificationSettingsConstants {
   // API Request Keys
   static const String apiKeyField = 'field';
   static const String apiKeyValue = 'value';
+
+  // Base IDs (Item identifiers)
+  static const String keyBaseId = 'baseId';
+  static const String baseLeave = 'leave_application';
+  static const String baseAttendance = 'attendance_regularization_request';
+  static const String baseTimesheet = 'employee_timesheet';
+  static const String baseCompOff = 'compensatory_leave_request';
+
+  // Fallbacks
+  static const String defaultAppBarTitle = 'Notification Settings';
 }

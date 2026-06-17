@@ -1096,8 +1096,8 @@
   "light": "लाइट",
   "dark": "डार्क",
   "language": "भाषा",
-  "notificationPreferences": "सूचना प्राथमिकताएं",
-  "pushNotifications": "पुश सूचनाएं",
+  "notificationPreferences": "अधिसूचना सेटिंग्स",
+  "pushNotifications": "मोबाइल सूचनाएं",
   "emailAlerts": "ईमेल अलर्ट",
   "notificationDesc": "नियंत्रित करें कि धीरा आपसे कब और कैसे संवाद करता है। शोर के बिना सूचित रहने के लिए अपने अलर्ट को अनुकूलित करें।",
   "attendancePushDesc": "चेक-इन/आउट अनियमितताओं या छूटे हुए पंचों के लिए तत्काल अलर्ट।",
@@ -1610,8 +1610,8 @@
     "light": "लाइट",
     "dark": "डार्क",
     "language": "भाषा",
-    "notificationPreferences": "सूचना प्राथमिकताएं",
-    "pushNotifications": "पुश सूचनाएं",
+    "notificationPreferences": "अधिसूचना सेटिंग्स",
+    "pushNotifications": "मोबाइल सूचनाएं",
     "emailAlerts": "ईमेल अलर्ट",
     "notificationDesc": "नियंत्रित करें कि धीरा आपसे कब और कैसे संवाद करता है। शोर के बिना सूचित रहने के लिए अपने अलर्ट को अनुकूलित करें।",
     "attendancePushDesc": "चेक-इन/आउट अनियमितताओं या छूटे हुए पंचों के लिए तत्काल अलर्ट।",
@@ -2027,7 +2027,14 @@
     "policiesCount": "नीतियां",
     "readPolicy": "नीति पढ़ें",
     "view": "देखें",
-    "failedToLoadPdf": "PDF फ़ाइल लोड करने में विफल।"
+    "failedToLoadPdf": "PDF फ़ाइल लोड करने में विफल।",
+    "personal": "व्यक्तिगत",
+    "notificationType": "अधिसूचना प्रकार",
+    "compOffRequest": "प्रतिपूरक अवकाश अनुरोध",
+    "pushNotificationsDesc": "आपके इंस्टॉल किए गए ऐप पर वास्तविक समय के अलर्ट",
+    "emailAlertsDesc": "आपके रिकॉर्ड के लिए औपचारिक ईमेल सूचनाएं",
+    "pushNotificationPreferenceSuccess": "मोबाइल नोटिफिकेशन प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
+    "emailAlertsPreferenceSuccess": "ईमेल अलर्ट प्राथमिकताएं सफलतापूर्वक अपडेट की गईं"
 }
 
 

@@ -21,10 +21,7 @@ class NotificationSectionWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding:       EdgeInsets.symmetric(
-            horizontal: 8.0.w,
-            vertical: 16.0.h,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 16.0.h),
           child: Row(
             children: [
               Container(
@@ -40,7 +37,7 @@ class NotificationSectionWidget extends StatelessWidget {
                   size: 24,
                 ),
               ),
-                    SizedBox(width: 12.w),
+              SizedBox(width: 12.w),
               Text(
                 title,
                 style: AppTextStyle.h3.copyWith(
@@ -52,7 +49,7 @@ class NotificationSectionWidget extends StatelessWidget {
           ),
         ),
         Container(
-          padding:       EdgeInsets.all(24.0.w),
+          padding: EdgeInsets.all(24.0.w),
           decoration: BoxDecoration(
             color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12.r),
