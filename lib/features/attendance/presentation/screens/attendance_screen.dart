@@ -42,9 +42,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.of(context).background,
-      body: SafeArea(
+    return Container(
+      color: AppColors.of(context).background,
+      child: SafeArea(
         child: MultiBlocListener(
           listeners: [
             BlocListener<AttendanceBloc, AttendanceState>(

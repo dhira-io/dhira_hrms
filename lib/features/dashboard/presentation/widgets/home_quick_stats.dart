@@ -22,11 +22,11 @@ class HomeQuickStats extends StatelessWidget {
           color: AppColors.of(context).surface,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: AppColors.of(context).outlineVariant.withOpacity(0.5),
+            color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: AppColors.black.withValues(alpha: 0.02),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -49,7 +49,7 @@ class HomeQuickStats extends StatelessWidget {
             Divider(
               height: 1,
               thickness: 1,
-              color: AppColors.of(context).outlineVariant.withOpacity(0.3),
+              color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
             ),
             BlocSelector<DashboardCubit, DashboardState, dynamic>(
               selector: (state) => state.stats,
@@ -70,7 +70,7 @@ class HomeQuickStats extends StatelessWidget {
                         VerticalDivider(
                           width: 1,
                           thickness: 1,
-                          color: AppColors.of(context).outlineVariant.withOpacity(0.3),
+                          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
                         ),
                         Expanded(
                           child: _StatColumn(
@@ -82,7 +82,7 @@ class HomeQuickStats extends StatelessWidget {
                         VerticalDivider(
                           width: 1,
                           thickness: 1,
-                          color: AppColors.of(context).outlineVariant.withOpacity(0.3),
+                          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
                         ),
                         Expanded(
                           child: _StatColumn(

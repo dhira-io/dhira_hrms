@@ -50,7 +50,7 @@ class HomeUserHeader extends StatelessWidget {
                       (userProfile?.userImage != null &&
                           userProfile!.userImage!.isNotEmpty)
                       ? NetworkImage(
-                          "${Get.find<DioClient>().baseUrl}${userProfile.userImage}",
+                          "${AppConstants.baseUrl}${userProfile.userImage}",
                         )
                       : const AssetImage(AppAssets.defaultProfile)
                             as ImageProvider,

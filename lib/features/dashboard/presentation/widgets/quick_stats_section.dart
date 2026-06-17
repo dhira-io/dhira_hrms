@@ -23,8 +23,7 @@ class QuickStatsSection extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildStatCard(
-                context,
+              _StatCardWidget(
                 value: stats != null
                     ? stats.daysPresent.toString()
                     : AppConstants.placeholderText,
@@ -32,8 +31,7 @@ class QuickStatsSection extends StatelessWidget {
                 valueColor: AppColors.of(context).primary,
               ),
               const SizedBox(width: AppConstants.p12),
-              _buildStatCard(
-                context,
+              _StatCardWidget(
                 value: stats != null
                     ? stats.leaveBalance.toString()
                     : AppConstants.placeholderText,
@@ -41,8 +39,7 @@ class QuickStatsSection extends StatelessWidget {
                 valueColor: AppColors.of(context).tertiary,
               ),
               const SizedBox(width: AppConstants.p12),
-              _buildStatCard(
-                context,
+              _StatCardWidget(
                 value: stats != null
                     ? (stats.nextHoliday.split('-').length >= 2
                           ? stats.nextHoliday.split('-').sublist(0, 2).join('-')
@@ -58,13 +55,23 @@ class QuickStatsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(
-    BuildContext context, {
-    required String value,
-    required String label,
-    required Color valueColor,
-    bool isSmallValue = false,
-  }) {
+}
+
+class _StatCardWidget extends StatelessWidget {
+  final String value;
+  final String label;
+  final Color valueColor;
+  final bool isSmallValue;
+
+  const _StatCardWidget({
+    required this.value,
+    required this.label,
+    required this.valueColor,
+    this.isSmallValue = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: Material(
         color: Colors.transparent,

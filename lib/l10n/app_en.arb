@@ -307,8 +307,8 @@
   "projectBasedServiceChart": "Project Wise Service Hierarchy",
   "myOrg": "My Org",
   "helloLabel": "Hello,",
-  "welcomeName": "Welcome,",
-  "timeElapsed": "Time Elapsed",
+  "welcomeName": "Welcome",
+  "timeElapsed": "Time elapsed",
   "startedDayAt": "Started day at {time}",
   "logYourHours": "Log your hours",
   "requestTimeOff": "Request time off",
@@ -714,7 +714,7 @@
     "projectBasedServiceChart": "Project Wise Service Hierarchy",
     "myOrg": "My Org",
     "helloLabel": "Hello,",
-    "welcomeName": "Welcome,",
+    "welcomeName": "Welcome",
     "timeElapsed": "Time Elapsed",
     "startedDayAt": "Started day at {time}",
     "logYourHours": "Log your hours",
@@ -2147,7 +2147,18 @@
     "pushNotificationsDesc": "Real-time alerts delivered to your installed app",
     "emailAlertsDesc": "Formal email notifications for your records",
     "pushNotificationPreferenceSuccess": "Mobile Notification Preferences updated successfully",
-    "emailAlertsPreferenceSuccess": "Email Alerts Preferences updated successfully"
+    "emailAlertsPreferenceSuccess": "Email Alerts Preferences updated successfully",
+    "applyLeaveSubtitle": "Apply for leaves and check balance",
+    "requestCompensatoryLeave": "View and manage comp-off credits",
+    "calendar": "My Calendar",
+    "allPages": "All Pages",
+    "pages": "Pages",
+    "noDataFound": "No data found.",
+    "projectBasedServiceHierarchy": "Project Based Service Hierarchy",
+    "myActions": "My Actions",
+    "takeABreak": "Take a break",
+    "thatsAllForToday": "That's all for today",
+    "resume": "Resume"
 }
 
 

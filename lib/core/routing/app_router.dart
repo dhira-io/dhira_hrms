@@ -19,7 +19,6 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.d
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/settings/presentation/bloc/settings_cubit.dart';
-import 'package:dhira_hrms/features/payslip/presentation/bloc/payslip_bloc.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_detail_screen.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_list_screen.dart';
@@ -37,7 +36,6 @@ import 'package:dhira_hrms/features/onboarding/presentation/screens/get_started_
 import 'package:dhira_hrms/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:dhira_hrms/features/onboarding/presentation/bloc/onboarding_cubit.dart';
 import 'package:dhira_hrms/features/settings/presentation/screens/settings_screen.dart';
-import 'package:dhira_hrms/features/settings/presentation/bloc/settings_cubit.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
@@ -51,6 +49,7 @@ import 'package:dhira_hrms/features/notifications/presentation/screens/notificat
 import 'package:dhira_hrms/core/widgets/coming_soon_screen.dart';
 
 import 'package:dhira_hrms/features/performance/presentation/screens/self_assessment_screen.dart';
+import 'package:dhira_hrms/features/performance/presentation/screens/performance_dashboard_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/goal_setup_page.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/team_evaluation_page.dart';
 import 'package:dhira_hrms/features/performance/presentation/screens/team_evaluation_review_screen.dart';
@@ -63,15 +62,9 @@ import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessme
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/domain/usecases/get_approvals_access_usecase.dart';
-import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
-import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:go_router/go_router.dart';
-import 'package:get/get.dart';
 import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
-import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
-import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -99,6 +92,7 @@ class AppRouter {
       '/attendance-regularization';
   static const String compensatoryLeavePath = '/compensatory-leave';
 
+  static const String performanceDashboardPath = '/performance-dashboard';
   static const String performanceGoalSetupPath = '/performance-goal-setup';
   static const String performanceSelfAssessmentPath =
       '/performance-self-assessment';
@@ -556,6 +550,13 @@ class AppRouter {
       ),
 
       GoRoute(
+        path: performanceDashboardPath,
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<PerformanceBloc>(),
+          child: const PerformanceDashboardScreen(),
+        ),
+      ),
+      GoRoute(
         path: performanceGoalSetupPath,
         builder: (context, state) => BlocProvider.value(
           value: Get.find<PerformanceBloc>(),
@@ -684,8 +685,11 @@ class AppRouter {
       ),
       GoRoute(
         path: settingsPath,
-        builder: (context, state) => BlocProvider.value(
-          value: Get.find<SettingsCubit>(),
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: Get.find<SettingsCubit>()),
+            BlocProvider.value(value: Get.find<ProfileBloc>()),
+          ],
           child: const SettingsScreen(),
         ),
       ),

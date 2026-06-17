@@ -16,6 +16,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../utils/performance_ui_extensions.dart';
 import '../utils/performance_error_utils.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class TeamEvaluationPage extends StatefulWidget {
   const TeamEvaluationPage({super.key});
@@ -60,17 +61,12 @@ class _TeamEvaluationPageState extends State<TeamEvaluationPage> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
-        appBar: AppBar(
-          backgroundColor: AppColors.of(context).background,
-          elevation: 0,
-          title: Text(l10n.teamEvaluation, style: AppTextStyle.h2),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, size: AppConstants.iconXSmall),
-            onPressed: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-              context.pop();
-            },
-          ),
+        appBar: CommonAppBar(
+          title: l10n.teamEvaluation,
+          onBack: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+            context.pop();
+          },
         ),
         body: BlocListener<TeamEvaluationCubit, TeamEvaluationState>(
           listener: (context, state) {

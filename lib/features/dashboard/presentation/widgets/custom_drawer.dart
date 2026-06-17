@@ -10,9 +10,10 @@ import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
-import 'package:dhira_hrms/features/auth/presentation/bloc/auth_event.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
+import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/bloc/performance_state.dart';
 import 'package:dhira_hrms/core/network/dio_client.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/core/presentation/dialogs/logout_alert_dialog.dart';
@@ -49,7 +50,7 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             
-            Divider(height: 1, thickness: 1, color: AppColors.of(context).outlineVariant.withOpacity(0.3)),
+            Divider(height: 1, thickness: 1, color: AppColors.of(context).outlineVariant),
             
             // Profile Section
             Padding(
@@ -117,15 +118,15 @@ class CustomDrawer extends StatelessWidget {
                                   fullName ?? l10n.employeeName,
                                   style: AppTextStyle.bodyLarge.copyWith(
                                     color: AppColors.of(context).onSurface,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.bold, // Made bold as requested
                                     fontSize: 15.sp,
                                   ),
                                 ),
-                                SizedBox(height: 4.h),
+                                SizedBox(height: 8.h), // Increased space
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                                   decoration: BoxDecoration(
-                                    color: AppColors.of(context).primary.withOpacity(0.1),
+                                    color: AppColors.of(context).primary.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(4.r),
                                   ),
                                   child: Text(
@@ -147,80 +148,69 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             
-            Divider(height: 1, thickness: 1, color: AppColors.of(context).outlineVariant.withOpacity(0.3)),
+            Divider(height: 1, thickness: 1, color: AppColors.of(context).outlineVariant),
             
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.symmetric(vertical: 8.h),
-                children: [
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.person_outline,
-                    title: l10n.myAccount,
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.push(AppRouter.profilePath);
-                    },
-                  ),
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.account_tree_outlined,
-                    title: l10n.organizationHierarchy,
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.push(AppRouter.organizationChartPath);
-                    },
-                  ),
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.speed_outlined,
-                    title: l10n.performance,
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.push(AppRouter.comingSoonPath, extra: l10n.performance);
-                    },
-                  ),
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.shield_outlined,
-                    title: l10n.policies,
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.push(AppRouter.comingSoonPath, extra: l10n.policies);
-                    },
-                  ),
-                  
-                  Padding(
+              child: CustomScrollView(
+                slivers: [
+                  SliverPadding(
                     padding: EdgeInsets.symmetric(vertical: 8.h),
-                    child: Divider(height: 1, thickness: 1, color: AppColors.of(context).outlineVariant.withOpacity(0.3)),
-                  ),
-                  
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.headset_mic_outlined,
-                    title: l10n.support,
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.push(AppRouter.comingSoonPath, extra: l10n.support);
-                    },
-                  ),
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.settings_outlined,
-                    title: l10n.settings,
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.push(AppRouter.settingsPath);
-                    },
-                  ),
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.logout_outlined,
-                    title: l10n.logout,
-                    onTap: () {
-                      Navigator.pop(context);
-                      LogoutAlertDialog.show(context);
-                    },
+                    sliver: SliverList.list(
+                      children: [
+                        _DrawerMenuItemWidget(
+                          icon: Icons.person_outline,
+                          title: l10n.myAccount,
+                          onTap: () {
+                            context.push(AppRouter.profilePath);
+                          },
+                        ),
+
+                        BlocProvider<PerformanceBloc>.value(
+                          value: Get.find<PerformanceBloc>(),
+                          child: BlocBuilder<PerformanceBloc, PerformanceState>(
+                            builder: (context, performanceState) {
+                              return _ExpandablePerformanceMenuItem(
+                                l10n: l10n,
+                                performanceState: performanceState,
+                              );
+                            },
+                          ),
+                        ),
+                        _DrawerMenuItemWidget(
+                          icon: Icons.policy_outlined,
+                          title: l10n.policies,
+                          onTap: () {
+                            context.push(AppRouter.policyPath);
+                          },
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.h),
+                          child: Divider(height: 1, thickness: 1, color: AppColors.of(context).outlineVariant),
+                        ),
+                        _DrawerMenuItemWidget(
+                          icon: Icons.headset_mic_outlined,
+                          title: l10n.support,
+                          onTap: () {
+                            context.push(AppRouter.comingSoonPath, extra: l10n.support);
+                          },
+                        ),
+                        _DrawerMenuItemWidget(
+                          icon: Icons.settings_outlined,
+                          title: l10n.settings,
+                          onTap: () {
+                            context.push(AppRouter.settingsPath);
+                          },
+                        ),
+                        _DrawerMenuItemWidget(
+                          icon: Icons.logout_outlined,
+                          title: l10n.logout,
+                          onTap: () {
+                            Navigator.pop(context);
+                            LogoutAlertDialog.show(context);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -230,7 +220,7 @@ class CustomDrawer extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.h),
               child: Text(
-                "${l10n.version} 1.0.0",
+                "${l10n.version} ${AppConstants.appVersion}",
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).onSurfaceVariant,
                 ),
@@ -242,27 +232,161 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: const Color(0xFF23444A), // Use a darker color like mockup
-        size: 24.w,
+}
+
+class _DrawerMenuItemWidget extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  const _DrawerMenuItemWidget({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(8.w),
+      child: ListTile(
+        leading: Icon(
+          icon,
+          color: AppColors.drawerIconColor,
+          size: 24.w,
+        ),
+        title: Text(
+          title,
+          style: AppTextStyle.bodyMedium.copyWith(
+            color: AppColors.drawerIconColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        onTap: onTap,
+        contentPadding: EdgeInsets.symmetric(horizontal: 24.w),
+        dense: true,
       ),
+    );
+  }
+}
+
+class _ExpandablePerformanceMenuItem extends StatefulWidget {
+  final AppLocalizations l10n;
+  final PerformanceState performanceState;
+
+  const _ExpandablePerformanceMenuItem({
+    required this.l10n,
+    required this.performanceState,
+  });
+
+  @override
+  State<_ExpandablePerformanceMenuItem> createState() =>
+      _ExpandablePerformanceMenuItemState();
+}
+
+class _ExpandablePerformanceMenuItemState
+    extends State<_ExpandablePerformanceMenuItem> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          dividerColor: Colors.transparent,
+        ),
+        child: ExpansionTile(
+          onExpansionChanged: (expanded) {
+            setState(() {
+              _isExpanded = expanded;
+            });
+          },
+          trailing: AnimatedRotation(
+            turns: _isExpanded ? 0.25 : 0,
+            duration: const Duration(milliseconds: 200),
+            child: Icon(
+              Icons.keyboard_arrow_right,
+              color: AppColors.drawerIconColor,
+            ),
+          ),
+          leading: Icon(
+            Icons.speed_outlined,
+            color: AppColors.drawerIconColor,
+            size: 24.w,
+          ),
+          title: Text(
+            widget.l10n.performance,
+            style: AppTextStyle.bodyMedium.copyWith(
+              color: AppColors.drawerIconColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          tilePadding: EdgeInsets.symmetric(horizontal: 24.w),
+          childrenPadding: EdgeInsets.only(left: 36.w),
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  left: BorderSide(
+                    color: AppColors.of(context).onSurfaceVariant,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+              child: Column(
+                children: [
+                  _DrawerSubMenuItemWidget(
+                    title: widget.l10n.goalSetup,
+                    onTap: () {
+                      context.push(AppRouter.performanceGoalSetupPath);
+                    },
+                  ),
+                  _DrawerSubMenuItemWidget(
+                    title: widget.l10n.selfAssessment,
+                    onTap: () {
+                      context.push(AppRouter.performanceSelfAssessmentPath);
+                    },
+                  ),
+                  if (widget.performanceState.isManager)
+                    _DrawerSubMenuItemWidget(
+                      title: widget.l10n.teamEvaluation,
+                      onTap: () {
+                        context.push(AppRouter.performanceTeamEvaluationPath);
+                      },
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+}
+
+class _DrawerSubMenuItemWidget extends StatelessWidget {
+  final String title;
+  final VoidCallback onTap;
+
+  const _DrawerSubMenuItemWidget({
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
       title: Text(
         title,
         style: AppTextStyle.bodyMedium.copyWith(
-          color: const Color(0xFF23444A), // Dark text color
-          fontWeight: FontWeight.w600,
+          color: AppColors.drawerIconColor,
+          fontWeight: FontWeight.w500,
         ),
       ),
       onTap: onTap,
-      contentPadding: EdgeInsets.symmetric(horizontal: 24.w),
+      contentPadding: EdgeInsets.only(left: 16.w, right: 24.w),
       dense: true,
     );
   }

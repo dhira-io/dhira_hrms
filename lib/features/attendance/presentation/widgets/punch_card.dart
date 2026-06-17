@@ -212,7 +212,7 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
                     timeFormatted: timeFormatted,
                     dateFormatted: dateFormatted,
                   ),
-                        SizedBox(height: 16.h),
+                        SizedBox(height: 4.h),
                 ],
                 PunchActionButtonRow(
                   padding: widget.showDateAndTime

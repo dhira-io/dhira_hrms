@@ -110,36 +110,4 @@ class WelcomeProfileCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoChip({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required Color backgroundColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.p12,
-        vertical: AppConstants.p8,
-      ),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(AppConstants.r10),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: AppConstants.p16, color: color),
-          const SizedBox(width: AppConstants.p8),
-          Text(
-            label.toUpperCase(),
-            style: AppTextStyle.bodyMedium.copyWith(
-              color: color,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

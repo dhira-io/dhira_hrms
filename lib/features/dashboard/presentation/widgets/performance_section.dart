@@ -19,14 +19,7 @@ class PerformanceSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.performance,
-          style: AppTextStyle.h3.copyWith(
-            fontSize: AppConstants.p16.sp,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: AppConstants.p16),
+
         BlocSelector<PerformanceBloc, PerformanceState, bool>(
           selector: (state) => state.isManager,
           builder: (context, isManager) {

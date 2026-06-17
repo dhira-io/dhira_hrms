@@ -114,7 +114,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final baseUrl = Get.find<DioClient>().baseUrl;
+    final baseUrl = AppConstants.baseUrl;
 
     return BlocListener<AttendanceBloc, AttendanceState>(
       listenWhen: (previous, current) =>
@@ -131,17 +131,17 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
         );
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: AppConstants.p18.w),
+        margin: EdgeInsets.symmetric(horizontal: AppConstants.p16.w),
         padding: EdgeInsets.all(AppConstants.p16.w),
         decoration: BoxDecoration(
           color: AppColors.of(context).surface,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: AppColors.of(context).outlineVariant.withOpacity(0.5),
+            color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: AppColors.black.withValues(alpha: 0.02),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -184,7 +184,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                     final displayInitials = fullName?.isNotEmpty == true ? fullName![0].toUpperCase() : "E";
 
                     return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
                           width: 48.w,
@@ -222,7 +222,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                             children: [
                               Text(
                                 fullName ?? l10n.employeeName,
-                                style: AppTextStyle.bodyLarge.copyWith(
+                                style: AppTextStyle.bodyMedium.copyWith(
                                   color: AppColors.of(context).onSurface,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -231,7 +231,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                                 decoration: BoxDecoration(
-                                  color: AppColors.of(context).primary.withOpacity(0.1),
+                                  color: AppColors.of(context).primary.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(4.r),
                                 ),
                                 child: Text(
@@ -242,7 +242,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 8.h),
+                              SizedBox(height: 4.h),
                               Wrap(
                                 spacing: 8.w,
                                 runSpacing: 4.h,
@@ -271,7 +271,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
               },
             ),
             
-            SizedBox(height: 20.h),
+            SizedBox(height: 16.h),
             PunchCard(padding: EdgeInsets.zero),
           ],
         ),

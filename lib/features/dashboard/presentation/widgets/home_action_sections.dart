@@ -25,18 +25,16 @@ class HomeActionSections extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSection(
-                context,
-                l10n.employeeActions,
-                state.filteredEmployeeActions,
-                l10n,
+              _ActionSectionWidget(
+                title: l10n.employeeActions,
+                items: state.filteredEmployeeActions,
+                l10n: l10n,
               ),
                     SizedBox(height: 30.h),
-              _buildSection(
-                context,
-                l10n.companyInformation,
-                state.filteredCompanyInfo,
-                l10n,
+              _ActionSectionWidget(
+                title: l10n.companyInformation,
+                items: state.filteredCompanyInfo,
+                l10n: l10n,
               ),
                     SizedBox(height: 30.h),
             ],
@@ -46,12 +44,21 @@ class HomeActionSections extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(
-    BuildContext context,
-    String title,
-    List<dynamic> items,
-    AppLocalizations l10n,
-  ) {
+}
+
+class _ActionSectionWidget extends StatelessWidget {
+  final String title;
+  final List<dynamic> items;
+  final AppLocalizations l10n;
+
+  const _ActionSectionWidget({
+    required this.title,
+    required this.items,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -10,6 +10,7 @@ import '../../../auth/presentation/bloc/auth_state.dart';
 import '../bloc/settings_cubit.dart';
 import '../bloc/settings_state.dart';
 import '../widgets/settings_body.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -56,28 +57,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ],
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
-        // appBar: AppBar(
-        //   backgroundColor: AppColors.of(context).slate50.withValues(alpha: 0.8),
-        //   surfaceTintColor: Colors.transparent,
-        //   elevation: 0,
-        //   automaticallyImplyLeading: false,
-        //   title: Text(
-        //     l10n.settings,
-        //     style: TextStyle(
-        //       color: AppColors.of(context).onSurface,
-        //       fontWeight: FontWeight.bold,
-        //       fontSize: 18.sp,
-        //     ),
-        //   ),
-        //   centerTitle: true,
-        //   bottom: PreferredSize(
-        //     preferredSize: const Size.fromHeight(1),
-        //     child: Container(
-        //       color: AppColors.of(context).slate200.withValues(alpha: 0.5),
-        //       height: 1.h,
-        //     ),
-        //   ),
-        // ),
+        appBar: CommonAppBar(
+          title: l10n.settings,
+        ),
         body: const SettingsBody(),
       ),
     );

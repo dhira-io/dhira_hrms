@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/widgets/app_header.dart';
+import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -18,21 +19,9 @@ class ComingSoonScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      appBar: AppBar(
-        backgroundColor: AppColors.of(context).surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.of(context).onSurface),
-          onPressed: () => context.pop(),
-        ),
-        title: Text(
-          title,
-          style: AppTextStyle.bodyLarge.copyWith(
-            color: AppColors.of(context).onSurface,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        centerTitle: true,
+      appBar: CommonAppBar(
+        title: title,
+        onBack: () => context.pop(),
       ),
       body: Center(
         child: Column(

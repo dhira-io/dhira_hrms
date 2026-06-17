@@ -38,10 +38,10 @@ class PunchActionButtonRow extends StatelessWidget {
       padding:
           padding ??
           const EdgeInsets.fromLTRB(
-            AppConstants.p16,
+            AppConstants.p8,
             0,
-            AppConstants.p16,
-            AppConstants.p16,
+            AppConstants.p8,
+            AppConstants.p8,
           ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -53,7 +53,7 @@ class PunchActionButtonRow extends StatelessWidget {
                   child: CommonButton(
                     text: l10n.letsGoStartYourDay,
                     icon: Icons.login_rounded,
-                    backgroundColor: AppColors.of(context).primaryContainer,
+                    backgroundColor: AppColors.of(context).primary,
                     onPressed: isAnyLoading ? null : onPunchIn,
                     isLoading: loadingType == AttendanceActionType.punchIn,
                     padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
@@ -63,7 +63,7 @@ class PunchActionButtonRow extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: CommonButton(
-                    text: "Take a break",
+                    text: l10n.takeABreak,
                     icon: Icons.pause_rounded,
                     backgroundColor: AppColors.of(context).punchBreak,
                     onPressed: isAnyLoading ? null : onTakeBreak,
@@ -76,7 +76,7 @@ class PunchActionButtonRow extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: CommonButton(
-                    text: "That's all for today",
+                    text: l10n.thatsAllForToday,
                     icon: Icons.access_time_rounded,
                     backgroundColor: AppColors.of(context).punchOut,
                     onPressed: isAnyLoading ? null : onPunchOut,
@@ -89,7 +89,7 @@ class PunchActionButtonRow extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: CommonButton(
-                    text: "Resume",
+                    text: l10n.resume,
                     icon: Icons.stop_rounded,
                     backgroundColor: AppColors.of(context).punchBreak,
                     onPressed: isAnyLoading ? null : onEndBreak,
@@ -102,7 +102,7 @@ class PunchActionButtonRow extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: CommonButton(
-                    text: "That's all for today",
+                    text: l10n.thatsAllForToday,
                     icon: Icons.access_time_rounded,
                     backgroundColor: AppColors.of(context).punchOut,
                     onPressed: isAnyLoading ? null : onPunchOut,

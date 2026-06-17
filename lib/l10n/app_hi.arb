@@ -300,7 +300,7 @@
   "projectBasedServiceChart": "प्रोजेक्ट वाइज सर्विस पदानुक्रम",
   "myOrg": "My Org",
   "helloLabel": "नमस्ते,",
-  "welcomeName": "स्वागत है,",
+  "welcomeName": "स्वागत है",
   "timeElapsed": "बीता हुआ समय",
   "startedDayAt": "दिन का समय {time} शुरू हुआ",
   "logYourHours": "अपने घंटे लॉग करें",
@@ -699,7 +699,7 @@
     "projectBasedServiceChart": "प्रोजेक्ट वाइज सर्विस पदानुक्रम",
     "myOrg": "My Org",
     "helloLabel": "नमस्ते,",
-    "welcomeName": "स्वागत है,",
+    "welcomeName": "स्वागत है",
     "timeElapsed": "बीता हुआ समय",
     "startedDayAt": "दिन का समय {time} शुरू हुआ",
     "logYourHours": "अपने घंटे लॉग करें",
@@ -2043,7 +2043,18 @@
     "pushNotificationsDesc": "आपके इंस्टॉल किए गए ऐप पर वास्तविक समय के अलर्ट",
     "emailAlertsDesc": "आपके रिकॉर्ड के लिए औपचारिक ईमेल सूचनाएं",
     "pushNotificationPreferenceSuccess": "मोबाइल नोटिफिकेशन प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
-    "emailAlertsPreferenceSuccess": "ईमेल अलर्ट प्राथमिकताएं सफलतापूर्वक अपडेट की गईं"
+    "emailAlertsPreferenceSuccess": "ईमेल अलर्ट प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
+    "applyLeaveSubtitle": "छुट्टियों के लिए आवेदन करें और शेष राशि की जांच करें",
+    "requestCompensatoryLeave": "प्रतिपूरक अवकाश क्रेडिट देखें और प्रबंधित करें",
+    "calendar": "मेरा कैलेंडर",
+    "allPages": "सभी पृष्ठ",
+    "pages": "पृष्ठ",
+    "noDataFound": "कोई डेटा नहीं मिला।",
+    "projectBasedServiceHierarchy": "परियोजना आधारित सेवा पदानुक्रम",
+    "myActions": "मेरे कार्य",
+    "takeABreak": "एक ब्रेक लें",
+    "thatsAllForToday": "आज के लिए बस इतना ही",
+    "resume": "फिर से शुरू करें"
 }
 
 

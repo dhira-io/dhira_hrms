@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Primary Palette
-  static const Color primary = Color(0xFF0047CC);
-  static const Color primaryContainer = Color(0xFF155DFC);
+  static const Color primaryContainer = Color(0xFF0047CC);
+  static const Color primary = Color(0xFF155DFC);
   static const Color primaryFixed = Color(0xFFDCE1FF);
   static const Color onPrimaryFixed = Color(0xFF00164E);
   static const Color secondary = Color(0xff0066FF);
@@ -25,6 +25,10 @@ class AppColors {
   static const Color outlineVariant = Color(0xFFC3C5D9);
   static const Color onSecondaryFixedVariant = Color(0xFF3F484F);
   static const Color primaryBlue = Color(0xff1100CC);
+  static const Color darkText = Color(0xFF0F172B);
+  static const Color searchHint = Color(0xFFA1A1A1);
+  static const Color clockCardBg = Color(0xFFEFF6FF);
+  static const Color clockCardBorder = Color(0xFFB4D5FF);
 
   // HTML Mockup Colors
   static const Color onPrimary = Color(0xffffffff);
@@ -94,6 +98,11 @@ class AppColors {
   static const Color iconbgviolet = Color(0xffF3E5F5);
   static const Color iconbgred = Color(0xffFFEBEE);
   static const Color iconbgorange = Color(0xffFFF3E0);
+
+  // Custom UI colors
+  static const Color drawerIconColor = Color(0xFF23444A);
+  static const Color employeeActionText = Color(0xFF020618);
+  static const Color employeeActionSubtitle = Color(0xFF62748E);
 
   // Profile Specific
   static const Color profileHeaderBg = Color(0xFFEBFDFF);

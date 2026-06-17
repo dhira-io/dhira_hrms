@@ -47,7 +47,7 @@ class CommonButton extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(
                 variant == ButtonVariant.outlined ||
                         variant == ButtonVariant.text
-                    ? AppColors.of(context).primaryContainer
+                    ? AppColors.of(context).primary
                     : AppColors.of(context).white,
               ),
               strokeWidth: 2,
@@ -145,12 +145,12 @@ class CommonButton extends StatelessWidget {
                 backgroundColor ??
                 (variant == ButtonVariant.secondary
                     ? AppColors.of(context).secondary
-                    : AppColors.of(context).primaryContainer),
+                    : AppColors.of(context).primary),
             foregroundColor: AppColors.of(context).white,
             disabledBackgroundColor: (backgroundColor ??
                     (variant == ButtonVariant.secondary
                         ? AppColors.of(context).secondary
-                        : AppColors.of(context).primaryContainer))
+                        : AppColors.of(context).primary))
                 .withValues(alpha: 0.6),
             disabledForegroundColor: AppColors.of(context).white,
             elevation: 0,
@@ -182,7 +182,7 @@ class CommonButton extends StatelessWidget {
     switch (variant) {
       case ButtonVariant.outlined:
       case ButtonVariant.text:
-        return colors.primaryContainer;
+        return colors.primary;
       case ButtonVariant.secondary:
       case ButtonVariant.primary:
       default:

@@ -67,11 +67,11 @@ class HomeEmployeeActions extends StatelessWidget {
           color: AppColors.of(context).surface,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: AppColors.of(context).outlineVariant.withOpacity(0.5),
+            color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: AppColors.black.withValues(alpha: 0.02),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -94,7 +94,7 @@ class HomeEmployeeActions extends StatelessWidget {
             Divider(
               height: 1,
               thickness: 1,
-              color: AppColors.of(context).outlineVariant.withOpacity(0.3),
+              color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
             ),
             Padding(
               padding: EdgeInsets.all(16.w),
@@ -123,7 +123,7 @@ class HomeEmployeeActions extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: AppColors.of(context).outlineVariant.withOpacity(0.5),
+                            color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
                           ),
                           borderRadius: BorderRadius.circular(8.r),
                         ),
@@ -162,19 +162,19 @@ class HomeEmployeeActions extends StatelessWidget {
                                 children: [
                                   Text(
                                     action.label,
-                                    style: AppTextStyle.bodyMedium.copyWith(
-                                      color: AppColors.of(context).onSurface,
+                                    style: AppTextStyle.bodySmall.copyWith(
+                                      color: AppColors.employeeActionText,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 14.sp,
+                                      fontSize: 12.sp,
                                     ),
                                   ),
                                   SizedBox(height: 2.h),
                                   Text(
                                     action.subtitle,
                                     style: AppTextStyle.bodySmall.copyWith(
-                                      color: AppColors.of(context).onSurfaceVariant,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12.sp,
+                                      color: AppColors.employeeActionSubtitle,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 10.sp,
                                     ),
                                   ),
                                 ],

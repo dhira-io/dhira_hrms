@@ -30,12 +30,11 @@ class PunchHeader extends StatelessWidget {
       padding: const EdgeInsets.all(AppConstants.p8),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
+        padding: const EdgeInsets.symmetric(vertical: AppConstants.p8),
         decoration: BoxDecoration(
-          color: AppColors.of(context).profileHeaderBg.withValues(alpha: 0.5),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(AppConstants.r16),
-            topRight: Radius.circular(AppConstants.r16),
+          color: AppColors.clockCardBg,
+          border: Border.all(color: AppColors.clockCardBorder, width: 1),
+          borderRadius: const BorderRadius.all(Radius.circular(AppConstants.r16),
           ),
         ),
         child: Column(
@@ -53,13 +52,14 @@ class PunchHeader extends StatelessWidget {
             else if (!isPunchedIn)
               Text(
                 l10n.notClockedIn,
-                style: AppTextStyle.bodyMedium.copyWith(
+                style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
                   fontWeight: FontWeight.w500,
+                  fontSize: 12.sp
                 ),
               ),
 
-            SizedBox(height: 8.h),
+            SizedBox(height: 4.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -83,7 +83,7 @@ class PunchHeader extends StatelessWidget {
                 ],
               ],
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 4.h),
             Text(
               !isPunchedIn 
                   ? l10n.readyToStartYourDay 

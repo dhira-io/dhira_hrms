@@ -6,15 +6,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../bloc/dashboard_cubit.dart';
 import '../bloc/dashboard_state.dart';
 import '../widgets/home_header_widget.dart';
 import '../widgets/home_user_clock_card.dart';
 import '../widgets/home_employee_actions.dart';
 import '../widgets/home_quick_stats.dart';
-import '../widgets/performance_section.dart';
+
 import '../widgets/salary_section.dart';
-import '../widgets/policies_section.dart';
 import 'package:dhira_hrms/core/widgets/app_header.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,7 +25,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
@@ -38,43 +37,32 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
-          return CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    HomeHeaderWidget(
-                      onSearchChanged: (value) {
-                        setState(() {
-                          _searchQuery = value;
-                        });
-                      },
-                    ),
-                    Transform.translate(
-                      offset: Offset(0, -35.h),
+          return Column(
+            children: [
+              AppHeader(
+                backgroundColor: AppColors.of(context).surface,
+                iconColor: AppColors.of(context).onSurface,
+              ),
+              Expanded(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
                       child: Column(
                         children: [
-                          const HomeUserClockCard(),
-                          SizedBox(height: 24.h),
-                          HomeEmployeeActions(searchQuery: _searchQuery),
-                          SizedBox(height: 24.h),
-                          const HomeQuickStats(),
-                          SizedBox(height: 24.h),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppConstants.p20.w,
+                          const HomeHeaderWidget(),
+                          Transform.translate(
+                            offset: Offset(0, -40.h),
+                            child: Column(
+                              children: [
+                                const HomeUserClockCard(),
+                                SizedBox(height: 8.h),
+                                const HomeEmployeeActions(),
+                                SizedBox(height: 8.h),
+                                const HomeQuickStats(),
+                                SizedBox(height: 10.h),
+                              ],
                             ),
-                            child: const PerformanceSection(),
                           ),
-                          SizedBox(height: 24.h),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppConstants.p20.w,
-                            ),
-                            child: const PoliciesSection(),
-                          ),
-
-                          SizedBox(height: 30.h),
                         ],
                       ),
                     ),

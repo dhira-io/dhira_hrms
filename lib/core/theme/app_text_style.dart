@@ -31,10 +31,10 @@ class AppTextStyle {
   static final TextStyle h3Bold = h3.copyWith(fontWeight: FontWeight.bold);
 
   static TextStyle get bodyLarge =>
-      GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w500);
+      GoogleFonts.inter(fontSize: 16.sp, fontWeight: FontWeight.w500);
 
   static TextStyle get bodyMedium =>
-      GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w500);
+      GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w500);
 
   static TextStyle get bodySmall =>
       GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w500);

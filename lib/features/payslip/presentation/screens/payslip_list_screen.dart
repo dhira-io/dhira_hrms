@@ -65,9 +65,9 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      backgroundColor: AppColors.of(context).background,
-      body: BlocBuilder<PayslipBloc, PayslipState>(
+    return Container(
+      color: AppColors.of(context).background,
+      child: BlocBuilder<PayslipBloc, PayslipState>(
         buildWhen: (previous, current) =>
             previous.isListLoading != current.isListLoading ||
             previous.listError != current.listError ||
