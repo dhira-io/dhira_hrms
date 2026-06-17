@@ -26,28 +26,38 @@ class TimesheetTaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final status = task.status ?? TimesheetStatus.draft;
     final isApproved = status == TimesheetStatus.approved;
-    final isDraft = status == TimesheetStatus.draft;
+    final isRejected = status == TimesheetStatus.rejected;
+    final isPending = status == TimesheetStatus.pending;
 
-    final statusColor = isApproved
-        ? AppColors.of(context).success
-        : isDraft 
-            ? AppColors.of(context).textSecondary 
-            : AppColors.colorOrange400;
+    final Color statusColor;
+    final Color statusBorderColor;
 
-    final statusBorderColor = isApproved
-        ? AppColors.colorGreen300
-        : isDraft
-            ? AppColors.colorNeutral400
-            : AppColors.colorOrange300;
+    if (isApproved) {
+      statusColor = AppColors.colorGreen600;
+      statusBorderColor = AppColors.colorGreen300;
+    } else if (isRejected) {
+      statusColor = AppColors.colorRed600;
+      statusBorderColor = AppColors.colorRed300;
+    } else if (isPending) {
+      statusColor = AppColors.colorOrange500;
+      statusBorderColor = AppColors.colorOrange300;
+    } else {
+      statusColor = AppColors.of(context).textSecondary;
+      statusBorderColor = AppColors.colorNeutral400;
+    }
 
     final l10n = AppLocalizations.of(context)!;
-    
+    final double variance = task.spentHours - task.expectedHours;
+    final String varianceSign = variance >= 0 ? '+' : '';
+    final String varianceText =
+        '$varianceSign${variance.toStringAsFixed(variance % 1 == 0 ? 0 : 1)}h variance';
+
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(9.w),
+      padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(12.r),
         border: Border.all(color: AppColors.slate200),
       ),
       child: Column(
@@ -65,13 +75,11 @@ class TimesheetTaskCard extends StatelessWidget {
                       task.project,
                       style: TextStyle(
                         color: AppColors.of(context).textPrimary,
-                        fontSize: 14.sp,
+                        fontSize: 12.sp,
                         fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         height: 1.2,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 2.h),
                     Text(
@@ -83,24 +91,22 @@ class TimesheetTaskCard extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         height: 1.2,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.h),
                 decoration: BoxDecoration(
-                  color: AppColors.of(context).surfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(99.r),
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(80.r),
                   border: Border.all(color: statusBorderColor),
                 ),
                 child: Text(
-                  status.toUpperCase(),
+                  status,
                   style: TextStyle(
                     color: statusColor,
-                    fontSize: 10.sp,
+                    fontSize: 11.sp,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w500,
                   ),
@@ -108,12 +114,12 @@ class TimesheetTaskCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 5.h),
           Row(
             children: [
               Icon(
-                Icons.schedule,
-                size: 14.sp,
+                Icons.access_time_outlined,
+                size: 12.sp,
                 color: AppColors.of(context).textSecondary,
               ),
               SizedBox(width: 4.w),
@@ -121,54 +127,58 @@ class TimesheetTaskCard extends StatelessWidget {
                 '${task.spentHours}h ${l10n.logged}',
                 style: TextStyle(
                   color: AppColors.of(context).textSecondary,
-                  fontSize: 11.sp,
+                  fontSize: 9.sp,
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(width: 35.w),
-              if (task.expectedHours > 0)
+              if (task.expectedHours > 0) ...[
+                SizedBox(width: 24.w),
                 Text(
-                  '${(task.spentHours) - task.expectedHours}h variance',
+                  varianceText,
                   style: TextStyle(
-                    color: AppColors.colorGreen700,
-                    fontSize: 12.sp,
+                    color: variance >= 0
+                        ? AppColors.colorEmerald500
+                        : AppColors.of(context).error,
+                    fontSize: 9.sp,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+              ],
             ],
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 8.h),
           Text(
             l10n.description,
             style: TextStyle(
               color: AppColors.of(context).textPrimary,
-              fontSize: 12.sp,
+              fontSize: 11.sp,
               fontFamily: 'Inter',
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.bold,
             ),
           ),
           SizedBox(height: 4.h),
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.h),
             decoration: BoxDecoration(
               color: AppColors.of(context).surfaceContainerLowest,
-              borderRadius: BorderRadius.circular(6.r),
+              borderRadius: BorderRadius.circular(8.r),
               border: Border.all(color: AppColors.slate200),
             ),
             child: Text(
               task.description ?? '',
               style: TextStyle(
                 color: AppColors.of(context).textSecondary,
-                fontSize: 10.sp,
+                fontSize: 11.sp,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w500,
+                height: 1.3,
               ),
             ),
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 6.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -188,26 +198,24 @@ class TimesheetTaskCard extends StatelessWidget {
                       );
                     }
                   },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4.h),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           Icons.attach_file,
                           size: 16.sp,
                           color: AppColors.of(context).primaryContainer,
                         ),
-                        SizedBox(width: 6.w),
+                        SizedBox(width: 4.w),
                         Text(
-                          l10n.view,
+                          'View Attach',
                           style: TextStyle(
                             color: AppColors.of(context).primaryContainer,
-                            fontSize: 14.sp,
+                            fontSize: 12.sp,
                             fontFamily: 'Inter',
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
@@ -220,32 +228,24 @@ class TimesheetTaskCard extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => onEdit(task, index),
-                    child: Container(
-                      width: 32.w,
-                      height: 32.w,
-                      decoration: BoxDecoration(
-                        color: AppColors.slate100,
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
+                    behavior: HitTestBehavior.opaque,
+                    child: Padding(
+                      padding: EdgeInsets.all(4.w),
                       child: Icon(
-                        Icons.edit,
+                        Icons.edit_outlined,
                         size: 16.sp,
-                        color: AppColors.slate500,
+                        color: AppColors.of(context).textSecondary,
                       ),
                     ),
                   ),
-                  SizedBox(width: 6.w),
+                  SizedBox(width: 8.w),
                   GestureDetector(
                     onTap: () => onDelete(task),
-                    child: Container(
-                      width: 32.w,
-                      height: 32.w,
-                      decoration: BoxDecoration(
-                        color: AppColors.errorBg,
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
+                    behavior: HitTestBehavior.opaque,
+                    child: Padding(
+                      padding: EdgeInsets.all(4.w),
                       child: Icon(
-                        Icons.delete,
+                        Icons.delete_outline,
                         size: 16.sp,
                         color: AppColors.of(context).error,
                       ),

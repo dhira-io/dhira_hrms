@@ -171,7 +171,7 @@ class _DayButton extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: AspectRatio(
-        aspectRatio: 1.0,
+        aspectRatio: 0.83,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
           decoration: BoxDecoration(
@@ -288,20 +288,20 @@ class _SelectedDayCard extends StatelessWidget {
                   alignment: Alignment.center,
                   children: [
                     SizedBox(
-                      width: 32.w,
-                      height: 32.w,
+                      width: 30.w,
+                      height: 30.w,
                       child: CircularProgressIndicator(
                         value: percent,
                         backgroundColor: AppColors.colorNeutral200,
                         color: AppColors.of(context).primaryContainer,
-                        strokeWidth: 4.w,
+                        strokeWidth: 3.w,
                       ),
                     ),
                     Text(
                       '$percentInt%',
                       style: TextStyle(
                         color: AppColors.of(context).textPrimary,
-                        fontSize: 10.sp,
+                        fontSize: 9.sp,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                       ),

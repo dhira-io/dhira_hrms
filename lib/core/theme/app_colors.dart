@@ -121,6 +121,7 @@ class AppColors {
   static const Color slate300 = Color(0xFFCBD5E1);
   static const Color slate400 = Color(0xFF94A3B8);
   static const Color slate500 = Color(0xFF64748B);
+  static const Color slate500Confirmation = Color(0xFF62748E);
   static const Color slate600 = Color(0xFF475569);
   static const Color slate700 = Color(0xFF334155);
   static const Color slate800 = Color(0xFF1E293B);
@@ -156,6 +157,8 @@ class AppColors {
   static const Color colorEmerald400 = Color(0xFF00D492);
   static const Color colorEmerald500 = Color(0xFF00BC7D);
   static const Color colorRed500 = Color(0xFFFB2C36);
+  static const Color colorRed300 = Color(0xFFFF6467);
+  static const Color colorRed600 = Color(0xFFE7000B);
   static const Color purpleHoliday = Color(0xFF9810FA);
   static const Color blueAttendance = Color(0xFF3B82F6);
 
@@ -267,7 +270,6 @@ class AppColors {
   static const Color _darkTextPrimary = Color(0xFFE1E1E1);
   static const Color _darkTextSecondary = Color(0xFFA0A0A0);
   static const Color _darkBorder = Color(0xFF3A3A3A);
-  static const Color _darkBorderGrey = Color(0xFF3A3A3A);
   static const Color _darkSurfaceContainerLowest = Color(0xFF1A1A1A);
   static const Color _darkSurfaceContainerLow = Color(0xFF252525);
   static const Color _darkSurfaceContainerHigh = Color(0xFF333333);
@@ -429,6 +431,7 @@ class AppColorsResolved {
   final Color slate300;
   final Color slate400;
   final Color slate500;
+  final Color slate500Confirmation;
   final Color slate600;
   final Color slate700;
   final Color slate800;
@@ -605,6 +608,7 @@ class AppColorsResolved {
     required this.slate300,
     required this.slate400,
     required this.slate500,
+    required this.slate500Confirmation,
     required this.slate600,
     required this.slate700,
     required this.slate800,
@@ -780,6 +784,7 @@ class AppColorsResolved {
     slate300: AppColors.slate300,
     slate400: AppColors.slate400,
     slate500: AppColors.slate500,
+    slate500Confirmation: AppColors.slate500Confirmation,
     slate600: AppColors.slate600,
     slate700: AppColors.slate700,
     slate800: AppColors.slate800,
@@ -955,6 +960,7 @@ class AppColorsResolved {
     slate300: AppColors.slate300,
     slate400: AppColors.slate400,
     slate500: AppColors.slate500,
+    slate500Confirmation: AppColors.slate500Confirmation,
     slate600: AppColors.slate200,
     slate700: AppColors.slate700,
     slate800: AppColors.slate800,

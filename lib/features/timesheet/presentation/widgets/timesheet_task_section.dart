@@ -1,7 +1,5 @@
-import 'dart:math';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
@@ -9,7 +7,7 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bottomsheet/add_task_bottom_sheet.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
-import 'package:dhira_hrms/shared/dialogs/app_dialogs.dart';
+import 'package:dhira_hrms/core/widgets/common_confirmation_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/core/widgets/common_button.dart';
@@ -25,8 +23,6 @@ class TimesheetTaskSection extends StatefulWidget {
 }
 
 class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
-  bool _isExpanded = false;
-
   void _openAddTask(BuildContext context) {
     final bloc = context.read<TimesheetBloc>();
     final timesheetId =
@@ -43,20 +39,19 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
           previous.assignmentsForSelectedDay !=
               current.assignmentsForSelectedDay ||
           previous.selectedDate != current.selectedDate ||
-          previous.status != current.status,
+          previous.status != current.status ||
+          previous.isActionLoading != current.isActionLoading,
       builder: (context, state) {
         final assignments = state.assignmentsForSelectedDay;
-        final isLoading = state.status == TimesheetStateStatus.loading;
-
-        final displayCount = _isExpanded
-            ? assignments.length
-            : min(2, assignments.length);
+        final isLoading = state.status == TimesheetStateStatus.loading ||
+            state.isActionLoading;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   l10n.taskEntries,
@@ -68,21 +63,17 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                   ),
                 ),
                 if (assignments.isNotEmpty && !isLoading)
-                  InkWell(
-                    onTap: () => _openAddTask(context),
-                    child: Padding(
+                  SizedBox(
+                    height: 25.h,
+                    width: 110.w,
+                    child: CommonButton(
+                      text: l10n.addTask,
+                      onPressed: () => _openAddTask(context),
+                      icon: Icons.add,
+                      borderRadius: 8.r,
                       padding: EdgeInsets.symmetric(
-                        horizontal: 8.w,
-                        vertical: 4.h,
-                      ),
-                      child: Text(
-                        l10n.addTask,
-                        style: TextStyle(
-                          color: AppColors.of(context).primaryContainer,
-                          fontSize: 14.sp,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w500,
-                        ),
+                        horizontal: 9.w,
+                        vertical: 6.h,
                       ),
                     ),
                   ),
@@ -165,16 +156,17 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                         ),
                       ),
                       SizedBox(height: 16.h),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 65.w),
+                      SizedBox(
+                        height: 25.h,
+                        width: 110.w,
                         child: CommonButton(
                           text: l10n.addTask,
                           onPressed: () => _openAddTask(context),
                           icon: Icons.add,
                           borderRadius: 8.r,
                           padding: EdgeInsets.symmetric(
-                            horizontal: 20.w,
-                            vertical: 8.h,
+                            horizontal: 9.w,
+                            vertical: 6.h,
                           ),
                         ),
                       ),
@@ -186,7 +178,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: displayCount,
+                itemCount: assignments.length,
                 itemBuilder: (context, index) {
                   final task = assignments[index];
                   return TimesheetTaskCard(
@@ -216,15 +208,31 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                     },
                     onDelete: (task) async {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      final confirmed = await AppDialogs.showConfirmation(
+                      final confirmed = await showModalBottomSheet<bool>(
                         context: context,
-                        title: l10n.confirmDeletion,
-                        message: l10n.deleteTaskConfirmationSubtitle,
-                        confirmLabel: l10n.delete,
-                        isDestructive: true,
+                        backgroundColor: Colors.transparent,
+                        isScrollControlled: true,
+                        builder: (context) => CommonConfirmationBottomSheet(
+                          icon: Icon(
+                            Icons.error_outline,
+                            color: AppColors.of(context).absentText,
+                            size: 20.w,
+                          ),
+                          iconBackgroundColor: const Color(0xFFFEF2F2),
+                          title: l10n.confirmDeletion,
+                          subtitle: l10n.deleteTaskConfirmationSubtitle,
+                          cancelAction: ConfirmationAction(
+                            label: l10n.cancel,
+                            onTap: () => Navigator.of(context).pop(false),
+                          ),
+                          confirmAction: ConfirmationAction(
+                            label: l10n.delete,
+                            onTap: () => Navigator.of(context).pop(true),
+                          ),
+                        ),
                       );
 
-                      if (confirmed && context.mounted) {
+                      if (confirmed == true && context.mounted) {
                         FocusManager.instance.primaryFocus?.unfocus();
                         context.read<TimesheetBloc>().add(
                           TimesheetEvent.deleteTaskRequested(task: task),
@@ -234,23 +242,6 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                   );
                 },
               ),
-              if (assignments.length > 2)
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isExpanded = !_isExpanded;
-                      });
-                    },
-                    child: Text(
-                      _isExpanded ? l10n.showLess : l10n.showMore,
-                      style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.of(context).primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
             ],
           ],
         );
@@ -266,66 +257,95 @@ class TaskCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(16.r),
+        color: AppColors.of(context).white,
+        borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
-          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1),
+          color: AppColors.of(context).slate200,
+          width: 1.w,
         ),
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ShimmerLoading(height: 40.h, width: 40.w, borderRadius: 12),
-          SizedBox(width: 16.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ShimmerLoading(height: 16.h, width: 120.w, borderRadius: 4),
-                    Row(
-                      children: [
-                        ShimmerLoading(
-                          height: 20.h,
-                          width: 60.w,
-                          borderRadius: 99,
-                        ),
-                        SizedBox(width: 8.w),
-                        ShimmerLoading(
-                          height: 18.h,
-                          width: 18.w,
-                          borderRadius: 99,
-                        ),
-                        SizedBox(width: 4.w),
-                        ShimmerLoading(
-                          height: 18.h,
-                          width: 18.w,
-                          borderRadius: 99,
-                        ),
-                      ],
+                    ShimmerLoading(
+                      height: 14.h,
+                      width: 140.w,
+                      borderRadius: 4.r,
+                    ),
+                    SizedBox(height: 4.h),
+                    ShimmerLoading(
+                      height: 10.h,
+                      width: 180.w,
+                      borderRadius: 4.r,
                     ),
                   ],
                 ),
-                SizedBox(height: 8.h),
-                ShimmerLoading(
-                  height: 14.h,
-                  width: double.infinity,
-                  borderRadius: 4,
+              ),
+              ShimmerLoading(height: 22.h, width: 64.w, borderRadius: 9999.r),
+            ],
+          ),
+          SizedBox(height: 11.h),
+          Row(
+            children: [
+              ShimmerLoading(height: 14.h, width: 14.w, borderRadius: 4.r),
+              SizedBox(width: 4.w),
+              ShimmerLoading(height: 12.h, width: 60.w, borderRadius: 4.r),
+              SizedBox(width: 24.w),
+              ShimmerLoading(height: 12.h, width: 70.w, borderRadius: 4.r),
+            ],
+          ),
+          SizedBox(height: 11.h),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ShimmerLoading(height: 12.h, width: 80.w, borderRadius: 4.r),
+              SizedBox(height: 4.h),
+              Container(
+                width: double.infinity,
+                height: 36.h,
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: AppColors.of(context).white,
+                  borderRadius: BorderRadius.circular(6.r),
+                  border: Border.all(
+                    color: AppColors.of(context).slate200,
+                    width: 1.w,
+                  ),
                 ),
-                SizedBox(height: 12.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ShimmerLoading(height: 14.h, width: 50.w, borderRadius: 4),
-                    ShimmerLoading(height: 14.h, width: 50.w, borderRadius: 4),
-                  ],
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ShimmerLoading(
+                    height: 10.h,
+                    width: double.infinity,
+                    borderRadius: 4.r,
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
+          SizedBox(height: 11.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ShimmerLoading(height: 24.h, width: 90.w, borderRadius: 8.r),
+              Row(
+                children: [
+                  ShimmerLoading(height: 24.h, width: 24.w, borderRadius: 6.r),
+                  SizedBox(width: 8.w),
+                  ShimmerLoading(height: 24.h, width: 24.w, borderRadius: 6.r),
+                ],
+              ),
+            ],
           ),
         ],
       ),

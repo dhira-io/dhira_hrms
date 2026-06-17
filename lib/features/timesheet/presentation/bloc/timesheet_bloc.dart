@@ -436,6 +436,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
     emit(
       _ensureNonErrorState(state).copyWith(
+        status: TimesheetStateStatus.initial,
         isActionLoading: !isWeeklySubmit,
         isSubmitWeeklyLoading: isWeeklySubmit,
       ),
@@ -457,6 +458,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           previousState.copyWith(
             isActionLoading: false,
             isSubmitWeeklyLoading: false,
+            status: TimesheetStateStatus.error,
+            errorMessage: failure.message,
           ),
         ),
       ),
@@ -515,6 +518,7 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
 
     emit(
       _ensureNonErrorState(state).copyWith(
+        status: TimesheetStateStatus.initial,
         isActionLoading: !isWeeklySubmit,
         isSubmitWeeklyLoading: isWeeklySubmit,
       ),
@@ -538,6 +542,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
           previousState.copyWith(
             isActionLoading: false,
             isSubmitWeeklyLoading: false,
+            status: TimesheetStateStatus.error,
+            errorMessage: failure.message,
           ),
         ),
       ),
@@ -713,7 +719,17 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   ) async {
     final previousState = state;
 
-    emit(_recalculateDerivedState(state.copyWith(isActionLoading: true)));
+    emit(
+      _recalculateDerivedState(
+        state.copyWith(
+          isActionLoading: true,
+          status: TimesheetStateStatus.initial,
+          successMessage: null,
+          successType: null,
+          errorMessage: null,
+        ),
+      ),
+    );
 
     final result = await deleteTimesheetEntryUseCase(
       name: event.name,
@@ -724,7 +740,11 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     await result.fold(
       (failure) async => emit(
         _recalculateDerivedState(
-          previousState.copyWith(isActionLoading: false),
+          previousState.copyWith(
+            isActionLoading: false,
+            status: TimesheetStateStatus.error,
+            errorMessage: failure.message,
+          ),
         ),
       ),
       (_) async {
@@ -778,7 +798,17 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
   ) async {
     final previousState = state;
 
-    emit(_recalculateDerivedState(state.copyWith(isActionLoading: true)));
+    emit(
+      _recalculateDerivedState(
+        state.copyWith(
+          isActionLoading: true,
+          status: TimesheetStateStatus.initial,
+          successMessage: null,
+          successType: null,
+          errorMessage: null,
+        ),
+      ),
+    );
 
     final result = await deleteTimesheetUseCase(
       timesheetName: event.timesheetName,
@@ -787,7 +817,11 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     await result.fold(
       (failure) async => emit(
         _recalculateDerivedState(
-          previousState.copyWith(isActionLoading: false),
+          previousState.copyWith(
+            isActionLoading: false,
+            status: TimesheetStateStatus.error,
+            errorMessage: failure.message,
+          ),
         ),
       ),
       (_) async {
