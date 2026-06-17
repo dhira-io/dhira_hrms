@@ -264,7 +264,7 @@
   "requestCompensatoryLeave": "Request Compensatory Leave",
   "compensatoryLeaveInfo": "Compensatory leave is granted for working on weekends, holidays, or extra hours. Manager's approval is mandatory.",
   "balanceSummary": "Balance Summary",
-  "availableBalance": "Available Balance",
+  "availableBalance": "Available balance",
   "expiringSoon": "Expiring Soon",
   "expiresInDays": "Expires in {days} days",
   "@expiresInDays": {

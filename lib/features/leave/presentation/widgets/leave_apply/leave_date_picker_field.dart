@@ -34,11 +34,11 @@ class LeaveDatePickerField extends StatelessWidget {
             decoration: BoxDecoration(
               color: isReadOnly
                   ? AppColors.of(context).surfaceContainerLow
-                  : AppColors.of(context).surfaceContainerHighest,
+                  : Colors.white,
               borderRadius: BorderRadius.circular(AppConstants.r12),
               border: errorText != null
                   ? Border.all(color: Colors.red, width: 1.w)
-                  : null,
+                  : Border.all(color: const Color(0xFF90A1B9), width: 1.w),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,7 +46,7 @@ class LeaveDatePickerField extends StatelessWidget {
                 Text(
                   text,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: isReadOnly
+                    color: (isReadOnly || text == 'dd/MM/yyyy')
                         ? AppColors.of(context).outline
                         : AppColors.of(context).onSurface,
                   ),

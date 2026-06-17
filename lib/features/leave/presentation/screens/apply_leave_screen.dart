@@ -94,6 +94,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
       backgroundColor: AppColors.of(context).surface,
         appBar: CommonAppBar(
           title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
+          subtitle: 'Apply any type of leave here',
         ),
         body: SafeArea(
           child: GestureDetector(

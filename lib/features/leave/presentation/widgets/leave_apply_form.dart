@@ -231,10 +231,10 @@ class LeaveApplyFormState extends State<LeaveApplyForm> {
                 Container(
                   padding: EdgeInsets.all(AppConstants.p16.w),
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).primary.withValues(alpha: 0.02),
+                    color: AppColors.of(context).slateBg,
                     borderRadius: BorderRadius.circular(AppConstants.r12.r),
                     border: Border.all(
-                      color: AppColors.of(context).primary.withValues(alpha: 0.2),
+                      color: AppColors.of(context).slateBorder,
                     ),
                   ),
                   child: LeaveFormFields(

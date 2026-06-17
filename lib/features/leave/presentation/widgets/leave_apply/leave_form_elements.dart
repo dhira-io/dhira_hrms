@@ -34,7 +34,7 @@ class LeaveFormLabel extends StatelessWidget {
       child: RichText(
         text: TextSpan(
           text: label,
-          style: AppTextStyle.bodySmall.copyWith(
+          style: AppTextStyle.bodyMedium.copyWith(
             color: AppColors.of(context).onSurfaceVariant,
             fontWeight: FontWeight.bold,
           ),
@@ -42,7 +42,7 @@ class LeaveFormLabel extends StatelessWidget {
             if (isRequired)
               TextSpan(
                 text: '*',
-                style: AppTextStyle.bodySmall.copyWith(
+                style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.of(context).error,
                   fontWeight: FontWeight.bold,
                 ),

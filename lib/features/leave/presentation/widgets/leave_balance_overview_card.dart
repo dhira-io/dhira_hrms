@@ -199,7 +199,6 @@ class LeaveDetailCard extends StatelessWidget {
             style: AppTextStyle.bodyLarge.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.of(context).onSurface,
-              fontSize: AppConstants.fs15.sp,
             ),
           ),
           SizedBox(height: 16.h),

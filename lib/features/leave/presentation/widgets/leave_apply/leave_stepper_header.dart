@@ -104,7 +104,7 @@ class LeaveStepIndicator extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: AppTextStyle.labelMedium.copyWith(
+          style: AppTextStyle.labelSmall.copyWith(
             color: isActive || isCompleted ? AppColors.of(context).onSurface : AppColors.of(context).outline,
             fontWeight: FontWeight.bold,
           ),
@@ -114,7 +114,6 @@ class LeaveStepIndicator extends StatelessWidget {
           textAlign: TextAlign.center,
           style: AppTextStyle.bodySmall.copyWith(
             color: AppColors.of(context).outline,
-            fontSize: 10.sp,
           ),
         ),
       ],
