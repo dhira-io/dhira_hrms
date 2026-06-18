@@ -65,6 +65,7 @@ class AppColors {
   static const Color black = Colors.black;
   static const Color transparent = Colors.transparent;
   static const Color placeholdergrey = Color(0xff9E9E9E);
+  static const Color confirmationRedBg = Color(0xFFFEF2F2);
 
   // Status Palettes (Tailwind-like)
   static const Color info = Color(0xFF0369A1);
@@ -156,7 +157,7 @@ class AppColors {
   static const Color colorOrange500 = Color(0xFFFF6900);
   static const Color colorOrange600 = Color(0xFFF54A00);
   static const Color colorEmerald400 = Color(0xFF00D492);
-  static const Color colorEmerald500 = Color(0xFF00BC7D);
+  static const Color colorEmerald500 = Color(0xFF008236);
   static const Color colorRed500 = Color(0xFFFB2C36);
   static const Color colorRed300 = Color(0xFFFF6467);
   static const Color colorRed600 = Color(0xFFE7000B);

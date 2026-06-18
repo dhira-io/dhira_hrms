@@ -2158,7 +2158,17 @@
     "noTasksLogged": "No tasks logged",
     "logWorkHoursPrompt": "Log your work hours by adding tasks for this day",
     "addTask": "Add Task",
-    "trackWeeklyWorkHours": "Track weekly work hours"
+    "trackWeeklyWorkHours": "Track weekly work hours",
+    "monFri": "Mon-Fri",
+    "viewAttach": "View Attach",
+    "hoursVariance": "{hours}h variance",
+    "@hoursVariance": {
+      "placeholders": {
+        "hours": {
+          "type": "String"
+        }
+      }
+    }
 ,
     "policies": "Policies",
     "policyHub": "Policy Hub",

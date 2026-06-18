@@ -1,5 +1,6 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
@@ -43,7 +44,8 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
           previous.isActionLoading != current.isActionLoading,
       builder: (context, state) {
         final assignments = state.assignmentsForSelectedDay;
-        final isLoading = state.status == TimesheetStateStatus.loading ||
+        final isLoading =
+            state.status == TimesheetStateStatus.loading ||
             state.isActionLoading;
 
         return Column(
@@ -55,26 +57,21 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
               children: [
                 Text(
                   l10n.taskEntries,
-                  style: TextStyle(
+                  style: AppTextStyle.labelLarge.copyWith(
                     color: AppColors.of(context).textPrimary,
-                    fontSize: 12.sp,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 if (assignments.isNotEmpty && !isLoading)
                   SizedBox(
-                    height: 25.h,
+                    height: 26.h,
                     width: 110.w,
                     child: CommonButton(
+                      fontWeight: FontWeight.w100,
                       text: l10n.addTask,
                       onPressed: () => _openAddTask(context),
                       icon: Icons.add,
                       borderRadius: 8.r,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 9.w,
-                        vertical: 6.h,
-                      ),
+                      padding: EdgeInsets.zero,
                     ),
                   ),
               ],
@@ -84,7 +81,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
               child: Divider(
                 height: 1,
                 thickness: 0.8,
-                color: AppColors.of(context).border,
+                color: AppColors.of(context).tableBorder,
               ),
             ),
             if (isLoading)
@@ -99,7 +96,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
             else if (assignments.isEmpty)
               CustomPaint(
                 foregroundPainter: DashedBorderPainter(
-                  color: AppColors.of(context).border,
+                  color: AppColors.of(context).tableBorder,
                   borderRadius: 12.r,
                   strokeWidth: 2.0,
                   dashWidth: 7,
@@ -121,13 +118,13 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                       Container(
                         padding: EdgeInsets.all(12.w),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF5F5F5),
+                          color: AppColors.of(context).slate100,
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                         child: SvgPicture.asset(
                           'assets/svg/clock.svg',
-                          colorFilter: const ColorFilter.mode(
-                            Color(0xFFA1A1A1),
+                          colorFilter: ColorFilter.mode(
+                            AppColors.of(context).slate400,
                             BlendMode.srcIn,
                           ),
                           width: 24.w,
@@ -137,37 +134,30 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                       SizedBox(height: 16.h),
                       Text(
                         l10n.noTasksLogged,
-                        style: TextStyle(
+                        style: AppTextStyle.labelLarge.copyWith(
                           color: AppColors.of(context).textPrimary,
-                          fontSize: 12.sp,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       SizedBox(height: 6.h),
                       Text(
                         l10n.logWorkHoursPrompt,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: AppTextStyle.bodySmall.copyWith(
                           color: AppColors.of(context).textSecondary,
-                          fontSize: 10.sp,
-                          fontFamily: 'Inter',
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                       SizedBox(height: 16.h),
                       SizedBox(
-                        height: 25.h,
-                        width: 110.w,
+                        height: 26.h,
+                        width: 100.w,
                         child: CommonButton(
+                          fontWeight: FontWeight.w100,
                           text: l10n.addTask,
                           onPressed: () => _openAddTask(context),
                           icon: Icons.add,
                           borderRadius: 8.r,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 9.w,
-                            vertical: 6.h,
-                          ),
+                          padding: EdgeInsets.zero,
                         ),
                       ),
                     ],
@@ -218,7 +208,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                             color: AppColors.of(context).absentText,
                             size: 20.w,
                           ),
-                          iconBackgroundColor: const Color(0xFFFEF2F2),
+                          iconBackgroundColor: AppColors.confirmationRedBg,
                           title: l10n.confirmDeletion,
                           subtitle: l10n.deleteTaskConfirmationSubtitle,
                           cancelAction: ConfirmationAction(
@@ -261,10 +251,7 @@ class TaskCardSkeleton extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.of(context).white,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(
-          color: AppColors.of(context).slate200,
-          width: 1.w,
-        ),
+        border: Border.all(color: AppColors.of(context).slate200, width: 1.w),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

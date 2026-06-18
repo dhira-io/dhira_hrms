@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/timesheet_bloc.dart';
@@ -43,11 +44,11 @@ class TimesheetNewHeader extends StatelessWidget {
         int woy = ((dayOfYear - startOfWeek.weekday + 10) / 7).floor();
 
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
           decoration: BoxDecoration(
             color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: AppColors.of(context).border),
+            border: Border.all(color: AppColors.of(context).tableBorder),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,11 +75,8 @@ class TimesheetNewHeader extends StatelessWidget {
                     children: [
                       Text(
                         rangeText,
-                        style: TextStyle(
+                        style: AppTextStyle.bodyMedium.copyWith(
                           color: AppColors.of(context).textPrimary,
-                          fontSize: 12.sp,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       if (isThisWeek) ...[
@@ -97,10 +95,8 @@ class TimesheetNewHeader extends StatelessWidget {
                           ),
                           child: Text(
                             l10n.thisWeek,
-                            style: TextStyle(
+                            style: AppTextStyle.labelSmall.copyWith(
                               color: AppColors.colorBlue600,
-                              fontSize: 10.sp,
-                              fontFamily: 'Inter',
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -110,11 +106,9 @@ class TimesheetNewHeader extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    'Week $woy · ${startOfWeek.year}',
-                    style: TextStyle(
+                    '${l10n.week} $woy · ${startOfWeek.year}',
+                    style: AppTextStyle.bodyMedium.copyWith(
                       color: AppColors.of(context).textSecondary,
-                      fontSize: 12.sp,
-                      fontFamily: 'Inter',
                       fontWeight: FontWeight.w400,
                     ),
                   ),

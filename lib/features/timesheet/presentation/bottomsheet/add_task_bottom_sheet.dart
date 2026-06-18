@@ -219,6 +219,15 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
                     child: BlocBuilder<TimesheetBloc, TimesheetState>(
+                      buildWhen: (previous, current) =>
+                          previous.projects != current.projects ||
+                          previous.status != current.status ||
+                          previous.selectedDate != current.selectedDate ||
+                          previous.uploadedFileUrl != current.uploadedFileUrl ||
+                          previous.formSelectedProject !=
+                              current.formSelectedProject ||
+                          previous.assignmentsForSelectedDay !=
+                              current.assignmentsForSelectedDay,
                       builder: (context, state) {
                         final l10n = AppLocalizations.of(context)!;
                         final projects = state.projects;
@@ -306,10 +315,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                               ],
                             ),
                             SizedBox(height: 12.h),
-                            StatLabel(
-                              text: l10n.allocationLabel,
-                              isMandatory: true,
-                            ),
+                            StatLabel(text: l10n.project, isMandatory: true),
                             Container(
                               height: 40.h,
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -317,7 +323,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                 color: AppColors.of(context).white,
                                 borderRadius: BorderRadius.circular(6.r),
                                 border: Border.all(
-                                  color: AppColors.of(context).slate400,
+                                  color: AppColors.of(context).tableBorder,
                                   width: 1.w,
                                 ),
                               ),
@@ -354,7 +360,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   hint: Text(
                                     isLoadingProjects
                                         ? l10n.loadingProjects
-                                        : l10n.selectAllocationTime,
+                                        : l10n.selectProject,
                                     style: AppTextStyle.bodyMedium.copyWith(
                                       fontSize: 12.sp,
                                       color: AppColors.of(
@@ -465,19 +471,24 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             ),
                             SizedBox(height: 12.h),
                             StatLabel(text: l10n.supportingDocumentLabel),
-                            state.isUploading
-                                ? ShimmerLoading(
-                                    height: 60.h,
-                                    width: double.infinity,
-                                    borderRadius: 14.r,
-                                  )
-                                : TimesheetUploadCard(
-                                    onTap: () {
-                                      context.read<TimesheetBloc>().add(
-                                        const TimesheetEvent.pickAndUploadFileRequested(),
+                            BlocSelector<TimesheetBloc, TimesheetState, bool>(
+                              selector: (state) => state.isUploading,
+                              builder: (context, isUploading) {
+                                return isUploading
+                                    ? ShimmerLoading(
+                                        height: 60.h,
+                                        width: double.infinity,
+                                        borderRadius: 14.r,
+                                      )
+                                    : TimesheetUploadCard(
+                                        onTap: () {
+                                          context.read<TimesheetBloc>().add(
+                                            const TimesheetEvent.pickAndUploadFileRequested(),
+                                          );
+                                        },
                                       );
-                                    },
-                                  ),
+                              },
+                            ),
                             if ((attachment ?? "").isNotEmpty) ...[
                               SizedBox(height: 8.h),
                               Container(
@@ -544,29 +555,43 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                 Expanded(
                                   child: SizedBox(
                                     height: 40.h,
-                                    child: CommonButton(
-                                      text: l10n.save,
-                                      variant: ButtonVariant.primary,
-                                      backgroundColor: AppColors.of(
-                                        context,
-                                      ).primaryContainer,
-                                      foregroundColor: AppColors.of(
-                                        context,
-                                      ).slate50,
-                                      borderRadius: 8.r,
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 10.h,
-                                      ),
-                                      isLoading: state.isActionLoading,
-                                      onPressed: () {
-                                        FocusScope.of(context).unfocus();
-                                        context.read<TimesheetBloc>().add(
-                                          TimesheetEvent.saveTaskRequested(
-                                            timesheetId: widget.timesheetId,
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                    child:
+                                        BlocSelector<
+                                          TimesheetBloc,
+                                          TimesheetState,
+                                          bool
+                                        >(
+                                          selector: (state) =>
+                                              state.isActionLoading,
+                                          builder: (context, isActionLoading) {
+                                            return CommonButton(
+                                              text: l10n.save,
+                                              variant: ButtonVariant.primary,
+                                              backgroundColor: AppColors.of(
+                                                context,
+                                              ).primaryContainer,
+                                              foregroundColor: AppColors.of(
+                                                context,
+                                              ).slate50,
+                                              borderRadius: 8.r,
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: 10.h,
+                                              ),
+                                              isLoading: isActionLoading,
+                                              onPressed: () {
+                                                FocusScope.of(
+                                                  context,
+                                                ).unfocus();
+                                                context.read<TimesheetBloc>().add(
+                                                  TimesheetEvent.saveTaskRequested(
+                                                    timesheetId:
+                                                        widget.timesheetId,
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
                                   ),
                                 ),
                               ],
@@ -599,7 +624,7 @@ class StatLabel extends StatelessWidget {
         text: TextSpan(
           text: text,
           style: AppTextStyle.bodySmall.copyWith(
-            fontSize: 10.sp,
+            fontSize: 11.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.of(context).slate900,
           ),
@@ -656,7 +681,7 @@ class TimesheetTextField extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.r),
           borderSide: BorderSide(
-            color: AppColors.of(context).slate400,
+            color: AppColors.of(context).tableBorder,
             width: 1.w,
           ),
         ),
@@ -670,7 +695,7 @@ class TimesheetTextField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.r),
           borderSide: BorderSide(
-            color: AppColors.of(context).slate400,
+            color: AppColors.of(context).tableBorder,
             width: 1.w,
           ),
         ),
@@ -692,7 +717,7 @@ class TimesheetUploadCard extends StatelessWidget {
       onTap: onTap,
       child: CustomPaint(
         painter: _DashedRectPainter(
-          color: AppColors.of(context).slate400,
+          color: AppColors.of(context).tableBorder,
           fillColor: AppColors.of(context).white,
           strokeWidth: 1.w,
           radius: 14.r,

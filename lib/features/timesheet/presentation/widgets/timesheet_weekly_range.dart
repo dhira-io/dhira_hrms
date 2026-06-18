@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/timesheet_bloc.dart';
 import '../bloc/timesheet_state.dart';
@@ -24,11 +25,11 @@ class TimesheetWeeklyRange extends StatelessWidget {
         final int percentInt = (percent * 100).toInt();
 
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
           decoration: BoxDecoration(
             color: AppColors.of(context).surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: AppColors.of(context).border),
+            border: Border.all(color: AppColors.of(context).tableBorder),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.02),
@@ -41,12 +42,11 @@ class TimesheetWeeklyRange extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Weekly Range',
-                style: TextStyle(
+                l10n.weeklyRange,
+                style: AppTextStyle.labelLarge.copyWith(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
                   color: AppColors.of(context).textPrimary,
-                  fontSize: 13.sp,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w600,
                 ),
               ),
               SizedBox(height: 6.h),
@@ -68,7 +68,7 @@ class TimesheetWeeklyRange extends StatelessWidget {
                     child: _StatCard(
                       title: l10n.target,
                       value: '${target.toInt()}h',
-                      subtitle: 'Mon-Fri', // Changed to Mon-Fri
+                      subtitle: l10n.monFri,
                       valueColor: AppColors.colorGreen600,
                       bgColor: AppColors.colorGreen50,
                       borderColor: AppColors.colorGreen200,
@@ -80,7 +80,7 @@ class TimesheetWeeklyRange extends StatelessWidget {
                       title: l10n.remaining,
                       value:
                           '${remaining.toStringAsFixed(remaining.truncateToDouble() == remaining ? 0 : 1)}h',
-                      subtitle: '$percentInt% complete',
+                      subtitle: l10n.percentComplete(percentInt.toString()),
                       valueColor: AppColors.colorOrange500,
                       bgColor: AppColors.colorOrange50,
                       borderColor: AppColors.colorOrange200,
@@ -127,30 +127,23 @@ class _StatCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: AppTextStyle.bodySmall.copyWith(
               color: AppColors.of(context).textPrimary,
-              fontSize: 10.sp,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w500,
             ),
           ),
           SizedBox(height: 2.h),
           Text(
             value,
-            style: TextStyle(
+            style: AppTextStyle.bodyLarge.copyWith(
               color: valueColor,
               fontSize: 14.sp,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w500,
             ),
           ),
           SizedBox(height: 2.h),
           Text(
             subtitle,
-            style: TextStyle(
+            style: AppTextStyle.bodySmall.copyWith(
               color: AppColors.of(context).textSecondary,
-              fontSize: 10.sp,
-              fontFamily: 'Inter',
               fontWeight: FontWeight.w400,
             ),
           ),

@@ -47,23 +47,22 @@ class TimesheetContentView extends StatelessWidget {
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(AppConstants.p20),
+            padding: const EdgeInsets.all(AppConstants.p12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const TimesheetNewHeader(),
-                SizedBox(height: 8.h),
+                SizedBox(height: 6.h),
                 const TimesheetWeeklyRange(),
-                SizedBox(height: 8.h),
+                SizedBox(height: 6.h),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 14.h,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                   decoration: BoxDecoration(
                     color: AppColors.of(context).surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: AppColors.of(context).border),
+                    border: Border.all(
+                      color: AppColors.of(context).tableBorder,
+                    ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.02),
@@ -81,7 +80,7 @@ class TimesheetContentView extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 20.h), // Padding for bottom submit bar
+                SizedBox(height: 10.h), // Padding for bottom submit bar
               ],
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/utils/date_time_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/project_assignment_entity.dart';
@@ -17,6 +18,9 @@ class TimesheetDailyProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TimesheetBloc, TimesheetState>(
+      buildWhen: (previous, current) =>
+          previous.selectedDate != current.selectedDate ||
+          previous.editAssignments != current.editAssignments,
       builder: (context, state) {
         final l10n = AppLocalizations.of(context)!;
         final selectedDate = state.selectedDate ?? DateTime.now();
@@ -30,29 +34,32 @@ class TimesheetDailyProgress extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   l10n.dailyProgress,
-                  style: TextStyle(
+                  style: AppTextStyle.labelLarge.copyWith(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold,
                     color: AppColors.of(context).textPrimary,
-                    fontSize: 13.sp,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                Row(
-                  children: [
-                    _LegendItem(
-                      color: AppColors.colorEmerald500,
-                      label: l10n.logged,
-                    ),
-                    SizedBox(width: 8.w),
-                    _LegendItem(
-                      color: AppColors.colorRed500,
-                      label: l10n.missing,
-                    ),
-                  ],
+                const Spacer(),
+                Padding(
+                  padding: EdgeInsets.only(right: 5.w),
+                  child: Row(
+                    children: [
+                      _LegendItem(
+                        color: AppColors.colorEmerald500,
+                        label: l10n.logged,
+                      ),
+                      SizedBox(width: 8.w),
+                      _LegendItem(
+                        color: AppColors.colorRed500,
+                        label: l10n.missing,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -62,7 +69,7 @@ class TimesheetDailyProgress extends StatelessWidget {
               children: days.map((day) {
                 return Expanded(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 1.w),
+                    padding: EdgeInsets.only(right: 5.w),
                     child: _DayButton(
                       day: day,
                       isSelected: DateTimeUtils.isSameDay(selectedDate, day),
@@ -77,7 +84,7 @@ class TimesheetDailyProgress extends StatelessWidget {
                 );
               }).toList(),
             ),
-            SizedBox(height: 14.h),
+            SizedBox(height: 8.h),
             _SelectedDayCard(
               selectedDate: selectedDate,
               assignments: state.editAssignments,
@@ -109,10 +116,8 @@ class _LegendItem extends StatelessWidget {
         SizedBox(width: 4.w),
         Text(
           label,
-          style: TextStyle(
+          style: AppTextStyle.labelMedium.copyWith(
             color: AppColors.of(context).textSecondary,
-            fontSize: 11.sp,
-            fontFamily: 'Inter',
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -163,7 +168,7 @@ class _DayButton extends StatelessWidget {
 
     final Color borderColor = isSelected
         ? AppColors.of(context).primaryContainer
-        : AppColors.of(context).border;
+        : AppColors.of(context).tableBorder;
 
     final Color? dotColor = _getStatusColor(context, hours);
 
@@ -171,9 +176,9 @@ class _DayButton extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: AspectRatio(
-        aspectRatio: 0.83,
+        aspectRatio: 0.8,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
+          padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(8.r),
@@ -184,28 +189,24 @@ class _DayButton extends StatelessWidget {
             children: [
               Text(
                 DateFormat('EEE').format(day).toUpperCase(),
-                style: TextStyle(
-                  color: AppColors.of(context).textSecondary,
+                style: AppTextStyle.dateDay.copyWith(
                   fontSize: 8.sp,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w600,
+                  color: AppColors.of(context).textSecondary,
                 ),
               ),
               SizedBox(height: 1.h),
               Text(
                 '${day.day}',
-                style: TextStyle(
-                  color: AppColors.of(context).textPrimary,
+                style: AppTextStyle.dateNumber.copyWith(
                   fontSize: 12.sp,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w700,
+                  color: AppColors.of(context).textPrimary,
                 ),
               ),
               if (dotColor != null) ...[
                 SizedBox(height: 1.h),
                 Container(
-                  width: 3.w,
-                  height: 3.w,
+                  width: 5.w,
+                  height: 5.w,
                   decoration: BoxDecoration(
                     color: dotColor,
                     shape: BoxShape.circle,
@@ -247,11 +248,11 @@ class _SelectedDayCard extends StatelessWidget {
     final int percentInt = (percent * 100).toInt();
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.of(context).border),
+        border: Border.all(color: AppColors.of(context).tableBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -264,19 +265,15 @@ class _SelectedDayCard extends StatelessWidget {
                 children: [
                   Text(
                     DateFormat('EEEE').format(selectedDate),
-                    style: TextStyle(
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      fontWeight: FontWeight.w700,
                       color: AppColors.of(context).textPrimary,
-                      fontSize: 12.sp,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
                     DateFormat('d MMM · yyyy').format(selectedDate),
-                    style: TextStyle(
+                    style: AppTextStyle.bodySmall.copyWith(
                       color: AppColors.of(context).textSecondary,
-                      fontSize: 10.sp,
-                      fontFamily: 'Inter',
                     ),
                   ),
                 ],
@@ -288,8 +285,8 @@ class _SelectedDayCard extends StatelessWidget {
                   alignment: Alignment.center,
                   children: [
                     SizedBox(
-                      width: 30.w,
-                      height: 30.w,
+                      width: 27.w,
+                      height: 27.w,
                       child: CircularProgressIndicator(
                         value: percent,
                         backgroundColor: AppColors.colorNeutral200,
@@ -299,11 +296,9 @@ class _SelectedDayCard extends StatelessWidget {
                     ),
                     Text(
                       '$percentInt%',
-                      style: TextStyle(
+                      style: AppTextStyle.bodySmall.copyWith(
+                        fontSize: percentInt == 100 ? 8.sp : 9.sp,
                         color: AppColors.of(context).textPrimary,
-                        fontSize: 9.sp,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
@@ -321,25 +316,23 @@ class _SelectedDayCard extends StatelessWidget {
                     targetHours.truncateToDouble() == targetHours ? 0 : 1,
                   ),
                 ),
-                style: TextStyle(
+                style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
-                  fontSize: 10.sp,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w500,
                 ),
               ),
               Text(
-                '${remaining.toStringAsFixed(remaining.truncateToDouble() == remaining ? 0 : 1)}h remaining',
-                style: TextStyle(
+                l10n.hoursRemaining(
+                  remaining.toStringAsFixed(
+                    remaining.truncateToDouble() == remaining ? 0 : 1,
+                  ),
+                ),
+                style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
-                  fontSize: 10.sp,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 5.h),
           ClipRRect(
             borderRadius: BorderRadius.circular(99.r),
             child: LinearProgressIndicator(
@@ -348,7 +341,7 @@ class _SelectedDayCard extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(
                 AppColors.of(context).primaryContainer,
               ),
-              minHeight: 4.h,
+              minHeight: 5.h,
             ),
           ),
         ],

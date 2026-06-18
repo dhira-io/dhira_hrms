@@ -20,6 +20,7 @@ class CommonButton extends StatelessWidget {
     this.borderRadius,
     this.backgroundColor,
     this.foregroundColor,
+    this.fontWeight,
   });
 
   final String text;
@@ -33,60 +34,53 @@ class CommonButton extends StatelessWidget {
   final double? borderRadius;
   final Color? backgroundColor;
   final Color? foregroundColor;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
     final bool isButtonDisabled = (isLoading ? null : onPressed) == null;
 
-    Widget buttonChild = SizedBox(
-      height: 20,
-      child: Center(
-        child: isLoading
-            ? SizedBox(
-                width: 20.w,
-                height: 20.h,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    variant == ButtonVariant.outlined ||
-                            variant == ButtonVariant.text
-                        ? AppColors.of(context).primaryContainer
-                        : AppColors.of(context).white,
-                  ),
-                  strokeWidth: 2,
-                ),
-              )
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (customIcon != null) ...[
-                    if (isButtonDisabled)
-                      Opacity(
-                        opacity: 0.8,
-                        child: customIcon!,
-                      )
-                    else
-                      customIcon!,
-                    const SizedBox(width: AppConstants.p8),
-                  ] else if (icon != null) ...[
-                    Icon(
-                      icon,
-                      size: AppConstants.iconXSmall,
-                      color: _getTextColor(AppColors.of(context), isButtonDisabled),
-                    ),
-                    const SizedBox(width: AppConstants.p8),
-                  ],
-                  Text(
-                    text,
-                    style: AppTextStyle.button.copyWith(
-                      color: _getTextColor(AppColors.of(context), isButtonDisabled),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+    Widget buttonChild = isLoading
+        ? SizedBox(
+            width: 20.w,
+            height: 20.h,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                variant == ButtonVariant.outlined ||
+                        variant == ButtonVariant.text
+                    ? AppColors.of(context).primaryContainer
+                    : AppColors.of(context).white,
               ),
-      ),
-    );
+              strokeWidth: 2,
+            ),
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (customIcon != null) ...[
+                if (isButtonDisabled)
+                  Opacity(opacity: 0.8, child: customIcon!)
+                else
+                  customIcon!,
+                const SizedBox(width: AppConstants.p8),
+              ] else if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: AppConstants.iconXSmall,
+                  color: _getTextColor(AppColors.of(context), isButtonDisabled),
+                ),
+                const SizedBox(width: AppConstants.p8),
+              ],
+              Text(
+                text,
+                style: AppTextStyle.button.copyWith(
+                  color: _getTextColor(AppColors.of(context), isButtonDisabled),
+                  fontWeight: fontWeight ?? FontWeight.w700,
+                ),
+              ),
+            ],
+          );
 
     Widget button;
     switch (variant) {
@@ -98,13 +92,16 @@ class CommonButton extends StatelessWidget {
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             backgroundColor: backgroundColor,
             side: BorderSide(
-              color: AppColors.of(context).gray400.withValues(
-                    alpha: isButtonDisabled ? 0.5 : 1.0,
-                  ),
+              color: AppColors.of(
+                context,
+              ).gray400.withValues(alpha: isButtonDisabled ? 0.5 : 1.0),
               width: 1.0.w,
             ),
-            foregroundColor: foregroundColor ?? AppColors.of(context).primaryContainer,
-            disabledForegroundColor: (foregroundColor ?? AppColors.of(context).primaryContainer).withValues(alpha: 0.5),
+            foregroundColor:
+                foregroundColor ?? AppColors.of(context).primaryContainer,
+            disabledForegroundColor:
+                (foregroundColor ?? AppColors.of(context).primaryContainer)
+                    .withValues(alpha: 0.5),
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
@@ -126,8 +123,11 @@ class CommonButton extends StatelessWidget {
           style: TextButton.styleFrom(
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            foregroundColor: foregroundColor ?? AppColors.of(context).primaryContainer,
-            disabledForegroundColor: (foregroundColor ?? AppColors.of(context).primaryContainer).withValues(alpha: 0.5),
+            foregroundColor:
+                foregroundColor ?? AppColors.of(context).primaryContainer,
+            disabledForegroundColor:
+                (foregroundColor ?? AppColors.of(context).primaryContainer)
+                    .withValues(alpha: 0.5),
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
@@ -156,12 +156,16 @@ class CommonButton extends StatelessWidget {
                     ? AppColors.of(context).secondary
                     : AppColors.of(context).primaryContainer),
             foregroundColor: foregroundColor ?? AppColors.of(context).white,
-            disabledBackgroundColor: (backgroundColor ??
-                    (variant == ButtonVariant.secondary
-                        ? AppColors.of(context).secondary
-                        : AppColors.of(context).primaryContainer))
-                .withValues(alpha: 0.5),
-            disabledForegroundColor: (foregroundColor ?? AppColors.of(context).white).withValues(alpha: 0.8),
+            disabledBackgroundColor:
+                (backgroundColor ??
+                        (variant == ButtonVariant.secondary
+                            ? AppColors.of(context).secondary
+                            : AppColors.of(context).primaryContainer))
+                    .withValues(alpha: 0.5),
+            disabledForegroundColor:
+                (foregroundColor ?? AppColors.of(context).white).withValues(
+                  alpha: 0.8,
+                ),
             elevation: 0,
             padding:
                 padding ??
@@ -189,7 +193,9 @@ class CommonButton extends StatelessWidget {
 
   Color _getTextColor(AppColorsResolved colors, bool isDisabled) {
     if (foregroundColor != null) {
-      return isDisabled ? foregroundColor!.withValues(alpha: 0.5) : foregroundColor!;
+      return isDisabled
+          ? foregroundColor!.withValues(alpha: 0.5)
+          : foregroundColor!;
     }
     if (isDisabled) {
       switch (variant) {

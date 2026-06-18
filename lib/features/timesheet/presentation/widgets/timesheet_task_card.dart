@@ -2,6 +2,7 @@ import 'package:dhira_hrms/core/constants/api_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/string_utils.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
@@ -52,7 +53,7 @@ class TimesheetTaskCard extends StatelessWidget {
     final double variance = task.spentHours - task.expectedHours;
     final String varianceSign = variance >= 0 ? '+' : '';
     final String varianceText =
-        '$varianceSign${variance.toStringAsFixed(variance % 1 == 0 ? 0 : 1)}h variance';
+        '$varianceSign${l10n.hoursVariance(variance.abs().toStringAsFixed(variance % 1 == 0 ? 0 : 1))}';
 
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
@@ -60,7 +61,7 @@ class TimesheetTaskCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.of(context).surfaceContainerLowest,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.slate200),
+        border: Border.all(color: AppColors.of(context).tableBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,22 +76,16 @@ class TimesheetTaskCard extends StatelessWidget {
                   children: [
                     Text(
                       task.project,
-                      style: TextStyle(
+                      style: AppTextStyle.labelLarge.copyWith(
                         color: AppColors.of(context).textPrimary,
-                        fontSize: 12.sp,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.bold,
                         height: 1.2,
                       ),
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       task.taskData ?? '',
-                      style: TextStyle(
+                      style: AppTextStyle.bodySmall.copyWith(
                         color: AppColors.of(context).textSecondary,
-                        fontSize: 10.sp,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
                         height: 1.2,
                       ),
                     ),
@@ -106,10 +101,8 @@ class TimesheetTaskCard extends StatelessWidget {
                 ),
                 child: Text(
                   status,
-                  style: TextStyle(
+                  style: AppTextStyle.labelMedium.copyWith(
                     color: statusColor,
-                    fontSize: 11.sp,
-                    fontFamily: 'Inter',
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -127,24 +120,20 @@ class TimesheetTaskCard extends StatelessWidget {
               SizedBox(width: 4.w),
               Text(
                 '${task.spentHours}h ${l10n.logged}',
-                style: TextStyle(
-                  color: AppColors.of(context).textSecondary,
+                style: AppTextStyle.bodySmall.copyWith(
                   fontSize: 9.sp,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w500,
+                  color: AppColors.of(context).textSecondary,
                 ),
               ),
               if (task.expectedHours > 0) ...[
                 SizedBox(width: 24.w),
                 Text(
                   varianceText,
-                  style: TextStyle(
+                  style: AppTextStyle.bodySmall.copyWith(
+                    fontSize: 9.sp,
                     color: variance >= 0
                         ? AppColors.colorEmerald500
                         : AppColors.of(context).error,
-                    fontSize: 9.sp,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
@@ -153,10 +142,8 @@ class TimesheetTaskCard extends StatelessWidget {
           SizedBox(height: 8.h),
           Text(
             l10n.description,
-            style: TextStyle(
+            style: AppTextStyle.labelMedium.copyWith(
               color: AppColors.of(context).textPrimary,
-              fontSize: 11.sp,
-              fontFamily: 'Inter',
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -167,15 +154,13 @@ class TimesheetTaskCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.of(context).surfaceContainerLowest,
               borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: AppColors.slate200),
+              border: Border.all(color: AppColors.of(context).tableBorder),
             ),
             child: Text(
               task.description ?? '',
-              style: TextStyle(
-                color: AppColors.of(context).textSecondary,
+              style: AppTextStyle.bodyMedium.copyWith(
                 fontSize: 11.sp,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
+                color: AppColors.of(context).textSecondary,
                 height: 1.3,
               ),
             ),
@@ -243,12 +228,9 @@ class TimesheetTaskCard extends StatelessWidget {
                         ),
                         SizedBox(width: 4.w),
                         Text(
-                          'View Attach',
-                          style: TextStyle(
+                          l10n.viewAttach,
+                          style: AppTextStyle.labelLarge.copyWith(
                             color: AppColors.of(context).primaryContainer,
-                            fontSize: 12.sp,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],

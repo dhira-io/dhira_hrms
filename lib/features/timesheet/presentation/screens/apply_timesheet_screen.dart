@@ -148,7 +148,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
               decoration: BoxDecoration(
                 color: AppColors.of(context).surfaceContainerLowest,
                 border: Border(
-                  top: BorderSide(color: AppColors.of(context).border),
+                  top: BorderSide(color: AppColors.of(context).tableBorder),
                 ),
               ),
               child: SafeArea(

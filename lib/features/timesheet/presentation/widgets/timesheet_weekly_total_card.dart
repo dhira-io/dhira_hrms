@@ -27,7 +27,7 @@ class TimesheetWeeklyTotalCard extends StatelessWidget {
           ),
         ],
         border: Border.all(
-          color: AppColors.of(context).border.withValues(alpha: 0.5),
+          color: AppColors.of(context).tableBorder,
         ),
       ),
       child: Row(
