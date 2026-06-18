@@ -1,114 +1,223 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class NotificationPreferencesSkeleton extends StatelessWidget {
-  const NotificationPreferencesSkeleton({super.key});
+  final bool isManager;
+
+  const NotificationPreferencesSkeleton({
+    super.key,
+    this.isManager = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding:       EdgeInsets.all(24.0.w),
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 18.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-                ShimmerLoading(height: 38.h, width: 250.w, borderRadius: 8),
-                SizedBox(height: 8.h),
-                ShimmerLoading(
-            height: 20.h,
-            width: double.infinity,
-            borderRadius: 4,
-          ),
-                SizedBox(height: 4.h),
-                ShimmerLoading(height: 20.h, width: 200.w, borderRadius: 4),
-                SizedBox(height: 40.h),
-
-          _buildSectionSkeleton(context),
-          SizedBox(height: 32.h),
-          _buildSectionSkeleton(context),
+          _buildSectionSkeleton(context, isManager: isManager),
+          SizedBox(height: 40.h),
+          _buildSectionSkeleton(context, isManager: isManager),
+          SizedBox(height: 40.h),
         ],
       ),
     );
   }
 
-  Widget _buildSectionSkeleton(BuildContext context) {
+  Widget _buildSectionSkeleton(BuildContext context, {required bool isManager}) {
+    final typeFlex = isManager ? 28 : 22;
+    final personalFlex = isManager ? 7 : 10;
+    final teamFlex = 7;
+
+    final colors = AppColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Section Header Row
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-                  ShimmerLoading(height: 24.h, width: 24.w, borderRadius: 12),
-                  SizedBox(width: 8.w),
-                  ShimmerLoading(height: 24.h, width: 150.w, borderRadius: 4),
+            Container(
+              width: 32.w,
+              height: 32.w,
+              decoration: BoxDecoration(
+                color: colors.iconbgblue,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: ShimmerLoading(
+                  height: 18.w,
+                  width: 18.w,
+                  borderRadius: 9999,
+                ),
+              ),
+            ),
+            SizedBox(width: 12.w),
+            ShimmerLoading(
+              height: 20.h,
+              width: 180.w,
+              borderRadius: 4.r,
+            ),
           ],
         ),
-              SizedBox(height: 16.h),
+        SizedBox(height: 10.h),
+        // Table Wrapper
         Container(
+          width: double.infinity,
           decoration: BoxDecoration(
-            color: AppColors.of(context).surfaceContainerLowest,
+            color: colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.of(context).onSurface.withValues(alpha: 0.04),
-                blurRadius: 32,
-                offset: const Offset(0, 12),
-              ),
-            ],
+            border: Border.all(color: colors.tableBorder, width: 1.w),
           ),
+          clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
-              _buildItemSkeleton(),
-              Divider(
-                height: 1.h,
-                color: AppColors.of(context).surfaceContainerHigh,
+              // Table Header Row
+              Container(
+                height: 38.h,
+                decoration: BoxDecoration(
+                  color: isDark ? colors.surfaceContainerLow : colors.infoBg,
+                  border: Border(
+                    bottom: BorderSide(color: colors.tableBorder),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: typeFlex,
+                      child: Container(
+                        height: double.infinity,
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        decoration: BoxDecoration(
+                          border: isManager
+                              ? Border(
+                                  right: BorderSide(color: colors.tableBorder),
+                                )
+                              : null,
+                        ),
+                        child: ShimmerLoading(
+                          height: 14.h,
+                          width: 110.w,
+                          borderRadius: 4.r,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: personalFlex,
+                      child: Container(
+                        height: double.infinity,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.symmetric(horizontal: 4.w),
+                        decoration: BoxDecoration(
+                          border: isManager
+                              ? Border(
+                                  right: BorderSide(color: colors.tableBorder),
+                                )
+                              : null,
+                        ),
+                        child: isManager
+                            ? ShimmerLoading(
+                                height: 14.h,
+                                width: 50.w,
+                                borderRadius: 4.r,
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+                    ),
+                    if (isManager)
+                      Expanded(
+                        flex: teamFlex,
+                        child: Container(
+                          height: double.infinity,
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 4.w),
+                          child: ShimmerLoading(
+                            height: 14.h,
+                            width: 50.w,
+                            borderRadius: 4.r,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
-              _buildItemSkeleton(),
+              // Table Data Rows (4 rows)
+              ...List.generate(4, (index) {
+                final isLast = index == 3;
+                return Container(
+                  height: 38.h,
+                  decoration: BoxDecoration(
+                    color: colors.surfaceContainerLowest,
+                    border: isLast
+                        ? null
+                        : Border(
+                            bottom: BorderSide(color: colors.tableBorder),
+                          ),
+                  ),
+                  child: Row(
+                    children: [
+                      // Column 1: Row Title
+                      Expanded(
+                        flex: typeFlex,
+                        child: Container(
+                          height: double.infinity,
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: ShimmerLoading(
+                            height: 14.h,
+                            width: index == 0
+                                ? 120.w
+                                : index == 1
+                                    ? 150.w
+                                    : index == 2
+                                        ? 80.w
+                                        : 110.w,
+                            borderRadius: 4.r,
+                          ),
+                        ),
+                      ),
+                      // Column 2: Personal Toggle
+                      Expanded(
+                        flex: personalFlex,
+                        child: Container(
+                          height: double.infinity,
+                          alignment: Alignment.center,
+                          child: ShimmerLoading(
+                            height: 20.w,
+                            width: 36.w,
+                            borderRadius: 9999,
+                          ),
+                        ),
+                      ),
+                      // Column 3: Team Toggle (if manager)
+                      if (isManager)
+                        Expanded(
+                          flex: teamFlex,
+                          child: Container(
+                            height: double.infinity,
+                            alignment: Alignment.center,
+                            child: ShimmerLoading(
+                              height: 20.w,
+                              width: 36.w,
+                              borderRadius: 9999,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              }),
             ],
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildItemSkeleton() {
-    return Padding(
-      padding:       EdgeInsets.all(16.0.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                      ShimmerLoading(
-                  height: 20.h,
-                  width: 180.w,
-                  borderRadius: 4,
-                ),
-                      SizedBox(height: 4.h),
-                      ShimmerLoading(
-                  height: 16.h,
-                  width: double.infinity,
-                  borderRadius: 4,
-                ),
-                      SizedBox(height: 2.h),
-                      ShimmerLoading(
-                  height: 16.h,
-                  width: 100.w,
-                  borderRadius: 4,
-                ),
-              ],
-            ),
-          ),
-                SizedBox(width: 16.w),
-                ShimmerLoading(
-            height: 24.h,
-            width: 40.w,
-            borderRadius: 12,
-          ), // switch
-        ],
-      ),
     );
   }
 }
