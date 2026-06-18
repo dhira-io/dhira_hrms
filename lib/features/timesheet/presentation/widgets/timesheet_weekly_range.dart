@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/features/timesheet/domain/constants/timesheet_constants.dart';
+import 'package:dhira_hrms/core/utils/double_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,10 +21,9 @@ class TimesheetWeeklyRange extends StatelessWidget {
       builder: (context, state) {
         final l10n = AppLocalizations.of(context)!;
         final double logged = state.weeklyTotalHours;
-        const double target = 48.0; // Target is 48.0 as requested
-        final double remaining = (target - logged).clamp(0.0, target);
-        final double percent = (logged / target).clamp(0.0, 1.0);
-        final int percentInt = (percent * 100).toInt();
+        // Computed in TimesheetState using TimesheetConstants.weeklyTargetHours (48h)
+        final double remaining = state.weeklyRemainingHours;
+        final int percentInt = state.weeklyProgressPercentInt;
 
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
@@ -32,7 +33,7 @@ class TimesheetWeeklyRange extends StatelessWidget {
             border: Border.all(color: AppColors.of(context).tableBorder),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.02),
+                color: AppColors.of(context).black.withValues(alpha: 0.02),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -55,31 +56,29 @@ class TimesheetWeeklyRange extends StatelessWidget {
                   Expanded(
                     child: _StatCard(
                       title: l10n.logged,
-                      value:
-                          '${logged.toStringAsFixed(logged.truncateToDouble() == logged ? 0 : 1)}h',
+                      value: '${logged.formatHours()}h',
                       subtitle: l10n.thisWeek,
                       valueColor: AppColors.colorBlue400,
                       bgColor: AppColors.colorBlue50,
                       borderColor: AppColors.colorBlue200,
                     ),
                   ),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 6.w),
                   Expanded(
                     child: _StatCard(
                       title: l10n.target,
-                      value: '${target.toInt()}h',
+                      value: '${TimesheetConstants.weeklyTargetHours.toInt()}h',
                       subtitle: l10n.monFri,
                       valueColor: AppColors.colorGreen600,
                       bgColor: AppColors.colorGreen50,
                       borderColor: AppColors.colorGreen200,
                     ),
                   ),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 6.w),
                   Expanded(
                     child: _StatCard(
                       title: l10n.remaining,
-                      value:
-                          '${remaining.toStringAsFixed(remaining.truncateToDouble() == remaining ? 0 : 1)}h',
+                      value: '${remaining.formatHours()}h',
                       subtitle: l10n.percentComplete(percentInt.toString()),
                       valueColor: AppColors.colorOrange500,
                       bgColor: AppColors.colorOrange50,

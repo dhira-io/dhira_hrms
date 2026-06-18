@@ -1,9 +1,6 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
-import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
@@ -22,6 +19,7 @@ import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_bottom_actions.dart';
 
 class ApplyTimesheetScreen extends StatefulWidget {
   final String timesheetId;
@@ -71,7 +69,6 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           ToastUtils.showSuccess(displayMessage);
 
           if (state.successType == TimesheetSuccessType.timesheetSubmitted) {
-            // Switch to Approvals tab and show Raised Requests for Timesheet
             context.read<BottomNavCubit>().changeIndex(
               BottomNavCubit.approvalsIndex,
             );
@@ -107,14 +104,11 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                       current.editAssignments.isEmpty ||
                   previous.errorMessage != current.errorMessage,
               builder: (context, state) {
-                if ((state.status == TimesheetStateStatus.initial ||
-                        state.status == TimesheetStateStatus.loading) &&
-                    state.editAssignments.isEmpty) {
+                if (state.isInitialLoading) {
                   return const TimesheetLoadingView();
                 }
 
-                if (state.status == TimesheetStateStatus.error &&
-                    state.editAssignments.isEmpty) {
+                if (state.isErrorEmpty) {
                   return TimesheetErrorView(
                     message: state.errorMessage ?? l10n.somethingWentWrong,
                     onRetry: () {
@@ -130,52 +124,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: BlocBuilder<TimesheetBloc, TimesheetState>(
-          buildWhen: (previous, current) =>
-              previous.hasDraftTasksInSelectedWeek !=
-                  current.hasDraftTasksInSelectedWeek ||
-              previous.isSubmitWeeklyLoading != current.isSubmitWeeklyLoading ||
-              previous.status != current.status ||
-              previous.editAssignments.isEmpty !=
-                  current.editAssignments.isEmpty,
-          builder: (context, state) {
-            final isLoading = state.status == TimesheetStateStatus.initial ||
-                (state.status == TimesheetStateStatus.loading &&
-                    state.editAssignments.isEmpty);
-            final hasDraft = state.hasDraftTasksInSelectedWeek;
-            return Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
-              decoration: BoxDecoration(
-                color: AppColors.of(context).surfaceContainerLowest,
-                border: Border(
-                  top: BorderSide(color: AppColors.of(context).tableBorder),
-                ),
-              ),
-              child: SafeArea(
-                child: isLoading
-                    ? ShimmerLoading(
-                        height: 48.h,
-                        width: double.infinity,
-                        borderRadius: 12.r,
-                      )
-                    : CommonButton(
-                        text: l10n.submitWeeklyTimesheet,
-                        width: double.infinity,
-                        isLoading: state.isSubmitWeeklyLoading,
-                        icon: Icons.check_circle_outlined,
-                        onPressed: hasDraft
-                            ? () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                context.read<TimesheetBloc>().add(
-                                  const TimesheetEvent.submitWeeklyRequested(),
-                                );
-                              }
-                            : null,
-                      ),
-              ),
-            );
-          },
-        ),
+        bottomNavigationBar: const TimesheetBottomActions(),
       ),
     );
   }
@@ -192,6 +141,8 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         l10n.timesheetSubmittedSuccessfully,
       TimesheetSuccessType.taskUpdated => l10n.taskUpdatedSuccessfully,
       TimesheetSuccessType.taskDeleted => l10n.taskDeletedSuccessfully,
+      TimesheetSuccessType.timesheetDeleted =>
+        l10n.timesheetDeletedSuccessfully,
     };
   }
 }

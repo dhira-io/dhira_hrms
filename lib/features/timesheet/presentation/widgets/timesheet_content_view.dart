@@ -1,6 +1,5 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
@@ -24,26 +23,9 @@ class TimesheetContentView extends StatelessWidget {
       builder: (context, state) {
         return RefreshIndicator(
           onRefresh: () async {
-            final timesheetBloc = context.read<TimesheetBloc>();
-            final selected = timesheetBloc.state.selectedDate ?? DateTime.now();
-
-            final startOfWeek = selected.subtract(
-              Duration(days: selected.weekday - 1),
-            );
-
-            final dominantMonth = DateTimeUtils.getDominantMonthOfWeek(
-              startOfWeek,
-            );
-            final dominantYear = DateTimeUtils.getDominantYearOfWeek(
-              startOfWeek,
-            );
-
-            timesheetBloc.add(
-              TimesheetEvent.fetchOverviewRequested(
-                month: dominantMonth,
-                year: dominantYear,
-              ),
-            );
+            context.read<TimesheetBloc>().add(
+                  const TimesheetEvent.refreshRequested(),
+                );
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -65,7 +47,7 @@ class TimesheetContentView extends StatelessWidget {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.02),
+                        color: AppColors.of(context).black.withValues(alpha: 0.02),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),

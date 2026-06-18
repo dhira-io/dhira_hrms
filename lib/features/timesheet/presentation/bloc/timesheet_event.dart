@@ -97,4 +97,5 @@ abstract class TimesheetEvent with _$TimesheetEvent {
   const factory TimesheetEvent.previousWeekRequested() =
       TimesheetPreviousWeekRequested;
   const factory TimesheetEvent.nextWeekRequested() = TimesheetNextWeekRequested;
+  const factory TimesheetEvent.refreshRequested() = TimesheetRefreshRequested;
 }

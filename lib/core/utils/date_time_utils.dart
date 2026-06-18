@@ -45,6 +45,7 @@ class DateTimeUtils {
   static const String dateFormatAbbrMonthDay = 'MMM dd';
   static const String dateFormatDayMonthKey = 'EEEE MMM d, yyyy';
   static const String dateFormatMonthOnly = 'MMMM';
+  static const String dateFormatDayNameMonth = 'dd EEEE, MMMM';
 
   /// Formats date to 'yyyy-MM-dd' (e.g., 2023-10-25)
   static String formatToYMD(DateTime date) {
@@ -215,6 +216,10 @@ class DateTimeUtils {
 
   /// Returns the full day name (e.g., "Monday", "Friday").
   static String getDayName(DateTime date) => DateFormat('EEEE').format(date);
+
+  /// Formats date to 'd MMM · yyyy' (e.g., 5 May · 2026)
+  static String formatWithDotSeparator(DateTime date) =>
+      DateFormat('d MMM · yyyy').format(date);
 
   /// Returns mixed-case month abbreviation (e.g., "Jan", "Feb")
   static String formatToMonthAbbr(DateTime date, [String? locale]) {

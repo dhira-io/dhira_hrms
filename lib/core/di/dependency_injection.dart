@@ -493,13 +493,13 @@ class DependencyInjection {
     );
 
     // Timesheet Feature
-    Get.lazyPut<TimesheetRemoteDataSource>(
+    Get.lazyPut<ITimesheetRemoteDataSource>(
       () => TimesheetRemoteDataSourceImpl(Get.find<DioClient>()),
       fenix: true,
     );
     Get.lazyPut<ITimesheetRepository>(
       () => TimesheetRepositoryImpl(
-        Get.find<TimesheetRemoteDataSource>(),
+        Get.find<ITimesheetRemoteDataSource>(),
         Get.find<NetworkInfo>(),
       ),
       fenix: true,

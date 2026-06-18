@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../domain/entities/project_assignment_entity.dart';
-import '../bloc/timesheet_bloc.dart';
-import '../bloc/timesheet_event.dart';
-import '../bloc/timesheet_state.dart';
+import 'package:dhira_hrms/features/timesheet/domain/constants/timesheet_constants.dart';
+import 'package:dhira_hrms/core/utils/double_extensions.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 
 class TimesheetDailyProgress extends StatelessWidget {
   const TimesheetDailyProgress({super.key});
@@ -34,7 +34,6 @@ class TimesheetDailyProgress extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   l10n.dailyProgress,
@@ -73,7 +72,7 @@ class TimesheetDailyProgress extends StatelessWidget {
                     child: _DayButton(
                       day: day,
                       isSelected: DateTimeUtils.isSameDay(selectedDate, day),
-                      assignments: state.editAssignments,
+                      hours: state.getHoursForDay(day),
                       onTap: () {
                         context.read<TimesheetBloc>().add(
                           TimesheetEvent.daySelected(day),
@@ -86,8 +85,7 @@ class TimesheetDailyProgress extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             _SelectedDayCard(
-              selectedDate: selectedDate,
-              assignments: state.editAssignments,
+              state: state,
               l10n: l10n,
             ),
           ],
@@ -129,13 +127,13 @@ class _LegendItem extends StatelessWidget {
 class _DayButton extends StatelessWidget {
   final DateTime day;
   final bool isSelected;
-  final List<ProjectAssignmentEntity> assignments;
+  final double hours;
   final VoidCallback onTap;
 
   const _DayButton({
     required this.day,
     required this.isSelected,
-    required this.assignments,
+    required this.hours,
     required this.onTap,
   });
 
@@ -146,19 +144,11 @@ class _DayButton extends StatelessWidget {
     if (hours > 0 || !DateTimeUtils.isWeekend(day)) {
       return AppColors.colorRed500;
     }
-    return null; // No dot for weekends with 0 hours
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    final hours = assignments
-        .where(
-          (e) =>
-              e.date != null &&
-              DateTimeUtils.isSameDay(DateTime.parse(e.date!), day),
-        )
-        .fold(0.0, (sum, e) => sum + e.spentHours);
-
     final bool isWeekend = DateTimeUtils.isWeekend(day);
     final Color bgColor = isSelected
         ? AppColors.colorBlue50
@@ -188,7 +178,7 @@ class _DayButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                DateFormat('EEE').format(day).toUpperCase(),
+                DateTimeUtils.formatToDayAbbrFull(day),
                 style: AppTextStyle.dateDay.copyWith(
                   fontSize: 8.sp,
                   color: AppColors.of(context).textSecondary,
@@ -222,30 +212,21 @@ class _DayButton extends StatelessWidget {
 }
 
 class _SelectedDayCard extends StatelessWidget {
-  final DateTime selectedDate;
-  final List<ProjectAssignmentEntity> assignments;
+  final TimesheetState state;
   final AppLocalizations l10n;
 
   const _SelectedDayCard({
-    required this.selectedDate,
-    required this.assignments,
+    required this.state,
     required this.l10n,
   });
 
   @override
   Widget build(BuildContext context) {
-    final hours = assignments
-        .where(
-          (e) =>
-              e.date != null &&
-              DateTimeUtils.isSameDay(DateTime.parse(e.date!), selectedDate),
-        )
-        .fold(0.0, (sum, e) => sum + e.spentHours);
-
-    const targetHours = 9.5;
-    final remaining = (targetHours - hours).clamp(0.0, targetHours);
-    final percent = (hours / targetHours).clamp(0.0, 1.0);
-    final int percentInt = (percent * 100).toInt();
+    final selectedDate = state.selectedDate ?? DateTime.now();
+    final remaining = state.selectedDayRemainingHours;
+    final percent = state.selectedDayProgressPercent;
+    final percentInt = state.selectedDayProgressPercentInt;
+    const targetHours = TimesheetConstants.dailyTargetHours;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
@@ -264,14 +245,14 @@ class _SelectedDayCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    DateFormat('EEEE').format(selectedDate),
+                    DateTimeUtils.getDayName(selectedDate),
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.of(context).textPrimary,
                     ),
                   ),
                   Text(
-                    DateFormat('d MMM · yyyy').format(selectedDate),
+                    DateTimeUtils.formatWithDotSeparator(selectedDate),
                     style: AppTextStyle.bodySmall.copyWith(
                       color: AppColors.of(context).textSecondary,
                     ),
@@ -312,9 +293,7 @@ class _SelectedDayCard extends StatelessWidget {
             children: [
               Text(
                 l10n.dailyTarget(
-                  targetHours.toStringAsFixed(
-                    targetHours.truncateToDouble() == targetHours ? 0 : 1,
-                  ),
+                  targetHours.formatHours(),
                 ),
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
@@ -322,9 +301,7 @@ class _SelectedDayCard extends StatelessWidget {
               ),
               Text(
                 l10n.hoursRemaining(
-                  remaining.toStringAsFixed(
-                    remaining.truncateToDouble() == remaining ? 0 : 1,
-                  ),
+                  remaining.formatHours(),
                 ),
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,

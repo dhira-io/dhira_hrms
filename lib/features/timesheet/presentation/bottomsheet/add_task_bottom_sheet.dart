@@ -4,13 +4,13 @@ import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
-import 'package:intl/intl.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_success_type.dart';
+import 'package:dhira_hrms/features/timesheet/domain/constants/timesheet_constants.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,6 @@ class AddTaskBottomSheet extends StatefulWidget {
   final ProjectAssignmentEntity? editingTask;
   final int? editingIndex;
   final VoidCallback? onEditComplete;
-  final String? activeIdOverride;
   final DateTime? selectedDate;
 
   const AddTaskBottomSheet({
@@ -31,7 +30,6 @@ class AddTaskBottomSheet extends StatefulWidget {
     this.editingTask,
     this.editingIndex,
     this.onEditComplete,
-    this.activeIdOverride,
     this.selectedDate,
   });
 
@@ -57,7 +55,6 @@ class AddTaskBottomSheet extends StatefulWidget {
             onEditComplete:
                 onEditComplete ??
                 () => timesheetBloc.add(const TimesheetEvent.editTaskCleared()),
-            activeIdOverride: timesheetBloc.state.currentWeekActiveId,
           ),
         );
       },
@@ -85,10 +82,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     _expectedController.text = state.formExpectedHours;
     _actualController.text = state.formSpentHours;
 
-    _taskController.addListener(_onTaskChanged);
-    _descriptionController.addListener(_onDescriptionChanged);
-    _expectedController.addListener(_onExpectedChanged);
-    _actualController.addListener(_onActualChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _taskController.addListener(_onTaskChanged);
+        _descriptionController.addListener(_onDescriptionChanged);
+        _expectedController.addListener(_onExpectedChanged);
+        _actualController.addListener(_onActualChanged);
+      }
+    });
   }
 
   void _onTaskChanged() {
@@ -145,13 +146,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             (state.successType == TimesheetSuccessType.taskAdded ||
                 state.successType == TimesheetSuccessType.taskUpdated)) {
           widget.onEditComplete?.call();
-          // Automatically close the bottom sheet upon successful addition/modification
           Navigator.of(context).pop();
           return;
         }
 
-        // Synchronize controllers if state changes externally (e.g., cleared/reset)
-        // Avoid setting text when it matches to prevent resetting cursor position during active typing
         if (state.formTaskData != _taskController.text) {
           _taskController.value = _taskController.value.copyWith(
             text: state.formTaskData,
@@ -201,16 +199,15 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Premium drag handle
                 Center(
                   child: Container(
                     margin: EdgeInsets.only(top: 12.h, bottom: 8.h),
                     width: 36.w,
                     height: 4.h,
                     decoration: BoxDecoration(
-                      color: AppColors.of(
-                        context,
-                      ).outlineVariant.withValues(alpha: 0.4),
+                      color: AppColors.of(context)
+                          .outlineVariant
+                          .withValues(alpha: 0.4),
                       borderRadius: BorderRadius.circular(2.r),
                     ),
                   ),
@@ -218,387 +215,29 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 Flexible(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                    child: BlocBuilder<TimesheetBloc, TimesheetState>(
-                      buildWhen: (previous, current) =>
-                          previous.projects != current.projects ||
-                          previous.status != current.status ||
-                          previous.selectedDate != current.selectedDate ||
-                          previous.uploadedFileUrl != current.uploadedFileUrl ||
-                          previous.formSelectedProject !=
-                              current.formSelectedProject ||
-                          previous.assignmentsForSelectedDay !=
-                              current.assignmentsForSelectedDay,
-                      builder: (context, state) {
-                        final l10n = AppLocalizations.of(context)!;
-                        final projects = state.projects;
-                        final isLoadingProjects =
-                            projects.isEmpty &&
-                            state.status == TimesheetStateStatus.loading;
-
-                        final selectedDate =
-                            state.selectedDate ?? DateTime.now();
-                        final isFutureDay = DateTimeUtils.isFutureDay(
-                          selectedDate,
-                        );
-
-                        final attachment =
-                            state.uploadedFileUrl ??
-                            widget.editingTask?.attachments;
-                        final selectedProjectName =
-                            state.formSelectedProject?.projectName;
-
-                        final int taskNumber;
-                        if (widget.editingTask != null) {
-                          final indexInSelectedDay = state
-                              .assignmentsForSelectedDay
-                              .indexOf(widget.editingTask!);
-                          if (indexInSelectedDay != -1) {
-                            taskNumber = indexInSelectedDay + 1;
-                          } else if (widget.editingIndex != null) {
-                            taskNumber = widget.editingIndex! + 1;
-                          } else {
-                            taskNumber = 1;
-                          }
-                        } else {
-                          taskNumber =
-                              state.assignmentsForSelectedDay.length + 1;
-                        }
-
-                        final formattedDate = DateFormat(
-                          'dd EEEE, MMMM',
-                        ).format(selectedDate);
-
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        widget.editingTask != null
-                                            ? l10n.updateTask
-                                            : l10n.addingNewTask,
-                                        style: AppTextStyle.h3.copyWith(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColors.of(context).slate900,
-                                        ),
-                                      ),
-                                      SizedBox(height: 2.h),
-                                      Text(
-                                        'Task $taskNumber, $formattedDate',
-                                        style: AppTextStyle.bodySmall.copyWith(
-                                          fontSize: 10.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color: AppColors.of(context).slate500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.close,
-                                    color: AppColors.of(context).slate900,
-                                    size: 20,
-                                  ),
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                  onPressed: () => Navigator.of(context).pop(),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 12.h),
-                            StatLabel(text: l10n.project, isMandatory: true),
-                            Container(
-                              height: 40.h,
-                              padding: EdgeInsets.symmetric(horizontal: 12.w),
-                              decoration: BoxDecoration(
-                                color: AppColors.of(context).white,
-                                borderRadius: BorderRadius.circular(6.r),
-                                border: Border.all(
-                                  color: AppColors.of(context).tableBorder,
-                                  width: 1.w,
-                                ),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value:
-                                      projects.any(
-                                        (p) =>
-                                            p.projectName ==
-                                            selectedProjectName,
-                                      )
-                                      ? selectedProjectName
-                                      : null,
-                                  isExpanded: true,
-                                  icon: isLoadingProjects
-                                      ? SizedBox(
-                                          width: 16.w,
-                                          height: 16.h,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 1.5,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                  AppColors.of(
-                                                    context,
-                                                  ).slate500,
-                                                ),
-                                          ),
-                                        )
-                                      : Icon(
-                                          Icons.expand_more,
-                                          color: AppColors.of(context).slate900,
-                                          size: 16,
-                                        ),
-                                  hint: Text(
-                                    isLoadingProjects
-                                        ? l10n.loadingProjects
-                                        : l10n.selectProject,
-                                    style: AppTextStyle.bodyMedium.copyWith(
-                                      fontSize: 12.sp,
-                                      color: AppColors.of(
-                                        context,
-                                      ).slate500.withValues(alpha: 0.5),
-                                    ),
-                                  ),
-                                  items: projects.map((p) {
-                                    return DropdownMenuItem(
-                                      value: p.projectName,
-                                      child: Text(
-                                        p.projectName,
-                                        style: AppTextStyle.bodyMedium.copyWith(
-                                          fontSize: 12.sp,
-                                          color: AppColors.of(context).slate900,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: isLoadingProjects
-                                      ? null
-                                      : (val) {
-                                          if (val != null) {
-                                            final matched = projects.firstWhere(
-                                              (p) => p.projectName == val,
-                                            );
-                                            context.read<TimesheetBloc>().add(
-                                              TimesheetEvent.formProjectChanged(
-                                                matched,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 12.h),
-                            StatLabel(text: l10n.taskLabel, isMandatory: true),
-                            TimesheetTextField(
-                              controller: _taskController,
-                              hint: l10n.enterTaskName,
-                            ),
-                            SizedBox(height: 12.h),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      StatLabel(
-                                        text: l10n.expectedHrsLabel,
-                                        isMandatory: true,
-                                      ),
-                                      TimesheetTextField(
-                                        controller: _expectedController,
-                                        hint: "0.0",
-                                        keyboardType:
-                                            const TextInputType.numberWithOptions(
-                                              decimal: true,
-                                            ),
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.allow(
-                                            RegExp(r'[0-9.]'),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: 16.w),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      StatLabel(
-                                        text: l10n.actualHrsLabel,
-                                        isMandatory: !isFutureDay,
-                                      ),
-                                      TimesheetTextField(
-                                        controller: _actualController,
-                                        hint: "0.0",
-                                        keyboardType:
-                                            const TextInputType.numberWithOptions(
-                                              decimal: true,
-                                            ),
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.allow(
-                                            RegExp(r'[0-9.]'),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 12.h),
-                            StatLabel(
-                              text: l10n.descriptionLabel,
-                              isMandatory: true,
-                            ),
-                            TimesheetTextField(
-                              controller: _descriptionController,
-                              hint: l10n.brieflyDescribeWhatYouWorkedOn,
-                              maxLines: 3,
-                            ),
-                            SizedBox(height: 12.h),
-                            StatLabel(text: l10n.supportingDocumentLabel),
-                            BlocSelector<TimesheetBloc, TimesheetState, bool>(
-                              selector: (state) => state.isUploading,
-                              builder: (context, isUploading) {
-                                return isUploading
-                                    ? ShimmerLoading(
-                                        height: 60.h,
-                                        width: double.infinity,
-                                        borderRadius: 14.r,
-                                      )
-                                    : TimesheetUploadCard(
-                                        onTap: () {
-                                          context.read<TimesheetBloc>().add(
-                                            const TimesheetEvent.pickAndUploadFileRequested(),
-                                          );
-                                        },
-                                      );
-                              },
-                            ),
-                            if ((attachment ?? "").isNotEmpty) ...[
-                              SizedBox(height: 8.h),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 12.w,
-                                  vertical: 10.h,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  color: AppColors.of(
-                                    context,
-                                  ).surfaceContainerLow,
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.attach_file, size: 18),
-                                    SizedBox(width: 8.w),
-                                    Expanded(
-                                      child: Text(
-                                        attachment!.split('/').last,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: AppTextStyle.bodySmall.copyWith(
-                                          color: AppColors.of(context).slate900,
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.close, size: 18),
-                                      onPressed: () {
-                                        context.read<TimesheetBloc>().add(
-                                          const TimesheetEvent.clearUploadedFile(),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                            SizedBox(height: 24.h),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 40.h,
-                                    child: CommonButton(
-                                      text: l10n.cancel,
-                                      variant: ButtonVariant.outlined,
-                                      backgroundColor: AppColors.of(
-                                        context,
-                                      ).white,
-                                      foregroundColor: AppColors.of(
-                                        context,
-                                      ).slate900,
-                                      borderRadius: 8.r,
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 10.h,
-                                      ),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 16.w),
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 40.h,
-                                    child:
-                                        BlocSelector<
-                                          TimesheetBloc,
-                                          TimesheetState,
-                                          bool
-                                        >(
-                                          selector: (state) =>
-                                              state.isActionLoading,
-                                          builder: (context, isActionLoading) {
-                                            return CommonButton(
-                                              text: l10n.save,
-                                              variant: ButtonVariant.primary,
-                                              backgroundColor: AppColors.of(
-                                                context,
-                                              ).primaryContainer,
-                                              foregroundColor: AppColors.of(
-                                                context,
-                                              ).slate50,
-                                              borderRadius: 8.r,
-                                              padding: EdgeInsets.symmetric(
-                                                vertical: 10.h,
-                                              ),
-                                              isLoading: isActionLoading,
-                                              onPressed: () {
-                                                FocusScope.of(
-                                                  context,
-                                                ).unfocus();
-                                                context.read<TimesheetBloc>().add(
-                                                  TimesheetEvent.saveTaskRequested(
-                                                    timesheetId:
-                                                        widget.timesheetId,
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _BottomSheetHeader(
+                          editingTask: widget.editingTask,
+                          editingIndex: widget.editingIndex,
+                        ),
+                        SizedBox(height: 12.h),
+                        _FormFieldsSection(
+                          taskController: _taskController,
+                          expectedController: _expectedController,
+                          actualController: _actualController,
+                          descriptionController: _descriptionController,
+                        ),
+                        SizedBox(height: 12.h),
+                        _DocumentUploadSection(
+                          editingTask: widget.editingTask,
+                        ),
+                        SizedBox(height: 24.h),
+                        _SheetActionsSection(
+                          timesheetId: widget.timesheetId,
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -607,6 +246,396 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BottomSheetHeader extends StatelessWidget {
+  final ProjectAssignmentEntity? editingTask;
+  final int? editingIndex;
+
+  const _BottomSheetHeader({
+    required this.editingTask,
+    required this.editingIndex,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return BlocBuilder<TimesheetBloc, TimesheetState>(
+      buildWhen: (previous, current) =>
+          previous.selectedDate != current.selectedDate ||
+          previous.assignmentsForSelectedDay != current.assignmentsForSelectedDay,
+      builder: (context, state) {
+        final selectedDate = state.selectedDate ?? DateTime.now();
+        final taskNumber = state.currentTaskNumber;
+        final formattedDate = DateTimeUtils.formatDate(
+          selectedDate,
+          pattern: DateTimeUtils.dateFormatDayNameMonth,
+        );
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    editingTask != null ? l10n.updateTask : l10n.addingNewTask,
+                    style: AppTextStyle.h3.copyWith(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.of(context).slate900,
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    l10n.taskNumberDate(taskNumber, formattedDate),
+                    style: AppTextStyle.bodySmall.copyWith(
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.of(context).slate500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.close,
+                color: AppColors.of(context).slate900,
+                size: 20,
+              ),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _FormFieldsSection extends StatelessWidget {
+  final TextEditingController taskController;
+  final TextEditingController expectedController;
+  final TextEditingController actualController;
+  final TextEditingController descriptionController;
+
+  const _FormFieldsSection({
+    required this.taskController,
+    required this.expectedController,
+    required this.actualController,
+    required this.descriptionController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return BlocBuilder<TimesheetBloc, TimesheetState>(
+      buildWhen: (previous, current) =>
+          previous.projects != current.projects ||
+          previous.status != current.status ||
+          previous.selectedDate != current.selectedDate ||
+          previous.formSelectedProject != current.formSelectedProject,
+      builder: (context, state) {
+        final projects = state.projects;
+        final isLoadingProjects =
+            projects.isEmpty && state.status == TimesheetStateStatus.loading;
+
+        final selectedDate = state.selectedDate ?? DateTime.now();
+        final isFutureDay = DateTimeUtils.isFutureDay(selectedDate);
+        final selectedProjectName = state.formSelectedProject?.projectName;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            StatLabel(text: l10n.project, isMandatory: true),
+            Container(
+              height: 40.h,
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              decoration: BoxDecoration(
+                color: AppColors.of(context).white,
+                borderRadius: BorderRadius.circular(6.r),
+                border: Border.all(
+                  color: AppColors.of(context).tableBorder,
+                  width: 1.w,
+                ),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: projects.any((p) => p.projectName == selectedProjectName)
+                      ? selectedProjectName
+                      : null,
+                  isExpanded: true,
+                  icon: isLoadingProjects
+                      ? SizedBox(
+                          width: 16.w,
+                          height: 16.h,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1.5,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.of(context).slate500,
+                            ),
+                          ),
+                        )
+                      : Icon(
+                          Icons.expand_more,
+                          color: AppColors.of(context).slate900,
+                          size: 16,
+                        ),
+                  hint: Text(
+                    isLoadingProjects ? l10n.loadingProjects : l10n.selectProject,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      fontSize: 12.sp,
+                      color: AppColors.of(context).slate500.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  items: projects.map((p) {
+                    return DropdownMenuItem(
+                      value: p.projectName,
+                      child: Text(
+                        p.projectName,
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          fontSize: 12.sp,
+                          color: AppColors.of(context).slate900,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: isLoadingProjects
+                      ? null
+                      : (val) {
+                          if (val != null) {
+                            final matched = projects.firstWhere(
+                              (p) => p.projectName == val,
+                            );
+                            context.read<TimesheetBloc>().add(
+                                  TimesheetEvent.formProjectChanged(matched),
+                                );
+                          }
+                        },
+                ),
+              ),
+            ),
+            SizedBox(height: 12.h),
+            StatLabel(text: l10n.taskLabel, isMandatory: true),
+            TimesheetTextField(
+              controller: taskController,
+              hint: l10n.enterTaskName,
+            ),
+            SizedBox(height: 12.h),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      StatLabel(
+                        text: l10n.expectedHrsLabel,
+                        isMandatory: true,
+                      ),
+                      TimesheetTextField(
+                        controller: expectedController,
+                        hint: TimesheetConstants.defaultHoursHint,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'[0-9.]'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      StatLabel(
+                        text: l10n.actualHrsLabel,
+                        isMandatory: !isFutureDay,
+                      ),
+                      TimesheetTextField(
+                        controller: actualController,
+                        hint: TimesheetConstants.defaultHoursHint,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'[0-9.]'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 12.h),
+            StatLabel(
+              text: l10n.descriptionLabel,
+              isMandatory: true,
+            ),
+            TimesheetTextField(
+              controller: descriptionController,
+              hint: l10n.brieflyDescribeWhatYouWorkedOn,
+              maxLines: 3,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _DocumentUploadSection extends StatelessWidget {
+  final ProjectAssignmentEntity? editingTask;
+
+  const _DocumentUploadSection({
+    required this.editingTask,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return BlocBuilder<TimesheetBloc, TimesheetState>(
+      buildWhen: (previous, current) =>
+          previous.uploadedFileUrl != current.uploadedFileUrl ||
+          previous.isUploading != current.isUploading,
+      builder: (context, state) {
+        final attachment = state.uploadedFileUrl ?? editingTask?.attachments;
+        final isUploading = state.isUploading;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            StatLabel(text: l10n.supportingDocumentLabel),
+            isUploading
+                ? ShimmerLoading(
+                    height: 60.h,
+                    width: double.infinity,
+                    borderRadius: 14.r,
+                  )
+                : TimesheetUploadCard(
+                    onTap: () {
+                      context.read<TimesheetBloc>().add(
+                            const TimesheetEvent.pickAndUploadFileRequested(),
+                          );
+                    },
+                  ),
+            if ((attachment ?? "").isNotEmpty) ...[
+              SizedBox(height: 8.h),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12.w,
+                  vertical: 10.h,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.r),
+                  color: AppColors.of(context).surfaceContainerLow,
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.attach_file, size: 18),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: Text(
+                        attachment!.split('/').last,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.bodySmall.copyWith(
+                          color: AppColors.of(context).slate900,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 18),
+                      onPressed: () {
+                        context.read<TimesheetBloc>().add(
+                              const TimesheetEvent.clearUploadedFile(),
+                            );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _SheetActionsSection extends StatelessWidget {
+  final String timesheetId;
+
+  const _SheetActionsSection({
+    required this.timesheetId,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Row(
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 40.h,
+            child: CommonButton(
+              text: l10n.cancel,
+              variant: ButtonVariant.outlined,
+              backgroundColor: AppColors.of(context).white,
+              foregroundColor: AppColors.of(context).slate900,
+              borderRadius: 8.r,
+              padding: EdgeInsets.symmetric(
+                vertical: 10.h,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ),
+        SizedBox(width: 16.w),
+        Expanded(
+          child: SizedBox(
+            height: 40.h,
+            child: BlocSelector<TimesheetBloc, TimesheetState, bool>(
+              selector: (state) => state.isActionLoading,
+              builder: (context, isActionLoading) {
+                return CommonButton(
+                  text: l10n.save,
+                  variant: ButtonVariant.primary,
+                  backgroundColor: AppColors.of(context).primaryContainer,
+                  foregroundColor: AppColors.of(context).slate50,
+                  borderRadius: 8.r,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 10.h,
+                  ),
+                  isLoading: isActionLoading,
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    context.read<TimesheetBloc>().add(
+                          TimesheetEvent.saveTaskRequested(
+                            timesheetId: timesheetId,
+                          ),
+                        );
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

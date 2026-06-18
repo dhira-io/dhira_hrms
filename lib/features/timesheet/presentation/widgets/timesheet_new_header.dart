@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/utils/date_time_utils.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../bloc/timesheet_bloc.dart';
-import '../bloc/timesheet_event.dart';
-import '../bloc/timesheet_state.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/timesheet/domain/constants/timesheet_constants.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 
 class TimesheetNewHeader extends StatelessWidget {
   const TimesheetNewHeader({super.key});
@@ -23,25 +23,14 @@ class TimesheetNewHeader extends StatelessWidget {
       builder: (context, state) {
         final l10n = AppLocalizations.of(context)!;
         final selectedDate = state.selectedDate ?? DateTime.now();
-        final startOfWeek = DateTimeUtils.getStartOfWeek(selectedDate);
-        final endOfWeek = startOfWeek.add(const Duration(days: 6));
 
-        final String rangeText;
-        if (startOfWeek.month == endOfWeek.month) {
-          rangeText =
-              '${DateFormat('MMM d').format(startOfWeek)} – ${endOfWeek.day}';
-        } else {
-          rangeText =
-              '${DateFormat('MMM d').format(startOfWeek)} – ${DateFormat('MMM d').format(endOfWeek)}';
-        }
+        final rangeText = state.currentWeekRangeText.isNotEmpty
+            ? state.currentWeekRangeText
+            : DateTimeUtils.formatTimesheetWeekRange(selectedDate);
 
-        final isThisWeek = DateTimeUtils.isSameDay(
-          startOfWeek,
-          DateTimeUtils.getStartOfWeek(DateTime.now()),
-        );
-
-        int dayOfYear = int.parse(DateFormat('D').format(startOfWeek));
-        int woy = ((dayOfYear - startOfWeek.weekday + 10) / 7).floor();
+        final isThisWeek = state.isThisWeek;
+        final woy = state.currentWeekOfYear;
+        final year = state.currentWeekYear;
 
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
@@ -54,11 +43,8 @@ class TimesheetNewHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _ChevronButton(
-                assetPath: 'assets/icons/chevron_left.png',
-                onTap:
-                    DateTimeUtils.isWeekAllowed(
-                      startOfWeek.subtract(const Duration(days: 7)),
-                    )
+                assetPath: TimesheetConstants.chevronLeftIcon,
+                onTap: state.isPreviousWeekAllowed
                     ? () {
                         FocusManager.instance.primaryFocus?.unfocus();
                         context.read<TimesheetBloc>().add(
@@ -106,7 +92,7 @@ class TimesheetNewHeader extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    '${l10n.week} $woy · ${startOfWeek.year}',
+                    '${l10n.week} $woy · $year',
                     style: AppTextStyle.bodyMedium.copyWith(
                       color: AppColors.of(context).textSecondary,
                       fontWeight: FontWeight.w400,
@@ -115,11 +101,8 @@ class TimesheetNewHeader extends StatelessWidget {
                 ],
               ),
               _ChevronButton(
-                assetPath: 'assets/icons/chevron_right.png',
-                onTap:
-                    DateTimeUtils.isWeekAllowed(
-                      startOfWeek.add(const Duration(days: 7)),
-                    )
+                assetPath: TimesheetConstants.chevronRightIcon,
+                onTap: state.isNextWeekAllowed
                     ? () {
                         FocusManager.instance.primaryFocus?.unfocus();
                         context.read<TimesheetBloc>().add(
@@ -147,7 +130,7 @@ class _ChevronButton extends StatelessWidget {
     final themeColors = AppColors.of(context);
     final isEnabled = onTap != null;
     return Material(
-      color: Colors.transparent,
+      color: AppColors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(99.r),

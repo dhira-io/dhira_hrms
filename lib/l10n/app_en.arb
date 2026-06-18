@@ -1084,9 +1084,21 @@
   "timesheetSubmittedSuccessfully": "Timesheet submitted successfully",
   "taskUpdatedSuccessfully": "Task updated successfully",
   "taskDeletedSuccessfully": "Task deleted successfully",
+  "timesheetDeletedSuccessfully": "Timesheet deleted successfully",
   "noDraftTasksFound": "No Draft task found for week",
   "weeksCount": "{count, plural, =1{1 week} other{{count} weeks}}",
   "timesheetDateTasks": "{date}, Tasks ",
+  "taskNumberDate": "Task {count}, {date}",
+  "@taskNumberDate": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "timesheetSubtitle": "Easily track work hours, log time, and view reports.",
   "leaveSubtitle": "Manage leave and attendance, submit regularizations, and track approvals efficiently",
   "compOffSubtitle": "Manage extra work credits",
@@ -1643,9 +1655,21 @@
     "timesheetSubmittedSuccessfully": "Timesheet submitted successfully",
     "taskUpdatedSuccessfully": "Task updated successfully",
     "taskDeletedSuccessfully": "Task deleted successfully",
+    "timesheetDeletedSuccessfully": "Timesheet deleted successfully",
     "noDraftTasksFound": "No Draft task found for week",
     "weeksCount": "{count, plural, =1{1 week} other{{count} weeks}}",
     "timesheetDateTasks": "{date}, Tasks ",
+    "taskNumberDate": "Task {count}, {date}",
+    "@taskNumberDate": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "timesheetSubtitle": "Easily track work hours, log time, and view reports.",
     "leaveSubtitle": "Manage leave and attendance, submit regularizations, and track approvals efficiently",
     "compOffSubtitle": "Manage extra work credits",

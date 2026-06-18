@@ -1072,9 +1072,21 @@
   "timesheetSubmittedSuccessfully": "टाइमशीट सफलतापूर्वक जमा की गई",
   "taskUpdatedSuccessfully": "कार्य सफलतापूर्वक अपडेट किया गया",
   "taskDeletedSuccessfully": "कार्य सफलतापूर्वक हटा दिया गया",
+  "timesheetDeletedSuccessfully": "टाइमशीट सफलतापूर्वक हटा दी गई",
   "noDraftTasksFound": "सप्ताह के लिए कोई ड्राफ्ट कार्य नहीं मिला",
   "weeksCount": "{count, plural, =1{1 सप्ताह} other{{count} सप्ताह}}",
   "timesheetDateTasks": "{date}, कार्य ",
+  "taskNumberDate": "कार्य {count}, {date}",
+  "@taskNumberDate": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "timesheetSubtitle": "काम के घंटों को आसानी से ट्रैक करें, समय लॉग करें और रिपोर्ट देखें।",
   "leaveSubtitle": "छुट्टी और उपस्थिति का प्रबंधन करें, नियमितीकरण जमा करें और स्वीकृतियों को कुशलतापूर्वक ट्रैक करें",
   "compOffSubtitle": "अतिरिक्त कार्य क्रेडिट प्रबंधित करें",
@@ -1586,9 +1598,21 @@
     "timesheetSubmittedSuccessfully": "टाइमशीट सफलतापूर्वक जमा की गई",
     "taskUpdatedSuccessfully": "कार्य सफलतापूर्वक अपडेट किया गया",
     "taskDeletedSuccessfully": "कार्य सफलतापूर्वक हटा दिया गया",
+    "timesheetDeletedSuccessfully": "टाइमशीट सफलतापूर्वक हटा दी गई",
     "noDraftTasksFound": "सप्ताह के लिए कोई ड्राफ्ट कार्य नहीं मिला",
     "weeksCount": "{count, plural, =1{1 सप्ताह} other{{count} सप्ताह}}",
     "timesheetDateTasks": "{date}, कार्य ",
+    "taskNumberDate": "कार्य {count}, {date}",
+    "@taskNumberDate": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "timesheetSubtitle": "काम के घंटों को आसानी से ट्रैक करें, समय लॉग करें और रिपोर्ट देखें।",
     "leaveSubtitle": "छुट्टी और उपस्थिति का प्रबंधन करें, नियमितीकरण जमा करें और स्वीकृतियों को कुशलतापूर्वक ट्रैक करें",
     "compOffSubtitle": "अतिरिक्त कार्य क्रेडिट प्रबंधित करें",

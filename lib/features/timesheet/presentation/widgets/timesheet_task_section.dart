@@ -3,12 +3,11 @@ import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bottomsheet/add_task_bottom_sheet.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
-import 'package:dhira_hrms/core/widgets/common_confirmation_bottom_sheet.dart';
+import 'package:dhira_hrms/features/timesheet/domain/constants/timesheet_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/core/widgets/common_button.dart';
@@ -16,19 +15,12 @@ import 'package:dhira_hrms/features/leave/presentation/widgets/dashed_border_pai
 import 'package:flutter_svg/flutter_svg.dart';
 import 'timesheet_task_card.dart';
 
-class TimesheetTaskSection extends StatefulWidget {
+class TimesheetTaskSection extends StatelessWidget {
   const TimesheetTaskSection({super.key});
 
-  @override
-  State<TimesheetTaskSection> createState() => _TimesheetTaskSectionState();
-}
-
-class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
   void _openAddTask(BuildContext context) {
-    final bloc = context.read<TimesheetBloc>();
-    final timesheetId =
-        bloc.state.currentWeekActiveId ?? bloc.state.initialTimesheetId ?? '0';
-    AddTaskBottomSheet.show(context, timesheetId: timesheetId);
+    final state = context.read<TimesheetBloc>().state;
+    AddTaskBottomSheet.show(context, timesheetId: state.activeTimesheetIdOrDefault);
   }
 
   @override
@@ -122,7 +114,7 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                         child: SvgPicture.asset(
-                          'assets/svg/clock.svg',
+                          TimesheetConstants.clockSvgIcon,
                           colorFilter: ColorFilter.mode(
                             AppColors.of(context).slate400,
                             BlendMode.srcIn,
@@ -174,61 +166,6 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                   return TimesheetTaskCard(
                     task: task,
                     index: index,
-                    onEdit: (task, index) {
-                      final bloc = context.read<TimesheetBloc>();
-                      final realIndex = bloc.state.editAssignments.indexOf(
-                        task,
-                      );
-                      bloc.add(
-                        TimesheetEvent.editTaskRequested(
-                          task: task,
-                          index: realIndex,
-                        ),
-                      );
-                      final timesheetId =
-                          bloc.state.currentWeekActiveId ??
-                          bloc.state.initialTimesheetId ??
-                          '0';
-                      AddTaskBottomSheet.show(
-                        context,
-                        timesheetId: timesheetId,
-                        editingTask: task,
-                        editingIndex: realIndex,
-                      );
-                    },
-                    onDelete: (task) async {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      final confirmed = await showModalBottomSheet<bool>(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        isScrollControlled: true,
-                        builder: (context) => CommonConfirmationBottomSheet(
-                          icon: Icon(
-                            Icons.error_outline,
-                            color: AppColors.of(context).absentText,
-                            size: 20.w,
-                          ),
-                          iconBackgroundColor: AppColors.confirmationRedBg,
-                          title: l10n.confirmDeletion,
-                          subtitle: l10n.deleteTaskConfirmationSubtitle,
-                          cancelAction: ConfirmationAction(
-                            label: l10n.cancel,
-                            onTap: () => Navigator.of(context).pop(false),
-                          ),
-                          confirmAction: ConfirmationAction(
-                            label: l10n.delete,
-                            onTap: () => Navigator.of(context).pop(true),
-                          ),
-                        ),
-                      );
-
-                      if (confirmed == true && context.mounted) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        context.read<TimesheetBloc>().add(
-                          TimesheetEvent.deleteTaskRequested(task: task),
-                        );
-                      }
-                    },
                   );
                 },
               ),
