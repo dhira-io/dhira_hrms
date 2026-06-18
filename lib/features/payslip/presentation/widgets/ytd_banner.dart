@@ -7,13 +7,19 @@ import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class YtdBanner extends StatelessWidget {
-  final double ytd;
+  final int payslipsCount;
+  final double ytdGross;
+  final double ytdDeduction;
+  final double ytdNet;
   final NumberFormat formatter;
   final AppLocalizations l10n;
 
   const YtdBanner({
     super.key,
-    required this.ytd,
+    required this.payslipsCount,
+    required this.ytdGross,
+    required this.ytdDeduction,
+    required this.ytdNet,
     required this.formatter,
     required this.l10n,
   });
@@ -21,60 +27,127 @@ class YtdBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(AppConstants.p16),
-      padding: const EdgeInsets.all(AppConstants.p20),
+      margin: const EdgeInsets.symmetric(horizontal: AppConstants.p16, vertical: AppConstants.p12),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.of(context).primary,
-            AppColors.of(context).primaryContainer,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(AppConstants.r20),
+        color: AppColors.of(context).surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(AppConstants.r16),
+        border: Border.all(color: AppColors.of(context).border),
         boxShadow: [
           BoxShadow(
-            color: AppColors.of(context).primary.withValues(alpha: 0.28),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            color: AppColors.of(context).black.withValues(alpha: 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(AppConstants.p8),
-                decoration: BoxDecoration(
-                  color: AppColors.of(context).white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(AppConstants.r10),
+          Padding(
+            padding: const EdgeInsets.all(AppConstants.p16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'YTD Summary · ${DateTime.now().year}',
+                  style: AppTextStyle.labelMedium.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.of(context).textPrimary,
+                  ),
                 ),
-                child: Icon(
-                  Icons.account_balance_wallet_outlined,
-                  color: AppColors.of(context).white,
-                  size: 20.sp,
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.of(context).primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(color: AppColors.of(context).primary.withValues(alpha: 0.2)),
+                  ),
+                  child: Text(
+                    '$payslipsCount Pay slips',
+                    style: AppTextStyle.labelMedium.copyWith(
+                      color: AppColors.of(context).primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(width: AppConstants.p12),
-              Text(
-                l10n.totalNetPayYtd,
-                style: AppTextStyle.labelMedium.copyWith(
-                  color: AppColors.of(context).white.withValues(alpha: 0.8),
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(height: AppConstants.p16),
-          Text(
-            formatter.format(ytd),
-            style: AppTextStyle.h1.copyWith(
-              color: AppColors.of(context).white,
-              fontSize: 32.sp,
-              fontWeight: FontWeight.w800,
+          Divider(height: 1, color: AppColors.of(context).border),
+          Padding(
+            padding: const EdgeInsets.all(AppConstants.p16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Total Earned',
+                        style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary),
+                      ),
+                      const SizedBox(height: AppConstants.p4),
+                      Text(
+                        formatter.format(ytdGross),
+                        style: AppTextStyle.labelMedium.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.of(context).textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 30.h,
+                  color: AppColors.of(context).border,
+                ),
+                const SizedBox(width: AppConstants.p12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Deduction', // Or l10n.deductions if preferred
+                        style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary),
+                      ),
+                      const SizedBox(height: AppConstants.p4),
+                      Text(
+                        formatter.format(ytdDeduction),
+                        style: AppTextStyle.labelMedium.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.of(context).error,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 30.h,
+                  color: AppColors.of(context).border,
+                ),
+                const SizedBox(width: AppConstants.p12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Net Paid',
+                        style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary),
+                      ),
+                      const SizedBox(height: AppConstants.p4),
+                      Text(
+                        formatter.format(ytdNet),
+                        style: AppTextStyle.labelMedium.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.of(context).success,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ],
