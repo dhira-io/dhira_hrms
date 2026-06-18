@@ -616,7 +616,6 @@ class _SheetActionsSection extends StatelessWidget {
                   text: l10n.save,
                   variant: ButtonVariant.primary,
                   backgroundColor: AppColors.of(context).primaryContainer,
-                  foregroundColor: AppColors.of(context).slate50,
                   borderRadius: 8.r,
                   padding: EdgeInsets.symmetric(
                     vertical: 10.h,
