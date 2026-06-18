@@ -60,12 +60,13 @@ abstract class NotificationModel with _$NotificationModel {
     DateTime parsedTime;
     try {
       if (time.contains(' ')) {
-        // Handle "YYYY-MM-DD HH:mm:ss" format by converting to ISO
-        parsedTime = DateTime.parse(
-          "${time.replaceFirst(' ', 'T')}Z",
-        ).toLocal();
+        // Handle "YYYY-MM-DD HH:mm:ss" format by converting to ISO T-format
+        // We avoid forcing 'Z' here to prevent incorrect shifts if server time is not UTC
+        parsedTime = DateTime.parse(time.replaceFirst(' ', 'T'));
+        // If the parsed time is still appearing as UTC (due to system defaults) 
+        // we can conditionally adjust, but usually parse() handles no-offset as local.
       } else {
-        parsedTime = DateTime.tryParse(time)?.toLocal() ?? DateTime.now();
+        parsedTime = DateTime.tryParse(time) ?? DateTime.now();
       }
     } catch (_) {
       parsedTime = DateTime.now();

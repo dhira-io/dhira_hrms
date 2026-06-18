@@ -70,6 +70,8 @@ class NotificationManager {
             LocalNotificationConstants.channelName,
             description: LocalNotificationConstants.channelDescription,
             importance: fln.Importance.max,
+            playSound: true,
+            enableVibration: true,
           );
 
       await _localNotifications
@@ -80,9 +82,8 @@ class NotificationManager {
 
       // 4. Handle Foreground Messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        if (message.notification != null) {
-          _showLocalNotification(message, channel);
-        }
+        // Show local notification for both formal notification objects AND data-only payloads
+        _showLocalNotification(message, channel);
         _refreshNotificationList();
       });
 
@@ -159,18 +160,26 @@ class NotificationManager {
     fln.AndroidNotificationChannel channel,
   ) {
     // Extract title and body from notification object OR data payload as fallback
+    final String? notificationTitle = message.notification?.title;
+    final String? notificationBody = message.notification?.body;
+
     final String title =
-        message.notification?.title ??
+        notificationTitle ??
         message.data[PushNotificationPayloadKeys.title]?.toString() ??
         message.data[PushNotificationPayloadKeys.subject]?.toString() ??
         'New Notification';
 
     String body =
-        message.notification?.body ??
+        notificationBody ??
         message.data[PushNotificationPayloadKeys.message]?.toString() ??
         message.data[PushNotificationPayloadKeys.content]?.toString() ??
         message.data[PushNotificationPayloadKeys.body]?.toString() ??
         '';
+
+    // If both notification object is null and no useful data is present, skip showing
+    if (message.notification == null && body.isEmpty && (title == 'New Notification')) {
+      return;
+    }
 
     // Section 7 Edge Cases: items JSON fails to parse on bulk -> show generic message
     if (message.data[PushNotificationPayloadKeys.isBulk] ==
@@ -196,6 +205,9 @@ class NotificationManager {
           channelDescription: channel.description,
           importance: fln.Importance.max,
           priority: fln.Priority.high,
+          playSound: true,
+          enableVibration: true,
+          fullScreenIntent: true,
         ),
         iOS: const fln.DarwinNotificationDetails(
           presentAlert: true,
