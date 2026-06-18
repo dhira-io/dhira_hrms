@@ -151,9 +151,9 @@ class _DayButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isWeekend = DateTimeUtils.isWeekend(day);
     final Color bgColor = isSelected
-        ? AppColors.colorBlue50
+        ? AppColors.of(context).colorBlue50
         : isWeekend
-        ? AppColors.colorNeutral100
+        ? AppColors.of(context).colorNeutral100
         : AppColors.of(context).surfaceContainerLowest;
 
     final Color borderColor = isSelected
@@ -270,7 +270,7 @@ class _SelectedDayCard extends StatelessWidget {
                       height: 27.w,
                       child: CircularProgressIndicator(
                         value: percent,
-                        backgroundColor: AppColors.colorNeutral200,
+                        backgroundColor: AppColors.of(context).tableBorder,
                         color: AppColors.of(context).primaryContainer,
                         strokeWidth: 3.w,
                       ),
@@ -314,7 +314,7 @@ class _SelectedDayCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(99.r),
             child: LinearProgressIndicator(
               value: percent,
-              backgroundColor: AppColors.colorNeutral200,
+              backgroundColor: AppColors.of(context).tableBorder,
               valueColor: AlwaysStoppedAnimation<Color>(
                 AppColors.of(context).primaryContainer,
               ),

@@ -293,6 +293,12 @@ class AppColors {
   static const Color _darkSlate100 = Color(0xFF1E293B);
   static const Color _darkSlate200 = Color(0xFF334155);
 
+  // Timesheet colors for dark mode
+  static const Color _darkColorBlue50 = Color(0xFF0F2D5C);
+  static const Color _darkColorGreen50 = Color(0xFF0A3D1F);
+  static const Color _darkColorOrange50 = Color(0xFF4A2C10);
+  static const Color _darkColorNeutral100 = Color(0xFF2C2C2C);
+
   // Profile specific dark mode
   static const Color _darkProfileHeaderBg = Color(0xFF0A1929);
   static const Color _darkProfileTabBg = Color(0xFF1E293B);
@@ -525,6 +531,12 @@ class AppColorsResolved {
   final Color welcomeTitlePrimary;
   final Color welcomeSubtitleColor;
 
+  // Timesheet card colors (theme-aware)
+  final Color colorBlue50;
+  final Color colorGreen50;
+  final Color colorOrange50;
+  final Color colorNeutral100;
+
   const AppColorsResolved._({
     required this.primary,
     required this.primaryContainer,
@@ -700,6 +712,10 @@ class AppColorsResolved {
     required this.welcomeTopBg,
     required this.welcomeTitlePrimary,
     required this.welcomeSubtitleColor,
+    required this.colorBlue50,
+    required this.colorGreen50,
+    required this.colorOrange50,
+    required this.colorNeutral100,
   });
 
   factory AppColorsResolved.light() => const AppColorsResolved._(
@@ -877,6 +893,10 @@ class AppColorsResolved {
     welcomeTopBg: AppColors.leaveBg,
     welcomeTitlePrimary: AppColors.slate900,
     welcomeSubtitleColor: AppColors.slate500,
+    colorBlue50: AppColors.colorBlue50,
+    colorGreen50: AppColors.colorGreen50,
+    colorOrange50: AppColors.colorOrange50,
+    colorNeutral100: AppColors.colorNeutral100,
   );
 
   factory AppColorsResolved.dark() => const AppColorsResolved._(
@@ -1054,5 +1074,9 @@ class AppColorsResolved {
     welcomeTopBg: AppColors._darkWelcomeTopBg,
     welcomeTitlePrimary: AppColors._darkWelcomeTitlePrimary,
     welcomeSubtitleColor: AppColors._darkWelcomeSubtitle,
+    colorBlue50: AppColors._darkColorBlue50,
+    colorGreen50: AppColors._darkColorGreen50,
+    colorOrange50: AppColors._darkColorOrange50,
+    colorNeutral100: AppColors._darkColorNeutral100,
   );
 }
