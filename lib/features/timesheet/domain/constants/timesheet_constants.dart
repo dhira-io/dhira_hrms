@@ -31,5 +31,23 @@ class TimesheetConstants {
   static const String chevronLeftIcon = 'assets/icons/chevron_left.png';
   static const String chevronRightIcon = 'assets/icons/chevron_right.png';
   static const String clockSvgIcon = 'assets/svg/clock.svg';
+
+  // Attachment extensions
+  static const List<String> pdfDocExtensions = [
+    '.pdf',
+    '.docx',
+    '.doc',
+    '.xlsx',
+    '.xls',
+    '.pptx',
+    '.ppt'
+  ];
+  static const List<String> imageExtensions = [
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.gif',
+    '.webp'
+  ];
 }
 

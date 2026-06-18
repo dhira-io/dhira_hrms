@@ -1,15 +1,10 @@
-import 'package:dhira_hrms/core/constants/api_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
-import 'package:dhira_hrms/core/utils/string_utils.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
-import 'package:dhira_hrms/core/widgets/common_pdf_viewer.dart';
-import 'package:dhira_hrms/core/widgets/common_image_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
@@ -166,52 +161,12 @@ class TimesheetTaskCard extends StatelessWidget {
             children: [
               if ((task.attachments ?? "").isNotEmpty)
                 GestureDetector(
-                  onTap: () async {
-                    final attachmentUrl = task.attachments!.isAbsoluteUrl
-                        ? task.attachments!
-                        : '${ApiConstants.baseUrl}${task.attachments!}';
-
-                    final uri = Uri.parse(attachmentUrl);
-                    final path = uri.path.toLowerCase();
-                    final isPdfOrDoc =
-                        path.endsWith('.pdf') ||
-                        path.endsWith('.docx') ||
-                        path.endsWith('.doc') ||
-                        path.endsWith('.xlsx') ||
-                        path.endsWith('.xls') ||
-                        path.endsWith('.pptx') ||
-                        path.endsWith('.ppt');
-                    final isImage =
-                        path.endsWith('.png') ||
-                        path.endsWith('.jpg') ||
-                        path.endsWith('.jpeg') ||
-                        path.endsWith('.gif') ||
-                        path.endsWith('.webp');
-
-                    if (isPdfOrDoc) {
-                      if (context.mounted) {
-                        CommonPdfViewer.show(
-                          context: context,
-                          title: l10n.attachmentsLabel,
-                          fileUrl: attachmentUrl,
+                  onTap: () {
+                    context.read<TimesheetBloc>().add(
+                          TimesheetEvent.viewAttachmentRequested(
+                            attachment: task.attachments!,
+                          ),
                         );
-                      }
-                    } else if (isImage) {
-                      if (context.mounted) {
-                        CommonImageViewer.show(
-                          context: context,
-                          title: l10n.attachmentsLabel,
-                          imageUrl: attachmentUrl,
-                        );
-                      }
-                    } else {
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(
-                          uri,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      }
-                    }
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 4.h),

@@ -9,6 +9,7 @@ import 'package:dhira_hrms/features/timesheet/domain/entities/timesheet_overview
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'timesheet_status.dart';
 import 'timesheet_success_type.dart';
+import 'timesheet_attachment_type.dart';
 
 part 'timesheet_state.freezed.dart';
 
@@ -50,6 +51,8 @@ class TimesheetState with _$TimesheetState {
     String? errorMessage,
     String? successMessage,
     TimesheetSuccessType? successType,
+    String? viewAttachmentUrl,
+    TimesheetAttachmentType? viewAttachmentType,
   }) = _TimesheetState;
 
   const TimesheetState._();

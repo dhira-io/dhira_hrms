@@ -98,4 +98,9 @@ abstract class TimesheetEvent with _$TimesheetEvent {
       TimesheetPreviousWeekRequested;
   const factory TimesheetEvent.nextWeekRequested() = TimesheetNextWeekRequested;
   const factory TimesheetEvent.refreshRequested() = TimesheetRefreshRequested;
+  const factory TimesheetEvent.viewAttachmentRequested({
+    required String attachment,
+  }) = TimesheetViewAttachmentRequested;
+  const factory TimesheetEvent.clearAttachmentViewRequested() =
+      TimesheetClearAttachmentViewRequested;
 }

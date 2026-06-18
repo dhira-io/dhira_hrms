@@ -1,6 +1,9 @@
 import 'dart:developer' show log;
 
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/constants/api_constants.dart';
+import 'package:dhira_hrms/core/utils/string_utils.dart';
+import 'timesheet_attachment_type.dart';
 import 'package:dhira_hrms/core/usecases/usecase.dart';
 import 'package:dhira_hrms/core/services/image_compress_service.dart';
 import 'package:dhira_hrms/core/services/local_storage_service.dart';
@@ -78,6 +81,8 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     on<TimesheetPreviousWeekRequested>(_onPreviousWeekRequested);
     on<TimesheetNextWeekRequested>(_onNextWeekRequested);
     on<TimesheetRefreshRequested>(_onRefreshRequested);
+    on<TimesheetViewAttachmentRequested>(_onViewAttachmentRequested);
+    on<TimesheetClearAttachmentViewRequested>(_onClearAttachmentViewRequested);
   }
 
   void _onFromDateChanged(
@@ -1154,5 +1159,43 @@ class TimesheetBloc extends Bloc<TimesheetEvent, TimesheetState> {
     if (result != null && result.files.first.path != null) {
       add(TimesheetEvent.uploadFileRequested(result.files.first.path!));
     }
+  }
+
+  void _onViewAttachmentRequested(
+    TimesheetViewAttachmentRequested event,
+    Emitter<TimesheetState> emit,
+  ) {
+    if (event.attachment.isEmpty) return;
+
+    final attachmentUrl = event.attachment.isAbsoluteUrl
+        ? event.attachment
+        : '${ApiConstants.baseUrl}${event.attachment}';
+
+    final uri = Uri.parse(attachmentUrl);
+    final path = uri.path.toLowerCase();
+
+    final isPdfOrDoc = TimesheetConstants.pdfDocExtensions.any((ext) => path.endsWith(ext));
+    final isImage = TimesheetConstants.imageExtensions.any((ext) => path.endsWith(ext));
+
+    final type = isPdfOrDoc
+        ? TimesheetAttachmentType.pdf
+        : isImage
+            ? TimesheetAttachmentType.image
+            : TimesheetAttachmentType.external;
+
+    emit(state.copyWith(
+      viewAttachmentUrl: attachmentUrl,
+      viewAttachmentType: type,
+    ));
+  }
+
+  void _onClearAttachmentViewRequested(
+    TimesheetClearAttachmentViewRequested event,
+    Emitter<TimesheetState> emit,
+  ) {
+    emit(state.copyWith(
+      viewAttachmentUrl: null,
+      viewAttachmentType: null,
+    ));
   }
 }

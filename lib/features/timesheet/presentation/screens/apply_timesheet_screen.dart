@@ -13,12 +13,16 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_success_type.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/utils/timesheet_error_mapper.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_content_view.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_error_view.dart';
+import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_loading_view.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:dhira_hrms/core/widgets/common_pdf_viewer.dart';
+import 'package:dhira_hrms/core/widgets/common_image_viewer.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_attachment_type.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_bottom_actions.dart';
 
 class ApplyTimesheetScreen extends StatefulWidget {
@@ -56,10 +60,42 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
     final l10n = AppLocalizations.of(context)!;
     return BlocListener<TimesheetBloc, TimesheetState>(
       listenWhen: (previous, current) =>
-          previous.status != current.status &&
-          (current.status == TimesheetStateStatus.success ||
-              current.status == TimesheetStateStatus.error),
+          (previous.status != current.status &&
+              (current.status == TimesheetStateStatus.success ||
+                  current.status == TimesheetStateStatus.error)) ||
+          (previous.viewAttachmentUrl != current.viewAttachmentUrl &&
+              current.viewAttachmentUrl != null),
       listener: (context, state) {
+        if (state.viewAttachmentUrl != null) {
+          final url = state.viewAttachmentUrl!;
+          final type = state.viewAttachmentType;
+          if (type == TimesheetAttachmentType.pdf) {
+            CommonPdfViewer.show(
+              context: context,
+              title: l10n.attachmentsLabel,
+              fileUrl: url,
+            );
+          } else if (type == TimesheetAttachmentType.image) {
+            CommonImageViewer.show(
+              context: context,
+              title: l10n.attachmentsLabel,
+              imageUrl: url,
+            );
+          } else if (type == TimesheetAttachmentType.external) {
+            final uri = Uri.tryParse(url);
+            if (uri != null) {
+              canLaunchUrl(uri).then((canLaunch) {
+                if (canLaunch) {
+                  launchUrl(uri, mode: LaunchMode.externalApplication);
+                }
+              });
+            }
+          }
+          context.read<TimesheetBloc>().add(
+                const TimesheetEvent.clearAttachmentViewRequested(),
+              );
+        }
+
         if (state.status == TimesheetStateStatus.success) {
           final displayMessage = _getSuccessMessage(
             state.successType,
@@ -109,7 +145,7 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                 }
 
                 if (state.isErrorEmpty) {
-                  return TimesheetErrorView(
+                  return GenericErrorWidget(
                     message: state.errorMessage ?? l10n.somethingWentWrong,
                     onRetry: () {
                       context.read<TimesheetBloc>().add(

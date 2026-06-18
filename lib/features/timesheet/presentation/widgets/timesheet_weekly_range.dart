@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../bloc/timesheet_bloc.dart';
-import '../bloc/timesheet_state.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 
 class TimesheetWeeklyRange extends StatelessWidget {
   const TimesheetWeeklyRange({super.key});
