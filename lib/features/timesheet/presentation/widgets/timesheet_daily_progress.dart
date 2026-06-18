@@ -84,10 +84,7 @@ class TimesheetDailyProgress extends StatelessWidget {
               }).toList(),
             ),
             SizedBox(height: 8.h),
-            _SelectedDayCard(
-              state: state,
-              l10n: l10n,
-            ),
+            _SelectedDayCard(state: state, l10n: l10n),
           ],
         );
       },
@@ -215,10 +212,7 @@ class _SelectedDayCard extends StatelessWidget {
   final TimesheetState state;
   final AppLocalizations l10n;
 
-  const _SelectedDayCard({
-    required this.state,
-    required this.l10n,
-  });
+  const _SelectedDayCard({required this.state, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -292,17 +286,13 @@ class _SelectedDayCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                l10n.dailyTarget(
-                  targetHours.formatHours(),
-                ),
+                l10n.dailyTarget(targetHours.formatHours()),
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
                 ),
               ),
               Text(
-                l10n.hoursRemaining(
-                  remaining.formatHours(),
-                ),
+                l10n.hoursRemaining(remaining.formatHours()),
                 style: AppTextStyle.bodySmall.copyWith(
                   color: AppColors.of(context).textSecondary,
                 ),
