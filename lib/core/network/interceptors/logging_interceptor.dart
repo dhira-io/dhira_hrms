@@ -1,32 +1,38 @@
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
+import '../../utils/secure_logger.dart';
 
 class LoggingInterceptor extends Interceptor {
-  final Logger _logger;
-
-  LoggingInterceptor(this._logger);
+  LoggingInterceptor();
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    _logger.i('REQUEST[${options.method}] => PATH: ${options.path}');
-    _logger.d('Headers: ${options.headers}');
+    SecureLogger.i('REQUEST[${options.method}] => PATH: ${options.path}');
+    SecureLogger.d('Headers: ${SecureLogger.mask(options.headers)}');
+    if (options.queryParameters.isNotEmpty) {
+      SecureLogger.d('Query: ${SecureLogger.mask(options.queryParameters)}');
+    }
     if (options.data != null) {
-      _logger.d('Body: ${options.data}');
+      SecureLogger.d('Body', options.data);
     }
     return super.onRequest(options, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    _logger.i('RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
-    _logger.d('Data: ${response.data}');
+    SecureLogger.i(
+      'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}',
+    );
+    SecureLogger.d('Data', response.data);
     return super.onResponse(response, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    _logger.e('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
-    _logger.e('Message: ${err.message}');
+    SecureLogger.e(
+      'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}',
+      error: err.message,
+      data: err.response?.data,
+    );
     return super.onError(err, handler);
   }
 }

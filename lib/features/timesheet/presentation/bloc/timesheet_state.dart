@@ -1,68 +1,53 @@
+import 'package:dhira_hrms/features/auth/domain/entities/user_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/timesheet_entity.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/timesheet_overview_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/timesheet_entities.dart';
-import '../../../auth/domain/entities/user_entity.dart';
+import 'timesheet_status.dart';
+import 'timesheet_success_type.dart';
 
 part 'timesheet_state.freezed.dart';
 
 @freezed
-abstract class TimesheetState with _$TimesheetState {
-  const factory TimesheetState.initial({
+class TimesheetState with _$TimesheetState {
+  const factory TimesheetState({
+    @Default(TimesheetStateStatus.initial) TimesheetStateStatus status,
     UserEntity? user,
     DateTime? editFromDate,
     DateTime? editToDate,
-    @Default([]) List<ProjectAssignmentEntity> editAssignments,
-  }) = _Initial;
-
-  const factory TimesheetState.loading({
-    UserEntity? user,
-    DateTime? editFromDate,
-    DateTime? editToDate,
-    @Default([]) List<ProjectAssignmentEntity> editAssignments,
-  }) = _Loading;
-
-  const factory TimesheetState.loaded({
-    required List<TimesheetEntity> timesheets,
+    DateTime? selectedDate,
+    String? initialTimesheetId,
+    @Default([]) List<TimesheetEntity> timesheets,
     @Default(false) bool hasMore,
-    @Default(false) bool isFetchingMore,
-    UserEntity? user,
-    DateTime? editFromDate,
-    DateTime? editToDate,
     @Default([]) List<ProjectAssignmentEntity> editAssignments,
-  }) = _Loaded;
-
-  const factory TimesheetState.detailLoaded({
-    required TimesheetEntity timesheet,
-    required List<ProjectEntity> projects,
-    UserEntity? user,
-    DateTime? editFromDate,
-    DateTime? editToDate,
-    @Default([]) List<ProjectAssignmentEntity> editAssignments,
-  }) = _DetailLoaded;
-
-  const factory TimesheetState.success({
-    required String message,
-    UserEntity? user,
-    DateTime? editFromDate,
-    DateTime? editToDate,
-    @Default([]) List<ProjectAssignmentEntity> editAssignments,
-  }) = _Success;
-
-  const factory TimesheetState.error({
-    required String message,
-    UserEntity? user,
-    DateTime? editFromDate,
-    DateTime? editToDate,
-    @Default([]) List<ProjectAssignmentEntity> editAssignments,
-  }) = _Error;
+    @Default([]) List<ProjectEntity> projects,
+    @Default(false) bool isActionLoading,
+    @Default(false) bool isSubmitWeeklyLoading,
+    @Default(false) bool hasDraftTasksInSelectedWeek,
+    String? activeTimesheetId,
+    TimesheetOverviewEntity? overview,
+    @Default([]) List<ProjectAssignmentEntity> assignmentsForSelectedDay,
+    String? currentWeekActiveId,
+    @Default("") String formattedOverviewWeeks,
+    ProjectAssignmentEntity? editingTask,
+    int? editingIndex,
+    @Default("") String formTaskData,
+    @Default("") String formDescription,
+    @Default("") String formExpectedHours,
+    @Default("") String formSpentHours,
+    ProjectEntity? formSelectedProject,
+    @Default(0.0) double weeklyTotalHours,
+    @Default({}) Set<DateTime> taskDays,
+    @Default({}) Set<DateTime> holidayDays,
+    @Default("") String currentWeekRangeText,
+    @Default([]) List<DateTime> holidays,
+    @Default(false) bool isUploading,
+    String? uploadedFileUrl,
+    String? errorMessage,
+    String? successMessage,
+    TimesheetSuccessType? successType,
+  }) = _TimesheetState;
 
   const TimesheetState._();
-
-  @override
-  UserEntity? get user;
-  @override
-  DateTime? get editFromDate;
-  @override
-  DateTime? get editToDate;
-  @override
-  List<ProjectAssignmentEntity> get editAssignments;
 }

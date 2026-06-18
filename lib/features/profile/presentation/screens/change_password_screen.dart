@@ -1,8 +1,11 @@
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/utils/toast_utils.dart';
-import '../../../auth/presentation/screens/login_screen.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_state.dart';
 import '../widgets/change_password_form.dart';
@@ -12,26 +15,23 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocProvider.value(
       value: Get.find<ProfileBloc>(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Change Password')),
+        appBar: AppBar(title: Text(l10n.changePassword)),
         body: BlocListener<ProfileBloc, ProfileState>(
           listener: (context, state) {
             state.whenOrNull(
-              success: (message) {
+              success: (message, _, _) {
                 ToastUtils.showSuccess(message);
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
-                  (route) => false,
-                );
+                context.go(AppRouter.loginPath);
               },
-              error: (message) => ToastUtils.showError(message),
+              error: (message, _, _) => ToastUtils.showError(message),
             );
           },
-          child: const SingleChildScrollView(
-            padding: EdgeInsets.all(24),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(24.w),
             child: ChangePasswordForm(),
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
@@ -8,9 +9,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/routing/app_router.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
+import '../bloc/otp_verification_cubit.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
@@ -27,14 +26,17 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   void _verifyOtp() {
     final l10n = AppLocalizations.of(context)!;
     if (_otpController.text.length >= 4) {
-      context.read<AuthBloc>().add(AuthEvent.verifyOtpRequested(widget.email, _otpController.text));
+      context.read<OtpVerificationCubit>().verifyOtp(
+        widget.email,
+        _otpController.text,
+      );
     } else {
       ToastUtils.showError(l10n.pleaseEnterValidOtp);
     }
   }
 
   void _resendOtp() {
-    context.read<AuthBloc>().add(AuthEvent.resendOtpRequested(widget.email));
+    context.read<OtpVerificationCubit>().resendOtp(widget.email);
   }
 
   @override
@@ -46,26 +48,25 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<AuthBloc>.value(
-      value: Get.find<AuthBloc>(),
+    return BlocProvider<OtpVerificationCubit>.value(
+      value: Get.find<OtpVerificationCubit>(),
       child: Scaffold(
-        backgroundColor: AppColors.surface,
-        appBar: AppBar(
-          title: Text(l10n.verifyOtp),
-        ),
-        body: BlocListener<AuthBloc, AuthState>(
+        backgroundColor: AppColors.of(context).surface,
+        appBar: AppBar(title: Text(l10n.verifyOtp)),
+        body: BlocListener<OtpVerificationCubit, OtpVerificationState>(
           listener: (context, state) {
             state.whenOrNull(
-              success: (message) {
+              success: (message, status) {
                 ToastUtils.showSuccess(message);
-                if (message == l10n.otpVerifiedSuccessfully) {
-                   context.go(AppRouter.dashboardPath);
+                if (!mounted) return;
+                if (status == OtpVerificationStatus.otpVerified) {
+                  context.go(AppRouter.dashboardPath);
                 }
               },
               error: (message) => ToastUtils.showError(message),
             );
           },
-          child: BlocBuilder<AuthBloc, AuthState>(
+          child: BlocBuilder<OtpVerificationCubit, OtpVerificationState>(
             builder: (context, state) {
               final isLoading = state.maybeWhen(
                 loading: () => true,
@@ -88,25 +89,31 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       controller: _otpController,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                        hintText: '----',
-                      ),
+                      decoration: const InputDecoration(hintText: '----'),
                       maxLength: 6,
                     ),
                     const SizedBox(height: AppConstants.p24),
                     ElevatedButton(
                       onPressed: isLoading ? null : _verifyOtp,
                       child: isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.surface),
+                          ? SizedBox(
+                              height: 20.h,
+                              width: 20.w,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.of(context).surface,
+                              ),
                             )
                           : Text(l10n.verifyOtp, style: AppTextStyle.button),
                     ),
                     TextButton(
                       onPressed: isLoading ? null : _resendOtp,
-                      child: Text(l10n.resendOtp, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.primary)),
+                      child: Text(
+                        l10n.resendOtp,
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          color: AppColors.of(context).primary,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -118,4 +125,3 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     );
   }
 }
-

@@ -13,12 +13,10 @@ abstract class LeaveTypeModel with _$LeaveTypeModel {
 
   const LeaveTypeModel._();
 
-  factory LeaveTypeModel.fromJson(Map<String, dynamic> json) => _$LeaveTypeModelFromJson(json);
+  factory LeaveTypeModel.fromJson(Map<String, dynamic> json) =>
+      _$LeaveTypeModelFromJson(json);
 
   LeaveTypeEntity toEntity() {
-    return LeaveTypeEntity(
-      name: name,
-      leaveTypeName: leaveTypeName,
-    );
+    return LeaveTypeEntity(name: name, leaveTypeName: leaveTypeName);
   }
 }

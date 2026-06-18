@@ -131,9 +131,12 @@ lib/
 ## 🚀 Getting Started
 
 1. **Clone & Install**: `flutter pub get`
-2. **Generate Models**: 
+2. **Generate Models & Localization**: 
    ```bash
+   # Generate freezed/json_serializable models
    flutter pub run build_runner build --delete-conflicting-outputs
+   # Generate localizations (since generated l10n files are ignored in git)
+   flutter gen-l10n
    ```
 3. **Run**: `flutter run`
 

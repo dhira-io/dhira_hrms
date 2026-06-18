@@ -1,17 +1,17 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/features/attendance/presentation/widgets/attendance_header.dart';
+import 'package:dhira_hrms/features/attendance/presentation/widgets/leave_details_section.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/storage_constants.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../l10n/app_localizations.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
-import '../widgets/attendance_header.dart';
+import 'package:dhira_hrms/core/widgets/app_header.dart';
 import '../widgets/attendance_log_list.dart';
-import '../widgets/punch_card.dart';
+import '../widgets/leave_history_section.dart';
+import '../widgets/on_leave_today_section.dart';
 
 class AttendanceScreen extends StatefulWidget {
   const AttendanceScreen({super.key});
@@ -21,69 +21,103 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  String? _empid;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    _loadEmpId();
-  }
-
-  Future<void> _loadEmpId() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _empid = prefs.getString(StorageConstants.empId);
+    _scrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<AttendanceBloc>().add(const AttendanceEvent.started());
+      }
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (_empid == null) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-    final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<AttendanceBloc>(
-      create: (context) => Get.find<AttendanceBloc>()..add(AttendanceEvent.started(_empid!)),
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
-        appBar: AppBar(
-          title: Text(l10n.attendance),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: () {
-                context.read<AttendanceBloc>().add(AttendanceEvent.checkStatusRequested(_empid!));
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.of(context).background,
+      body: SafeArea(
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<AttendanceBloc, AttendanceState>(
+              listenWhen: (previous, current) =>
+                  current.mapOrNull(error: (_) => true) == true,
+              listener: (context, state) {
+                state.whenOrNull(
+                  error: (message, events, _, _, _, _, _, _, _) =>
+                      ToastUtils.showError(message),
+                );
+              },
+            ),
+            BlocListener<BottomNavCubit, int>(
+              listener: (context, state) {
+                if (state == BottomNavCubit.attendanceIndex) {
+                  if (context.mounted) {
+                    context.read<AttendanceBloc>().add(
+                      const AttendanceEvent.started(),
+                    );
+                    if (_scrollController.hasClients) {
+                      _scrollController.jumpTo(0.0);
+                    }
+                  }
+                }
               },
             ),
           ],
-        ),
-        body: BlocListener<AttendanceBloc, AttendanceState>(
-          listener: (context, state) {
-            state.whenOrNull(
-              error: (message) => ToastUtils.showError(message),
-            );
-          },
-          child: RefreshIndicator(
-            onRefresh: () async {
-              context.read<AttendanceBloc>().add(AttendanceEvent.logRequested(_empid!));
-              context.read<AttendanceBloc>().add(AttendanceEvent.checkStatusRequested(_empid!));
-            },
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  const AttendanceHeader(),
-                  const PunchCard(),
-                  const SizedBox(height: AppConstants.p20),
-                  const AttendanceLogList(),
-                ],
+          child: Column(
+            children: [
+              const AppHeader(),
+              AttendanceHeader(),
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      const AttendanceLogList(),
+
+                      BlocBuilder<AttendanceBloc, AttendanceState>(
+                        buildWhen: (previous, current) =>
+                            previous.leaveDetails != current.leaveDetails ||
+                            previous.leaveHistory != current.leaveHistory ||
+                            previous.teamLeaves != current.teamLeaves,
+                        builder: (context, state) {
+                          return Column(
+                            children: [
+                              if (state.leaveDetails != null)
+                                LeaveDetailsSection(
+                                  key: ValueKey(
+                                    state.leaveDetails!.leaveAllocation.length,
+                                  ),
+                                  details: state.leaveDetails!,
+                                ),
+                              if (state.leaveHistory != null)
+                                LeaveHistorySection(
+                                  recentHistory: state.recentLeaveHistory,
+                                  hasMore: state.hasMoreLeaveHistory,
+                                ),
+                              OnLeaveTodaySection(leaves: state.teamLeaves),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
     );
+    // );
   }
 }
-

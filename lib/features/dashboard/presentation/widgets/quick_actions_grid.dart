@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -14,10 +16,7 @@ class QuickActionsGrid extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.quickActions,
-          style: AppTextStyle.h3,
-        ),
+        Text(l10n.quickActions, style: AppTextStyle.h3),
         const SizedBox(height: AppConstants.p16),
         Wrap(
           spacing: AppConstants.p24,
@@ -27,31 +26,31 @@ class QuickActionsGrid extends StatelessWidget {
             _ActionIcon(
               icon: Icons.checklist,
               label: l10n.tasks,
-              color: Colors.red,
+              color: AppColors.of(context).error,
               onTap: () => context.push(AppRouter.myTaskPath),
             ),
             _ActionIcon(
               icon: Icons.add_task,
               label: l10n.timesheet,
-              color: Colors.blue,
+              color: AppColors.of(context).primary,
               onTap: () {}, // TODO: Implementation
             ),
             _ActionIcon(
               icon: Icons.request_page,
               label: l10n.leave,
-              color: Colors.orange,
-              onTap: () {}, 
+              color: AppColors.of(context).warning,
+              onTap: () {},
             ),
             _ActionIcon(
               icon: Icons.people,
               label: l10n.team,
-              color: Colors.purple,
+              color: AppColors.of(context).secondary,
               onTap: () => context.push(AppRouter.organizationPath),
             ),
             _ActionIcon(
               icon: Icons.settings,
               label: l10n.settings,
-              color: Colors.grey,
+              color: AppColors.of(context).textSecondary,
               onTap: () {},
             ),
           ],
@@ -87,16 +86,12 @@ class _ActionIcon extends StatelessWidget {
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
-            child: Icon(icon, color: color),
+            child: Icon(icon, color: color, size: AppConstants.iconMedium),
           ),
         ),
         const SizedBox(height: AppConstants.p8),
-        Text(
-          label,
-          style: AppTextStyle.bodySmall.copyWith(fontSize: 12),
-        ),
+        Text(label, style: AppTextStyle.bodySmall.copyWith(fontSize: 12.sp)),
       ],
     );
   }
 }
-

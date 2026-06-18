@@ -1,10 +1,12 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/shared/components/mandatory_label.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/components/mandatory_label.dart';
-import '../../domain/entities/timesheet_entities.dart';
 
 class TimesheetAssignmentList extends StatelessWidget {
   final List<ProjectAssignmentEntity> assignments;
@@ -30,46 +32,158 @@ class TimesheetAssignmentList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             MandatoryLabel(labelText: l10n.projectAssignments),
-            TextButton.icon(
+            OutlinedButton.icon(
               onPressed: onAdd,
-              icon: const Icon(Icons.add, color: AppColors.primary),
-              label: Text(l10n.addProject, style: AppTextStyle.bodyMedium.copyWith(color: AppColors.primary)),
+              icon: Icon(
+                Icons.add,
+                size: 18,
+                color: AppColors.of(context).primary,
+              ),
+              label: Text(
+                l10n.addProject,
+                style: AppTextStyle.bodyMedium.copyWith(
+                  color: AppColors.of(context).primary,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: AppColors.of(context).border),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppConstants.r8),
+                ),
+                padding:       EdgeInsets.symmetric(horizontal: 12.w),
+              ),
             ),
           ],
         ),
+        const SizedBox(height: AppConstants.p12),
         if (assignments.isEmpty)
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(AppConstants.p20), 
-              child: Text(
-                l10n.noProjectsAdded, 
-                style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+          Container(
+            padding: const EdgeInsets.all(AppConstants.p24),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.of(context).surface,
+              borderRadius: BorderRadius.circular(AppConstants.r12),
+              border: Border.all(
+                color: AppColors.of(context).border,
+                style: BorderStyle.solid,
               ),
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.assignment_outlined,
+                  size: 40,
+                  color: AppColors.of(
+                    context,
+                  ).textSecondary.withValues(alpha: 0.5),
+                ),
+                const SizedBox(height: AppConstants.p12),
+                Text(
+                  l10n.noProjectsAdded,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).textSecondary,
+                  ),
+                ),
+              ],
             ),
           )
         else
-          ...assignments.asMap().entries.map((entry) {
-            final idx = entry.key;
-            final item = entry.value;
-            return Card(
-              margin: const EdgeInsets.only(bottom: AppConstants.p8),
-              child: ListTile(
-                title: Text(item.project, style: AppTextStyle.bodyMedium.copyWith(fontWeight: FontWeight.bold)),
-                subtitle: Text(
-                  'Spent: ${item.spentHours}h | Expected: ${item.expectedHours}h',
-                  style: AppTextStyle.bodySmall,
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(icon: const Icon(Icons.edit, size: 18), onPressed: () => onEdit(idx, item)),
-                    IconButton(icon: const Icon(Icons.delete, size: 18, color: AppColors.error), onPressed: () => onDelete(idx)),
-                  ],
-                ),
-              ),
-            );
-          }),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: assignments.length,
+            itemBuilder: (context, index) {
+              final item = assignments[index];
+              return _AssignmentCard(
+                item: item,
+                onEdit: () => onEdit(index, item),
+                onDelete: () => onDelete(index),
+              );
+            },
+          ),
       ],
+    );
+  }
+}
+
+class _AssignmentCard extends StatelessWidget {
+  final ProjectAssignmentEntity item;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  const _AssignmentCard({
+    required this.item,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppConstants.p12),
+      decoration: BoxDecoration(
+        color: AppColors.of(context).surface,
+        borderRadius: BorderRadius.circular(AppConstants.r12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppConstants.p16),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.project,
+                    style: AppTextStyle.bodyLarge.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (item.date != null) ...[
+                          SizedBox(height: 4.h),
+                    Text(
+                      DateTimeUtils.formatDateString(item.date),
+                      style: AppTextStyle.bodySmall.copyWith(
+                        color: AppColors.of(context).primary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            IconButton(
+              onPressed: onEdit,
+              icon: Icon(
+                Icons.edit_outlined,
+                size: 20,
+                color: AppColors.of(context).textSecondary,
+              ),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+            ),
+                  SizedBox(width: 12.w),
+            IconButton(
+              onPressed: onDelete,
+              icon: Icon(
+                Icons.delete_outline,
+                size: 20,
+                color: AppColors.of(context).error,
+              ),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -7,21 +7,57 @@ part 'leave_balance_model.g.dart';
 @freezed
 abstract class LeaveBalanceModel with _$LeaveBalanceModel {
   const factory LeaveBalanceModel({
-    @JsonKey(name: 'total_leaves') required int totalAllocated,
-    @JsonKey(name: 'leaves_taken') required int used,
-    @JsonKey(name: 'leaves_pending_approval') required int pending,
+    @JsonKey(name: 'total_leaves') required num totalAllocated,
+    @JsonKey(name: 'leaves_taken') required num used,
+    @JsonKey(name: 'leaves_pending_approval') required num pending,
+    @Default(0) num available,
+    @Default(0) num approved,
+    @Default(0) num rejected,
+    @Default(0) num applied,
+    @Default([]) List<DetailedBalanceModel> details,
   }) = _LeaveBalanceModel;
 
   const LeaveBalanceModel._();
 
-  factory LeaveBalanceModel.fromJson(Map<String, dynamic> json) => _$LeaveBalanceModelFromJson(json);
+  factory LeaveBalanceModel.fromJson(Map<String, dynamic> json) =>
+      _$LeaveBalanceModelFromJson(json);
 
   LeaveBalanceEntity toEntity() {
     return LeaveBalanceEntity(
       totalAllocated: totalAllocated,
       used: used,
       pending: pending,
-      available: totalAllocated - used - pending,
+      approved: approved,
+      rejected: rejected,
+      applied: applied,
+      available: available,
+      details: details.map((e) => e.toEntity()).toList(),
+    );
+  }
+}
+
+@freezed
+abstract class DetailedBalanceModel with _$DetailedBalanceModel {
+  const factory DetailedBalanceModel({
+    required String leaveType,
+    required double allocated,
+    required double used,
+    required double pending,
+    required double available,
+  }) = _DetailedBalanceModel;
+
+  const DetailedBalanceModel._();
+
+  factory DetailedBalanceModel.fromJson(Map<String, dynamic> json) =>
+      _$DetailedBalanceModelFromJson(json);
+
+  LeaveDetailedBalanceEntity toEntity() {
+    return LeaveDetailedBalanceEntity(
+      leaveType: leaveType,
+      allocated: allocated,
+      used: used,
+      pending: pending,
+      available: available,
     );
   }
 }

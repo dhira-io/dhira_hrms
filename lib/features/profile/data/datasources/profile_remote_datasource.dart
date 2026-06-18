@@ -1,17 +1,51 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/profile_api_constants.dart';
 import '../models/profile_models.dart';
+import '../models/resume_model.dart';
+import '../models/search_employee_model.dart';
+import '../../../../core/constants/app_constants.dart';
 
 abstract class ProfileRemoteDataSource {
-  Future<ProfileModel> getProfile(String email);
-  Future<bool> updateAvatar(String filePath, String email);
+  Future<ProfileModel> getProfile(String identifier);
+  Future<String> updateAvatar(String filePath, String identifier);
+  Future<bool> deleteProfileImage(String employeeId);
   Future<bool> changePassword({
     required String oldPassword,
     required String newPassword,
     required String logoutAllSessions,
   });
+  Future<bool> updateProfileDetails({
+    required String identifier,
+    required String personalEmail,
+    required String phone,
+    required String emergencyContact,
+    String? emergencyContactName,
+    String? nationality,
+    required String currentAddress,
+    required String permanentAddress,
+    String? currentLocation,
+    String? dateOfBirth,
+  });
+
+  // Resume operations
+  Future<ResumeModel> getEmployeeResume(String employeeId);
+  Future<List<String>> searchSkills(String query);
+  Future<List<String>> searchDesignations(String query);
+  Future<List<String>> searchProjects(String query);
+  Future<List<SearchEmployeeModel>> searchEmployees(String query);
+  Future<List<SubSkillModel>> getSubSkills(String skillName);
+  Future<List<String>> searchLocations(String query);
+  Future<List<Map<String, dynamic>>> getCountryCodes();
+  Future<List<String>> getNationalities();
+  Future<void> upsertResumeRow(String employeeId, String section, String rowDataJson, {String? rowName});
+  Future<void> deleteResumeRow(String employeeId, String section, String rowName);
+  Future<void> updateEmployeeResume(String employeeId, String resumeDataJson);
+  Future<void> updateEmployeeSubSkills(String employeeId, String subSkillsJson);
+  Future<void> saveSubSkillsForSkill(String employeeId, String skillName, String subSkillsJson);
+  Future<void> updateEmployeeProjectAssignments(String employeeId, String assignmentsJson);
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -20,35 +54,82 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   ProfileRemoteDataSourceImpl(this.dioClient);
 
   @override
-  Future<ProfileModel> getProfile(String email) async {
-    final response = await dioClient.get(
-      ProfileApiConstants.getUserDetails,
-      queryParameters: {"user": email},
-    );
-
-    final userData = response.data['data'];
-    if (userData == null) throw const ServerException(message: "Profile data not found");
-    return ProfileModel.fromJson(userData);
+  Future<ProfileModel> getProfile(String identifier) async {
+    Response response;
+    if (identifier.contains('@')) {
+      response = await dioClient.get(
+        ProfileApiConstants.getUserDetails,
+        queryParameters: {
+          "filters": '[["user_id","=","$identifier"]]',
+          "fields": '["*"]',
+        },
+      );
+      final List? dataList = response.data['data'];
+      if (dataList == null || dataList.isEmpty) {
+        throw const ServerException(message: ProfileApiConstants.errProfileDataNotFound);
+      }
+      return ProfileModel.fromJson(Map<String, dynamic>.from(dataList.first));
+    } else {
+      response = await dioClient.get(
+        "${ProfileApiConstants.getUserDetails}/$identifier",
+        queryParameters: {"fields": '["*"]'},
+      );
+      final userData = response.data['data'];
+      if (userData == null) {
+        throw const ServerException(message: ProfileApiConstants.errProfileDataNotFound);
+      }
+      return ProfileModel.fromJson(userData);
+    }
   }
 
   @override
-  Future<bool> updateAvatar(String filePath, String email) async {
+  Future<String> updateAvatar(String filePath, String identifier) async {
     final fileName = filePath.split('/').last;
-    
+
+    // Step 1: Upload the file
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath, filename: fileName),
-      'docname': email,
-      'doctype': 'User',
-      'fieldname': 'user_image',
-      'is_private': 0,
+      'docname': identifier,
+      'doctype': 'Employee',
+      'fieldname': 'image',
+      'folder': 'Home',
+      'is_private': '0',
     });
 
-    final response = await dioClient.post(
+    final uploadResponse = await dioClient.post(
       ProfileApiConstants.uploadFile,
       data: formData,
     );
 
-    return response.statusCode == 200;
+    final fileUrl = uploadResponse.data['message']['file_url'];
+
+    // Step 2: Update the Employee record
+    final updateResponse = await dioClient.put(
+      "${ProfileApiConstants.getUserDetails}/$identifier",
+      data: {
+        "data": {"image": fileUrl},
+      },
+    );
+
+    if (updateResponse.statusCode == 200 || updateResponse.statusCode == 202) {
+      final message = updateResponse.data['message'];
+      if (message is String && message.trim().isNotEmpty) {
+        return message.trim();
+      }
+      return ProfileApiConstants.msgProfilePicUpdated;
+    } else {
+      throw const ServerException(message: ProfileApiConstants.errProfilePicUpdateFailed);
+    }
+  }
+
+  @override
+  Future<bool> deleteProfileImage(String employeeId) async {
+    final response = await dioClient.post(
+      ProfileApiConstants.deleteProfileImage,
+      queryParameters: {"employee_id": employeeId},
+    );
+    return response.statusCode == 200 &&
+        response.data['message']?['success'] == true;
   }
 
   @override
@@ -66,5 +147,302 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       },
     );
     return response.statusCode == 200;
+  }
+
+  @override
+  Future<bool> updateProfileDetails({
+    required String identifier,
+    required String personalEmail,
+    required String phone,
+    required String emergencyContact,
+    String? emergencyContactName,
+    String? nationality,
+    required String currentAddress,
+    required String permanentAddress,
+    String? currentLocation,
+    String? dateOfBirth,
+  }) async {
+    final response = await dioClient.put(
+      "${ProfileApiConstants.getUserDetails}/$identifier",
+      data: {
+        "data": {
+          "personal_email": personalEmail,
+          "cell_number": phone,
+          "emergency_phone_number": emergencyContact,
+          if (emergencyContactName != null && emergencyContactName.isNotEmpty) "person_to_be_contacted": emergencyContactName,
+          if (nationality != null && nationality.isNotEmpty) "custom_nationality": nationality,
+          "current_address": currentAddress,
+          "permanent_address": permanentAddress,
+          if (currentLocation != null) "custom_current_location": currentLocation,
+          if (dateOfBirth != null) "date_of_birth": dateOfBirth,
+        },
+      },
+    );
+    return response.statusCode == 200 || response.statusCode == 202;
+  }
+
+  @override
+  Future<ResumeModel> getEmployeeResume(String employeeId) async {
+    final response = await dioClient.get(
+      ProfileApiConstants.getEmployeeResume,
+      queryParameters: {"employee": employeeId},
+    );
+    final data = response.data['message'];
+    if (data == null) throw const ServerException(message: ProfileApiConstants.errResumeDataNotFound);
+    final processedData = ResumeModel.preprocessJson(Map<String, dynamic>.from(data));
+    return ResumeModel.fromJson(processedData);
+  }
+
+  @override
+  Future<List<String>> searchSkills(String query) async {
+    final response = await dioClient.get(
+      ProfileApiConstants.searchSkill,
+      queryParameters: {
+        "filters": query.trim().isEmpty
+            ? '[]'
+            : '[["skill_name","like","%$query%"]]',
+        "fields": '["skill_name"]',
+        "limit_page_length": 50,
+      },
+    );
+    final data = response.data['data'] as List?;
+    if (data == null) return [];
+    return data.map((e) {
+      final name = e['skill_name'] as String;
+      return name
+          .replaceAll('&amp;', '&')
+          .replaceAll('&quot;', '"')
+          .replaceAll('&#39;', "'")
+          .replaceAll('&lt;', '<')
+          .replaceAll('&gt;', '>');
+    }).toList();
+  }
+
+  @override
+  Future<List<String>> searchDesignations(String query) async {
+    final response = await dioClient.get(
+      ProfileApiConstants.searchDesignation,
+      queryParameters: {
+        "filters": query.trim().isEmpty ? '[]' : '[["name","like","%$query%"]]',
+        "fields": '["name"]',
+        "limit_page_length": 10,
+      },
+    );
+    final data = response.data['data'] as List?;
+    if (data == null) return [];
+    return data.map((e) => e['name'] as String).toList();
+  }
+
+  @override
+  Future<List<String>> searchProjects(String query) async {
+    final response = await dioClient.get(
+      ProfileApiConstants.searchProject,
+      queryParameters: {
+        "filters": query.trim().isEmpty
+            ? '[]'
+            : '[["project_name","like","%$query%"]]',
+        "fields": '["project_name"]',
+        "limit_page_length": 10,
+      },
+    );
+    final data = response.data['data'] as List?;
+    if (data == null) return [];
+    return data.map((e) => e['project_name'] as String).toList();
+  }
+
+  @override
+  Future<List<SearchEmployeeModel>> searchEmployees(String query) async {
+    final response = await dioClient.get(
+      ProfileApiConstants.searchEmployees,
+      queryParameters: {
+        "query": query,
+        "limit": 20,
+      },
+    );
+    final data = response.data['message'] as List?;
+    if (data == null) return [];
+    return data.map((e) => SearchEmployeeModel.fromJson(Map<String, dynamic>.from(e))).toList();
+  }
+
+  @override
+  Future<List<SubSkillModel>> getSubSkills(String skillName) async {
+    final response = await dioClient.post(
+      ProfileApiConstants.getCustomSubSkills,
+      data: {"skill_name": skillName},
+    );
+    final data = response.data['message'] as List?;
+    if (data == null) return [];
+    return data.map((e) {
+      final map = Map<String, dynamic>.from(e);
+      if (map.containsKey('sub_skill')) {
+        map['name'] = map['sub_skill'];
+      }
+      return SubSkillModel.fromJson(map);
+    }).toList();
+  }
+
+  @override
+  Future<List<String>> searchLocations(String query) async {
+    if (query.trim().isEmpty) {
+      return [
+        'New York, New York, United States',
+        'London, England, United Kingdom',
+        'Dubai, Dubai, United Arab Emirates',
+        'Singapore, Singapore',
+        'Mumbai, Maharashtra, India',
+        'Bengaluru, Karnataka, India',
+        'Chennai, Tamil Nadu, India',
+        'New Delhi, Delhi, India',
+        'San Francisco, California, United States',
+        'Sydney, New South Wales, Australia',
+      ];
+    }
+    if (query.length < 2) {
+      return [];
+    }
+    try {
+      final dio = Dio();
+      final response = await dio.get(
+        'https://geocoding-api.open-meteo.com/v1/search',
+        queryParameters: {
+          'name': query,
+          'count': 10,
+          'language': 'en',
+          'format': 'json',
+        },
+      );
+
+      if (response.data != null && response.data['results'] != null) {
+        final List<dynamic> results = response.data['results'];
+        final parsedResults = results.map((e) {
+          final name = e['name'] ?? '';
+          final admin1 = e['admin1'] ?? '';
+          final country = e['country'] ?? '';
+
+          final parts = [name, admin1, country]
+              .where((part) => part.toString().isNotEmpty)
+              .toSet()
+              .toList();
+
+          return parts.join(', ');
+        }).toList();
+
+        return parsedResults;
+      }
+      return [];
+    } catch (e) {
+      throw ServerException(message: 'Failed to fetch locations');
+    }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getCountryCodes() async {
+    try {
+      final dio = Dio();
+      final response = await dio.get(
+        'https://countriesnow.space/api/v0.1/countries/codes',
+      );
+      return List<Map<String, dynamic>>.from(response.data['data'] as List<dynamic>);
+    } catch (e) {
+      throw ServerException(message: 'Failed to fetch country codes');
+    }
+  }
+
+  @override
+  Future<List<String>> getNationalities() async {
+    return AppConstants.nationalities;
+  }
+
+  @override
+  Future<void> upsertResumeRow(String employeeId, String section, String rowDataJson, {String? rowName}) async {
+    final data = {
+      "employee": employeeId,
+      "section": section,
+      "row_data": rowDataJson,
+    };
+    if (rowName != null && rowName.isNotEmpty) {
+      data["row_name"] = rowName;
+    }
+    
+    final response = await dioClient.post(
+      ProfileApiConstants.upsertChildRow,
+      data: data,
+    );
+    if (response.data['message']?['status'] != 'ok') {
+      throw const ServerException(message: ProfileApiConstants.errFailedToSaveRow);
+    }
+  }
+
+  @override
+  Future<void> deleteResumeRow(String employeeId, String section, String rowName) async {
+    final response = await dioClient.post(
+      ProfileApiConstants.deleteChildRow,
+      data: {
+        "employee": employeeId,
+        "section": section,
+        "row_name": rowName,
+      },
+    );
+    if (response.data['message']?['status'] != 'ok') {
+      throw const ServerException(message: ProfileApiConstants.errFailedToDeleteRow);
+    }
+  }
+
+  @override
+  Future<void> updateEmployeeResume(String employeeId, String resumeDataJson) async {
+    final response = await dioClient.post(
+      ProfileApiConstants.updateEmployeeResume,
+      data: {
+        "employee": employeeId,
+        "data": resumeDataJson,
+      },
+    );
+    if (response.data['message']?['status'] != 'ok') {
+      throw const ServerException(message: ProfileApiConstants.errFailedToUpdateResume);
+    }
+  }
+
+  @override
+  Future<void> updateEmployeeSubSkills(String employeeId, String subSkillsJson) async {
+    final response = await dioClient.put(
+      "${ProfileApiConstants.getUserDetails}/$employeeId",
+      data: {
+        "data": {
+          "custom_sub_skill": jsonDecode(subSkillsJson),
+        }
+      },
+    );
+    if (response.statusCode != 200 && response.statusCode != 202) {
+      throw const ServerException(message: ProfileApiConstants.errFailedToUpdateSubSkills);
+    }
+  }
+
+  @override
+  Future<void> saveSubSkillsForSkill(String employeeId, String skillName, String subSkillsJson) async {
+    final response = await dioClient.post(
+      ProfileApiConstants.saveSubSkillsForSkill,
+      data: {
+        "employee": employeeId,
+        "skill_name": skillName,
+        "sub_skills": subSkillsJson,
+      },
+    );
+    if (response.data['message']?['status'] != 'ok') {
+      throw const ServerException(message: ProfileApiConstants.errFailedToSaveSubSkills);
+    }
+  }
+  @override
+  Future<void> updateEmployeeProjectAssignments(String employeeId, String assignmentsJson) async {
+    final response = await dioClient.put(
+      "${ProfileApiConstants.getUserDetails}/$employeeId",
+      data: {
+        "data": {
+          "custom_employee_assignment": jsonDecode(assignmentsJson),
+        }
+      },
+    );
+    if (response.statusCode != 200 && response.statusCode != 202) {
+      throw const ServerException(message: ProfileApiConstants.errFailedToUpdateProjectAssignments);
+    }
   }
 }

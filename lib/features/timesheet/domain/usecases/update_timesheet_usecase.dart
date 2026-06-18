@@ -8,12 +8,14 @@ class UpdateTimesheetUseCase {
 
   UpdateTimesheetUseCase(this.repository);
 
-  Future<Either<Failure, bool>> call({
+  Future<Either<Failure, String>> call({
     required String name,
     required String employee,
     required String department,
     required String approver,
     required int approved,
+    required String fromDate,
+    required String toDate,
     required double hoursTotal,
     required List<ProjectAssignmentEntity> assignments,
   }) async {
@@ -23,6 +25,8 @@ class UpdateTimesheetUseCase {
       department: department,
       approver: approver,
       approved: approved,
+      fromDate: fromDate,
+      toDate: toDate,
       hoursTotal: hoursTotal,
       assignments: assignments,
     );

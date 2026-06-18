@@ -1,0 +1,482 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import '../../domain/entities/holiday_list_leave_policy_entity.dart';
+import '../../domain/entities/attendance_month_summary_entity.dart';
+
+class HolidayListBottomSheet extends StatelessWidget {
+  final List<HolidayEntity> regularHolidays;
+  final List<RestrictedHolidayEntity> optionalHolidays;
+  final bool isYearly;
+
+  const HolidayListBottomSheet({
+    super.key,
+    required this.regularHolidays,
+    required this.optionalHolidays,
+    this.isYearly = true,
+  });
+
+  static Future<void> showYearly(
+    BuildContext context,
+    HolidayListLeavePolicyEntity policy,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    final saturdayStr = l10n.saturday.toLowerCase();
+    final sundayStr = l10n.sunday.toLowerCase();
+
+    // Filter holidays
+    final regularHolidays = policy.holidayList.holidays.where((h) {
+      final desc = h.description.toLowerCase();
+      return !desc.contains(saturdayStr) && !desc.contains(sundayStr);
+    }).toList();
+
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.of(context).surface,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppConstants.r20),
+        ),
+      ),
+      builder: (context) => HolidayListBottomSheet(
+        regularHolidays: regularHolidays,
+        optionalHolidays: policy.holidayList.customRestrictedHolidays,
+        isYearly: true,
+      ),
+    );
+  }
+
+  static Future<void> showMonthly(
+    BuildContext context,
+    List<HolidayDetailEntity> holidays,
+  ) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.of(context).surface,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppConstants.r20),
+        ),
+      ),
+      builder: (context) => HolidayListBottomSheet(
+        regularHolidays: holidays
+            .map(
+              (h) => HolidayEntity(
+                holidayDate: h.date,
+                description: h.name,
+                weeklyOff: 0,
+              ),
+            )
+            .toList(),
+        optionalHolidays: [],
+        isYearly: false,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final size = MediaQuery.of(context).size;
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: size.height * 0.9),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Fixed Header
+          _HolidayHeader(
+            isYearly: isYearly,
+            regularHolidaysCount: regularHolidays.length,
+            optionalHolidaysCount: optionalHolidays.length,
+            l10n: l10n,
+            onClose: () => Navigator.pop(context),
+          ),
+
+          // Scrollable List
+          Flexible(
+            child: CustomScrollView(
+              shrinkWrap: true,
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppConstants.p24,
+                  ),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      // Regular Holidays Section
+                      _SectionHeader(
+                        title: isYearly
+                            ? l10n.regularHolidays
+                            : l10n.monthlyHolidays,
+                      ),
+                      SizedBox(height: 16.h),
+                      ...regularHolidays.map(
+                        (h) => _HolidayCard(
+                          date: h.holidayDate,
+                          name: h.description,
+                          isOptional: false,
+                        ),
+                      ),
+
+                      if (isYearly && optionalHolidays.isNotEmpty) ...[
+                        SizedBox(height: 24.h),
+                        // Optional Holidays Section
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _SectionHeader(title: l10n.optionalHolidays),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppConstants.p8,
+                                vertical: AppConstants.p4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.of(
+                                  context,
+                                ).tertiaryContainer.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(
+                                  AppConstants.r24,
+                                ),
+                              ),
+                              child: Text(
+                                "(${l10n.restricted})",
+                                style: AppTextStyle.labelSmall.copyWith(
+                                  color: AppColors.of(
+                                    context,
+                                  ).tertiaryContainer,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16.h),
+                        ...optionalHolidays.map(
+                          (h) => _HolidayCard(
+                            date: h.holidayDate,
+                            name: h.description,
+                            isOptional: true,
+                          ),
+                        ),
+                      ],
+                      SizedBox(height: 40.h),
+                    ]),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HolidayHeader extends StatelessWidget {
+  final bool isYearly;
+  final int regularHolidaysCount;
+  final int optionalHolidaysCount;
+  final AppLocalizations l10n;
+  final VoidCallback onClose;
+
+  const _HolidayHeader({
+    required this.isYearly,
+    required this.regularHolidaysCount,
+    required this.optionalHolidaysCount,
+    required this.l10n,
+    required this.onClose,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.of(context).surface,
+      padding: EdgeInsets.only(top: 10.h),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Center(
+            child: Container(
+              width: 48.w,
+              height: 6.h,
+              decoration: BoxDecoration(
+                color: AppColors.of(context).surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(3.r),
+              ),
+            ),
+          ),
+          SizedBox(height: 16.h),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l10n.holidayList,
+                  style: AppTextStyle.h1.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.of(context).onSurface,
+                    fontSize: AppConstants.fs22.sp,
+                  ),
+                ),
+                IconButton(
+                  onPressed: onClose,
+                  icon: Icon(
+                    Icons.close,
+                    color: AppColors.of(context).onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (isYearly) ...[
+            SizedBox(height: 10.h),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppConstants.p24),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _SummaryCard(
+                      title: l10n.regular,
+                      count: regularHolidaysCount,
+                      icon: Icons.calendar_month,
+                      iconColor: AppColors.of(context).primary,
+                      iconBg: AppColors.of(context).primaryFixed,
+                    ),
+                  ),
+                  SizedBox(width: 16.w),
+                  Expanded(
+                    child: _SummaryCard(
+                      title: l10n.optional,
+                      count: optionalHolidaysCount,
+                      icon: Icons.event_available,
+                      iconColor: AppColors.of(context).tertiaryContainer,
+                      iconBg: AppColors.of(
+                        context,
+                      ).tertiaryContainer.withValues(alpha: 0.1),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          SizedBox(height: 10.h),
+        ],
+      ),
+    );
+  }
+}
+
+class _SummaryCard extends StatelessWidget {
+  final String title;
+  final int count;
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBg;
+
+  const _SummaryCard({
+    required this.title,
+    required this.count,
+    required this.icon,
+    required this.iconColor,
+    required this.iconBg,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.p16),
+      decoration: BoxDecoration(
+        color: AppColors.of(context).surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.of(context).onSurface.withValues(alpha: 0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: AppColors.of(context).onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(AppConstants.p6),
+                decoration: BoxDecoration(
+                  color: iconBg,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  icon,
+                  size: AppConstants.iconSmall,
+                  color: iconColor,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                count.toString(),
+                style: AppTextStyle.h1.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.of(context).onSurface,
+                ),
+              ),
+              SizedBox(width: 4.w),
+              Text(
+                l10n.daysLabel,
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: AppColors.of(context).onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  final String title;
+
+  const _SectionHeader({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: AppTextStyle.h2.copyWith(
+        fontWeight: FontWeight.w600,
+        fontSize: AppConstants.fs16.sp,
+        color: AppColors.of(context).onSurface,
+      ),
+    );
+  }
+}
+
+class _HolidayCard extends StatelessWidget {
+  final String date;
+  final String name;
+  final bool isOptional;
+
+  const _HolidayCard({
+    required this.date,
+    required this.name,
+    required this.isOptional,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final parsedDate = DateTime.tryParse(date) ?? DateTime.now();
+    final dayNumber = DateTimeUtils.getDayNumber(parsedDate);
+    final monthAbbr = DateTimeUtils.getMonthAbbr(parsedDate);
+    final dayName = DateTimeUtils.getDayName(parsedDate);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppConstants.p12),
+      padding: const EdgeInsets.all(AppConstants.p16),
+      decoration: BoxDecoration(
+        color: AppColors.of(context).surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.of(context).onSurface.withValues(alpha: 0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Date Box
+          Container(
+            width: 48.w,
+            height: 48.h,
+            decoration: BoxDecoration(
+              color: AppColors.of(context).surfaceContainerLow,
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(
+                color: AppColors.of(
+                  context,
+                ).outlineVariant.withValues(alpha: 0.3),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  dayNumber,
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.of(context).onSurface,
+                    height: 1.1.h,
+                  ),
+                ),
+                Text(
+                  monthAbbr,
+                  style: AppTextStyle.labelSmall.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontSize: AppConstants.fs9.sp,
+                    color: AppColors.of(context).onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 16.w),
+          // Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: AppTextStyle.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.of(context).onSurface,
+                  ),
+                ),
+                Text(
+                  dayName,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

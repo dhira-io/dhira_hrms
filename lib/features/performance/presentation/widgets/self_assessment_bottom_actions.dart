@@ -1,0 +1,95 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
+import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessment/self_assessment_cubit.dart';
+import 'package:dhira_hrms/features/performance/presentation/dialogs/submit_self_assessment_dialog.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class SelfAssessmentBottomActions extends StatelessWidget {
+  final bool? isSaving;
+  final bool? isSubmitting;
+  final VoidCallback? onSave;
+  final VoidCallback? onSubmit;
+
+  const SelfAssessmentBottomActions({
+    super.key,
+    this.isSaving,
+    this.isSubmitting,
+    this.onSave,
+    this.onSubmit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    final bool resolvedIsSaving =
+        isSaving ??
+        context.select(
+          (SelfAssessmentCubit cubit) =>
+              cubit.state.actionStatus == SelfAssessmentActionStatus.saving,
+        );
+
+    final bool resolvedIsSubmitting =
+        isSubmitting ??
+        context.select(
+          (SelfAssessmentCubit cubit) =>
+              cubit.state.actionStatus == SelfAssessmentActionStatus.submitting,
+        );
+
+    final resolvedOnSave =
+        onSave ??
+        () => context.read<SelfAssessmentCubit>().saveSelfAssessment();
+
+    final resolvedOnSubmit =
+        onSubmit ??
+        () => context.read<SelfAssessmentCubit>().submitSelfAssessment();
+
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.p16),
+      decoration: BoxDecoration(
+        color: AppColors.of(context).surfaceContainerLowest,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.of(context).black.withValues(alpha: 0.1),
+            blurRadius: AppConstants.r10,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: CommonButton(
+              text: l10n.save,
+              onPressed: () {
+                if (resolvedIsSaving || resolvedIsSubmitting) return;
+                resolvedOnSave();
+              },
+              variant: ButtonVariant.outlined,
+              isLoading: resolvedIsSaving,
+            ),
+          ),
+          const SizedBox(width: AppConstants.p16),
+          Expanded(
+            child: CommonButton(
+              text: l10n.submitReview,
+              onPressed: () {
+                if (resolvedIsSaving || resolvedIsSubmitting) return;
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) =>
+                      SubmitSelfAssessmentDialog(onConfirm: resolvedOnSubmit),
+                );
+              },
+              isLoading: resolvedIsSubmitting,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

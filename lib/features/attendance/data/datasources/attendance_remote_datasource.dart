@@ -1,35 +1,76 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
+
 import '../../../../core/network/dio_client.dart';
+import '../../../../core/utils/secure_logger.dart';
 import '../constants/attendance_api_constants.dart';
 import '../models/attendance_models.dart';
+import '../models/attendance_regularization_model.dart';
 
-abstract class AttendanceRemoteDataSource {
+abstract class IAttendanceRemoteDataSource {
   Future<AttendanceStatusModel> getCheckinStatus(String empid);
   Future<AttendanceStatusModel> punchIn(String empid);
   Future<AttendanceStatusModel> punchOut(String empid);
   Future<List<AttendanceLogModel>> getAttendanceLogs(String empid);
-  Future<Map<DateTime, String>> getCalendarEvents({
+  Future<Map<String, String>> getCalendarEvents({
     required String employee,
     required String fromDate,
     required String toDate,
   });
+  Future<AttendanceStatusModel> startBreak(String empid);
+  Future<AttendanceStatusModel> endBreak(String empid);
+  Future<AttendanceMonthSummaryModel> getAttendanceMonthSummary({
+    required String employee,
+    required int month,
+    required int year,
+  });
+  Future<AttendancePunchSummaryModel> getAttendancePunchSummary({
+    required String attendanceDate,
+  });
+  Future<List<LeaveHistoryModel>> getLeaveHistory(String employee);
+  Future<LeaveDetailsModel> getLeaveDetails({
+    required String employee,
+    required String date,
+  });
+  Future<List<TeamLeaveModel>> getTeamLeaves({
+    required String employee,
+    required String fromDate,
+    required String toDate,
+  });
+  Future<HolidayListLeavePolicyModel> getHolidayListLeavePolicy(
+    String employee,
+  );
+  Future<void> submitRegularization(
+    AttendanceRegularizationModel regularization,
+  );
+  Future<String> uploadFile({
+    required String filePath,
+    required String fileName,
+  });
 }
 
-class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
+class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
   final DioClient dioClient;
 
-  AttendanceRemoteDataSourceImpl(this.dioClient);
+  AttendanceRemoteDataSourceImpl({required this.dioClient});
 
   @override
   Future<AttendanceStatusModel> getCheckinStatus(String empid) async {
     final response = await dioClient.post(
-      AttendanceApiConstants.getAttendanceStatus,
+      AttendanceApiConstants.getCheckinStatus,
       data: {"employee": empid},
     );
-
     final data = response.data['message'];
+
     return AttendanceStatusModel(
-      isPunchedIn: data['is_punched_in'] ?? false,
-      statusText: data['status_text'] ?? "Unknown",
+      punchedIn: data['punched_in'] == true,
+      onBreak: data['on_break'] == true,
+      dayEnded: data['day_ended'] == true,
+      firstIn: data['first_in'] as String?,
+      success: data['success'] == true,
+      lastOut: data['last_out'] as String?,
+      workedSeconds: (data['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (data['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -40,10 +81,16 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
       data: {"employee": empid},
     );
 
-    final data = response.data['message'];
+    final messageData = response.data['message'];
+
     return AttendanceStatusModel(
-      isPunchedIn: true,
-      statusText: data['message'] ?? "Successfully Punched In",
+      punchedIn: messageData['punched_in'] ?? true,
+      onBreak: messageData['on_break'] ?? false,
+      dayEnded: messageData['day_ended'] ?? false,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
+      workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -54,10 +101,16 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
       data: {"employee": empid},
     );
 
-    final data = response.data['message'];
+    final messageData = response.data['message'];
+
     return AttendanceStatusModel(
-      isPunchedIn: false,
-      statusText: data['message'] ?? "Successfully Punched Out",
+      punchedIn: messageData['punched_in'] ?? false,
+      onBreak: messageData['on_break'] ?? false,
+      dayEnded: messageData['day_ended'] ?? true,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
+      workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
     );
   }
 
@@ -67,31 +120,202 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
       AttendanceApiConstants.getAttendanceLogs,
       data: {"employee": empid},
     );
-
-    final List data = response.data['message'] ?? [];
+    final List data = response.data['message']['data'] ?? [];
     return data.map((e) => AttendanceLogModel.fromJson(e)).toList();
   }
 
   @override
-  Future<Map<DateTime, String>> getCalendarEvents({
+  Future<Map<String, String>> getCalendarEvents({
     required String employee,
     required String fromDate,
     required String toDate,
   }) async {
     final response = await dioClient.post(
       AttendanceApiConstants.getCalendarEvents,
-      data: {
+      data: {"employee": employee, "from_date": fromDate, "to_date": toDate},
+    );
+    final Map<String, dynamic> data = response.data['message'] ?? {};
+    final Map<String, String> events = {};
+    data.forEach((key, value) {
+      events[key] = value.toString();
+    });
+
+    return events;
+  }
+
+  @override
+  Future<AttendanceStatusModel> startBreak(String empid) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.startBreak,
+      data: {"employee": empid},
+    );
+
+    final messageData = response.data['message'];
+
+    return AttendanceStatusModel(
+      punchedIn: messageData['punched_in'] ?? true,
+      onBreak: messageData['on_break'] ?? true,
+      dayEnded: messageData['day_ended'] ?? false,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
+      workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
+    );
+  }
+
+  @override
+  Future<AttendanceStatusModel> endBreak(String empid) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.endBreak,
+      data: {"employee": empid},
+    );
+
+    final messageData = response.data['message'];
+
+    return AttendanceStatusModel(
+      punchedIn: messageData['punched_in'] ?? true,
+      onBreak: messageData['on_break'] ?? false,
+      dayEnded: messageData['day_ended'] ?? false,
+      success: messageData['success'] == true,
+      message: messageData['message'] as String?,
+      workedSeconds: (messageData['worked_seconds'] as num?)?.toInt(),
+      serverTimeMs: (messageData['server_time_ms'] as num?)?.toInt(),
+    );
+  }
+
+  @override
+  Future<AttendanceMonthSummaryModel> getAttendanceMonthSummary({
+    required String employee,
+    required int month,
+    required int year,
+  }) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.getAttendanceMonthSummary,
+      data: {"employee": employee, "month": month, "year": year},
+    );
+    return AttendanceMonthSummaryModel.fromJson(response.data['message']);
+  }
+
+  @override
+  Future<AttendancePunchSummaryModel> getAttendancePunchSummary({
+    required String attendanceDate,
+  }) async {
+    final response = await dioClient.get(
+      AttendanceApiConstants.getAttendancePunchSummary,
+      queryParameters: {'attendance_date': attendanceDate},
+    );
+    return AttendancePunchSummaryModel.fromJson(response.data['message'] ?? {});
+  }
+
+  @override
+  Future<List<LeaveHistoryModel>> getLeaveHistory(String employee) async {
+    final response = await dioClient.get(
+      AttendanceApiConstants.getLeaveHistory,
+      queryParameters: {
+        'fields': jsonEncode([
+          "name",
+          "employee",
+          "employee_name",
+          "leave_type",
+          "from_date",
+          "to_date",
+          "status",
+          "leave_approver",
+          "docstatus",
+          "leave_approver_name",
+          "total_leave_days",
+        ]),
+        'filters': jsonEncode([
+          ["employee", "=", employee],
+        ]),
+        'limit_start': 0,
+        'limit_page_length': 10,
+        'order_by': 'creation desc',
+      },
+    );
+    final data = response.data['data'] as List?;
+    return (data ?? []).map((e) => LeaveHistoryModel.fromJson(e)).toList();
+  }
+
+  @override
+  Future<LeaveDetailsModel> getLeaveDetails({
+    required String employee,
+    required String date,
+  }) async {
+    final response = await dioClient.post(
+      AttendanceApiConstants.getLeaveDetails,
+      data: {"employee": employee, "date": date},
+    );
+    return LeaveDetailsModel.fromJson(response.data['message']);
+  }
+
+  @override
+  Future<List<TeamLeaveModel>> getTeamLeaves({
+    required String employee,
+    required String fromDate,
+    required String toDate,
+  }) async {
+    final response = await dioClient.get(
+      AttendanceApiConstants.getTeamLeaves,
+      queryParameters: {
         "employee": employee,
         "from_date": fromDate,
         "to_date": toDate,
       },
     );
+    final List data = response.data['message']['data'] ?? [];
+    return data.map((e) => TeamLeaveModel.fromJson(e)).toList();
+  }
 
-    final Map<String, dynamic> data = response.data['message'] ?? {};
-    final Map<DateTime, String> events = {};
-    data.forEach((key, value) {
-      events[DateTime.parse(key)] = value.toString();
+  @override
+  Future<HolidayListLeavePolicyModel> getHolidayListLeavePolicy(
+    String employee,
+  ) async {
+    final response = await dioClient.get(
+      AttendanceApiConstants.getHolidayListLeavePolicy,
+      queryParameters: {"employee": employee},
+    );
+    return HolidayListLeavePolicyModel.fromJson(response.data['message']);
+  }
+
+  @override
+  Future<void> submitRegularization(
+    AttendanceRegularizationModel regularization,
+  ) async {
+    final payload = regularization.toJson();
+    SecureLogger.i('Submitting regularization', payload);
+
+    final formData = FormData.fromMap({
+      'doc': jsonEncode(payload),
+      'action': 'Save',
     });
-    return events;
+
+    await dioClient.post(
+      AttendanceApiConstants.submitRegularization,
+      data: formData,
+    );
+  }
+
+  @override
+  Future<String> uploadFile({
+    required String filePath,
+    required String fileName,
+  }) async {
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(filePath, filename: fileName),
+      'doctype': 'Attendance Regularization Request',
+      'docname':
+          'new-attendance-regularization-request-${DateTime.now().millisecondsSinceEpoch}',
+      'fieldname': 'supporting_document',
+      'folder': 'Home',
+      'is_private': 0,
+    });
+
+    final response = await dioClient.post(
+      AttendanceApiConstants.uploadFile,
+      data: formData,
+    );
+
+    return response.data['message']['file_url'] as String;
   }
 }

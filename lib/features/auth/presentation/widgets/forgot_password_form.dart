@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
+import '../bloc/forgot_password_cubit.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({super.key});
@@ -27,18 +27,22 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
-      context.read<AuthBloc>().add(
-            AuthEvent.forgotPasswordRequested(_emailController.text.trim()),
-          );
+      FocusManager.instance.primaryFocus?.unfocus();
+      context.read<ForgotPasswordCubit>().requestForgotPassword(
+        _emailController.text.trim(),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocSelector<AuthBloc, AuthState, bool>(
-      selector: (state) => state.maybeWhen(loading: () => true, orElse: () => false),
-      builder: (context, isLoading) {
+    return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
+      builder: (context, state) {
+        final isLoading = state.maybeWhen(
+          loading: () => true,
+          orElse: () => false,
+        );
         return Form(
           key: _formKey,
           child: Column(
@@ -46,7 +50,9 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
             children: [
               Text(
                 l10n.forgotPasswordInstructions,
-                style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary),
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: AppColors.of(context).textSecondary,
+                ),
               ),
               const SizedBox(height: AppConstants.p32),
               Text(l10n.emailAddress, style: AppTextStyle.label),
@@ -56,7 +62,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: l10n.enterEmail,
-                  prefixIcon: const Icon(Icons.email_outlined),
+                  prefixIcon: Icon(Icons.email_outlined),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) return l10n.emailRequired;
@@ -65,19 +71,16 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                 },
               ),
               const SizedBox(height: AppConstants.p32),
-              SizedBox(
+              CommonButton(
+                text: l10n.sendResetLink,
+                onPressed: _submit,
+                isLoading: isLoading,
                 width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: isLoading ? null : _submit,
-                  child: isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.surface),
-                        )
-                      : Text(l10n.sendResetLink, style: AppTextStyle.button),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 16,
                 ),
+                borderRadius: AppConstants.r8,
               ),
             ],
           ),
@@ -86,4 +89,3 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
     );
   }
 }
-

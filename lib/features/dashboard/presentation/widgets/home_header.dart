@@ -8,10 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 class HomeHeader extends StatelessWidget {
   final String userName;
 
-  const HomeHeader({
-    super.key,
-    required this.userName,
-  });
+  const HomeHeader({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +26,15 @@ class HomeHeader extends StatelessWidget {
           children: [
             Text(
               greeting,
-              style: AppTextStyle.bodyMedium.copyWith(color: AppColors.textSecondary),
+              style: AppTextStyle.bodyMedium.copyWith(
+                color: AppColors.of(context).textSecondary,
+              ),
             ),
             Text(
               l10n.hello(userName),
-              style: AppTextStyle.h1.copyWith(color: AppColors.primary),
+              style: AppTextStyle.h1.copyWith(
+                color: AppColors.of(context).primary,
+              ),
             ),
           ],
         ),
@@ -45,5 +46,3 @@ class HomeHeader extends StatelessWidget {
     );
   }
 }
-
-

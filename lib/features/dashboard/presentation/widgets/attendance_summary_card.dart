@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -16,25 +17,30 @@ class AttendanceSummaryCard extends StatelessWidget {
     return BlocSelector<AttendanceBloc, AttendanceState, String?>(
       selector: (state) {
         return state.maybeWhen(
-          loaded: (status, _) => status.statusText,
-          orElse: () => "--:--",
+          //loaded: (status, _) => status.statusText,
+          orElse: () => AppConstants.timePlaceholder,
         );
       },
       builder: (context, statusText) {
         return Container(
           padding: const EdgeInsets.all(AppConstants.p20),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [AppColors.primary, AppColors.secondary],
+            gradient: LinearGradient(
+              colors: [
+                AppColors.of(context).primary,
+                AppColors.of(context).secondary,
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(AppConstants.r20),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.3),
-                blurRadius: 15,
-                offset: const Offset(0, 8),
+                color: AppColors.of(
+                  context,
+                ).primary.withValues(alpha: AppConstants.opacityMedium),
+                blurRadius: AppConstants.p15,
+                offset: const Offset(0, AppConstants.p8),
               ),
             ],
           ),
@@ -45,7 +51,9 @@ class AttendanceSummaryCard extends StatelessWidget {
                 children: [
                   Text(
                     l10n.todaysAttendance,
-                    style: AppTextStyle.bodyMedium.copyWith(color: AppColors.surface),
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      color: AppColors.of(context).surface,
+                    ),
                   ),
                   _StatusBadge(text: statusText ?? l10n.onTime),
                 ],
@@ -54,9 +62,23 @@ class AttendanceSummaryCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _TimeColumn(label: l10n.checkIn, time: '--:--', icon: Icons.login),
-                  Container(width: 1, height: 40, color: AppColors.surface.withValues(alpha: 0.24)),
-                  _TimeColumn(label: l10n.checkOut, time: '--:--', icon: Icons.logout),
+                  _TimeColumn(
+                    label: l10n.checkIn,
+                    time: AppConstants.timePlaceholder,
+                    icon: Icons.login,
+                  ),
+                  Container(
+                    width: 1.w,
+                    height: AppConstants.p40,
+                    color: AppColors.of(
+                      context,
+                    ).surface.withValues(alpha: AppConstants.opacityFaded),
+                  ),
+                  _TimeColumn(
+                    label: l10n.checkOut,
+                    time: AppConstants.timePlaceholder,
+                    icon: Icons.logout,
+                  ),
                 ],
               ),
             ],
@@ -74,17 +96,22 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppConstants.p10, vertical: AppConstants.p4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppConstants.p10,
+        vertical: AppConstants.p4,
+      ),
       decoration: BoxDecoration(
-        color: AppColors.surface.withValues(alpha: 0.2),
+        color: AppColors.of(
+          context,
+        ).surface.withValues(alpha: AppConstants.opacitySlight),
         borderRadius: BorderRadius.circular(AppConstants.r20),
       ),
       child: Text(
         text,
         style: AppTextStyle.bodySmall.copyWith(
-          color: AppColors.surface,
+          color: AppColors.of(context).surface,
           fontWeight: FontWeight.bold,
-          fontSize: 10,
+          fontSize: AppConstants.p10,
         ),
       ),
     );
@@ -106,19 +133,27 @@ class _TimeColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: AppColors.surface.withValues(alpha: 0.7), size: AppConstants.iconSmall + 2),
+        Icon(
+          icon,
+          color: AppColors.of(
+            context,
+          ).surface.withValues(alpha: AppConstants.opacityMuted),
+          size: AppConstants.iconSmall + 2,
+        ),
         const SizedBox(height: AppConstants.p8),
         Text(
           time,
-          style: AppTextStyle.h2.copyWith(color: AppColors.surface),
+          style: AppTextStyle.h2.copyWith(color: AppColors.of(context).surface),
         ),
         Text(
           label,
-          style: AppTextStyle.bodySmall.copyWith(color: AppColors.surface.withValues(alpha: 0.7)),
+          style: AppTextStyle.bodySmall.copyWith(
+            color: AppColors.of(
+              context,
+            ).surface.withValues(alpha: AppConstants.opacityMuted),
+          ),
         ),
       ],
     );
   }
 }
-
-

@@ -1,117 +1,295 @@
+import 'dart:async';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_action_buttons.dart';
+import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_card_skeleton.dart';
+import 'package:dhira_hrms/features/attendance/presentation/widgets/punch_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/storage_constants.dart';
+import '../../../../core/utils/date_time_utils.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/attendance_bloc.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
+import '../dialogs/punch_out_dialog.dart';
 
 class PunchCard extends StatefulWidget {
-  const PunchCard({super.key});
+  final bool showBackground;
+  final EdgeInsets? padding;
+  final bool showDateAndTime;
+  final Color? breakButtonColor;
+  final Color? punchOutColor;
+
+  const PunchCard({
+    super.key,
+    this.showBackground = true,
+    this.padding,
+    this.showDateAndTime = true,
+    this.breakButtonColor,
+    this.punchOutColor,
+  });
 
   @override
   State<PunchCard> createState() => _PunchCardState();
 }
 
-class _PunchCardState extends State<PunchCard> {
-  String? _empid;
+class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
+  Timer? _pollingTimer;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      _stopPolling();
+    } else if (state == AppLifecycleState.resumed) {
+      _startPolling();
+    }
+  }
+
+  void _startPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      if (mounted) {
+        context.read<AttendanceBloc>().add(
+          const AttendanceEvent.checkStatusRequested(),
+        );
+      }
+    });
+  }
+
+  void _stopPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = null;
+  }
+
+  Timer? _timer;
+  int _workedSeconds = 0;
+  int? _serverTimeMs;
+  bool _isPunchedIn = false;
+  bool _isOnBreak = false;
+  String? _firstIn;
+
+  int get _computedWorkedSeconds {
+    if (!_isPunchedIn || _isOnBreak) {
+      return _workedSeconds;
+    }
+    if (_serverTimeMs == null) {
+      return _workedSeconds;
+    }
+    final nowMs = DateTime.now().millisecondsSinceEpoch;
+    final elapsedSeconds = (nowMs - _serverTimeMs!) ~/ 1000;
+    return _workedSeconds + elapsedSeconds;
+  }
 
   @override
   void initState() {
     super.initState();
-    _loadEmpId();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          if (mounted) {
+            setState(() {}); // Trigger rebuild to update time text visually
+          }
+        });
+
+        _startPolling();
+
+        _fetchInitialData();
+      }
+    });
   }
 
-  Future<void> _loadEmpId() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _empid = prefs.getString(StorageConstants.empId);
-    });
+  Future<void> _fetchInitialData() async {
+    if (!mounted) return;
+    final bloc = context.read<AttendanceBloc>();
+
+    final l10n = AppLocalizations.of(context)!;
+
+    // Sync with existing state if already loaded
+    bloc.state.maybeWhen(
+      loaded: (status, logs, calendarEvents, _, __, _, _, _, _, _) {
+        _handleStatusLoaded(status, l10n);
+      },
+      orElse: () {},
+    );
+
+    bloc.add(const AttendanceEvent.checkStatusRequested());
+  }
+
+  void _handleStatusLoaded(status, AppLocalizations l10n) {
+    if (!status.success) {
+      ToastUtils.showError(l10n.somethingWentWrong);
+      return;
+    }
+
+    if (mounted) {
+      setState(() {
+        _isPunchedIn = status.punchedIn;
+        _isOnBreak = status.onBreak;
+        _firstIn = status.firstIn;
+        _workedSeconds = status.workedSeconds ?? 0;
+        _serverTimeMs = status.serverTimeMs;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _timer?.cancel();
+    _stopPolling();
+    super.dispose();
+  }
+
+  String _formatDuration(int seconds) {
+    final d = Duration(seconds: seconds);
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(d.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(d.inSeconds.remainder(60));
+    return "${twoDigits(d.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_empid == null) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context)!;
+    final dateFormatted = DateTimeUtils.formatToFullDate(DateTime.now());
 
-    return BlocBuilder<AttendanceBloc, AttendanceState>(
-      builder: (context, state) {
-        return state.maybeWhen(
-          loaded: (status, logs) {
-            final isPunchedIn = status.isPunchedIn;
-            final punchColor = isPunchedIn ? AppColors.warning : AppColors.primary;
-
-            return Container(
-              padding: const EdgeInsets.all(AppConstants.p20),
-              margin: const EdgeInsets.all(AppConstants.p15),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(AppConstants.r20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      if (isPunchedIn) {
-                        context.read<AttendanceBloc>().add(AttendanceEvent.punchOutRequested(_empid!));
-                      } else {
-                        context.read<AttendanceBloc>().add(AttendanceEvent.punchInRequested(_empid!));
-                      }
-                    },
-                    child: Container(
-                      width: 180,
-                      height: 180,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: punchColor.withValues(alpha: 0.1),
-                        border: Border.all(color: punchColor, width: 2),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.touch_app, size: 50, color: punchColor),
-                            const SizedBox(height: AppConstants.p10),
-                            Text(
-                              isPunchedIn ? l10n.punchOut : l10n.punchIn,
-                              style: AppTextStyle.h3.copyWith(
-                                color: punchColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: AppConstants.p20),
-                  Text(
-                    status.statusText,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            );
+    return BlocConsumer<AttendanceBloc, AttendanceState>(
+      listenWhen: (previous, current) =>
+          current.mapOrNull(loaded: (_) => true, error: (_) => true) == true,
+      listener: (context, state) {
+        state.maybeWhen(
+          loaded: (status, logs, calendarEvents, _, __, _, _, _, _, _) {
+            _handleStatusLoaded(status, l10n);
+            if (status.message != null && status.message!.isNotEmpty) {
+              ToastUtils.showSuccess(status.message!);
+            }
           },
-          loading: () => const Center(child: Padding(padding: EdgeInsets.all(AppConstants.p40), child: CircularProgressIndicator())),
-          orElse: () => const SizedBox.shrink(),
+          error: (message, events, _, __, _, _, _, _, _) {
+            ToastUtils.showError(message);
+          },
+          orElse: () {},
+        );
+      },
+      builder: (context, state) {
+        final timeFormatted = _formatDuration(_computedWorkedSeconds);
+        final loadingType = state.mapOrNull(loading: (s) => s.actionType);
+
+        if (state.mapOrNull(loading: (s) => s.actionType) ==
+            AttendanceActionType.checkStatus) {
+          return Padding(
+            padding:
+                widget.padding ??
+                const EdgeInsets.symmetric(horizontal: AppConstants.p15),
+            child: const PunchCardSkeleton(),
+          );
+        }
+
+        final showHeader = _isPunchedIn || widget.showDateAndTime;
+
+        return Padding(
+          padding:
+              widget.padding ??
+              const EdgeInsets.symmetric(horizontal: AppConstants.p15),
+          child: Container(
+            decoration: widget.showBackground
+                ? BoxDecoration(
+                    color: AppColors.of(context).surfaceContainerLowest,
+                    borderRadius: BorderRadius.circular(16.r),
+                    border: (widget.showDateAndTime || _isPunchedIn)
+                        ? Border.all(
+                            color: AppColors.of(context).profileBadgeBorder,
+                            width: 1.w,
+                          )
+                        : null,
+                  )
+                : null,
+            child: Column(
+              children: [
+                if (showHeader) ...[
+                  PunchHeader(
+                    isPunchedIn: _isPunchedIn,
+                    isOnBreak: _isOnBreak,
+                    firstIn: _firstIn,
+                    timeFormatted: timeFormatted,
+                    dateFormatted: dateFormatted,
+                  ),
+                        SizedBox(height: 16.h),
+                ],
+                PunchActionButtonRow(
+                  padding: widget.showDateAndTime
+                      ? null
+                      : (_isPunchedIn
+                            ?       EdgeInsets.symmetric(
+                                horizontal: 8.w,
+                                vertical: 8.h,
+                              )
+                            : EdgeInsets.zero),
+                  breakButtonColor: widget.breakButtonColor,
+                  punchOutColor: widget.punchOutColor,
+                  isPunchedIn: _isPunchedIn,
+                  isOnBreak: _isOnBreak,
+                  loadingType: loadingType,
+                  onPunchIn: () => _onPunchIn(context),
+                  onTakeBreak: () => _onTakeBreak(context),
+                  onPunchOut: () => _onPunchOut(context),
+                  onEndBreak: () => _onEndBreak(context),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
   }
+
+  void _onPunchIn(BuildContext context) {
+    setState(() {
+      _isPunchedIn = true;
+      _isOnBreak = false;
+      _serverTimeMs = DateTime.now().millisecondsSinceEpoch;
+    });
+    context.read<AttendanceBloc>().add(
+      const AttendanceEvent.punchInRequested(),
+    );
+  }
+
+  void _onPunchOut(BuildContext context) {
+    final currentTotalMinutes = _computedWorkedSeconds ~/ 60;
+    if (currentTotalMinutes < (9 * 60 + 30)) {
+      showPunchOutDialog(
+        context: context,
+        getWorkedSeconds: () => _computedWorkedSeconds,
+        onConfirm: () {
+          setState(() {
+            _isPunchedIn = false;
+          });
+          context.read<AttendanceBloc>().add(
+            const AttendanceEvent.punchOutRequested(),
+          );
+        },
+      );
+    } else {
+      setState(() {
+        _isPunchedIn = false;
+      });
+      context.read<AttendanceBloc>().add(
+        const AttendanceEvent.punchOutRequested(),
+      );
+    }
+  }
+
+  void _onTakeBreak(BuildContext context) {
+    context.read<AttendanceBloc>().add(
+      const AttendanceEvent.takeBreakRequested(),
+    );
+  }
+
+  void _onEndBreak(BuildContext context) {
+    context.read<AttendanceBloc>().add(
+      const AttendanceEvent.endBreakRequested(),
+    );
+  }
 }
-
-

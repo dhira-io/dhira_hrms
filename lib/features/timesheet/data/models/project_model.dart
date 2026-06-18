@@ -13,12 +13,10 @@ abstract class ProjectModel with _$ProjectModel {
 
   const ProjectModel._();
 
-  factory ProjectModel.fromJson(Map<String, dynamic> json) => _$ProjectModelFromJson(json);
+  factory ProjectModel.fromJson(Map<String, dynamic> json) =>
+      _$ProjectModelFromJson(json);
 
   ProjectEntity toEntity() {
-    return ProjectEntity(
-      name: name,
-      projectName: projectName,
-    );
+    return ProjectEntity(name: name, projectName: projectName);
   }
 }

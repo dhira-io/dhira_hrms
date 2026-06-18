@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -7,6 +8,7 @@ import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
 import 'package:dhira_hrms/features/leave/presentation/bloc/leave_state.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 
 class LeaveBalanceCard extends StatelessWidget {
   const LeaveBalanceCard({super.key});
@@ -16,17 +18,14 @@ class LeaveBalanceCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocSelector<LeaveBloc, LeaveState, String>(
       selector: (state) {
-        return state.maybeWhen(
-          loaded: (leaves, _, balance, __, ___) => l10n.daysCount(balance.toString()),
-          orElse: () => l10n.daysCount("0"),
-        );
+        return l10n.daysCount(state.balance.available.toString());
       },
       builder: (context, balance) {
         return _OverviewCard(
           label: l10n.leaveBalance,
           value: balance,
           icon: Icons.calendar_month,
-          iconColor: Colors.orange,
+          iconColor: AppColors.of(context).warning,
         );
       },
     );
@@ -41,17 +40,16 @@ class TimesheetSummaryCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocSelector<TimesheetBloc, TimesheetState, String>(
       selector: (state) {
-        return state.maybeWhen(
-          loaded: (timesheets, _, __, ___, ____, _____, ______) => l10n.entriesCount(timesheets.length),
-          orElse: () => l10n.entriesCount(0),
-        );
+        return state.status == TimesheetStateStatus.loaded
+            ? l10n.entriesCount(state.timesheets.length)
+            : l10n.entriesCount(0);
       },
       builder: (context, summary) {
         return _OverviewCard(
           label: l10n.weekHours,
           value: summary,
           icon: Icons.timer,
-          iconColor: Colors.green,
+          iconColor: AppColors.of(context).success,
         );
       },
     );
@@ -76,13 +74,15 @@ class _OverviewCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.of(context).white,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: AppColors.of(
+              context,
+            ).onSurface.withValues(alpha: AppConstants.opacityVeryLow),
+            blurRadius: AppConstants.p10,
+            offset: const Offset(0, AppConstants.p4),
           ),
         ],
       ),
@@ -93,15 +93,13 @@ class _OverviewCard extends StatelessWidget {
           const SizedBox(height: AppConstants.p12),
           Text(
             label,
-            style: AppTextStyle.bodySmall.copyWith(color: Colors.grey),
+            style: AppTextStyle.bodySmall.copyWith(
+              color: AppColors.of(context).textSecondary,
+            ),
           ),
-          Text(
-            value,
-            style: AppTextStyle.h3,
-          ),
+          Text(value, style: AppTextStyle.h3),
         ],
       ),
     );
   }
 }
-

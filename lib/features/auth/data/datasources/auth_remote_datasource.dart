@@ -1,14 +1,18 @@
+import 'package:dhira_hrms/core/constants/api_constants.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/dio_client.dart';
 import '../constants/auth_api_constants.dart';
 import '../models/user_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserModel> signIn(String email, String password);
   Future<void> logout();
   Future<UserModel> getEmployeeDetails(String userId);
   Future<void> forgotPassword(String email);
-  Future<UserModel> microsoftSSO();
+  Future<void> initiateMicrosoftSSO();
+  Future<UserModel> exchangeToken(String apiKey, String apiSecret);
   Future<bool> verifyOtp(String email, String otp);
   Future<bool> resendOtp(String email);
 }
@@ -22,10 +26,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel> signIn(String email, String password) async {
     await dioClient.post(
       AuthApiConstants.login,
-      data: {
-        "usr": email,
-        "pwd": password,
-      },
+      data: {"usr": email, "pwd": password},
     );
     // Successful login, response body might not contain user info but cookies are saved by interceptor
     // We now fetch the user's basic info to return a model
@@ -42,37 +43,69 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final response = await dioClient.get(
       AuthApiConstants.employee,
       queryParameters: {
-        "filters": '[["user_id", "=", "$userId"]]',
-        "fields": '["name", "employee_name", "department", "user_image", "email"]',
+        "filters": '[["user_id","=","$userId"]]',
+        "fields":
+            '["name","employee_name","custom_organization_department","leave_approver","gender"]',
       },
     );
 
     final List data = response.data['data'];
     if (data.isEmpty) {
-      throw const ServerException(message: "Employee record not found");
+      throw const ServerException(message: AppConstants.employeeRecordNotFound);
     }
-    return UserModel.fromJson(data.first);
+
+    final Map<String, dynamic> dataMap = Map<String, dynamic>.from(data.first);
+    dataMap['email'] = userId;
+
+    return UserModel.fromJson(dataMap);
   }
 
   @override
   Future<void> forgotPassword(String email) async {
+    // Remove trailing slash from baseUrl if present
+    final frontendUrl = ApiConstants.baseUrl.endsWith('/')
+        ? ApiConstants.baseUrl.substring(0, ApiConstants.baseUrl.length - 1)
+        : ApiConstants.baseUrl;
     await dioClient.post(
       AuthApiConstants.resetPassword,
-      data: {"user": email},
+      data: {"user": email, "frontend_url": frontendUrl},
     );
   }
 
   @override
-  Future<UserModel> microsoftSSO() async {
-    // Mock implementation for Microsoft SSO
-    await Future.delayed(const Duration(seconds: 1));
-    return const UserModel(
-      empId: "EMP-001",
-      fullName: "Microsoft SSO User",
-      email: "sso@dhira.io",
-      department: "Engineering",
-      userImage: null,
+  Future<void> initiateMicrosoftSSO() async {
+    const callback = "com.dhira.hrms://auth/callback";
+    final baseUrl = dioClient.baseUrl;
+    final loginUrl =
+        "$baseUrl${AuthApiConstants.msLogin}?redirect_to=$callback";
+
+    final uri = Uri.parse(loginUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw const ServerException(
+        message: AppConstants.couldNotLaunchMsLogin,
+      );
+    }
+  }
+
+  @override
+  Future<UserModel> exchangeToken(String apiKey, String apiSecret) async {
+    final response = await dioClient.post(
+      AuthApiConstants.msExchangeToken,
+      data: {"api_key": apiKey, "api_secret": apiSecret},
     );
+
+    final data = response.data;
+    if (data["message"] != null) {
+      final msg = data["message"];
+      final String email = msg["user"];
+
+      // After exchanging token, we fetch full employee details
+      return await getEmployeeDetails(email);
+    } else {
+      throw const ServerException(message: AppConstants.invalidSsoResponse);
+    }
   }
 
   @override
@@ -82,7 +115,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if (otp == "1234") {
       return true;
     } else {
-      throw const ServerException(message: "Invalid OTP");
+      throw const ServerException(message: AppConstants.invalidOtp);
     }
   }
 

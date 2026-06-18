@@ -1,0 +1,231 @@
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/leave_constants.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/utils/date_time_utils.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../domain/entities/leave_history_entity.dart';
+import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import '../../../../core/widgets/collapsible_section.dart';
+
+class LeaveHistorySection extends StatelessWidget {
+  final List<LeaveHistoryEntity> recentHistory;
+  final bool hasMore;
+
+  const LeaveHistorySection({
+    super.key,
+    required this.recentHistory,
+    required this.hasMore,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (recentHistory.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CollapsibleSection(
+          initiallyExpanded: false,
+          title: Row(
+            children: [
+              Text(
+                l10n.leaveHistory,
+                style: AppTextStyle.h3.copyWith(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                  fontSize: AppConstants.fs15.sp,
+                ),
+              ),
+            ],
+          ),
+          trailing: hasMore
+              ? TextButton(
+                  onPressed: () {
+                    // Set category to 'raised' (second tab) before navigating
+                    context.read<ApprovalsBloc>().add(
+                      const ApprovalsEvent.categoryChanged(
+                        ApprovalType.leave,
+                        ApprovalCategory.raised,
+                      ),
+                    );
+                    context.read<BottomNavCubit>().changeIndex(
+                      BottomNavCubit.approvalsIndex,
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    l10n.viewAll,
+                    style: AppTextStyle.bodySmall.copyWith(
+                      color: AppColors.of(context).primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: AppConstants.fs11.sp,
+                    ),
+                  ),
+                )
+              : null,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: AppConstants.p16),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppConstants.p20,
+                ),
+                child: Column(
+                  children: [
+                    for (int i = 0; i < recentHistory.length; i++) ...[
+                      _LeaveHistoryCard(record: recentHistory[i]),
+                      if (i < recentHistory.length - 1)
+                        const SizedBox(height: AppConstants.p12),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppConstants.p24),
+      ],
+    );
+  }
+}
+
+class _LeaveHistoryCard extends StatelessWidget {
+  final LeaveHistoryEntity record;
+
+  const _LeaveHistoryCard({required this.record});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final statusTheme = _getStatusTheme(record.status);
+    final dateString = DateTimeUtils.formatDateRange(
+      record.fromDate,
+      record.toDate,
+    );
+    String formatValue(double value) {
+      return value % 1 == 0 ? value.toInt().toString() : value.toString();
+    }
+
+    final days = record.totalLeaveDays;
+    final daysText =
+        "(${formatValue(days)} ${days == 1 ? l10n.day : l10n.daysLabel})";
+
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.p16),
+      decoration: BoxDecoration(
+        color: AppColors.of(context).surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(AppConstants.r16),
+        border: Border.all(
+          color: AppColors.of(context).border.withValues(alpha: 0.7),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  record.leaveType,
+                  style: AppTextStyle.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.of(context).textPrimary,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  "$dateString $daysText",
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.p12,
+              vertical: AppConstants.p6,
+            ),
+            decoration: BoxDecoration(
+              color: statusTheme.background,
+              borderRadius: BorderRadius.circular(AppConstants.r20),
+              border: Border.all(
+                color: statusTheme.textColor.withValues(alpha: 0.15),
+                width: 1.w,
+              ),
+            ),
+            child: Text(
+              record.status.toLowerCase() ==
+                      LeaveStatusConstants.open.toLowerCase()
+                  ? l10n.pending
+                  : record.status,
+              style: AppTextStyle.bodySmall.copyWith(
+                color: statusTheme.textColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _StatusTheme _getStatusTheme(String status) {
+    final s = status.toLowerCase();
+    if (s == LeaveStatusConstants.approved.toLowerCase()) {
+      return const _StatusTheme(
+        background: AppColors.approvedBg,
+        textColor: AppColors.approvedText,
+      );
+    } else if (s == LeaveStatusConstants.rejected.toLowerCase()) {
+      return const _StatusTheme(
+        background: AppColors.rejectedBg,
+        textColor: AppColors.rejectedText,
+      );
+    } else if (s == LeaveStatusConstants.cancelled.toLowerCase() ||
+        s == LeaveStatusConstants.cancelledAlt.toLowerCase()) {
+      return const _StatusTheme(
+        background: AppColors.cancelledBg,
+        textColor: AppColors.cancelledText,
+      );
+    } else {
+      // For pending, open, draft, or any other status
+      return const _StatusTheme(
+        background: AppColors.pendingStatusBg,
+        textColor: AppColors.pendingStatusText,
+      );
+    }
+  }
+}
+
+class _StatusTheme {
+  final Color background;
+  final Color textColor;
+
+  const _StatusTheme({required this.background, required this.textColor});
+}

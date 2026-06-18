@@ -1,0 +1,102 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../core/constants/app_constants.dart';
+import '../../../domain/entities/team_evaluation_entity.dart';
+import 'team_evaluation_filter_state.dart';
+
+class TeamEvaluationFilterCubit extends Cubit<TeamEvaluationFilterState> {
+  TeamEvaluationFilterCubit() : super(const TeamEvaluationFilterState());
+
+  void setInitialData(List<TeamEvaluationEntity> evaluations) {
+    final departments = {
+      PerformanceStatus.allDepartment,
+      ...evaluations.map((e) => e.department),
+    }.toList();
+
+    final totalCount = evaluations.length;
+    final submittedCount = evaluations.where((e) => e.docstatus == 1).length;
+    final pendingCount = evaluations.where((e) => e.docstatus != 1).length;
+
+    emit(
+      state.copyWith(
+        allEvaluations: evaluations,
+        filteredEvaluations: evaluations,
+        departments: departments,
+        totalCount: totalCount,
+        submittedCount: submittedCount,
+        pendingCount: pendingCount,
+      ),
+    );
+    _filter();
+  }
+
+  void updateDepartment(String? department) {
+    if (department == null) return;
+    emit(state.copyWith(selectedDepartment: department));
+    _filter();
+  }
+
+  void updateStatus(String? status) {
+    if (status == null) return;
+    emit(state.copyWith(selectedStatus: status));
+    _filter();
+  }
+
+  void updateSearch(String query) {
+    emit(state.copyWith(searchQuery: query));
+    _filter();
+  }
+
+  void applyFilters({required String department, required String status}) {
+    emit(
+      state.copyWith(selectedDepartment: department, selectedStatus: status),
+    );
+    _filter();
+  }
+
+  void _filter() {
+    List<TeamEvaluationEntity> filtered = state.allEvaluations;
+
+    if (state.selectedDepartment != PerformanceStatus.allDepartment) {
+      filtered = filtered
+          .where((e) => e.department == state.selectedDepartment)
+          .toList();
+    }
+
+    if (state.selectedStatus != PerformanceStatus.allStatus) {
+      if (state.selectedStatus == PerformanceStatus.submitted) {
+        filtered = filtered.where((e) => e.docstatus == 1).toList();
+      } else {
+        filtered = filtered.where((e) => e.docstatus != 1).toList();
+      }
+    }
+
+    if (state.searchQuery.isNotEmpty) {
+      final query = state.searchQuery.toLowerCase();
+      filtered = filtered
+          .where(
+            (e) =>
+                e.employee.toLowerCase().contains(query) ||
+                e.name.toLowerCase().contains(query) ||
+                (e.employeeName?.toLowerCase().contains(query) ?? false),
+          )
+          .toList();
+    }
+
+    emit(state.copyWith(filteredEvaluations: filtered));
+  }
+
+  void resetFilters() {
+    emit(
+      state.copyWith(
+        selectedDepartment: PerformanceStatus.allDepartment,
+        selectedStatus: PerformanceStatus.allStatus,
+        searchQuery: '',
+      ),
+    );
+    _filter();
+  }
+
+  void clearData() {
+    emit(const TeamEvaluationFilterState());
+  }
+}

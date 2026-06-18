@@ -1,9 +1,10 @@
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../../../core/theme/app_text_style.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 
 class TimesheetDateSelectors extends StatelessWidget {
   final DateTime? fromDate;
@@ -54,24 +55,42 @@ class _DateTile extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTextStyle.bodySmall.copyWith(color: AppColors.textSecondary)),
-        const SizedBox(height: AppConstants.p4),
+        Text(
+          label,
+          style: AppTextStyle.bodySmall.copyWith(
+            color: AppColors.of(context).textSecondary,
+            fontSize: 13.sp,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: AppConstants.p8),
         Container(
-          padding: const EdgeInsets.all(AppConstants.p12),
+          padding:       EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
           width: double.infinity,
           decoration: BoxDecoration(
-            border: Border.all(color: AppColors.border), 
-            borderRadius: BorderRadius.circular(AppConstants.r8),
-            color: Colors.white,
+            border: Border.all(color: AppColors.of(context).border),
+            borderRadius: BorderRadius.circular(AppConstants.r10),
+            color: AppColors.of(context).background.withValues(alpha: 0.3),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                date == null ? l10n.select : DateFormat('dd MMM yyyy').format(date!),
-                style: AppTextStyle.bodySmall,
+                date == null ? l10n.select : DateTimeUtils.formatDate(date!),
+                style: AppTextStyle.bodyMedium.copyWith(
+                  color: date == null
+                      ? AppColors.of(context).textSecondary
+                      : AppColors.of(context).textPrimary,
+                  fontWeight: date == null
+                      ? FontWeight.normal
+                      : FontWeight.w500,
+                ),
               ),
-              const Icon(Icons.calendar_today, size: 16, color: AppColors.textSecondary),
+              const Icon(
+                Icons.calendar_month_outlined,
+                size: 20,
+                color: AppColors.textSecondary,
+              ),
             ],
           ),
         ),
