@@ -36,12 +36,14 @@ abstract class LeaveEvent with _$LeaveEvent {
 
   const factory LeaveEvent.typesRequested({@Default(false) bool isRefresh}) =
       _TypesRequested;
+
   const factory LeaveEvent.balanceRequested({
     required String employeeId,
     required String todayDate,
     required String gender,
     @Default(false) bool isRefresh,
   }) = _BalanceRequested;
+
   const factory LeaveEvent.statisticsRequested({
     required String employeeId,
     required String fromDate,
@@ -62,29 +64,42 @@ abstract class LeaveEvent with _$LeaveEvent {
 
   const factory LeaveEvent.leaveTypeChanged(String? leaveType) =
       _LeaveTypeChanged;
+
   const factory LeaveEvent.dateSelected({
     required bool isFrom,
     required DateTime date,
   }) = _DateSelected;
+
   const factory LeaveEvent.halfDayToggled(bool isHalfDay) = _HalfDayToggled;
+
   const factory LeaveEvent.halfDayDateSelected(DateTime? date) =
       _HalfDayDateSelected;
+
   const factory LeaveEvent.daySegmentChanged(String? segment) =
       _DaySegmentChanged;
+
   const factory LeaveEvent.formInitialized({
     LeaveEntity? leave,
     String? employeeName,
     String? gender,
+    @Default(false) bool isNewForm,
   }) = _FormInitialized;
+
   const factory LeaveEvent.overlapHiddenStatusChanged(bool hide) =
       _OverlapHiddenStatusChanged;
+
   const factory LeaveEvent.clearError() = _ClearError;
+
   const factory LeaveEvent.refreshRequested({
     required String employeeId,
     required String gender,
   }) = _RefreshRequested;
 
   const factory LeaveEvent.stepChanged(int step) = _StepChanged;
-  const factory LeaveEvent.emergencyContactToggled(bool value) = _EmergencyContactToggled;
-  const factory LeaveEvent.emergencyContactNumberChanged(String number) = _EmergencyContactNumberChanged;
+
+  const factory LeaveEvent.emergencyContactToggled(bool value) =
+      _EmergencyContactToggled;
+
+  const factory LeaveEvent.emergencyContactNumberChanged(String number) =
+      _EmergencyContactNumberChanged;
 }

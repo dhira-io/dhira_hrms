@@ -23,6 +23,7 @@ class LeaveApplyForm extends StatefulWidget {
   final LeaveEntity? leave;
   final String empName;
   final String gender;
+  final String initialReason;
   final ValueChanged<String> onNext;
 
   const LeaveApplyForm({
@@ -31,6 +32,7 @@ class LeaveApplyForm extends StatefulWidget {
     this.leave,
     required this.empName,
     required this.gender,
+    this.initialReason = "",
     required this.onNext,
   });
 
@@ -72,7 +74,9 @@ class LeaveApplyFormState extends State<LeaveApplyForm> {
       }
     });
 
-    if (widget.leave != null) {
+    if (widget.initialReason.isNotEmpty) {
+      _reasonController.text = widget.initialReason;
+    } else if (widget.leave != null) {
       _reasonController.text = widget.leave!.description ?? "";
     }
   }
@@ -263,7 +267,10 @@ class LeaveApplyFormState extends State<LeaveApplyForm> {
                 width: double.infinity,
                 child: CommonButton(
                   text: l10n.nextText,
-                  onPressed: (state.isInitialLoading || state.isUploading || (requiresDocs && state.uploadedFileUrl == null))
+                  onPressed:
+                      (state.isInitialLoading ||
+                          state.isUploading ||
+                          (requiresDocs && state.uploadedFileUrl == null))
                       ? null
                       : _handleNext,
                 ),

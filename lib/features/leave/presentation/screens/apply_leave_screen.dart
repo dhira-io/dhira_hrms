@@ -29,6 +29,7 @@ import '../utils/leave_form_utils.dart';
 class ApplyLeaveScreen extends StatefulWidget {
   final String employeeId;
   final LeaveEntity? leave;
+
   const ApplyLeaveScreen({super.key, required this.employeeId, this.leave});
 
   @override
@@ -75,6 +76,16 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
             gender: _gender,
           ),
         );
+
+        // Explicitly initialize form to reset state (like success step) when opening screen
+        _leaveBloc.add(
+          LeaveEvent.formInitialized(
+            leave: widget.leave,
+            employeeName: _empName,
+            gender: _gender,
+            isNewForm: widget.leave == null,
+          ),
+        );
       }
     });
   }
@@ -87,45 +98,46 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    _approverName = Get.find<LocalStorageService>().getApproverName() ?? l10n.notAvailable;
-    
+    _approverName =
+        Get.find<LocalStorageService>().getApproverName() ?? l10n.notAvailable;
+
     return Scaffold(
       backgroundColor: AppColors.of(context).surface,
-        appBar: CommonAppBar(
-          title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
-          subtitle: l10n.applyLeaveSubtitle,
-        ),
-        body: SafeArea(
-          child: GestureDetector(
-            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-            behavior: HitTestBehavior.opaque,
-            child: BlocConsumer<LeaveBloc, LeaveState>(
-              listenWhen: (previous, current) =>
-                  (previous.success != current.success && current.success) ||
-                  (previous.errorMessage != current.errorMessage &&
-                      current.errorMessage != null),
-              listener: (context, state) {
-                if (state.success) {
-                  _leaveBloc.add(const LeaveEvent.stepChanged(2));
-                  // Clear success to avoid repeated trigger if needed, or just stay on step 2
-                }
+      appBar: CommonAppBar(
+        title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
+        subtitle: l10n.applyLeaveSubtitle,
+      ),
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          behavior: HitTestBehavior.opaque,
+          child: BlocConsumer<LeaveBloc, LeaveState>(
+            listenWhen: (previous, current) =>
+                (previous.success != current.success && current.success) ||
+                (previous.errorMessage != current.errorMessage &&
+                    current.errorMessage != null),
+            listener: (context, state) {
+              if (state.success) {
+                _leaveBloc.add(const LeaveEvent.stepChanged(2));
+                // Clear success to avoid repeated trigger if needed, or just stay on step 2
+              }
 
-                if (state.errorMessage != null) {
-                  ToastUtils.showError(state.errorMessage!);
-                  // Clear error state after showing toast to allow repeated errors
-                  _leaveBloc.add(const LeaveEvent.clearError());
-                }
-              },
-              builder: (context, state) {
-                return RefreshIndicator(
-                  onRefresh: _onRefresh,
-                  color: AppColors.of(context).primary,
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppConstants.p20),
-                      child: Column(
-                        children: [
+              if (state.errorMessage != null) {
+                ToastUtils.showError(state.errorMessage!);
+                // Clear error state after showing toast to allow repeated errors
+                _leaveBloc.add(const LeaveEvent.clearError());
+              }
+            },
+            builder: (context, state) {
+              return RefreshIndicator(
+                onRefresh: _onRefresh,
+                color: AppColors.of(context).primary,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppConstants.p20),
+                    child: Column(
+                      children: [
                         LeaveStepperHeader(currentStep: state.currentStep),
                         const SizedBox(height: AppConstants.p24),
                         if (state.currentStep == 0)
@@ -134,6 +146,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                             leave: widget.leave,
                             empName: _empName,
                             gender: _gender,
+                            initialReason: _reason,
                             onNext: (reason) {
                               setState(() {
                                 _reason = reason;
@@ -147,14 +160,20 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
                             reason: _reason,
                             approverName: _approverName,
                             onSubmit: () => _submitForm(state),
-                            onBack: () => _leaveBloc.add(const LeaveEvent.stepChanged(0)),
+                            onBack: () =>
+                                _leaveBloc.add(const LeaveEvent.stepChanged(0)),
                           )
                         else if (state.currentStep == 2)
                           LeaveConfirmationStep(
                             onMyRequests: () {
-                              Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.approvalsIndex);
+                              Get.find<BottomNavCubit>().changeIndex(
+                                BottomNavCubit.approvalsIndex,
+                              );
                               Get.find<ApprovalsBloc>().add(
-                                const ApprovalsEvent.categoryChanged(ApprovalType.leave, ApprovalCategory.raised),
+                                const ApprovalsEvent.categoryChanged(
+                                  ApprovalType.leave,
+                                  ApprovalCategory.raised,
+                                ),
                               );
                               context.go(AppRouter.dashboardPath);
                             },
@@ -208,7 +227,9 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
       _leaveBloc.add(
         LeaveEvent.applyRequested(
           employeeId: _effectiveEmployeeId,
-          employeeName: _empName.isNotEmpty ? _empName : AppLocalizations.of(context)!.user,
+          employeeName: _empName.isNotEmpty
+              ? _empName
+              : AppLocalizations.of(context)!.user,
           leaveType: state.selectedLeaveType!,
           fromDate: fromStr,
           toDate: toStr,
@@ -219,7 +240,9 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
               : null,
           halfDaySegment: state.isHalfDay ? state.daySegment : null,
           totalleavedays: totalDays,
-          emergencyContactNumber: state.addEmergencyContact ? state.emergencyContactNumber : null,
+          emergencyContactNumber: state.addEmergencyContact
+              ? state.emergencyContactNumber
+              : null,
         ),
       );
     } else {
@@ -235,7 +258,9 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
               : null,
           halfDaySegment: state.isHalfDay ? state.daySegment : null,
           totalleavedays: totalDays,
-          emergencyContactNumber: state.addEmergencyContact ? state.emergencyContactNumber : null,
+          emergencyContactNumber: state.addEmergencyContact
+              ? state.emergencyContactNumber
+              : null,
         ),
       );
     }

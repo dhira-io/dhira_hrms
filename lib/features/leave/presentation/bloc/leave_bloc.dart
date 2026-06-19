@@ -114,21 +114,28 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
             emit(state.copyWith(halfDayDate: date, errorMessage: null)),
         daySegmentChanged: (segment) async =>
             emit(state.copyWith(daySegment: segment, errorMessage: null)),
-        formInitialized: (leave, name, gender) async => _onFormInitialized(
-          leave: leave,
-          employeeName: name,
-          gender: gender,
-          emit: emit,
-        ),
+        formInitialized: (leave, name, gender, isNewForm) async =>
+            _onFormInitialized(
+              leave: leave,
+              employeeName: name,
+              gender: gender,
+              isNewForm: isNewForm,
+              emit: emit,
+            ),
         overlapHiddenStatusChanged: (hide) async => emit(
           state.copyWith(hideOverlapAfterSubmit: hide, errorMessage: null),
         ),
         clearError: () async => emit(state.copyWith(errorMessage: null)),
         refreshRequested: (id, gender) async =>
             _onRefreshRequested(id, gender, emit),
-        stepChanged: (step) async => emit(state.copyWith(currentStep: step, errorMessage: null)),
-        emergencyContactToggled: (value) async => emit(state.copyWith(addEmergencyContact: value, errorMessage: null)),
-        emergencyContactNumberChanged: (number) async => emit(state.copyWith(emergencyContactNumber: number, errorMessage: null)),
+        stepChanged: (step) async =>
+            emit(state.copyWith(currentStep: step, errorMessage: null)),
+        emergencyContactToggled: (value) async => emit(
+          state.copyWith(addEmergencyContact: value, errorMessage: null),
+        ),
+        emergencyContactNumberChanged: (number) async => emit(
+          state.copyWith(emergencyContactNumber: number, errorMessage: null),
+        ),
       );
     });
   }
@@ -459,6 +466,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     LeaveEntity? leave,
     String? employeeName,
     String? gender,
+    bool isNewForm = false,
     required Emitter<LeaveState> emit,
   }) {
     emit(
@@ -466,20 +474,42 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         employeeName: employeeName ?? state.employeeName,
         gender: gender ?? state.gender,
         leaveId: leave?.name,
-        selectedLeaveType: leave?.leaveType ?? state.selectedLeaveType,
-        fromDate: leave != null
-            ? DateTime.tryParse(leave.fromDate)
-            : state.fromDate,
-        toDate: leave != null ? DateTime.tryParse(leave.toDate) : state.toDate,
-        isHalfDay: leave != null ? (leave.halfDay == 1) : state.isHalfDay,
-        halfDayDate: (leave != null && leave.halfDayDate != null)
-            ? DateTime.tryParse(leave.halfDayDate!)
-            : state.halfDayDate,
-        daySegment: leave?.halfDaySegment ?? state.daySegment,
-        uploadedFileUrl: leave?.fileUrl,
-        selectedFileName: leave?.fileUrl?.split('/').last,
-        uploadCount: leave?.fileUrl != null ? 1 : 0,
+        selectedLeaveType: isNewForm
+            ? (leave?.leaveType)
+            : (leave?.leaveType ?? state.selectedLeaveType),
+        fromDate: isNewForm
+            ? (leave != null ? DateTime.tryParse(leave.fromDate) : null)
+            : (leave != null
+                  ? DateTime.tryParse(leave.fromDate)
+                  : state.fromDate),
+        toDate: isNewForm
+            ? (leave != null ? DateTime.tryParse(leave.toDate) : null)
+            : (leave != null ? DateTime.tryParse(leave.toDate) : state.toDate),
+        isHalfDay: isNewForm
+            ? (leave != null ? (leave.halfDay == 1) : false)
+            : (leave != null ? (leave.halfDay == 1) : state.isHalfDay),
+        halfDayDate: isNewForm
+            ? ((leave != null && leave.halfDayDate != null)
+                  ? DateTime.tryParse(leave.halfDayDate!)
+                  : null)
+            : ((leave != null && leave.halfDayDate != null)
+                  ? DateTime.tryParse(leave.halfDayDate!)
+                  : state.halfDayDate),
+        daySegment: isNewForm
+            ? (leave?.halfDaySegment)
+            : (leave?.halfDaySegment ?? state.daySegment),
+        uploadedFileUrl: isNewForm
+            ? (leave?.fileUrl)
+            : (leave?.fileUrl ?? state.uploadedFileUrl),
+        selectedFileName: isNewForm
+            ? (leave?.fileUrl?.split('/').last)
+            : (leave?.fileUrl?.split('/').last ?? state.selectedFileName),
+        uploadCount: isNewForm
+            ? (leave?.fileUrl != null ? 1 : 0)
+            : (leave?.fileUrl != null ? 1 : state.uploadCount),
         errorMessage: null,
+        success: false,
+        currentStep: 0,
       ),
     );
   }
