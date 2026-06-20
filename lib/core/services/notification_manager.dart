@@ -167,7 +167,7 @@ class NotificationManager {
         notificationTitle ??
         message.data[PushNotificationPayloadKeys.title]?.toString() ??
         message.data[PushNotificationPayloadKeys.subject]?.toString() ??
-        'New Notification';
+        PushNotificationValues.defaultTitle;
 
     String body =
         notificationBody ??
@@ -176,8 +176,10 @@ class NotificationManager {
         message.data[PushNotificationPayloadKeys.body]?.toString() ??
         '';
 
-    // If both notification object is null and no useful data is present, skip showing
-    if (message.notification == null && body.isEmpty && (title == 'New Notification')) {
+    if (message.notification == null &&
+        body.isEmpty &&
+        (title.toLowerCase() ==
+            PushNotificationValues.defaultTitle.toLowerCase())) {
       return;
     }
 
