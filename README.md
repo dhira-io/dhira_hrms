@@ -144,8 +144,24 @@ lib/
 
 ## 🎨 UI & Design Principles
 - **Aesthetics**: Premium modern design (Glassmorphism, gradients, micro-animations).
-- **Consistency**: All colors must use `AppColors`. All text must use `AppTextStyles`.
+- **Consistency**: All colors must use `AppColors`. All text must use `AppTextStyles` (see Typography Reference below).
 - **Feedback**: Non-blocking feedback should use `ToastUtils`; critical errors should use `AppDialogs`.
+
+### 📝 Typography Reference
+Use the following styles defined in `AppTextStyles` consistently across the app based on their intended purpose:
+
+| Style              | Purpose                  | Typical Size | Example                                 |
+| ------------------ | ------------------------ | ------------ | --------------------------------------- |
+| **displayLarge**   | Very prominent text      | 32–48        | Splash screen title, marketing banner   |
+| **headlineLarge**  | Main page/screen heading | 24–30        | "Dashboard", "Profile", "Settings"      |
+| **headlineMedium** | Section heading          | 20–24        | "Employee Details", "Recent Activities" |
+| **titleLarge**     | Card/dialog/list title   | 16–20        | Card title, bottom sheet title          |
+| **bodyLarge**      | Main readable content    | 16           | Form values, descriptions, paragraphs   |
+| **bodyMedium**     | Secondary content        | 14           | Subtitles, metadata                     |
+| **bodySmall**      | Small helper text        | 12           | Captions, hints, timestamps             |
+| **labelLarge**     | Interactive controls     | 14–16        | Button text, tabs                       |
+| **labelMedium**    | Small controls           | 12–14        | Chips, badges                           |
+| **labelSmall**     | Tiny labels              | 10–12        | Very small tags                         |
 
 ---
 
