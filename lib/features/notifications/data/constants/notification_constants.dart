@@ -83,4 +83,6 @@ class PushNotificationValues {
   static const String urlSelfAssessment = 'self-assessment';
 
   static const String defaultTitle = 'New Notification';
+  static const String defaultDescription = '';
+  static const String noSubject = 'No Subject';
 }

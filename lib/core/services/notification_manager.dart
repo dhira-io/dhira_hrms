@@ -164,22 +164,23 @@ class NotificationManager {
     final String? notificationBody = message.notification?.body;
 
     final String title =
-        notificationTitle ??
-        message.data[PushNotificationPayloadKeys.title]?.toString() ??
-        message.data[PushNotificationPayloadKeys.subject]?.toString() ??
+        notificationTitle?.trim() ??
+        message.data[PushNotificationPayloadKeys.title]?.toString()?.trim() ??
+        message.data[PushNotificationPayloadKeys.subject]?.toString()?.trim() ??
         PushNotificationValues.defaultTitle;
 
     String body =
-        notificationBody ??
-        message.data[PushNotificationPayloadKeys.message]?.toString() ??
-        message.data[PushNotificationPayloadKeys.content]?.toString() ??
-        message.data[PushNotificationPayloadKeys.body]?.toString() ??
-        '';
+        (notificationBody ??
+                message.data[PushNotificationPayloadKeys.message]?.toString() ??
+                message.data[PushNotificationPayloadKeys.content]?.toString() ??
+                message.data[PushNotificationPayloadKeys.body]?.toString() ??
+                '')
+            .trim();
 
     if (message.notification == null &&
         body.isEmpty &&
-        (title.toLowerCase() ==
-            PushNotificationValues.defaultTitle.toLowerCase())) {
+        (title.toLowerCase().trim() ==
+            PushNotificationValues.defaultTitle.toLowerCase().trim())) {
       return;
     }
 
