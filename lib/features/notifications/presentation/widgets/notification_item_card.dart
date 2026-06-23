@@ -55,7 +55,9 @@ class NotificationItemCard extends StatelessWidget {
                 docName: notification.docName.isNotEmpty
                     ? notification.docName
                     : notification.id,
-                title: notification.title,
+                title: notification.title.isEmpty
+                    ? AppLocalizations.of(context)!.noSubject
+                    : notification.title,
               );
             },
             child: Stack(
@@ -86,7 +88,9 @@ class NotificationItemCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              notification.title,
+                              notification.title.isEmpty
+                                  ? AppLocalizations.of(context)!.noSubject
+                                  : notification.title,
                               style: AppTextStyle.h3.copyWith(
                                 fontSize: AppConstants.fs13.sp,
                                 fontWeight: notification.isRead
@@ -96,17 +100,21 @@ class NotificationItemCard extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: AppConstants.p2),
-                            Text(
-                              _formatTime(context, notification.time),
-                              style: AppTextStyle.labelSmall.copyWith(
-                                color: AppColors.of(context).onSurfaceVariant,
-                                fontWeight: FontWeight.normal,
+                            if (notification.time != null) ...[
+                              const SizedBox(height: AppConstants.p2),
+                              Text(
+                                _formatTime(context, notification.time),
+                                style: AppTextStyle.labelSmall.copyWith(
+                                  color: AppColors.of(context).onSurfaceVariant,
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
-                            ),
+                            ],
                             const SizedBox(height: AppConstants.p4),
                             Text(
-                              notification.description,
+                              notification.description.isEmpty
+                                  ? ''
+                                  : notification.description,
                               style: AppTextStyle.bodySmall.copyWith(
                                 color: AppColors.of(context).onSurfaceVariant,
                                 height: AppConstants.lineHeightNormal,
@@ -128,7 +136,8 @@ class NotificationItemCard extends StatelessWidget {
     );
   }
 
-  String _formatTime(BuildContext context, DateTime time) {
+  String _formatTime(BuildContext context, DateTime? time) {
+    if (time == null) return '';
     return DateTimeUtils.formatTimeAgo(
       time,
       l10n: AppLocalizations.of(context)!,

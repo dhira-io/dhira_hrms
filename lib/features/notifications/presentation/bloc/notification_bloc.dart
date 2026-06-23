@@ -209,14 +209,20 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
     for (var n in notifications) {
       String groupKey;
-      final nDate = DateTime(n.time.year, n.time.month, n.time.day);
+      final time = n.time;
 
-      if (nDate == today) {
-        groupKey = NotificationGroupConstants.groupToday;
-      } else if (nDate == yesterday) {
-        groupKey = NotificationGroupConstants.groupYesterday;
-      } else {
+      if (time == null) {
         groupKey = NotificationGroupConstants.groupEarlier;
+      } else {
+        final nDate = DateTime(time.year, time.month, time.day);
+
+        if (nDate == today) {
+          groupKey = NotificationGroupConstants.groupToday;
+        } else if (nDate == yesterday) {
+          groupKey = NotificationGroupConstants.groupYesterday;
+        } else {
+          groupKey = NotificationGroupConstants.groupEarlier;
+        }
       }
 
       groups.putIfAbsent(groupKey, () => []).add(n);
