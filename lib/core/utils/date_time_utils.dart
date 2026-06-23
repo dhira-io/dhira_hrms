@@ -523,4 +523,12 @@ class DateTimeUtils {
     }
     return parts.join(' ');
   }
+
+  /// Checks if a string is in a standard ISO 8601 format (YYYY-MM-DDTHH:mm:ss...)
+  static bool isISOFormat(String input) {
+    if (input.isEmpty) return false;
+    // Basic check for T delimiter or standard format
+    return input.contains('T') ||
+        RegExp(r'^\d{4}-\d{2}-\d{2}T').hasMatch(input);
+  }
 }

@@ -2159,6 +2159,9 @@
     "takeABreak": "Take a break",
     "thatsAllForToday": "That's all for today",
     "resume": "Resume"
+    "emailAlertsPreferenceSuccess": "Email Alerts Preferences updated successfully",
+    "noSubject": "No Subject",
+    "newNotification": "New Notification"
 }
 
 

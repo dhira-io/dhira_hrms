@@ -2055,6 +2055,9 @@
     "takeABreak": "एक ब्रेक लें",
     "thatsAllForToday": "आज के लिए बस इतना ही",
     "resume": "फिर से शुरू करें"
+    "emailAlertsPreferenceSuccess": "ईमेल अलर्ट प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
+    "noSubject": "कोई विषय नहीं",
+    "newNotification": "नई अधिसूचना"
 }
 
 
