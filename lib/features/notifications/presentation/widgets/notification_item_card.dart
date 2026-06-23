@@ -100,14 +100,16 @@ class NotificationItemCard extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: AppConstants.p2),
-                            Text(
-                              _formatTime(context, notification.time),
-                              style: AppTextStyle.labelSmall.copyWith(
-                                color: AppColors.of(context).onSurfaceVariant,
-                                fontWeight: FontWeight.normal,
+                            if (notification.time != null) ...[
+                              const SizedBox(height: AppConstants.p2),
+                              Text(
+                                _formatTime(context, notification.time),
+                                style: AppTextStyle.labelSmall.copyWith(
+                                  color: AppColors.of(context).onSurfaceVariant,
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
-                            ),
+                            ],
                             const SizedBox(height: AppConstants.p4),
                             Text(
                               notification.description.isEmpty
