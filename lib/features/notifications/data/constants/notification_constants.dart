@@ -26,7 +26,7 @@ class NotificationGroupConstants {
 }
 
 class LocalNotificationConstants {
-  static const String channelId = 'high_importance_channel';
+  static const String channelId = 'high_importance_channel_v2';
   static const String channelName = 'High Importance Notifications';
   static const String channelDescription =
       'This channel is used for important notifications.';
