@@ -10,7 +10,7 @@ abstract class NotificationEntity with _$NotificationEntity {
     required String id,
     required String title,
     required String description,
-    required DateTime time,
+    DateTime? time,
     required NotificationType type,
     required bool isRead,
     @Default('') String group,

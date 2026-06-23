@@ -58,9 +58,9 @@ abstract class NotificationModel with _$NotificationModel {
 
   NotificationEntity toEntity() {
     // Handle Frappe's time format (usually UTC) and convert to local
-    final DateTime parsedTime = DateTimeUtils.isISOFormat(time)
+    final DateTime? parsedTime = DateTimeUtils.isISOFormat(time)
         ? DateTime.parse(time)
-        : DateTime.tryParse(time.replaceFirst(' ', 'T')) ?? DateTime.now();
+        : DateTime.tryParse(time.replaceFirst(' ', 'T'));
 
     return NotificationEntity(
       id: id,

@@ -134,7 +134,8 @@ class NotificationItemCard extends StatelessWidget {
     );
   }
 
-  String _formatTime(BuildContext context, DateTime time) {
+  String _formatTime(BuildContext context, DateTime? time) {
+    if (time == null) return '';
     return DateTimeUtils.formatTimeAgo(
       time,
       l10n: AppLocalizations.of(context)!,
