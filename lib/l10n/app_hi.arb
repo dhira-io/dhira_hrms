@@ -2015,7 +2015,9 @@
     "pushNotificationsDesc": "आपके इंस्टॉल किए गए ऐप पर वास्तविक समय के अलर्ट",
     "emailAlertsDesc": "आपके रिकॉर्ड के लिए औपचारिक ईमेल सूचनाएं",
     "pushNotificationPreferenceSuccess": "मोबाइल नोटिफिकेशन प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
-    "emailAlertsPreferenceSuccess": "ईमेल अलर्ट प्राथमिकताएं सफलतापूर्वक अपडेट की गईं"
+    "emailAlertsPreferenceSuccess": "ईमेल अलर्ट प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
+    "noSubject": "कोई विषय नहीं",
+    "newNotification": "नई अधिसूचना"
 }
 
 
