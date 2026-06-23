@@ -7,6 +7,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final VoidCallback? onBack;
   final Color? backgroundColor;
+  final bool centerTitle;
 
   const CommonAppBar({
     super.key,
@@ -14,6 +15,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.onBack,
     this.backgroundColor,
+    this.centerTitle = true,
   });
 
   @override
@@ -21,7 +23,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor ?? AppColors.of(context).surface,
       elevation: 0,
-      centerTitle: true,
+      centerTitle: centerTitle,
       scrolledUnderElevation: 0,
       leading: IconButton(
         icon: Icon(
