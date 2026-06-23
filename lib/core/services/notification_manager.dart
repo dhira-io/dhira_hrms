@@ -14,6 +14,7 @@ import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dar
 import '../../features/notifications/domain/usecases/deactivate_device_usecase.dart';
 import '../../core/services/local_storage_service.dart';
 import '../../core/services/device_id_service.dart';
+import '../../l10n/app_localizations.dart';
 import '../routing/app_router.dart';
 
 class NotificationManager {
@@ -163,11 +164,16 @@ class NotificationManager {
     final String? notificationTitle = message.notification?.title;
     final String? notificationBody = message.notification?.body;
 
+    final context = AppRouter.navigatorKey.currentContext;
+    final String defaultTitle = (context != null && AppLocalizations.of(context) != null)
+        ? AppLocalizations.of(context)!.newNotification
+        : 'New Notification';
+
     final String title =
         notificationTitle?.trim() ??
         message.data[PushNotificationPayloadKeys.title]?.toString()?.trim() ??
         message.data[PushNotificationPayloadKeys.subject]?.toString()?.trim() ??
-        PushNotificationValues.defaultTitle;
+        defaultTitle;
 
     String body =
         (notificationBody ??
@@ -180,7 +186,7 @@ class NotificationManager {
     if (message.notification == null &&
         body.isEmpty &&
         (title.toLowerCase().trim() ==
-            PushNotificationValues.defaultTitle.toLowerCase().trim())) {
+            defaultTitle.toLowerCase().trim())) {
       return;
     }
 

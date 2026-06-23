@@ -55,7 +55,9 @@ class NotificationItemCard extends StatelessWidget {
                 docName: notification.docName.isNotEmpty
                     ? notification.docName
                     : notification.id,
-                title: notification.title,
+                title: notification.title.isEmpty
+                    ? AppLocalizations.of(context)!.noSubject
+                    : notification.title,
               );
             },
             child: Stack(
@@ -86,7 +88,9 @@ class NotificationItemCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              notification.title,
+                              notification.title.isEmpty
+                                  ? AppLocalizations.of(context)!.noSubject
+                                  : notification.title,
                               style: AppTextStyle.h3.copyWith(
                                 fontSize: AppConstants.fs13.sp,
                                 fontWeight: notification.isRead
@@ -106,7 +110,9 @@ class NotificationItemCard extends StatelessWidget {
                             ),
                             const SizedBox(height: AppConstants.p4),
                             Text(
-                              notification.description,
+                              notification.description.isEmpty
+                                  ? ''
+                                  : notification.description,
                               style: AppTextStyle.bodySmall.copyWith(
                                 color: AppColors.of(context).onSurfaceVariant,
                                 height: AppConstants.lineHeightNormal,

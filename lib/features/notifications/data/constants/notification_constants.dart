@@ -81,8 +81,4 @@ class PushNotificationValues {
   static const String urlAttendanceRegularization = 'attendance-regularization';
   static const String urlPerformance = 'performance';
   static const String urlSelfAssessment = 'self-assessment';
-
-  static const String defaultTitle = 'New Notification';
-  static const String defaultDescription = '';
-  static const String noSubject = 'No Subject';
 }
