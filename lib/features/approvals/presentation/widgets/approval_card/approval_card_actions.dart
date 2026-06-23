@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
@@ -86,7 +87,9 @@ class ApprovalCardActions extends StatelessWidget {
                 child: _ActionButton(
                   label: l10n.edit,
                   icon: Icons.edit_outlined,
-                  color: AppColors.of(context).primary,
+                  textColor: AppColors.of(context).primary,
+                  borderColor: AppColors.of(context).primary.withValues(alpha: 0.5),
+                  backgroundColor: Colors.transparent,
                   onPressed: onEditLeave,
                 ),
               ),
@@ -95,7 +98,9 @@ class ApprovalCardActions extends StatelessWidget {
                 child: _ActionButton(
                   label: l10n.withdraw,
                   icon: Icons.undo,
-                  color: AppColors.of(context).error,
+                  textColor: AppColors.of(context).error,
+                  borderColor: AppColors.of(context).error.withValues(alpha: 0.5),
+                  backgroundColor: Colors.transparent,
                   onPressed: onWithdrawLeave,
                 ),
               ),
@@ -104,7 +109,9 @@ class ApprovalCardActions extends StatelessWidget {
                 child: _ActionButton(
                   label: l10n.delete,
                   icon: Icons.delete_outline,
-                  color: AppColors.of(context).error,
+                  textColor: AppColors.of(context).error,
+                  borderColor: AppColors.of(context).error.withValues(alpha: 0.5),
+                  backgroundColor: Colors.transparent,
                   onPressed: onDeleteTimesheet,
                 ),
               ),
@@ -113,7 +120,9 @@ class ApprovalCardActions extends StatelessWidget {
                 child: _ActionButton(
                   label: l10n.edit,
                   icon: Icons.edit_outlined,
-                  color: AppColors.of(context).primary,
+                  textColor: AppColors.of(context).primary,
+                  borderColor: AppColors.of(context).primary.withValues(alpha: 0.5),
+                  backgroundColor: Colors.transparent,
                   onPressed: onEditTimesheet,
                 ),
               ),
@@ -149,6 +158,7 @@ class ApprovalCardActions extends StatelessWidget {
         break;
       case ApprovalType.timesheet:
         showReject = false;
+        isRejectEnabled = !isProcessed && data.isMainApprover;
         isApproveEnabled = !isProcessed && data.isMainApprover;
         break;
     }
@@ -180,7 +190,9 @@ class ApprovalCardActions extends StatelessWidget {
                   child: _ActionButton(
                     label: l10n.reject,
                     icon: Icons.cancel_outlined,
-                    color: AppColors.of(context).error,
+                    textColor: AppColors.of(context).error,
+                    borderColor: AppColors.of(context).error.withValues(alpha: 0.5),
+                    backgroundColor: AppColors.rejectedBg,
                     onPressed: isRejectEnabled
                         ? () => onAction(ApprovalActions.reject)
                         : null,
@@ -192,7 +204,9 @@ class ApprovalCardActions extends StatelessWidget {
                   child: _ActionButton(
                     label: l10n.approve,
                     icon: Icons.check_circle_outline,
-                    color: AppColors.of(context).success,
+                    textColor: AppColors.of(context).success,
+                    borderColor: AppColors.of(context).success.withValues(alpha: 0.5),
+                    backgroundColor: AppColors.approvedBg,
                     onPressed: isApproveEnabled
                         ? () => onAction(ApprovalActions.approve)
                         : null,
@@ -212,13 +226,17 @@ class ApprovalCardActions extends StatelessWidget {
 class _ActionButton extends StatelessWidget {
   final String label;
   final IconData icon;
-  final Color color;
+  final Color textColor;
+  final Color borderColor;
+  final Color backgroundColor;
   final VoidCallback? onPressed;
 
   const _ActionButton({
     required this.label,
     required this.icon,
-    required this.color,
+    required this.textColor,
+    required this.borderColor,
+    required this.backgroundColor,
     this.onPressed,
   });
 
@@ -230,18 +248,19 @@ class _ActionButton extends StatelessWidget {
       icon: Icon(
         icon,
         size: 18,
-        color: isDisabled ? color.withValues(alpha: 0.3) : color,
+        color: isDisabled ? textColor.withValues(alpha: 0.3) : textColor,
       ),
       label: Text(
         label,
-        style: TextStyle(
+        style: AppTextStyle.bodyMedium.copyWith(
           fontWeight: FontWeight.bold,
-          color: isDisabled ? color.withValues(alpha: 0.3) : color,
+          color: isDisabled ? textColor.withValues(alpha: 0.3) : textColor,
         ),
       ),
       style: OutlinedButton.styleFrom(
+        backgroundColor: isDisabled ? Colors.transparent : backgroundColor,
         side: BorderSide(
-          color: isDisabled ? color.withValues(alpha: 0.2) : color,
+          color: isDisabled ? borderColor.withValues(alpha: 0.2) : borderColor,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppConstants.r8),

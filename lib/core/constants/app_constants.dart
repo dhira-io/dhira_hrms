@@ -1,4 +1,7 @@
 class AppConstants {
+  static const String noneValue = 'None';
+  static const String naValue = 'N/A';
+  static const String view = 'View';
   static const List<String> nationalities = [
     'Afghan',
     'Albanian',
@@ -488,6 +491,7 @@ class TimesheetApiKeys {
 }
 
 class ApprovalStatus {
+  static const String allRequests = 'All Requests';
   static const String pending = 'Pending';
   static const String approved = 'Approved';
   static const String rejected = 'Rejected';
@@ -500,8 +504,35 @@ class ApprovalActions {
   static const String cancel = 'Cancel';
 }
 
+class RequestDetailKeys {
+  static const String justification = 'justification';
+  static const String remarks = 'remarks';
+  static const String reason = 'reason';
+  static const String attachment = 'attachment';
+  static const String attachments = 'attachments';
+  static const String comments = 'comments';
+  static const String submittedDate = 'Submitted Date';
+  static const String leaveType = 'Leave Type';
+  static const String totalHours = 'Total Hours';
+  static const String projects = 'Projects';
+  static const String expectedHours = 'Expected Hours';
+  static const String actualHours = 'Actual Hours';
+  static const String days = 'Days';
+  static const String fromDate = 'From Date';
+  static const String toDate = 'To Date';
+}
+
 class ProjectStatus {
   static const String active = 'Active';
   static const String inactive = 'Inactive';
   static const List<String> values = [active, inactive];
+}
+
+class HalfDaySegments {
+  static const String first = 'first';
+  static const String morning = 'morning';
+  static const String firstShort = '1st';
+  static const String second = 'second';
+  static const String afternoon = 'afternoon';
+  static const String secondShort = '2nd';
 }

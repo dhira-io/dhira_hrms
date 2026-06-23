@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/features/approvals/data/constants/approvals_api_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/presentation/widgets/approvals_sections.dart';
+import 'package:dhira_hrms/features/approvals/presentation/widgets/approvals_filter_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -27,6 +31,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   late final ScrollController _scrollController;
   ApprovalCategory? _previousCategory;
   ApprovalType? _previousType;
+  String? _bulkLoadingAction;
 
   @override
   void initState() {
@@ -80,8 +85,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
             }
             if (data.errorMessage != null && data.errorMessage!.isNotEmpty) {
               String displayError = data.errorMessage!;
-              if (displayError.startsWith('FAILED_TO_REFRESH_PREFIX:')) {
-                final errorDetails = displayError.substring('FAILED_TO_REFRESH_PREFIX:'.length);
+              if (displayError.startsWith(ApprovalsApiConstants.msgFailedToRefreshPrefix)) {
+                final errorDetails = displayError.substring(ApprovalsApiConstants.msgFailedToRefreshPrefix.length);
                 displayError = AppLocalizations.of(context)!.failedToRefresh(errorDetails);
               }
               ToastUtils.showError(displayError);
@@ -94,8 +99,10 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
           orElse: () {},
         );
       },
-      child: Scaffold(
-        backgroundColor: AppColors.of(context).background,
+      child: Stack(
+        children: [
+          Scaffold(
+            backgroundColor: AppColors.of(context).background,
         body: RefreshIndicator(
           onRefresh: () async {
             final completer = Completer<void>();
@@ -141,16 +148,20 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                       SliverPersistentHeader(
                         pinned: true,
                         delegate: _PersistentHeaderDelegate(
-                          height: 64.h,
+                          height: (data.category == ApprovalCategory.team &&
+                                  data.statusFilter.toLowerCase().contains(ApprovalsApiConstants.statusPending))
+                              ? 155.h
+                              : 128.h,
                           child: Container(
                             color: AppColors.of(context).background,
-                            child: const ApprovalsSubTabsSection(),
+                            child: const ApprovalsFilterSection(),
                           ),
                         ),
                       ),
                       // 3. Data Section — spread flat slivers
                       ...ApprovalsListContent.buildSlivers(
-                        requests: data.requests,
+                        requests: data.filteredRequests,
+                        selectedRequestIds: data.selectedRequestIds,
                         isLoading: data.isListLoading,
                         isLoadMoreLoading: data.isLoadMoreLoading,
                         context: context,
@@ -159,13 +170,151 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                             SliverPadding(
                         padding: EdgeInsets.only(bottom: 100.h),
                       ),
-                    ],
+                        ], // closes success
+                      ), // closes maybeWhen
+                    ], // closes slivers
+                  ); // closes CustomScrollView
+                },
+              ),
+            ),
+          ),
+          BlocBuilder<ApprovalsBloc, ApprovalsState>(
+            builder: (context, state) {
+              final l10n = AppLocalizations.of(context)!;
+              if (state is Success && state.data.selectedRequestIds.isNotEmpty) {
+                return Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.of(context).surfaceContainerLowest,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.of(context).black.withValues(alpha: 0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, -5),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.r24)),
+                    ),
+                    padding: EdgeInsets.only(
+                      left: AppConstants.p24,
+                      right: AppConstants.p24,
+                      top: AppConstants.p16,
+                      bottom: MediaQuery.of(context).padding.bottom + AppConstants.p16,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              l10n.bulkRequests,
+                              style: AppTextStyle.titleLarge.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                context.read<ApprovalsBloc>().add(const ApprovalsEvent.selectAllToggled(false));
+                              },
+                              icon: const Icon(Icons.close),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: AppConstants.p8),
+                        Text(
+                          l10n.requestsSelected(state.data.selectedRequestIds.length.toString()),
+                          style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: AppConstants.p16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: state.data.isBulkActionLoading
+                                    ? null
+                                    : () {
+                                        setState(() => _bulkLoadingAction = ApprovalActions.reject);
+                                        context.read<ApprovalsBloc>().add(
+                                              ApprovalsEvent.bulkWorkflowActionSubmitted(
+                                                requestIds: state.data.selectedRequestIds.toList(),
+                                                action: l10n.reject,
+                                                type: state.data.type,
+                                                category: state.data.category,
+                                              ),
+                                            );
+                                      },
+                                style: OutlinedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  side: BorderSide(color: AppColors.of(context).error),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                                ),
+                                child: state.data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.reject
+                                    ? SizedBox(
+                                        height: 20.h,
+                                        width: 20.w,
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.of(context).error),
+                                      )
+                                    : Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.cancel_outlined, color: AppColors.of(context).error, size: 20),
+                                          SizedBox(width: 8.w),
+                                          Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).error)),
+                                        ],
+                                      ),
+                              ),
+                            ),
+                            const SizedBox(width: AppConstants.p16),
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: state.data.isBulkActionLoading
+                                    ? null
+                                    : () {
+                                        setState(() => _bulkLoadingAction = ApprovalActions.approve);
+                                        context.read<ApprovalsBloc>().add(
+                                              ApprovalsEvent.bulkWorkflowActionSubmitted(
+                                                requestIds: state.data.selectedRequestIds.toList(),
+                                                action: l10n.approve,
+                                                type: state.data.type,
+                                                category: state.data.category,
+                                              ),
+                                            );
+                                      },
+                                style: OutlinedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  side: BorderSide(color: AppColors.of(context).success),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                                ),
+                                child: state.data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.approve
+                                    ? SizedBox(
+                                        height: 20.h,
+                                        width: 20.w,
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.of(context).success),
+                                      )
+                                    : Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.check_circle_outline, color: AppColors.of(context).success, size: 20),
+                                          SizedBox(width: 8.w),
+                                          Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).success)),
+                                        ],
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              );
+                );
+              }
+              return const SizedBox.shrink();
             },
           ),
-        ),
+        ],
       ),
     );
   }

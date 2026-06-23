@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../dialogs/widgets/edit_timesheet/edit_timesheet_form.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import '../dialogs/widgets/edit_timesheet/edit_timesheet_error_view.dart';
 
 class EditTimesheetBottomSheet extends StatelessWidget {
@@ -21,7 +22,16 @@ class EditTimesheetBottomSheet extends StatelessWidget {
         return state.maybeMap(
           success: (s) {
             if (s.data.isTimesheetLoading) {
-              return Center(child: CircularProgressIndicator());
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(4, (index) => Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: ShimmerLoading(width: double.infinity, height: 40),
+                  )),
+                ),
+              );
             }
 
             final timesheet = s.data.editingTimesheet;

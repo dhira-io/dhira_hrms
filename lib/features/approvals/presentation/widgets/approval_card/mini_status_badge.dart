@@ -17,24 +17,29 @@ class MiniStatusBadge extends StatelessWidget {
 
     Color bgColor = AppColors.of(context).surfaceContainerLow;
     Color textColor = AppColors.of(context).onSurfaceVariant;
+    Color borderColor = AppColors.of(context).onSurfaceVariant;
     String displayStatus = status;
 
     if (normStatus == ApprovalStatus.approved.toLowerCase()) {
       bgColor = AppColors.of(context).approvedBg;
       textColor = AppColors.of(context).approvedText;
+      borderColor = textColor;
       displayStatus = l10n.approved;
     } else if (normStatus == ApprovalStatus.rejected.toLowerCase()) {
       bgColor = AppColors.of(context).rejectedBg;
       textColor = AppColors.of(context).rejectedText;
+      borderColor = textColor;
       displayStatus = l10n.rejected;
     } else if (normStatus == ApprovalStatus.cancelled.toLowerCase()) {
       bgColor = AppColors.of(context).rejectedBg;
       textColor = AppColors.of(context).rejectedText;
+      borderColor = textColor;
       displayStatus = l10n.cancelledLabel;
     } else if (normStatus.contains(ApprovalsApiConstants.statusPending) ||
         normStatus == ApprovalsApiConstants.statusOpen) {
       bgColor = AppColors.of(context).pendingStatusBg;
-      textColor = AppColors.of(context).pendingStatusText;
+      textColor = AppColors.of(context).punchBreak;
+      borderColor = AppColors.of(context).punchBreak.withValues(alpha: 0.5);
       if (normStatus == ApprovalStatus.pending.toLowerCase() ||
           normStatus == ApprovalsApiConstants.statusOpen) {
         displayStatus = l10n.pending;
@@ -49,11 +54,14 @@ class MiniStatusBadge extends StatelessWidget {
         vertical: AppConstants.p4,
       ),
       decoration: BoxDecoration(
-        color: bgColor,
+        color: Colors.transparent,
+        border: Border.all(color: borderColor, width: 1),
         borderRadius: BorderRadius.circular(AppConstants.r12),
       ),
       child: Text(
         displayStatus,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: AppTextStyle.labelSmall.copyWith(
           color: textColor,
           fontWeight: FontWeight.bold,

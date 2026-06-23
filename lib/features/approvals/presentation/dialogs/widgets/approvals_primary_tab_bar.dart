@@ -18,35 +18,41 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocSelector<ApprovalsBloc, ApprovalsState, int>(
-      selector: (state) => state.maybeMap(
-        success: (s) => s.data.category.getIndex(s.data.access.canAccess),
-        orElse: () => 0,
-      ),
-      builder: (context, selectedIndex) {
+    return BlocBuilder<ApprovalsBloc, ApprovalsState>(
+      builder: (context, state) {
+        int selectedIndex = 0;
+        int badgeCount = 0;
+        state.maybeMap(
+          success: (s) {
+            selectedIndex = s.data.category.getIndex(s.data.access.canAccess);
+            badgeCount = s.data.summary.totalAllPending;
+          },
+          orElse: () {},
+        );
+
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
           child: Container(
-            height: 48.h,
+            height: 44.h,
             decoration: BoxDecoration(
-              color: AppColors.of(context).surfaceContainerHigh,
+              color: AppColors.of(context).surfaceContainer, // From design spec
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Row(
               children: [
                 Expanded(
-                  child: _buildTab(
-                    context,
+                  child: _ApprovalTabWidget(
                     label: l10n.teamApprovals,
                     isSelected: selectedIndex == 0,
+                    badgeCount: badgeCount,
                     onTap: () => _handleTap(context, 0),
                   ),
                 ),
                 Expanded(
-                  child: _buildTab(
-                    context,
+                  child: _ApprovalTabWidget(
                     label: l10n.raisedRequests,
                     isSelected: selectedIndex == 1,
+                    badgeCount: 0,
                     onTap: () => _handleTap(context, 1),
                   ),
                 ),
@@ -73,26 +79,36 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
       orElse: () {},
     );
   }
+}
 
-  Widget _buildTab(
-    BuildContext context, {
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
+class _ApprovalTabWidget extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final int badgeCount;
+  final VoidCallback onTap;
+
+  const _ApprovalTabWidget({
+    required this.label,
+    required this.isSelected,
+    required this.badgeCount,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin:       EdgeInsets.all(4.w),
+        margin: EdgeInsets.all(4.w),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.of(context).surfaceContainerLowest
+              ? AppColors.of(context).white
               : Colors.transparent,
           borderRadius: BorderRadius.circular(AppConstants.r10),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppColors.of(context).black.withValues(alpha: 0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -100,16 +116,39 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
               : null,
         ),
         alignment: Alignment.center,
-        child: Text(
-          label,
-          style: isSelected
-              ? AppTextStyle.labelLarge.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.of(context).primary,
-                )
-              : AppTextStyle.labelLarge.copyWith(
-                  color: AppColors.of(context).onSurfaceVariant,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: isSelected
+                  ? AppTextStyle.labelLarge.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.of(context).onSurface,
+                    )
+                  : AppTextStyle.labelLarge.copyWith(
+                      color: AppColors.of(context).onSurfaceVariant,
+                    ),
+            ),
+            if (badgeCount > 0) ...[
+              const SizedBox(width: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.of(context).error,
+                  borderRadius: BorderRadius.circular(6),
                 ),
+                child: Text(
+                  badgeCount < 10 ? '0$badgeCount' : '$badgeCount',
+                  style: AppTextStyle.labelSmall.copyWith(
+                    color: AppColors.of(context).white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );

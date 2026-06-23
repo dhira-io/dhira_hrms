@@ -6,11 +6,14 @@ import '../../domain/entities/comment_entity.dart';
 import '../../../timesheet/domain/entities/project_entity.dart';
 import '../../timesheetapproval/domain/entities/timesheet_approval_entity.dart';
 import '../../domain/entities/approval_type.dart';
+import '../../../../core/constants/app_constants.dart';
 
 part 'approvals_success_data.freezed.dart';
 
 @freezed
 class ApprovalsSuccessData with _$ApprovalsSuccessData {
+  const ApprovalsSuccessData._(); // Added for getter
+
   const factory ApprovalsSuccessData({
     required ApprovalsAccessEntity access,
     required ApprovalsSummaryEntity summary,
@@ -32,5 +35,29 @@ class ApprovalsSuccessData with _$ApprovalsSuccessData {
     @Default(1) int page,
     @Default(true) bool hasMore,
     @Default(false) bool isLoadMoreLoading,
+    @Default('') String searchQuery,
+    @Default(ApprovalStatus.pending) String statusFilter,
+    @Default(<String>{}) Set<String> selectedRequestIds,
+    @Default(false) bool isBulkActionLoading,
   }) = _ApprovalsSuccessData;
+
+  List<ApprovalRequestEntity> get filteredRequests {
+    return requests.where((request) {
+      // Filter by Status
+      bool matchesStatus = true;
+      if (statusFilter != ApprovalStatus.allRequests) {
+        matchesStatus = request.status.toLowerCase().contains(statusFilter.toLowerCase());
+      }
+
+      // Filter by Search Query
+      bool matchesSearch = true;
+      if (searchQuery.isNotEmpty) {
+        final query = searchQuery.toLowerCase();
+        matchesSearch = request.employeeName.toLowerCase().contains(query) ||
+            request.id.toLowerCase().contains(query);
+      }
+
+      return matchesStatus && matchesSearch;
+    }).toList();
+  }
 }

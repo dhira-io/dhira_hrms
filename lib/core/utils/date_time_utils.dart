@@ -45,6 +45,8 @@ class DateTimeUtils {
   static const String dateFormatAbbrMonthDay = 'MMM dd';
   static const String dateFormatDayMonthKey = 'EEEE MMM d, yyyy';
   static const String dateFormatMonthOnly = 'MMMM';
+  static const String patternAbbrMonthDay = 'MMM d';
+  static const String patternAbbrMonthDayYear = 'MMM d, yyyy';
 
   /// Formats date to 'yyyy-MM-dd' (e.g., 2023-10-25)
   static String formatToYMD(DateTime date) {
@@ -59,6 +61,39 @@ class DateTimeUtils {
   /// Formats date to 'dd-MM-yy' (e.g., 01-05-26)
   static String formatToDMYShort(DateTime date) {
     return date.format('dd-MM-yy');
+  }
+
+  /// Formats a string date to 'MMM d, yyyy' (e.g., Oct 25, 2023)
+  static String formatDateAbbr(String? date) {
+    if (date == null || date.isEmpty) return "";
+    return DateTimeUtils.formatDateString(date, pattern: 'MMM d, yyyy', fallback: date);
+  }
+
+  /// Formats a string date/time to localized time (e.g., 9:00 AM)
+  static String formatTimeStr(String? dateTimeStr) {
+    if (dateTimeStr == null || dateTimeStr.isEmpty) return "N/A";
+    try {
+      final DateTime dt = DateTime.parse(dateTimeStr);
+      return dt.toTime;
+    } catch (e) {
+      return "N/A";
+    }
+  }
+
+  /// Checks if a value represents a half day
+  static bool isHalfDay(dynamic value) {
+    if (value == null) return false;
+    return value == 1 ||
+        value == true ||
+        value.toString() == "1" ||
+        value.toString().toLowerCase() == "true";
+  }
+
+  /// Formats days to string (removes decimal if .0)
+  static String formatDays(dynamic days) {
+    if (days == null) return "0";
+    double val = double.tryParse(days.toString()) ?? 0.0;
+    return val == val.toInt() ? val.toInt().toString() : val.toString();
   }
 
   /// Formats date to 'dd MMM, yyyy' (e.g., 25 Oct, 2023)

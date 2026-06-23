@@ -118,7 +118,7 @@ class ShimmerCard extends StatelessWidget {
           // Header Skeleton
           Row(
             children: [
-                    ShimmerLoading(height: 48.h, width: 48.w, borderRadius: 24),
+                    ShimmerLoading(height: AppConstants.p48, width: AppConstants.p48, borderRadius: 24),
               const SizedBox(width: AppConstants.p12),
                     Expanded(
                 child: Column(

@@ -21,6 +21,7 @@ class ApprovalsListContent {
     required bool isLoading,
     bool isLoadMoreLoading = false,
     required BuildContext context,
+    Set<String> selectedRequestIds = const {},
   }) {
     if (isLoading) {
       return [
@@ -49,10 +50,22 @@ class ApprovalsListContent {
 
     return [
       SliverPadding(
-        padding:       EdgeInsets.only(left: 16.w, right: 16.w),
+        padding: EdgeInsets.only(left: 16.w, right: 16.w),
         sliver: SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
-            return ApprovalCard(data: requests[index]);
+            final request = requests[index];
+            return ApprovalCard(
+              data: request,
+              isSelected: selectedRequestIds.contains(request.id),
+              onSelectionChanged: (selected) {
+                context.read<ApprovalsBloc>().add(
+                      ApprovalsEvent.requestSelectionToggled(
+                        id: request.id,
+                        selected: selected,
+                      ),
+                    );
+              },
+            );
           }, childCount: requests.length),
         ),
       ),

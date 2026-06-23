@@ -1,8 +1,9 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intl/intl.dart';
 import '../../domain/entities/approval_request_entity.dart';
 import '../../domain/entities/approval_type.dart';
 import '../../../../core/constants/api_constants.dart';
+import '../../../../core/utils/date_time_utils.dart';
 
 part 'approval_request_model.freezed.dart';
 
@@ -28,6 +29,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
     String? halfDayDate,
     String? customHalfDetails,
     String? fileUrl,
+    String? managerReview,
   }) = _ApprovalRequestModel;
 
   const ApprovalRequestModel._();
@@ -101,51 +103,16 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       toDate: json['to_date'] != null
           ? DateTime.tryParse(json['to_date'].toString())
           : null,
-      isHalfDay: _isHalfDay(json['half_day']),
+      isHalfDay: DateTimeUtils.isHalfDay(json['half_day']),
       halfDaySegment: (json['custom_half_details'] ?? json['half_day_segment'])
           ?.toString(),
       halfDayDate: json['half_day_date']?.toString(),
       customHalfDetails:
           (json['custom_half_details'] ?? json['half_day_segment'])?.toString(),
       fileUrl: json['file_url'] ?? json['supporting_document'],
+      managerReview: json['approvers_remarks'] ?? json['workflow_state_message'] ?? json['remarks'] ?? json['manager_comments'],
     );
   }
-
-  // --- FORMATTING HELPERS ---
-
-  static String _formatDate(String? date) {
-    if (date == null || date.isEmpty) return "";
-    try {
-      return DateFormat('dd-MM-yyyy').format(DateTime.parse(date));
-    } catch (e) {
-      return date;
-    }
-  }
-
-  static String _formatTime(String? dateTimeStr) {
-    if (dateTimeStr == null || dateTimeStr.isEmpty) return "N/A";
-    try {
-      final DateTime dt = DateTime.parse(dateTimeStr);
-      return DateFormat('hh:mm a').format(dt);
-    } catch (e) {
-      return "N/A";
-    }
-  }
-
-  static bool _isHalfDay(dynamic value) {
-    if (value == null) return false;
-    return value == 1 ||
-        value == true ||
-        value.toString() == "1" ||
-        value.toString().toLowerCase() == "true";
-  }
-
-  static String _formatDays(dynamic days) {
-    if (days == null) return "0";
-    double val = double.tryParse(days.toString()) ?? 0.0;
-    return val == val.toInt() ? val.toInt().toString() : val.toString();
-  }
-
   // --- MAPPING LOGIC ---
 
   static void _mapTeamDetails(
@@ -156,33 +123,36 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
     switch (type) {
       case ApprovalType.leave:
         details['Leave Type'] = json['leave_type'] ?? "";
-        details['From Date'] = _formatDate(json['from_date']);
-        details['To Date'] = _formatDate(json['to_date']);
-        details['Days'] = _formatDays(json['days'] ?? json['total_leave_days']);
+        details['From Date'] = DateTimeUtils.formatDateAbbr(json['from_date']);
+        details['To Date'] = DateTimeUtils.formatDateAbbr(json['to_date']);
+        details['Days'] = DateTimeUtils.formatDays(json['days'] ?? json['total_leave_days']);
         details['Reason'] = json['description'] ?? "N/A";
         details['Attachments'] =
             (json['file_url'] != null && json['file_url'].toString().isNotEmpty)
-            ? "View"
-            : "None";
-        if (_isHalfDay(json['half_day'])) {
+            ? AppConstants.view
+            : AppConstants.noneValue;
+        if (DateTimeUtils.isHalfDay(json['half_day'])) {
           details['Day Segment'] =
               json['custom_half_details'] ?? json['half_day_segment'] ?? "";
         }
         break;
       case ApprovalType.attendance:
-        details['Date'] = _formatDate(json['attendance_date'] ?? json['date']);
-        details['In Time'] = _formatTime(
+        details['Date'] = DateTimeUtils.formatDateAbbr(json['attendance_date'] ?? json['date']);
+        details['In Time'] = DateTimeUtils.formatTimeStr(
           json['manual_in_time'] ?? json['in_time'],
         );
-        details['Out Time'] = _formatTime(
+        details['Out Time'] = DateTimeUtils.formatTimeStr(
           json['manual_out_time'] ?? json['out_time'],
         );
-        details['Reason'] = json['reason_category'] ?? json['reason'] ?? "N/A";
+        details['Reason Type'] = json['reason_category'] ?? "N/A";
+        details['Justification'] = json['employee_remarks'] ?? json['reason'] ?? "";
         details['Attachments'] =
             (json['supporting_document'] != null &&
                 json['supporting_document'].toString().isNotEmpty)
             ? "View"
-            : "None";
+            : AppConstants.noneValue;
+        final creationDate = DateTimeUtils.formatDateAbbr(json['creation'] ?? json['posting_date']);
+        if (creationDate.isNotEmpty) details['Submitted Date'] = creationDate;
         break;
       case ApprovalType.timesheet:
         details['Week'] = json['week_range'] ?? "";
@@ -191,7 +161,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['Projects'] = (json['projects'] as List?)?.join(', ') ?? "N/A";
         break;
       case ApprovalType.compOff:
-        details['Worked Date'] = _formatDate(
+        details['Worked Date'] = DateTimeUtils.formatDateAbbr(
           json['work_from_date'] ?? json['work_date'],
         );
         details['Hours'] = (json['total_working_hours'] ?? json['hours'] ?? "0")
@@ -206,51 +176,54 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
     Map<String, dynamic> json,
     ApprovalType type,
   ) {
-    details['Req ID'] = json['name'] ?? json['id'] ?? "";
+    if (type != ApprovalType.timesheet) {
+      details['Req ID'] = json['name'] ?? json['id'] ?? "";
+    }
     switch (type) {
       case ApprovalType.leave:
         details['Leave Type'] = json['leave_type'] ?? "";
-        details['From Date'] = _formatDate(json['from_date']);
-        details['To Date'] = _formatDate(json['to_date']);
-        details['Days'] = _formatDays(json['days'] ?? json['total_leave_days']);
+        details['From Date'] = DateTimeUtils.formatDateAbbr(json['from_date']);
+        details['To Date'] = DateTimeUtils.formatDateAbbr(json['to_date']);
+        details['Days'] = DateTimeUtils.formatDays(json['days'] ?? json['total_leave_days']);
+        final postingDate = DateTimeUtils.formatDateAbbr(json['posting_date']);
+        if (postingDate.isNotEmpty) details['Submitted Date'] = postingDate;
         details['Reason'] = json['description'] ?? "";
-        details['Attachments'] =
-            (json['file_url'] != null && json['file_url'].toString().isNotEmpty)
-            ? "View"
-            : "None";
-        details['Comments'] = "View";
-        if (_isHalfDay(json['half_day'])) {
+        if (DateTimeUtils.isHalfDay(json['half_day'])) {
           details['Day Segment'] =
               json['custom_half_details'] ?? json['half_day_segment'] ?? "";
         }
         break;
       case ApprovalType.attendance:
-        details['Date'] = _formatDate(
+        details['Date'] = DateTimeUtils.formatDateAbbr(
           json['attendance_date'] ?? json['manual_in_time'],
         );
-        details['In Time'] = _formatTime(json['manual_in_time']);
-        details['Out Time'] = _formatTime(json['manual_out_time']);
-        details['Reason'] = json['reason_category'] ?? "N/A";
+        details['In Time'] = DateTimeUtils.formatTimeStr(json['manual_in_time']);
+        details['Out Time'] = DateTimeUtils.formatTimeStr(json['manual_out_time']);
+        details['Reason Type'] = json['reason_category'] ?? "N/A";
+        details['Justification'] = json['employee_remarks'] ?? json['reason'] ?? "";
         details['Attachments'] =
             (json['supporting_document'] != null &&
                 json['supporting_document'].toString().isNotEmpty)
-            ? "View"
-            : "None";
-        details['Comments'] = "View";
+            ? AppConstants.view
+            : AppConstants.noneValue;
+        final creationDate = DateTimeUtils.formatDateAbbr(json['creation'] ?? json['posting_date']);
+        if (creationDate.isNotEmpty) details['Submitted Date'] = creationDate;
         break;
       case ApprovalType.timesheet:
-        details['Week Range'] =
-            "${_formatDate(json['from_date'])} to ${_formatDate(json['to_date'])}";
-        details['Total Hours'] = (json['total_spent_hours'] ?? 0).toString();
-        details['Submitted Date'] = _formatDate(json['creation']);
-        details['Approver'] = json['approver_name'] ?? "N/A";
-        details['Remarks'] = json['remarks'] ?? "N/A";
-        details['Comments'] = "View";
+        details['Week'] =
+            "${DateTimeUtils.formatDateAbbr(json['from_date'])} - ${DateTimeUtils.formatDateAbbr(json['to_date'])}";
+        details['Total Hours'] = "${json['total_spent_hours'] ?? 0} Hours";
+        details['Projects'] = (json['projects'] as List?)?.join(', ') ?? "N/A";
+        details['Submitted Date'] = DateTimeUtils.formatDateAbbr(json['creation']);
         break;
       case ApprovalType.compOff:
-        details['Comp-off Date'] = _formatDate(json['work_end_date']);
+        details['Work Date'] = DateTimeUtils.formatDateAbbr(json['work_end_date']);
+        if (json['custom_work_type'] != null && json['custom_work_type'].toString().isNotEmpty) {
+          details['Work Type'] = json['custom_work_type'].toString();
+        }
+        final creationDate = DateTimeUtils.formatDateAbbr(json['creation'] ?? json['posting_date']);
+        if (creationDate.isNotEmpty) details['Submitted Date'] = creationDate;
         details['Reason'] = json['reason'] ?? "N/A";
-        details['Comments'] = "View";
         break;
     }
   }
@@ -281,6 +254,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
                 ? fileUrl
                 : '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$fileUrl')
           : null,
+      managerReview: managerReview,
       conflictingLeaves: conflictingLeavesJson.map((e) {
         String name = "Unknown";
         String? role;
@@ -305,10 +279,10 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
               : null,
           leaveType: e['leave_type'] ?? '',
           status: e['workflow_state'] ?? e['status'] ?? 'Pending',
-          fromDate: ApprovalRequestModel._formatDate(
+          fromDate: DateTimeUtils.formatDateAbbr(
             e['from_date']?.toString(),
           ),
-          toDate: ApprovalRequestModel._formatDate(e['to_date']?.toString()),
+          toDate: DateTimeUtils.formatDateAbbr(e['to_date']?.toString()),
         );
       }).toList(),
     );

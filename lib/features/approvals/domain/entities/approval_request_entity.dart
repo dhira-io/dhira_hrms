@@ -66,6 +66,7 @@ class ApprovalRequestEntity extends Equatable {
   final String? halfDayDate;
   final String? customHalfDetails;
   final String? fileUrl;
+  final String? managerReview;
 
   const ApprovalRequestEntity({
     required this.id,
@@ -87,6 +88,7 @@ class ApprovalRequestEntity extends Equatable {
     this.halfDayDate,
     this.customHalfDetails,
     this.fileUrl,
+    this.managerReview,
   });
 
   @override
@@ -106,5 +108,6 @@ class ApprovalRequestEntity extends Equatable {
     halfDayDate,
     customHalfDetails,
     fileUrl,
+    managerReview,
   ];
 }

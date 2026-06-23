@@ -63,7 +63,7 @@ class EditTimesheetFooter extends StatelessWidget {
               ),
               child: Text(
                 l10n.update,
-                style: TextStyle(
+                style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.of(context).white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -86,7 +86,7 @@ class EditTimesheetFooter extends StatelessWidget {
               ),
               child: Text(
                 l10n.cancel,
-                style: TextStyle(
+                style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.of(context).primary,
                   fontWeight: FontWeight.bold,
                 ),

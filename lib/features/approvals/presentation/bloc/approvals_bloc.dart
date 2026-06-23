@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'dart:async';
 import 'dart:developer' as dev;
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
@@ -23,6 +24,7 @@ import '../../timesheetapproval/domain/usecases/delete_approval_timesheet_usecas
 import 'approvals_event.dart';
 import 'approvals_state.dart';
 import 'approvals_success_data.dart';
+import '../../data/constants/approvals_api_constants.dart';
 
 class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
   final GetApprovalsAccessUseCase getApprovalsAccessUseCase;
@@ -73,6 +75,11 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     on<UpdateTimesheetRequested>(_onUpdateTimesheetRequested);
     on<SyncTimesheetRequested>(_onSyncTimesheetRequested);
     on<DeleteTimesheetRequested>(_onDeleteTimesheetRequested);
+    on<SearchQueryChanged>(_onSearchQueryChanged);
+    on<StatusFilterChanged>(_onStatusFilterChanged);
+    on<RequestSelectionToggled>(_onRequestSelectionToggled);
+    on<SelectAllToggled>(_onSelectAllToggled);
+    on<BulkWorkflowActionSubmitted>(_onBulkWorkflowActionSubmitted);
     on<ClearMessages>(_onClearMessages);
   }
 
@@ -220,7 +227,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           ApprovalsState.success(
             latestSuccessState.data.copyWith(
               isListLoading: false,
-              errorMessage: 'FAILED_TO_REFRESH_PREFIX:$e',
+              errorMessage: '${ApprovalsApiConstants.msgFailedToRefreshPrefix}$e',
             ),
           ),
         );
@@ -662,7 +669,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               currentState.data.copyWith(
                 isTimesheetLoading: false,
                 editingTimesheet: null,
-                successMessage: 'Timesheet updated successfully',
+                successMessage: ApprovalsApiConstants.msgTimesheetUpdated,
               ),
             ),
           );
@@ -671,7 +678,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 isTimesheetLoading: false,
-                errorMessage: 'Failed to update timesheet',
+                errorMessage: ApprovalsApiConstants.msgTimesheetUpdateFailed,
               ),
             ),
           );
@@ -721,7 +728,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               currentState.data.copyWith(
                 isTimesheetLoading: false,
                 editingTimesheet: null,
-                successMessage: 'Timesheet updated successfully',
+                successMessage: ApprovalsApiConstants.msgTimesheetUpdated,
               ),
             ),
           );
@@ -730,7 +737,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ApprovalsState.success(
               currentState.data.copyWith(
                 isTimesheetLoading: false,
-                errorMessage: 'Failed to update timesheet',
+                errorMessage: ApprovalsApiConstants.msgTimesheetUpdateFailed,
               ),
             ),
           );
@@ -783,7 +790,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                 requests: updatedRequests,
                 processingIds: Set.from(currentState.data.processingIds)
                   ..remove(event.requestId),
-                successMessage: 'Timesheet deleted successfully',
+                successMessage: ApprovalsApiConstants.msgTimesheetDeleted,
                 errorMessage: null,
               ),
             ),
@@ -797,7 +804,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
               currentState.data.copyWith(
                 processingIds: Set.from(currentState.data.processingIds)
                   ..remove(event.requestId),
-                errorMessage: 'Failed to delete timesheet',
+                errorMessage: ApprovalsApiConstants.msgTimesheetDeleteFailed,
               ),
             ),
           );
@@ -812,10 +819,10 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     return List<ApprovalRequestEntity>.from(requests)..sort((a, b) {
       int getPriority(String status) {
         final s = status.toLowerCase();
-        if (s == 'pending' || s == 'open') return 1;
-        if (s.contains('pending')) return 2;
-        if (s == 'rejected') return 3;
-        if (s == 'approved') return 4;
+        if (s == ApprovalStatus.pending.toLowerCase() || s == 'open') return 1;
+        if (s.contains(ApprovalStatus.pending.toLowerCase())) return 2;
+        if (s == ApprovalStatus.rejected.toLowerCase()) return 3;
+        if (s == ApprovalStatus.approved.toLowerCase()) return 4;
         return 5;
       }
 
@@ -823,17 +830,141 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     });
   }
 
-  FutureOr<void> _onClearMessages(
+  Future<void> _onClearMessages(
     ClearMessages event,
     Emitter<ApprovalsState> emit,
-  ) {
+  ) async {
     if (state is Success) {
-      final currentState = state as Success;
+      final successState = state as Success;
       emit(
         ApprovalsState.success(
-          currentState.data.copyWith(successMessage: null, errorMessage: null),
+          successState.data.copyWith(
+            successMessage: null,
+            errorMessage: null,
+          ),
         ),
       );
     }
+  }
+
+  void _onSearchQueryChanged(SearchQueryChanged event, Emitter<ApprovalsState> emit) {
+    if (state is Success) {
+      final s = state as Success;
+      emit(ApprovalsState.success(s.data.copyWith(searchQuery: event.query)));
+    }
+  }
+
+  void _onStatusFilterChanged(StatusFilterChanged event, Emitter<ApprovalsState> emit) {
+    if (state is Success) {
+      final s = state as Success;
+      // Clear selections when status changes to avoid invalid states
+      emit(ApprovalsState.success(s.data.copyWith(
+        statusFilter: event.status,
+        selectedRequestIds: {},
+      )));
+    }
+  }
+
+  void _onRequestSelectionToggled(RequestSelectionToggled event, Emitter<ApprovalsState> emit) {
+    if (state is Success) {
+      final s = state as Success;
+      final newSelection = Set<String>.from(s.data.selectedRequestIds);
+      if (event.selected) {
+        newSelection.add(event.id);
+      } else {
+        newSelection.remove(event.id);
+      }
+      emit(ApprovalsState.success(s.data.copyWith(selectedRequestIds: newSelection)));
+    }
+  }
+
+  void _onSelectAllToggled(SelectAllToggled event, Emitter<ApprovalsState> emit) {
+    if (state is Success) {
+      final s = state as Success;
+      if (event.selected) {
+        final allIds = s.data.filteredRequests.map((e) => e.id).toSet();
+        emit(ApprovalsState.success(s.data.copyWith(selectedRequestIds: allIds)));
+      } else {
+        emit(ApprovalsState.success(s.data.copyWith(selectedRequestIds: {})));
+      }
+    }
+  }
+
+  Future<void> _onBulkWorkflowActionSubmitted(
+    BulkWorkflowActionSubmitted event,
+    Emitter<ApprovalsState> emit,
+  ) async {
+    if (state is! Success) return;
+    final successState = state as Success;
+
+    emit(ApprovalsState.success(successState.data.copyWith(isBulkActionLoading: true)));
+
+    List<Future<void>> futures = [];
+    bool hasError = false;
+
+    for (final requestId in event.requestIds) {
+      futures.add(() async {
+        try {
+          switch (event.type) {
+            case ApprovalType.leave:
+              final res = await submitLeaveWorkflowActionUseCase(requestId, event.action);
+              if (res.isLeft()) hasError = true;
+              break;
+            case ApprovalType.attendance:
+              final res = await submitAttendanceWorkflowActionUseCase(requestId, event.action);
+              if (res.isLeft()) hasError = true;
+              break;
+            case ApprovalType.timesheet:
+              final res = await submitTimesheetWorkflowActionUseCase(requestId, event.action);
+              if (res.isLeft()) hasError = true;
+              break;
+            case ApprovalType.compOff:
+              final res = await submitCompOffWorkflowActionUseCase(requestId, event.action);
+              if (res.isLeft()) hasError = true;
+              break;
+          }
+        } catch (e) {
+          hasError = true;
+        }
+      }());
+    }
+
+    await Future.wait(futures);
+
+    // Refresh after bulk action
+    final requestsResult = await getPendingRequestsUseCase(
+      event.type,
+      event.category,
+      page: 1,
+    );
+
+    final summaryResult = await getApprovalsSummaryUseCase();
+    final newSummary = summaryResult.fold(
+      (failure) => successState.data.summary,
+      (summary) => summary,
+    );
+
+    requestsResult.fold(
+      (failure) {
+        emit(ApprovalsState.success(
+          successState.data.copyWith(
+            isBulkActionLoading: false,
+            errorMessage: failure.message,
+            summary: newSummary,
+          ),
+        ));
+      },
+      (requests) {
+        emit(ApprovalsState.success(
+          successState.data.copyWith(
+            isBulkActionLoading: false,
+            requests: _sortRequests(requests),
+            summary: newSummary,
+            selectedRequestIds: {}, // Clear selection on success
+            successMessage: hasError ? ApprovalsApiConstants.msgBulkActionPartialError : ApprovalsApiConstants.msgBulkActionSuccess,
+          ),
+        ));
+      },
+    );
   }
 }

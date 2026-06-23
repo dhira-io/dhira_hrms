@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -69,10 +71,17 @@ class CommentsDialog extends StatelessWidget {
                     ),
                     const SizedBox(height: AppConstants.p24),
                     if (isLoading)
-                      const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(AppConstants.p24),
-                          child: CircularProgressIndicator(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(
+                            3,
+                            (index) => Padding(
+                              padding: EdgeInsets.only(bottom: 12.0),
+                              child: ShimmerLoading(width: double.infinity, height: 60.h),
+                            ),
+                          ),
                         ),
                       )
                     else if (comments.isEmpty)

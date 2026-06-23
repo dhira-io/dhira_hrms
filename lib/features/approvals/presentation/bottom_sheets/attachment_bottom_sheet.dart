@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -170,7 +171,7 @@ class _AttachmentPreview extends StatelessWidget {
           fit: BoxFit.contain,
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
-            return Center(child: CircularProgressIndicator());
+            return ShimmerLoading(width: double.infinity, height: 300);
           },
           errorBuilder: (context, error, stackTrace) => Center(
             child: Column(
