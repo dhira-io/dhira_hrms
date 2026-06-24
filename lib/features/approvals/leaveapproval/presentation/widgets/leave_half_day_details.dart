@@ -103,7 +103,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
                     ),
 
                     errorStyle: AppTextStyle.bodySmall.copyWith(
-                      color: Colors.red,
+                      color: AppColors.of(context).error,
                     ),
                   ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -409,7 +409,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                         child: Text(
                           l10n.sickLeaveDateInvalid,
                           style: AppTextStyle.bodySmall.copyWith(
-                            color: Colors.red,
+                            color: AppColors.of(context).error,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

@@ -50,9 +50,9 @@ class LeaveHalfDayToggle extends StatelessWidget {
             child: Switch(
               value: isHalfDay,
               onChanged: onChanged,
-              activeThumbColor: Colors.white,
+              activeThumbColor: AppColors.of(context).white,
               activeTrackColor: AppColors.of(context).primary,
-              inactiveThumbColor: Colors.white,
+              inactiveThumbColor: AppColors.of(context).white,
               inactiveTrackColor: AppColors.of(
                 context,
               ).outlineVariant.withValues(alpha: 0.3),
