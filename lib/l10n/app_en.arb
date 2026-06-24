@@ -2209,7 +2209,9 @@
     "pushNotificationsDesc": "Real-time alerts delivered to your installed app",
     "emailAlertsDesc": "Formal email notifications for your records",
     "pushNotificationPreferenceSuccess": "Mobile Notification Preferences updated successfully",
-    "emailAlertsPreferenceSuccess": "Email Alerts Preferences updated successfully"
+    "emailAlertsPreferenceSuccess": "Email Alerts Preferences updated successfully",
+    "noSubject": "No Subject",
+    "newNotification": "New Notification"
 }
 
 

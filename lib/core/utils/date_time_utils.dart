@@ -543,7 +543,7 @@ class DateTimeUtils {
   static String formatTimesheetWeekRange(DateTime date) {
     final monday = getStartOfWeek(date);
     final sunday = monday.add(const Duration(days: 6));
-    
+
     if (monday.month == sunday.month) {
       final monthStr = DateFormat('MMM').format(monday);
       return "$monthStr ${monday.day} – ${sunday.day}";
@@ -552,5 +552,13 @@ class DateTimeUtils {
       final sundayMonthStr = DateFormat('MMM').format(sunday);
       return "$mondayMonthStr ${monday.day} – $sundayMonthStr ${sunday.day}";
     }
+  }
+
+  /// Checks if a string is in a standard ISO 8601 format (YYYY-MM-DDTHH:mm:ss...)
+  static bool isISOFormat(String input) {
+    if (input.isEmpty) return false;
+    // Basic check for T delimiter or standard format
+    return input.contains('T') ||
+        RegExp(r'^\d{4}-\d{2}-\d{2}T').hasMatch(input);
   }
 }
