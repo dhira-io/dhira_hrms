@@ -5,6 +5,7 @@ import '../theme/app_text_style.dart';
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String? subtitle;
+  final bool centerTitle;
   final List<Widget>? actions;
   final VoidCallback? onBack;
   final Color? backgroundColor;
@@ -16,6 +17,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.onBack,
     this.backgroundColor,
+    this.centerTitle=false
   });
 
   @override
@@ -23,7 +25,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor ?? AppColors.of(context).surface,
       elevation: 0,
-      centerTitle: false,
+      centerTitle: centerTitle,
       scrolledUnderElevation: 0,
       leading: IconButton(
         icon: Icon(
