@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/attendance_entities.dart';
@@ -27,15 +28,15 @@ class GetLeaveDetailsUseCase
         details.leaveAllocation,
       );
 
-      if (gender == 'male') {
+      if (gender == Gender.male) {
         // Remove Maternity Leave for males
         filteredAllocation.removeWhere(
-          (key, value) => key.toLowerCase().contains('maternity'),
+          (key, value) => key.toLowerCase().contains(LeaveType.maternity),
         );
-      } else if (gender == 'female') {
+      } else if (gender == Gender.female) {
         // Remove Paternity Leave for females
         filteredAllocation.removeWhere(
-          (key, value) => key.toLowerCase().contains('paternity'),
+          (key, value) => key.toLowerCase().contains(LeaveType.paternity),
         );
       }
 

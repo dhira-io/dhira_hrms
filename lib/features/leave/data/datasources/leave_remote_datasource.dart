@@ -1,8 +1,8 @@
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dio/dio.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/constants/leave_constants.dart';
 import '../../../../core/network/dio_client.dart';
-import '../../../../core/utils/date_time_utils.dart';
 import '../constants/leave_api_constants.dart';
 import '../models/leave_models.dart';
 import '../models/leave_statistics_model.dart';
@@ -21,6 +21,7 @@ abstract class LeaveRemoteDataSource {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     String? attachmentUrl,
   });
   Future<bool> updateLeaveApplication({
@@ -35,6 +36,7 @@ abstract class LeaveRemoteDataSource {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     String? workflowState,
     String? attachmentUrl,
   });
@@ -88,6 +90,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     String? attachmentUrl,
   }) async {
     final response = await dioClient.post(
@@ -104,6 +107,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
         "custom_half_details": halfDaySegment,
         "half_day_segment": halfDaySegment,
         "total_leave_days": totalleavedays,
+        "custom_emergency_contact_number": emergencyContactNumber,
         "custom_attach_document": attachmentUrl,
       },
     );
@@ -141,6 +145,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     String? workflowState,
     String? attachmentUrl,
   }) async {
@@ -157,6 +162,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       "custom_half_details": halfDaySegment,
       "half_day_segment": halfDaySegment,
       "total_leave_days": totalleavedays,
+      "custom_emergency_contact_number": emergencyContactNumber,
       "custom_attach_document": attachmentUrl,
     };
 
@@ -218,10 +224,10 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
       // Apply Gender Filter
       // Male: Hide Maternity, Female: Hide Paternity
       bool shouldInclude = true;
-      if (gender.toLowerCase() == 'male' &&
+      if (gender.toLowerCase() == Gender.male &&
           leaveTypeName.contains(LeaveTypes.maternityLeave)) {
         shouldInclude = false;
-      } else if (gender.toLowerCase() == 'female' &&
+      } else if (gender.toLowerCase() == Gender.female &&
           leaveTypeName.contains(LeaveTypes.paternityLeave)) {
         shouldInclude = false;
       }

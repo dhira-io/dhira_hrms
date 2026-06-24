@@ -5,10 +5,10 @@ import '../theme/app_text_style.dart';
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String? subtitle;
+  final bool centerTitle;
   final List<Widget>? actions;
   final VoidCallback? onBack;
   final Color? backgroundColor;
-  final bool centerTitle;
 
   const CommonAppBar({
     super.key,
@@ -17,22 +17,24 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.onBack,
     this.backgroundColor,
-    this.centerTitle = true,
+    this.centerTitle=false
   });
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     return AppBar(
       backgroundColor:
-          backgroundColor ?? AppColors.of(context).surfaceContainerLowest,
+          backgroundColor ?? colors.surfaceContainerLowest,
       elevation: 0,
       centerTitle: subtitle == null,
       scrolledUnderElevation: 0,
       leading: IconButton(
         icon: Icon(
           Icons.arrow_back_ios_new,
-          color: AppColors.of(context).textPrimary,
-          size: 20,
+          color: colors.textPrimary,
+          size: 24,
         ),
         onPressed: onBack ?? () => Navigator.pop(context),
       ),

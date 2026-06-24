@@ -25,6 +25,7 @@ class AppColors {
   static const Color outlineVariant = Color(0xFFC3C5D9);
   static const Color onSecondaryFixedVariant = Color(0xFF3F484F);
   static const Color primaryBlue = Color(0xff1100CC);
+  static const Color darkText = Color(0xFF0F172B);
 
   // HTML Mockup Colors
   static const Color onPrimary = Color(0xffffffff);
@@ -176,6 +177,7 @@ class AppColors {
   static const Color weekendText = Color(0xFF4A5565);
   static const Color weekendBg = Color(0xFFF4F4F5);
   static const Color slateBg = Color(0xFFF1F5F9);
+  static const Color slateBorder = Color(0xFFCAD5E2);
   static const Color slateText = Color(0xFF64748B);
   static const Color blueIcon = Color(0xFF3B82F6);
   static const Color darkSlate = Color(0xFF1E293B);
@@ -292,6 +294,9 @@ class AppColors {
 
   // Slate alternatives for dark mode
   static const Color _darkSlateBg = Color(0xFF1E293B);
+  static const Color _darkWeekendBg = Color(0xFF2D3748);
+  static const Color _darkSlateBorder = Color(0xFF334155);
+  static const Color _darkSlateText = Color(0xFF94A3B8);
   static const Color _darkSlate50 = Color(0xFF0F172A);
   static const Color _darkSlate100 = Color(0xFF1E293B);
   static const Color _darkSlate200 = Color(0xFF334155);
@@ -468,6 +473,7 @@ class AppColorsResolved {
   final Color weekendText;
   final Color weekendBg;
   final Color slateBg;
+  final Color slateBorder;
   final Color slateText;
   final Color blueIcon;
   final Color darkSlate;
@@ -652,6 +658,7 @@ class AppColorsResolved {
     required this.weekendText,
     required this.weekendBg,
     required this.slateBg,
+    required this.slateBorder,
     required this.slateText,
     required this.blueIcon,
     required this.darkSlate,
@@ -833,6 +840,7 @@ class AppColorsResolved {
     weekendText: AppColors.weekendText,
     weekendBg: AppColors.weekendBg,
     slateBg: AppColors.slateBg,
+    slateBorder: AppColors.slateBorder,
     slateText: AppColors.slateText,
     blueIcon: AppColors.blueIcon,
     darkSlate: AppColors.darkSlate,
@@ -1012,9 +1020,10 @@ class AppColorsResolved {
     absentText: AppColors.absentText,
     absentBg: AppColors.absentBg,
     weekendText: AppColors.weekendText,
-    weekendBg: AppColors.weekendBg,
+    weekendBg: AppColors._darkWeekendBg,
     slateBg: AppColors._darkSlateBg,
-    slateText: AppColors.slateText,
+    slateBorder: AppColors._darkSlateBorder,
+    slateText: AppColors._darkSlateText,
     blueIcon: AppColors.blueIcon,
     darkSlate: AppColors.slate100,
     calendarDefaultBg: AppColors._darkCalendarDefaultBg,
