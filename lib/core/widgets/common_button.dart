@@ -39,17 +39,18 @@ class CommonButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isButtonDisabled = (isLoading ? null : onPressed) == null;
+    final colors = AppColors.of(context);
 
     Widget buttonChild = isLoading
         ? SizedBox(
             width: 20.w,
-            height: 20.h,
+            height: 20.w,
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 variant == ButtonVariant.outlined ||
                         variant == ButtonVariant.text
-                    ? AppColors.of(context).primaryContainer
-                    : AppColors.of(context).white,
+                    ? colors.primaryContainer
+                    : colors.white,
               ),
               strokeWidth: 2,
             ),
@@ -68,14 +69,14 @@ class CommonButton extends StatelessWidget {
                 Icon(
                   icon,
                   size: AppConstants.iconXSmall,
-                  color: _getTextColor(AppColors.of(context), isButtonDisabled),
+                  color: _getTextColor(colors, isButtonDisabled),
                 ),
                 const SizedBox(width: AppConstants.p8),
               ],
               Text(
                 text,
                 style: AppTextStyle.button.copyWith(
-                  color: _getTextColor(AppColors.of(context), isButtonDisabled),
+                  color: _getTextColor(colors, isButtonDisabled),
                   fontWeight: fontWeight ?? FontWeight.w700,
                 ),
               ),
@@ -92,15 +93,13 @@ class CommonButton extends StatelessWidget {
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             backgroundColor: backgroundColor,
             side: BorderSide(
-              color: AppColors.of(
-                context,
-              ).gray400.withValues(alpha: isButtonDisabled ? 0.5 : 1.0),
+              color: colors.gray400.withValues(alpha: isButtonDisabled ? 0.5 : 1.0),
               width: 1.0.w,
             ),
             foregroundColor:
-                foregroundColor ?? AppColors.of(context).primaryContainer,
+                foregroundColor ?? colors.primaryContainer,
             disabledForegroundColor:
-                (foregroundColor ?? AppColors.of(context).primaryContainer)
+                (foregroundColor ?? colors.primaryContainer)
                     .withValues(alpha: 0.5),
             padding:
                 padding ??
@@ -124,9 +123,9 @@ class CommonButton extends StatelessWidget {
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             foregroundColor:
-                foregroundColor ?? AppColors.of(context).primaryContainer,
+                foregroundColor ?? colors.primaryContainer,
             disabledForegroundColor:
-                (foregroundColor ?? AppColors.of(context).primaryContainer)
+                (foregroundColor ?? colors.primaryContainer)
                     .withValues(alpha: 0.5),
             padding:
                 padding ??
@@ -153,17 +152,17 @@ class CommonButton extends StatelessWidget {
             backgroundColor:
                 backgroundColor ??
                 (variant == ButtonVariant.secondary
-                    ? AppColors.of(context).secondary
-                    : AppColors.of(context).primaryContainer),
-            foregroundColor: foregroundColor ?? AppColors.of(context).white,
+                    ? colors.secondary
+                    : colors.primaryContainer),
+            foregroundColor: foregroundColor ?? colors.white,
             disabledBackgroundColor:
                 (backgroundColor ??
                         (variant == ButtonVariant.secondary
-                            ? AppColors.of(context).secondary
-                            : AppColors.of(context).primaryContainer))
+                            ? colors.secondary
+                            : colors.primaryContainer))
                     .withValues(alpha: 0.5),
             disabledForegroundColor:
-                (foregroundColor ?? AppColors.of(context).white).withValues(
+                (foregroundColor ?? colors.white).withValues(
                   alpha: 0.8,
                 ),
             elevation: 0,

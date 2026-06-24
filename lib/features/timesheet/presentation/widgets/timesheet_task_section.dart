@@ -40,41 +40,46 @@ class TimesheetTaskSection extends StatelessWidget {
         final isLoading =
             state.status == TimesheetStateStatus.loading ||
             state.isActionLoading;
+        final colors = AppColors.of(context);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  l10n.taskEntries,
-                  style: AppTextStyle.labelLarge.copyWith(
-                    color: AppColors.of(context).textPrimary,
-                  ),
-                ),
-                if (assignments.isNotEmpty && !isLoading)
-                  SizedBox(
-                    height: 26.h,
-                    width: 110.w,
-                    child: CommonButton(
-                      fontWeight: FontWeight.w100,
-                      text: l10n.addTask,
-                      onPressed: () => _openAddTask(context),
-                      icon: Icons.add,
-                      borderRadius: 8.r,
-                      padding: EdgeInsets.zero,
+            SizedBox(
+              height: 26.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    l10n.taskEntries,
+                    style: AppTextStyle.headingSmallTwo.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: colors.textPrimary,
                     ),
                   ),
-              ],
+                  if (assignments.isNotEmpty && !isLoading)
+                    SizedBox(
+                      height: 26.h,
+                      width: 110.w,
+                      child: CommonButton(
+                        fontWeight: FontWeight.w100,
+                        text: l10n.addTask,
+                        onPressed: () => _openAddTask(context),
+                        icon: Icons.add,
+                        borderRadius: 8.r,
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                ],
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(top: 8.h, bottom: 16.h),
               child: Divider(
                 height: 1,
                 thickness: 0.8,
-                color: AppColors.of(context).tableBorder,
+                color: colors.tableBorder,
               ),
             ),
             if (isLoading)
@@ -111,13 +116,14 @@ class TaskCardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
-        color: AppColors.of(context).white,
+        color: colors.white,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.of(context).slate200, width: 1.w),
+        border: Border.all(color: colors.slate200, width: 1.w),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,10 +174,10 @@ class TaskCardSkeleton extends StatelessWidget {
                 height: 36.h,
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: AppColors.of(context).white,
+                  color: colors.white,
                   borderRadius: BorderRadius.circular(6.r),
                   border: Border.all(
-                    color: AppColors.of(context).slate200,
+                    color: colors.slate200,
                     width: 1.w,
                   ),
                 ),

@@ -61,7 +61,7 @@ class TimesheetNewHeader extends StatelessWidget {
                     children: [
                       Text(
                         rangeText,
-                        style: AppTextStyle.bodyMedium.copyWith(
+                        style: AppTextStyle.labelLarge.copyWith(
                           color: AppColors.of(context).textPrimary,
                         ),
                       ),
@@ -81,7 +81,7 @@ class TimesheetNewHeader extends StatelessWidget {
                           ),
                           child: Text(
                             l10n.thisWeek,
-                            style: AppTextStyle.labelSmall.copyWith(
+                            style: AppTextStyle.bodyMedium.copyWith(
                               color: AppColors.colorBlue600,
                               fontWeight: FontWeight.w600,
                             ),

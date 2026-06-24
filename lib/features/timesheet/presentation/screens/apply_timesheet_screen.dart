@@ -18,8 +18,6 @@ import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_loa
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dhira_hrms/core/widgets/common_pdf_viewer.dart';
@@ -94,8 +92,8 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
             }
           }
           context.read<TimesheetBloc>().add(
-                const TimesheetEvent.clearAttachmentViewRequested(),
-              );
+            const TimesheetEvent.clearAttachmentViewRequested(),
+          );
         }
 
         if (state.status == TimesheetStateStatus.success) {

@@ -16,11 +16,7 @@ class TimesheetTaskCard extends StatelessWidget {
   final ProjectAssignmentEntity task;
   final int index;
 
-  const TimesheetTaskCard({
-    super.key,
-    required this.task,
-    required this.index,
-  });
+  const TimesheetTaskCard({super.key, required this.task, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +64,13 @@ class TimesheetTaskCard extends StatelessWidget {
                       task.project,
                       style: AppTextStyle.labelLarge.copyWith(
                         color: AppColors.of(context).textPrimary,
-                        height: 1.2,
                       ),
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       task.taskData ?? '',
-                      style: AppTextStyle.bodySmall.copyWith(
+                      style: AppTextStyle.bodyMediumOne.copyWith(
                         color: AppColors.of(context).textSecondary,
-                        height: 1.2,
                       ),
                     ),
                   ],
@@ -91,7 +85,7 @@ class TimesheetTaskCard extends StatelessWidget {
                 ),
                 child: Text(
                   task.status ?? AppConstants.placeholderText,
-                  style: AppTextStyle.labelMedium.copyWith(
+                  style: AppTextStyle.labelLarge.copyWith(
                     color: statusColor,
                     fontWeight: FontWeight.w500,
                   ),
@@ -110,8 +104,7 @@ class TimesheetTaskCard extends StatelessWidget {
               SizedBox(width: 4.w),
               Text(
                 '${task.spentHours}h ${l10n.logged}',
-                style: AppTextStyle.bodySmall.copyWith(
-                  fontSize: 9.sp,
+                style: AppTextStyle.bodyMediumOne.copyWith(
                   color: AppColors.of(context).textSecondary,
                 ),
               ),
@@ -119,8 +112,7 @@ class TimesheetTaskCard extends StatelessWidget {
                 SizedBox(width: 24.w),
                 Text(
                   varianceText,
-                  style: AppTextStyle.bodySmall.copyWith(
-                    fontSize: 9.sp,
+                  style: AppTextStyle.bodyMediumOne.copyWith(
                     color: task.variance >= 0
                         ? AppColors.colorEmerald500
                         : AppColors.of(context).error,
@@ -148,10 +140,8 @@ class TimesheetTaskCard extends StatelessWidget {
             ),
             child: Text(
               task.description ?? '',
-              style: AppTextStyle.bodyMedium.copyWith(
-                fontSize: 11.sp,
+              style: AppTextStyle.labelLarge.copyWith(
                 color: AppColors.of(context).textSecondary,
-                height: 1.3,
               ),
             ),
           ),
@@ -163,10 +153,10 @@ class TimesheetTaskCard extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     context.read<TimesheetBloc>().add(
-                          TimesheetEvent.viewAttachmentRequested(
-                            attachment: task.attachments!,
-                          ),
-                        );
+                      TimesheetEvent.viewAttachmentRequested(
+                        attachment: task.attachments!,
+                      ),
+                    );
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 4.h),
@@ -181,7 +171,7 @@ class TimesheetTaskCard extends StatelessWidget {
                         SizedBox(width: 4.w),
                         Text(
                           l10n.viewAttach,
-                          style: AppTextStyle.labelLarge.copyWith(
+                          style: AppTextStyle.labelMedium.copyWith(
                             color: AppColors.of(context).primaryContainer,
                           ),
                         ),
@@ -196,7 +186,9 @@ class TimesheetTaskCard extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       final bloc = context.read<TimesheetBloc>();
-                      final realIndex = bloc.state.editAssignments.indexOf(task);
+                      final realIndex = bloc.state.editAssignments.indexOf(
+                        task,
+                      );
                       bloc.add(
                         TimesheetEvent.editTaskRequested(
                           task: task,

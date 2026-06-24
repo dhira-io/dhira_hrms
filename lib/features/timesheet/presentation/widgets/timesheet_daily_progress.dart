@@ -37,9 +37,8 @@ class TimesheetDailyProgress extends StatelessWidget {
               children: [
                 Text(
                   l10n.dailyProgress,
-                  style: AppTextStyle.labelLarge.copyWith(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.bold,
+                  style: AppTextStyle.headingSmallTwo.copyWith(
+                    fontWeight: FontWeight.w700,
                     color: AppColors.of(context).textPrimary,
                   ),
                 ),
@@ -113,7 +112,6 @@ class _LegendItem extends StatelessWidget {
           label,
           style: AppTextStyle.labelMedium.copyWith(
             color: AppColors.of(context).textSecondary,
-            fontWeight: FontWeight.w500,
           ),
         ),
       ],
@@ -177,7 +175,6 @@ class _DayButton extends StatelessWidget {
               Text(
                 DateTimeUtils.formatToDayAbbrFull(day),
                 style: AppTextStyle.dateDay.copyWith(
-                  fontSize: 8.sp,
                   color: AppColors.of(context).textSecondary,
                 ),
               ),
@@ -185,7 +182,6 @@ class _DayButton extends StatelessWidget {
               Text(
                 '${day.day}',
                 style: AppTextStyle.dateNumber.copyWith(
-                  fontSize: 12.sp,
                   color: AppColors.of(context).textPrimary,
                 ),
               ),
@@ -240,44 +236,18 @@ class _SelectedDayCard extends StatelessWidget {
                 children: [
                   Text(
                     DateTimeUtils.getDayName(selectedDate),
-                    style: AppTextStyle.bodyMedium.copyWith(
+                    style: AppTextStyle.bodyLarge.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.of(context).textPrimary,
                     ),
                   ),
                   Text(
                     DateTimeUtils.formatWithDotSeparator(selectedDate),
-                    style: AppTextStyle.bodySmall.copyWith(
+                    style: AppTextStyle.bodyMedium.copyWith(
                       color: AppColors.of(context).textSecondary,
                     ),
                   ),
                 ],
-              ),
-              SizedBox(
-                width: 34.w,
-                height: 32.h,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: 27.w,
-                      height: 27.w,
-                      child: CircularProgressIndicator(
-                        value: percent,
-                        backgroundColor: AppColors.of(context).tableBorder,
-                        color: AppColors.of(context).primaryContainer,
-                        strokeWidth: 3.w,
-                      ),
-                    ),
-                    Text(
-                      '$percentInt%',
-                      style: AppTextStyle.bodySmall.copyWith(
-                        fontSize: percentInt == 100 ? 8.sp : 9.sp,
-                        color: AppColors.of(context).textPrimary,
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
@@ -287,13 +257,13 @@ class _SelectedDayCard extends StatelessWidget {
             children: [
               Text(
                 l10n.dailyTarget(targetHours.formatHours()),
-                style: AppTextStyle.bodySmall.copyWith(
+                style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.of(context).textSecondary,
                 ),
               ),
               Text(
                 l10n.hoursRemaining(remaining.formatHours()),
-                style: AppTextStyle.bodySmall.copyWith(
+                style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.of(context).textSecondary,
                 ),
               ),

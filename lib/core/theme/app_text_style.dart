@@ -30,7 +30,6 @@ class AppTextStyle {
   static final TextStyle h2Bold = h2.copyWith(fontWeight: FontWeight.bold);
   static final TextStyle h3Bold = h3.copyWith(fontWeight: FontWeight.bold);
 
-
   //Display
   static TextStyle get displayLarge =>
       GoogleFonts.inter(fontSize: 24.sp, fontWeight: FontWeight.w700);
@@ -43,8 +42,6 @@ class AppTextStyle {
   static TextStyle get displaySmallTwo =>
       GoogleFonts.inter(fontSize: 16.sp, fontWeight: FontWeight.w600);
 
-
-
   //Title
   static TextStyle get titleLarge =>
       GoogleFonts.inter(fontSize: 18.sp, fontWeight: FontWeight.w600);
@@ -54,7 +51,6 @@ class AppTextStyle {
       GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w600);
   static TextStyle get titleSmallOne =>
       GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w600);
-
 
   //Heading
   static TextStyle get headingLarge =>
@@ -68,19 +64,19 @@ class AppTextStyle {
   static TextStyle get headingSmallTwo =>
       GoogleFonts.manrope(fontSize: 14.sp, fontWeight: FontWeight.w500);
 
-
   // Body
   static TextStyle get bodyLarge =>
       GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w400);
   static TextStyle get bodyMedium =>
       GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w400);
+  static TextStyle get bodyMediumOne =>
+      GoogleFonts.inter(fontSize: 11.sp, fontWeight: FontWeight.w400);
   static TextStyle get bodySmall =>
       GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w400);
   static TextStyle get bodySmallOne =>
       GoogleFonts.inter(fontSize: 9.sp, fontWeight: FontWeight.w400);
   static TextStyle get bodySmallTwo =>
       GoogleFonts.inter(fontSize: 8.sp, fontWeight: FontWeight.w400);
-
 
   // Labels
   static TextStyle get labelLarge =>
@@ -93,7 +89,6 @@ class AppTextStyle {
       GoogleFonts.inter(fontSize: 9.sp, fontWeight: FontWeight.w400);
   static TextStyle get labelSmallTwo =>
       GoogleFonts.inter(fontSize: 8.sp, fontWeight: FontWeight.w400);
-
 
   static TextStyle get button => GoogleFonts.inter(
     fontSize: 14.sp,

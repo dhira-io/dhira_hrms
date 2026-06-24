@@ -24,16 +24,17 @@ class TimesheetWeeklyRange extends StatelessWidget {
         // Computed in TimesheetState using TimesheetConstants.weeklyTargetHours (48h)
         final double remaining = state.weeklyRemainingHours;
         final int percentInt = state.weeklyProgressPercentInt;
+        final colors = AppColors.of(context);
 
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: AppColors.of(context).surfaceContainerLowest,
+            color: colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: AppColors.of(context).tableBorder),
+            border: Border.all(color: colors.tableBorder),
             boxShadow: [
               BoxShadow(
-                color: AppColors.of(context).black.withValues(alpha: 0.02),
+                color: colors.black.withValues(alpha: 0.02),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -44,10 +45,9 @@ class TimesheetWeeklyRange extends StatelessWidget {
             children: [
               Text(
                 l10n.weeklyRange,
-                style: AppTextStyle.labelLarge.copyWith(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.of(context).textPrimary,
+                style: AppTextStyle.headingSmallTwo.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: colors.textPrimary,
                 ),
               ),
               SizedBox(height: 6.h),
@@ -59,7 +59,7 @@ class TimesheetWeeklyRange extends StatelessWidget {
                       value: '${logged.formatHours()}h',
                       subtitle: l10n.thisWeek,
                       valueColor: AppColors.colorBlue400,
-                      bgColor: AppColors.of(context).colorBlue50,
+                      bgColor: colors.colorBlue50,
                       borderColor: AppColors.colorBlue200,
                     ),
                   ),
@@ -70,7 +70,7 @@ class TimesheetWeeklyRange extends StatelessWidget {
                       value: '${TimesheetConstants.weeklyTargetHours.toInt()}h',
                       subtitle: l10n.monFri,
                       valueColor: AppColors.colorGreen600,
-                      bgColor: AppColors.of(context).colorGreen50,
+                      bgColor: colors.colorGreen50,
                       borderColor: AppColors.colorGreen200,
                     ),
                   ),
@@ -81,7 +81,7 @@ class TimesheetWeeklyRange extends StatelessWidget {
                       value: '${remaining.formatHours()}h',
                       subtitle: l10n.percentComplete(percentInt.toString()),
                       valueColor: AppColors.colorOrange500,
-                      bgColor: AppColors.of(context).colorOrange50,
+                      bgColor: colors.colorOrange50,
                       borderColor: AppColors.colorOrange200,
                     ),
                   ),
@@ -114,6 +114,7 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 9.h),
       decoration: BoxDecoration(
@@ -126,23 +127,21 @@ class _StatCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppTextStyle.bodySmall.copyWith(
-              color: AppColors.of(context).textPrimary,
+            style: AppTextStyle.bodyMediumOne.copyWith(
+              fontWeight: FontWeight.w600,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 2.h),
           Text(
             value,
-            style: AppTextStyle.bodyLarge.copyWith(
-              color: valueColor,
-              fontSize: 14.sp,
-            ),
+            style: AppTextStyle.bodyLarge.copyWith(color: valueColor),
           ),
           SizedBox(height: 2.h),
           Text(
             subtitle,
             style: AppTextStyle.bodySmall.copyWith(
-              color: AppColors.of(context).textSecondary,
+              color: colors.textSecondary,
               fontWeight: FontWeight.w400,
             ),
           ),

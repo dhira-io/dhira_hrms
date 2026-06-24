@@ -205,9 +205,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     width: 36.w,
                     height: 4.h,
                     decoration: BoxDecoration(
-                      color: AppColors.of(context)
-                          .outlineVariant
-                          .withValues(alpha: 0.4),
+                      color: AppColors.of(
+                        context,
+                      ).outlineVariant.withValues(alpha: 0.4),
                       borderRadius: BorderRadius.circular(2.r),
                     ),
                   ),
@@ -230,13 +230,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           descriptionController: _descriptionController,
                         ),
                         SizedBox(height: 12.h),
-                        _DocumentUploadSection(
-                          editingTask: widget.editingTask,
-                        ),
+                        _DocumentUploadSection(editingTask: widget.editingTask),
                         SizedBox(height: 24.h),
-                        _SheetActionsSection(
-                          timesheetId: widget.timesheetId,
-                        ),
+                        _SheetActionsSection(timesheetId: widget.timesheetId),
                       ],
                     ),
                   ),
@@ -265,7 +261,8 @@ class _BottomSheetHeader extends StatelessWidget {
     return BlocBuilder<TimesheetBloc, TimesheetState>(
       buildWhen: (previous, current) =>
           previous.selectedDate != current.selectedDate ||
-          previous.assignmentsForSelectedDay != current.assignmentsForSelectedDay,
+          previous.assignmentsForSelectedDay !=
+              current.assignmentsForSelectedDay,
       builder: (context, state) {
         final selectedDate = state.selectedDate ?? DateTime.now();
         final taskNumber = state.currentTaskNumber;
@@ -285,17 +282,13 @@ class _BottomSheetHeader extends StatelessWidget {
                   Text(
                     editingTask != null ? l10n.updateTask : l10n.addingNewTask,
                     style: AppTextStyle.h3.copyWith(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
                       color: AppColors.of(context).slate900,
                     ),
                   ),
                   SizedBox(height: 2.h),
                   Text(
                     l10n.taskNumberDate(taskNumber, formattedDate),
-                    style: AppTextStyle.bodySmall.copyWith(
-                      fontSize: 10.sp,
-                      fontWeight: FontWeight.w400,
+                    style: AppTextStyle.bodyMedium.copyWith(
                       color: AppColors.of(context).slate500,
                     ),
                   ),
@@ -368,7 +361,8 @@ class _FormFieldsSection extends StatelessWidget {
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: projects.any((p) => p.projectName == selectedProjectName)
+                  value:
+                      projects.any((p) => p.projectName == selectedProjectName)
                       ? selectedProjectName
                       : null,
                   isExpanded: true,
@@ -389,10 +383,13 @@ class _FormFieldsSection extends StatelessWidget {
                           size: 16,
                         ),
                   hint: Text(
-                    isLoadingProjects ? l10n.loadingProjects : l10n.selectProject,
+                    isLoadingProjects
+                        ? l10n.loadingProjects
+                        : l10n.selectProject,
                     style: AppTextStyle.bodyMedium.copyWith(
-                      fontSize: 12.sp,
-                      color: AppColors.of(context).slate500.withValues(alpha: 0.5),
+                      color: AppColors.of(
+                        context,
+                      ).slate500.withValues(alpha: 0.5),
                     ),
                   ),
                   items: projects.map((p) {
@@ -401,7 +398,6 @@ class _FormFieldsSection extends StatelessWidget {
                       child: Text(
                         p.projectName,
                         style: AppTextStyle.bodyMedium.copyWith(
-                          fontSize: 12.sp,
                           color: AppColors.of(context).slate900,
                         ),
                       ),
@@ -415,8 +411,8 @@ class _FormFieldsSection extends StatelessWidget {
                               (p) => p.projectName == val,
                             );
                             context.read<TimesheetBloc>().add(
-                                  TimesheetEvent.formProjectChanged(matched),
-                                );
+                              TimesheetEvent.formProjectChanged(matched),
+                            );
                           }
                         },
                 ),
@@ -435,10 +431,7 @@ class _FormFieldsSection extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      StatLabel(
-                        text: l10n.expectedHrsLabel,
-                        isMandatory: true,
-                      ),
+                      StatLabel(text: l10n.expectedHrsLabel, isMandatory: true),
                       TimesheetTextField(
                         controller: expectedController,
                         hint: TimesheetConstants.defaultHoursHint,
@@ -446,9 +439,7 @@ class _FormFieldsSection extends StatelessWidget {
                           decimal: true,
                         ),
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'[0-9.]'),
-                          ),
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
                         ],
                       ),
                     ],
@@ -470,9 +461,7 @@ class _FormFieldsSection extends StatelessWidget {
                           decimal: true,
                         ),
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'[0-9.]'),
-                          ),
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
                         ],
                       ),
                     ],
@@ -481,10 +470,7 @@ class _FormFieldsSection extends StatelessWidget {
               ],
             ),
             SizedBox(height: 12.h),
-            StatLabel(
-              text: l10n.descriptionLabel,
-              isMandatory: true,
-            ),
+            StatLabel(text: l10n.descriptionLabel, isMandatory: true),
             TimesheetTextField(
               controller: descriptionController,
               hint: l10n.brieflyDescribeWhatYouWorkedOn,
@@ -500,9 +486,7 @@ class _FormFieldsSection extends StatelessWidget {
 class _DocumentUploadSection extends StatelessWidget {
   final ProjectAssignmentEntity? editingTask;
 
-  const _DocumentUploadSection({
-    required this.editingTask,
-  });
+  const _DocumentUploadSection({required this.editingTask});
 
   @override
   Widget build(BuildContext context) {
@@ -529,17 +513,14 @@ class _DocumentUploadSection extends StatelessWidget {
                 : TimesheetUploadCard(
                     onTap: () {
                       context.read<TimesheetBloc>().add(
-                            const TimesheetEvent.pickAndUploadFileRequested(),
-                          );
+                        const TimesheetEvent.pickAndUploadFileRequested(),
+                      );
                     },
                   ),
             if ((attachment ?? "").isNotEmpty) ...[
               SizedBox(height: 8.h),
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12.w,
-                  vertical: 10.h,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: AppColors.of(context).surfaceContainerLow,
@@ -552,7 +533,7 @@ class _DocumentUploadSection extends StatelessWidget {
                       child: Text(
                         attachment!.split('/').last,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTextStyle.bodySmall.copyWith(
+                        style: AppTextStyle.bodyMedium.copyWith(
                           color: AppColors.of(context).slate900,
                         ),
                       ),
@@ -561,8 +542,8 @@ class _DocumentUploadSection extends StatelessWidget {
                       icon: const Icon(Icons.close, size: 18),
                       onPressed: () {
                         context.read<TimesheetBloc>().add(
-                              const TimesheetEvent.clearUploadedFile(),
-                            );
+                          const TimesheetEvent.clearUploadedFile(),
+                        );
                       },
                     ),
                   ],
@@ -579,9 +560,7 @@ class _DocumentUploadSection extends StatelessWidget {
 class _SheetActionsSection extends StatelessWidget {
   final String timesheetId;
 
-  const _SheetActionsSection({
-    required this.timesheetId,
-  });
+  const _SheetActionsSection({required this.timesheetId});
 
   @override
   Widget build(BuildContext context) {
@@ -598,9 +577,7 @@ class _SheetActionsSection extends StatelessWidget {
               backgroundColor: AppColors.of(context).white,
               foregroundColor: AppColors.of(context).slate900,
               borderRadius: 8.r,
-              padding: EdgeInsets.symmetric(
-                vertical: 10.h,
-              ),
+              padding: EdgeInsets.symmetric(vertical: 10.h),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
@@ -617,17 +594,15 @@ class _SheetActionsSection extends StatelessWidget {
                   variant: ButtonVariant.primary,
                   backgroundColor: AppColors.of(context).primaryContainer,
                   borderRadius: 8.r,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 10.h,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
                   isLoading: isActionLoading,
                   onPressed: () {
                     FocusScope.of(context).unfocus();
                     context.read<TimesheetBloc>().add(
-                          TimesheetEvent.saveTaskRequested(
-                            timesheetId: timesheetId,
-                          ),
-                        );
+                      TimesheetEvent.saveTaskRequested(
+                        timesheetId: timesheetId,
+                      ),
+                    );
                   },
                 );
               },
@@ -651,8 +626,7 @@ class StatLabel extends StatelessWidget {
       child: RichText(
         text: TextSpan(
           text: text,
-          style: AppTextStyle.bodySmall.copyWith(
-            fontSize: 11.sp,
+          style: AppTextStyle.bodyMedium.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.of(context).slate900,
           ),
@@ -695,13 +669,11 @@ class TimesheetTextField extends StatelessWidget {
       maxLines: maxLines,
       keyboardType: keyboardType,
       style: AppTextStyle.bodyMedium.copyWith(
-        fontSize: 12.sp,
         color: AppColors.of(context).slate900,
       ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: AppTextStyle.bodySmall.copyWith(
-          fontSize: 12.sp,
+        hintStyle: AppTextStyle.bodyMedium.copyWith(
           color: AppColors.of(context).slate500.withValues(alpha: 0.5),
         ),
         filled: true,
@@ -768,8 +740,7 @@ class TimesheetUploadCard extends StatelessWidget {
               SizedBox(height: 8.h),
               Text(
                 l10n.selectAnyFileToUpload,
-                style: AppTextStyle.bodySmall.copyWith(
-                  fontSize: 10.sp,
+                style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.w400,
                   color: AppColors.of(context).slate500,
                 ),
@@ -777,8 +748,7 @@ class TimesheetUploadCard extends StatelessWidget {
               SizedBox(height: 2.h),
               Text(
                 l10n.pdfJpgPngLimit,
-                style: AppTextStyle.bodySmall.copyWith(
-                  fontSize: 10.sp,
+                style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.w400,
                   color: AppColors.of(context).slate500,
                 ),
