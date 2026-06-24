@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
+import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 
 import 'package:dhira_hrms/features/attendance_regularization/presentation/bloc/attendance_regularization_bloc.dart';
@@ -14,8 +15,6 @@ import 'package:dhira_hrms/features/attendance_regularization/presentation/widge
 import 'package:dhira_hrms/features/attendance_regularization/presentation/widgets/attendance_regularization_form_widget.dart';
 import 'package:dhira_hrms/features/attendance_regularization/presentation/widgets/attendance_regularization_content_state.dart';
 import 'package:dhira_hrms/features/attendance_regularization/presentation/widgets/attendance_regularization_bottom_actions.dart';
-import 'package:dhira_hrms/features/attendance_regularization/presentation/widgets/attendance_regularization_loading_view.dart';
-import 'package:dhira_hrms/features/attendance_regularization/presentation/widgets/attendance_regularization_error_view.dart';
 
 class AttendanceRegularizationScreen extends StatelessWidget {
   final VoidCallback onMyRequestsPressed;
@@ -120,13 +119,9 @@ class _AttendanceRegularizationScreenBodyState
                   previous.status != current.status ||
                   previous.errorMessage != current.errorMessage,
               builder: (context, state) {
-                if (state.isLoading && state.loadingKind == null) {
-                  return const AttendanceRegularizationLoadingView();
-                }
-
                 if (state.isError && state.formData.date == null && state.errorMessage != null) {
-                  return AttendanceRegularizationErrorView(
-                    errorMessage: state.errorMessage!,
+                  return GenericErrorWidget(
+                    message: state.errorMessage!,
                     onRetry: () {
                       bloc.add(const AttendanceRegularizationEvent.regularizationStarted());
                     },

@@ -51,7 +51,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 Text(
                   subtitle!,
-                  style: AppTextStyle.bodySmall.copyWith(
+                  style: AppTextStyle.bodyMediumOne.copyWith(
                     color: AppColors.of(context).textPrimary,
                     fontWeight: FontWeight.w400,
                   ),
@@ -71,6 +71,6 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-    subtitle != null && subtitle!.isNotEmpty ? 64.h : kToolbarHeight,
+    subtitle != null && subtitle!.isNotEmpty ? 58.h : kToolbarHeight,
   );
 }

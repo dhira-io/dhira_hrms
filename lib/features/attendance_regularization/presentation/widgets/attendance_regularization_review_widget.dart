@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/attendance_regularization/presentation/bloc/attendance_regularization_state.dart';
 import 'package:dhira_hrms/features/attendance_regularization/domain/entities/attendance_regularization_constants.dart';
@@ -37,11 +38,11 @@ class AttendanceRegularizationReviewWidget extends StatelessWidget {
               value: _getRequestTypeLabel(l10n, formData.requestType),
             ),
             AttendanceRegularizationReviewRow(
-              label: l10n.clockInTime.replaceAll('Time', '').trim(),
+              label: l10n.clockIn,
               value: formData.inTime?.format(context) ?? '',
             ),
             AttendanceRegularizationReviewRow(
-              label: l10n.clockOutTime.replaceAll('Time', '').trim(),
+              label: l10n.clockOut,
               value: formData.outTime?.format(context) ?? '',
             ),
             AttendanceRegularizationReviewRow(
@@ -73,7 +74,7 @@ class AttendanceRegularizationReviewWidget extends StatelessWidget {
             Row(
               children: [
                 SvgPicture.asset(
-                  'assets/svg/paperclip.svg',
+                  AppAssets.paperclipIcon,
                   width: 14.r,
                   height: 14.r,
                   colorFilter: ColorFilter.mode(
@@ -156,7 +157,7 @@ class AttendanceRegularizationReviewCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppTextStyle.labelLargeMedium.copyWith(
+            style: AppTextStyle.labelLargeBold.copyWith(
               color: themeColors.textPrimary,
             ),
           ),
@@ -190,12 +191,12 @@ class AttendanceRegularizationReviewRow extends StatelessWidget {
           Text(
             label,
             style: AppTextStyle.labelMedium.copyWith(
-              color: themeColors.slate550,
+              color: themeColors.slate500Confirmation,
             ),
           ),
           Text(
             value,
-            style: AppTextStyle.labelMedium.copyWith(
+            style: AppTextStyle.titleSmallOne.copyWith(
               color: themeColors.textPrimary,
             ),
           ),

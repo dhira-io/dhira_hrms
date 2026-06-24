@@ -9,7 +9,7 @@ import 'package:dhira_hrms/features/attendance_regularization/presentation/bloc/
 import 'package:dhira_hrms/features/attendance_regularization/presentation/bloc/attendance_regularization_event.dart';
 import 'package:dhira_hrms/features/attendance_regularization/presentation/bloc/attendance_regularization_state.dart';
 import 'package:dhira_hrms/features/attendance_regularization/domain/entities/attendance_regularization_constants.dart';
-import 'attendance_regularization_loading_widget.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 
 class RegularizationFormConfig {
   final TextEditingController reasonController;
@@ -57,13 +57,13 @@ class AttendanceRegularizationFormWidget extends StatelessWidget {
               final dateText = selectedDate != null
                   ? DateTimeUtils.formatDate(
                       selectedDate,
-                      pattern: 'dd/MM/yy',
+                      pattern: DateTimeUtils.patternDayMonthYearShortSlash,
                     )
-                  : 'DD/MM/YY';
+                  : l10n.dateFormatPlaceholder;
               return InkWell(
                 onTap: () => _selectDate(context, selectedDate),
                 child: Container(
-                  height: 30.h,
+                  height: 34.h,
                   padding: EdgeInsets.symmetric(
                     horizontal: 10.w,
                     vertical: 4.h,
@@ -81,14 +81,17 @@ class AttendanceRegularizationFormWidget extends StatelessWidget {
                           style: AppTextStyle.bodyMedium.copyWith(
                             color: selectedDate != null
                                 ? themeColors.textPrimary
-                                : themeColors.textSecondary,
+                                : themeColors.slateText,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
                       Icon(
                         Icons.calendar_today_outlined,
                         size: 14.r,
-                        color: themeColors.textSecondary,
+                        color: selectedDate != null
+                            ? themeColors.textPrimary
+                            : themeColors.slate400,
                       ),
                     ],
                   ),
@@ -190,15 +193,16 @@ class AttendanceRegularizationFormWidget extends StatelessWidget {
               controller: config.reasonController,
               maxLines: 4,
               maxLength: 200,
-              style: AppTextStyle.bodyMedium.copyWith(
+              style: AppTextStyle.titleSmallOne.copyWith(
                 color: themeColors.textPrimary,
+                fontWeight: FontWeight.w600,
               ),
               decoration: InputDecoration(
                 filled: false,
                 fillColor: Colors.transparent,
                 hintText: l10n.reasonRegularizationHint,
-                hintStyle: AppTextStyle.bodySmall.copyWith(
-                  color: themeColors.textSecondary,
+                hintStyle: AppTextStyle.titleSmallOne.copyWith(
+                  color: themeColors.slate500Confirmation,
                 ),
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
@@ -295,14 +299,14 @@ class AttendanceRegularizationFormLabel extends StatelessWidget {
     return RichText(
       text: TextSpan(
         text: label,
-        style: AppTextStyle.bodySmallBold.copyWith(
+        style: AppTextStyle.bodyMediumSemibold.copyWith(
           color: themeColors.textPrimary,
         ),
         children: isRequired
             ? [
                 TextSpan(
                   text: ' *',
-                  style: AppTextStyle.bodySmallBold.copyWith(
+                  style: AppTextStyle.bodyMediumBold.copyWith(
                     color: themeColors.error,
                   ),
                 ),
@@ -335,7 +339,7 @@ class AttendanceRegularizationReasonTypeButton extends StatelessWidget {
         );
       },
       child: Container(
-        height: 30.h,
+        height: 34.h,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isSelected ? themeColors.blue50 : themeColors.white,
@@ -348,7 +352,7 @@ class AttendanceRegularizationReasonTypeButton extends StatelessWidget {
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: AppTextStyle.bodyMediumOneSemibold.copyWith(
+          style: AppTextStyle.bodyMediumSemibold.copyWith(
             color: isSelected ? themeColors.primary : themeColors.textPrimary,
           ),
         ),
@@ -454,12 +458,16 @@ class AttendanceRegularizationTimeSelector extends StatelessWidget {
         AttendanceRegularizationFormLabel(label: label, isRequired: true),
         SizedBox(height: 4.h),
         if (isLoading)
-          const AttendanceRegularizationLoadingWidget()
+          ShimmerLoading(
+            height: 34.h,
+            width: double.infinity,
+            borderRadius: 4.r,
+          )
         else
           InkWell(
             onTap: () => onSelectTime(context, time, isClockIn: isClockIn),
             child: Container(
-              height: isClockIn ? 30.h : 34.h,
+              height: 34.h,
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: themeColors.white,
@@ -476,14 +484,17 @@ class AttendanceRegularizationTimeSelector extends StatelessWidget {
                       style: AppTextStyle.bodyMedium.copyWith(
                         color: time != null
                             ? themeColors.textPrimary
-                            : themeColors.textSecondary,
+                            : themeColors.slate400,
+                        fontWeight: time != null
+                            ? FontWeight.w500
+                            : FontWeight.w300,
                       ),
                     ),
                   ),
                   Icon(
                     Icons.access_time_rounded,
                     size: 14.r,
-                    color: themeColors.textSecondary,
+                    color: themeColors.slate950,
                   ),
                 ],
               ),
@@ -526,8 +537,8 @@ class AttendanceRegularizationRouteToHRCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 12.w,
-              height: 12.w,
+              width: 15.w,
+              height: 15.w,
               decoration: BoxDecoration(
                 color: routeToHR ? themeColors.primary : themeColors.white,
                 borderRadius: BorderRadius.circular(2.r),
@@ -545,14 +556,14 @@ class AttendanceRegularizationRouteToHRCard extends StatelessWidget {
                 children: [
                   Text(
                     l10n.routeToHRDepartment,
-                    style: AppTextStyle.bodyMediumOneBold.copyWith(
+                    style: AppTextStyle.bodyMediumBold.copyWith(
                       color: themeColors.textPrimary,
                     ),
                   ),
                   Text(
                     l10n.routeToHRDepartmentSub,
-                    style: AppTextStyle.bodySmallTwo.copyWith(
-                      color: themeColors.textSecondary,
+                    style: AppTextStyle.bodySmall.copyWith(
+                      color: themeColors.slate500Confirmation,
                     ),
                   ),
                 ],
@@ -597,7 +608,11 @@ class AttendanceRegularizationAttachmentSection extends StatelessWidget {
         ),
         SizedBox(height: 4.h),
         if (isUploading)
-          const AttendanceRegularizationLoadingWidget()
+          ShimmerLoading(
+            height: 34.h,
+            width: double.infinity,
+            borderRadius: 4.r,
+          )
         else if (fileUrl != null)
           Container(
             height: 34.h,
@@ -617,7 +632,7 @@ class AttendanceRegularizationAttachmentSection extends StatelessWidget {
                 SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
-                    fileName ?? 'document.pdf',
+                    fileName ?? l10n.documentPdf,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyle.bodySmall.copyWith(

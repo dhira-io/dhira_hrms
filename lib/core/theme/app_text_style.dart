@@ -62,6 +62,8 @@ class AppTextStyle {
       GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w600);
   static TextStyle get titleSmallOne =>
       GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w600);
+  static TextStyle get titleSmallOneBold =>
+      GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w700);
 
   //Heading
   static TextStyle get headingLarge =>
@@ -117,7 +119,7 @@ class AppTextStyle {
   static TextStyle get bodyMediumOneBold =>
       GoogleFonts.inter(fontSize: 11.sp, fontWeight: FontWeight.w700);
   static TextStyle get bodyMediumBold =>
-      GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w700);
+      GoogleFonts.inter(fontSize: 13.sp, fontWeight: FontWeight.w700);
   static TextStyle get bodyMediumSemibold =>
       GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w600);
   static TextStyle get bodySmallBold =>

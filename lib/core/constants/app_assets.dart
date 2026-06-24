@@ -22,4 +22,5 @@ class AppAssets {
       'assets/svg/onboarding_timesheet.svg';
   static const String onboardingCompoff = 'assets/svg/onboarding_compoff.svg';
   static const String onboardingPayslip = 'assets/svg/onboarding_payslip.svg';
+  static const String paperclipIcon = 'assets/svg/paperclip.svg';
 }

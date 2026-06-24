@@ -183,6 +183,7 @@ class AppColors {
   static const Color slateText = Color(0xFF64748B);
   static const Color blueIcon = Color(0xFF3B82F6);
   static const Color darkSlate = Color(0xFF1E293B);
+  static const Color stepperColor = Color(0xFFA1A1A1);
 
   // New Calendar Colors
   static const Color calendarDefaultBg = Color(0xFFF8FAFC);
@@ -476,6 +477,7 @@ class AppColorsResolved {
   final Color slateText;
   final Color blueIcon;
   final Color darkSlate;
+  final Color stepperColor;
   final Color calendarDefaultBg;
   final Color calendarDefaultText;
   final Color calendarTodayBorder;
@@ -728,6 +730,7 @@ class AppColorsResolved {
     required this.colorGreen50,
     required this.colorOrange50,
     required this.colorNeutral100,
+    required this.stepperColor,
   });
 
   factory AppColorsResolved.light() => const AppColorsResolved._(
@@ -849,6 +852,7 @@ class AppColorsResolved {
     slateText: AppColors.slateText,
     blueIcon: AppColors.blueIcon,
     darkSlate: AppColors.darkSlate,
+    stepperColor: AppColors.stepperColor,
     calendarDefaultBg: AppColors.calendarDefaultBg,
     calendarDefaultText: AppColors.calendarDefaultText,
     calendarTodayBorder: AppColors.calendarTodayBorder,
@@ -974,6 +978,7 @@ class AppColorsResolved {
     placeholdergrey: AppColors.placeholdergrey,
     info: AppColors.info,
     infoBg: AppColors.infoBg,
+    stepperColor: AppColors.stepperColor,
     infoBorder: AppColors.infoBorder,
     quickStatsBg: AppColors._darkQuickStatsBg,
     successBg: AppColors.successBg,

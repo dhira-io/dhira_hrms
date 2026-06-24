@@ -67,7 +67,7 @@ class _Step1Actions extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 16.w),
       borderRadius: 6.r,
-      fontWeight: FontWeight.w100,
+      fontWeight: FontWeight.w500,
     );
   }
 }
@@ -98,7 +98,7 @@ class _Step2Actions extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 16.w),
           borderRadius: 6.r,
-          fontWeight: FontWeight.w100,
+          fontWeight: FontWeight.w500,
           textColor: colors.textPrimary,
         ),
         SizedBox(height: 6.h),
@@ -109,7 +109,7 @@ class _Step2Actions extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 16.w),
           borderRadius: 6.r,
-          fontWeight: FontWeight.w100,
+          fontWeight: FontWeight.w500,
         ),
       ],
     );

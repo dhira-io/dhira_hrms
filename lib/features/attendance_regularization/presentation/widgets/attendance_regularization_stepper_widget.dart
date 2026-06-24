@@ -16,7 +16,6 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
     final primaryColor = AppColors.of(context).primary;
     final textColor = AppColors.of(context).textPrimary;
     final mutedColor = AppColors.of(context).textSecondary;
-
     return BlocSelector<
       AttendanceRegularizationBloc,
       AttendanceRegularizationState,
@@ -25,21 +24,26 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
       selector: (state) => state.currentStep,
       builder: (context, currentStep) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+          padding: EdgeInsets.only(
+            left: 14.w,
+            right: 14.w,
+            top: 0.h,
+            bottom: 10.h,
+          ),
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
               // Connection lines behind circles
               Positioned(
-                top: 13.r,
+                top: 16.r, // Center of 32.r circle is 16
                 left: 0,
                 right: 0,
                 child: Row(
                   children: [
-                    SizedBox(width: 39.w), // Center of first step (78.w / 2)
+                    SizedBox(width: 42.w), // Center of first step (84.w / 2)
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        padding: EdgeInsets.symmetric(horizontal: 30.w),
                         child: Container(
                           height: 1.h,
                           color: AppColors.of(context).slate300,
@@ -48,14 +52,14 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        padding: EdgeInsets.symmetric(horizontal: 30.w),
                         child: Container(
                           height: 1.h,
                           color: AppColors.of(context).slate300,
                         ),
                       ),
                     ),
-                    SizedBox(width: 39.w), // Center of third step (78.w / 2)
+                    SizedBox(width: 42.w), // Center of third step (84.w / 2)
                   ],
                 ),
               ),
@@ -111,73 +115,83 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
     required Color textColor,
     required Color mutedColor,
   }) {
+    final colors = AppColors.of(context);
     Widget circle;
     if (isCompleted) {
       circle = SizedBox(
-        width: 20.r,
-        height: 20.r,
+        width: 30.r,
+        height: 30.r,
         child: Center(
           child: Container(
-            width: 18.r,
-            height: 18.r,
+            width: 28.r,
+            height: 28.r,
             decoration: BoxDecoration(
-              color: AppColors.of(context).greenSuccess,
+              color: colors.greenSuccess,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
-            child: Icon(Icons.check_rounded, color: Colors.white, size: 11.r),
+            child: Icon(Icons.check_rounded, color: colors.white, size: 14.r),
           ),
         ),
       );
     } else if (isActive) {
-      circle = SizedBox(
-        width: 26.r,
-        height: 26.r,
-        child: Center(
-          child: Container(
-            width: 19.r,
-            height: 19.r,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: primaryColor, width: 2.w),
-              color: Colors.white,
-            ),
-            alignment: Alignment.center,
-            child: Container(
-              width: 6.r,
-              height: 6.r,
-              decoration: BoxDecoration(
-                color: primaryColor,
-                shape: BoxShape.circle,
+      circle = Container(
+        alignment: Alignment.center,
+
+        width: 30.r,
+        height: 30.r,
+        child: Container(
+          width: 25.r,
+          height: 25.r,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: primaryColor,
+              width: 1.w,
+            ), // Reduced border thickness
+            color: colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: primaryColor.withOpacity(0.24), // Soft blue shade
+                blurRadius: 4.r,
+                spreadRadius: 2.r,
               ),
+            ],
+          ),
+          alignment: Alignment.center,
+          child: Container(
+            width: 8.r,
+            height: 8.r,
+            decoration: BoxDecoration(
+              color: primaryColor, // Center solid blue dot
+              shape: BoxShape.circle,
             ),
           ),
         ),
       );
     } else {
-      circle = SizedBox(
-        width: 26.r,
-        height: 26.r,
-        child: Center(
-          child: Container(
-            width: 19.r,
-            height: 19.r,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.of(context).slate400,
-                width: 1.w,
-              ),
-              color: Colors.white,
+      circle = Container(
+        alignment: Alignment.center,
+        width: 30.r,
+        height: 30.r,
+        child: Container(
+          width: 25.r,
+          height: 25.r,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: colors.stepperColor, // Soft gray shade
+              width: 1.w, // Reduced border thickness
             ),
-            alignment: Alignment.center,
-            child: Container(
-              width: 6.r,
-              height: 6.r,
-              decoration: BoxDecoration(
-                color: AppColors.of(context).slate400,
-                shape: BoxShape.circle,
-              ),
+            color: colors.white,
+          ),
+          alignment: Alignment.center,
+          child: Container(
+            width: 8.r,
+            height: 8.r,
+            decoration: BoxDecoration(
+              color: colors.slate300, // Center gray dot
+              shape: BoxShape.circle,
             ),
           ),
         ),
@@ -185,7 +199,7 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
     }
 
     return SizedBox(
-      width: 78.w,
+      width: 84.w,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -194,7 +208,7 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: AppTextStyle.labelSmallTwoMedium.copyWith(
+            style: AppTextStyle.bodySmallSemibold.copyWith(
               color: isActive || isCompleted ? textColor : mutedColor,
             ),
           ),

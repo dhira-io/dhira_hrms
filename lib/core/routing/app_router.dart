@@ -509,15 +509,7 @@ class AppRouter {
             ..add(const AttendanceRegularizationEvent.regularizationStarted()),
           child: AttendanceRegularizationScreen(
             onMyRequestsPressed: () {
-              Get.find<BottomNavCubit>().changeIndex(
-                BottomNavCubit.approvalsIndex,
-              );
-              Get.find<ApprovalsBloc>().add(
-                const ApprovalsEvent.started(
-                  initialCategory: ApprovalCategory.raised,
-                  initialType: ApprovalType.attendance,
-                ),
-              );
+              navigateToRaisedRequests(ApprovalType.attendance);
             },
           ),
         ),
