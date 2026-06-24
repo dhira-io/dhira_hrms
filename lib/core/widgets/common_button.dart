@@ -19,7 +19,8 @@ class CommonButton extends StatelessWidget {
     this.padding,
     this.borderRadius,
     this.backgroundColor,
-    this.textStyle,
+    this.foregroundColor,
+    this.fontWeight,
   });
 
   final String text;
@@ -32,22 +33,24 @@ class CommonButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
   final Color? backgroundColor;
-  final TextStyle? textStyle;
+  final Color? foregroundColor;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bool isButtonDisabled = (isLoading ? null : onPressed) == null;
+    final colors = AppColors.of(context);
 
     Widget buttonChild = isLoading
         ? SizedBox(
             width: 20.w,
-            height: 20.h,
+            height: 20.w,
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 variant == ButtonVariant.outlined ||
                         variant == ButtonVariant.text
-                    ? AppColors.of(context).primaryContainer
-                    : AppColors.of(context).white,
+                    ? colors.primaryContainer
+                    : colors.white,
               ),
               strokeWidth: 2,
             ),
@@ -57,21 +60,24 @@ class CommonButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (customIcon != null) ...[
-                    customIcon!,
-                    const SizedBox(width: AppConstants.p8),
+                if (isButtonDisabled)
+                  Opacity(opacity: 0.8, child: customIcon!)
+                else
+                  customIcon!,
+                const SizedBox(width: AppConstants.p8),
               ] else if (icon != null) ...[
                 Icon(
                   icon,
                   size: AppConstants.iconXSmall,
-                  color: _getTextColor(AppColors.of(context)),
+                  color: _getTextColor(colors, isButtonDisabled),
                 ),
                 const SizedBox(width: AppConstants.p8),
               ],
               Text(
                 text,
-                style: textStyle ?? AppTextStyle.button.copyWith(
-                  color: _getTextColor(AppColors.of(context)),
-                  fontWeight: FontWeight.w600,
+                style: AppTextStyle.button.copyWith(
+                  color: _getTextColor(colors, isButtonDisabled),
+                  fontWeight: fontWeight ?? FontWeight.w700,
                 ),
               ),
             ],
@@ -85,10 +91,16 @@ class CommonButton extends StatelessWidget {
           style: OutlinedButton.styleFrom(
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            backgroundColor: backgroundColor,
             side: BorderSide(
-              color: AppColors.of(context).gray400,
+              color: colors.gray400.withValues(alpha: isButtonDisabled ? 0.5 : 1.0),
               width: 1.0.w,
             ),
+            foregroundColor:
+                foregroundColor ?? colors.primaryContainer,
+            disabledForegroundColor:
+                (foregroundColor ?? colors.primaryContainer)
+                    .withValues(alpha: 0.5),
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
@@ -110,6 +122,11 @@ class CommonButton extends StatelessWidget {
           style: TextButton.styleFrom(
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            foregroundColor:
+                foregroundColor ?? colors.primaryContainer,
+            disabledForegroundColor:
+                (foregroundColor ?? colors.primaryContainer)
+                    .withValues(alpha: 0.5),
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
@@ -127,7 +144,6 @@ class CommonButton extends StatelessWidget {
         break;
       case ButtonVariant.secondary:
       case ButtonVariant.primary:
-      default:
         button = ElevatedButton(
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
@@ -136,15 +152,19 @@ class CommonButton extends StatelessWidget {
             backgroundColor:
                 backgroundColor ??
                 (variant == ButtonVariant.secondary
-                    ? AppColors.of(context).secondary
-                    : AppColors.of(context).primaryContainer),
-            disabledBackgroundColor: backgroundColor != null
-                ? backgroundColor!.withValues(alpha: 0.5)
-                : (variant == ButtonVariant.secondary
-                    ? AppColors.of(context).secondary
-                    : AppColors.of(context).primaryContainer).withValues(alpha: 0.5),
-            foregroundColor: AppColors.of(context).white,
-            disabledForegroundColor: AppColors.of(context).white,
+                    ? colors.secondary
+                    : colors.primaryContainer),
+            foregroundColor: foregroundColor ?? colors.white,
+            disabledBackgroundColor:
+                (backgroundColor ??
+                        (variant == ButtonVariant.secondary
+                            ? colors.secondary
+                            : colors.primaryContainer))
+                    .withValues(alpha: 0.5),
+            disabledForegroundColor:
+                (foregroundColor ?? colors.white).withValues(
+                  alpha: 0.8,
+                ),
             elevation: 0,
             padding:
                 padding ??
@@ -170,14 +190,28 @@ class CommonButton extends StatelessWidget {
     return button;
   }
 
-  Color _getTextColor(AppColorsResolved colors) {
+  Color _getTextColor(AppColorsResolved colors, bool isDisabled) {
+    if (foregroundColor != null) {
+      return isDisabled
+          ? foregroundColor!.withValues(alpha: 0.5)
+          : foregroundColor!;
+    }
+    if (isDisabled) {
+      switch (variant) {
+        case ButtonVariant.outlined:
+        case ButtonVariant.text:
+          return colors.primaryContainer.withValues(alpha: 0.5);
+        case ButtonVariant.secondary:
+        case ButtonVariant.primary:
+          return colors.white.withValues(alpha: 0.8);
+      }
+    }
     switch (variant) {
       case ButtonVariant.outlined:
       case ButtonVariant.text:
         return colors.primaryContainer;
       case ButtonVariant.secondary:
       case ButtonVariant.primary:
-      default:
         return colors.white;
     }
   }

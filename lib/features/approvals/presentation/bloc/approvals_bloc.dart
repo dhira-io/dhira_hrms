@@ -91,7 +91,9 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           (summary) async {
             // Fetch employees for image fallback
             final employeesResult = await getEmployeesUseCase();
-            final employees = employeesResult.getOrElse(() => <Map<String, dynamic>>[]);
+            final employees = employeesResult.getOrElse(
+              () => <Map<String, dynamic>>[],
+            );
 
             // If user is not an approver (can_access: false), default to
             // their own Raised requests so the list is never empty on first load.
@@ -197,22 +199,30 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         emit(
           ApprovalsState.success(
             latestSuccessState.data.copyWith(
-                summary: newSummary,
-                requests: _sortRequests(newRequests),
-                isListLoading: false, // Ensure shimmer is off
-                page: 1,
-                hasMore: requestsResult.isRight()
-                    ? requestsResult.getOrElse(() => <ApprovalRequestEntity>[]).length >= 10
-                    : latestSuccessState.data.hasMore,
-                successMessage: null,
-                errorMessage: requestsResult.isLeft()
-                    ? requestsResult.fold((f) => f.message, (_) => null)
-                    : null,),
+              summary: newSummary,
+              requests: _sortRequests(newRequests),
+              isListLoading: false, // Ensure shimmer is off
+              page: 1,
+              hasMore: requestsResult.isRight()
+                  ? requestsResult
+                            .getOrElse(() => <ApprovalRequestEntity>[])
+                            .length >=
+                        10
+                  : latestSuccessState.data.hasMore,
+              successMessage: null,
+              errorMessage: requestsResult.isLeft()
+                  ? requestsResult.fold((f) => f.message, (_) => null)
+                  : null,
+            ),
           ),
         );
       }
     } catch (e, stackTrace) {
-      dev.log('Error in _onRefreshRequested: $e', stackTrace: stackTrace, name: 'ApprovalsBloc');
+      dev.log(
+        'Error in _onRefreshRequested: $e',
+        stackTrace: stackTrace,
+        name: 'ApprovalsBloc',
+      );
 
       if (state is Success) {
         final latestSuccessState = state as Success;
@@ -237,7 +247,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     if (state is! Success) return;
     final initialSuccessState = state as Success;
 
-    if (initialSuccessState.data.isLoadMoreLoading || !initialSuccessState.data.hasMore) {
+    if (initialSuccessState.data.isLoadMoreLoading ||
+        !initialSuccessState.data.hasMore) {
       return;
     }
 
@@ -272,9 +283,9 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         if (state is Success) {
           final latestSuccessState = state as Success;
           final combinedRequests = [
-              ...latestSuccessState.data.requests,
-              ...newRequests,
-            ];
+            ...latestSuccessState.data.requests,
+            ...newRequests,
+          ];
           emit(
             ApprovalsState.success(
               latestSuccessState.data.copyWith(
@@ -464,23 +475,20 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
 
         // 4. Refresh the summary in the background
         final summaryResult = await getApprovalsSummaryUseCase();
-        summaryResult.fold(
-          (_) => null,
-          (newSummary) {
-            if (state is Success) {
-              final latestSuccessState = state as Success;
-              emit(
-                ApprovalsState.success(
-                  latestSuccessState.data.copyWith(
-                    summary: newSummary,
-                    successMessage: null,
-                    errorMessage: null,
-                  ),
+        summaryResult.fold((_) => null, (newSummary) {
+          if (state is Success) {
+            final latestSuccessState = state as Success;
+            emit(
+              ApprovalsState.success(
+                latestSuccessState.data.copyWith(
+                  summary: newSummary,
+                  successMessage: null,
+                  errorMessage: null,
                 ),
-              );
-            }
-          },
-        );
+              ),
+            );
+          }
+        });
       },
     );
   }

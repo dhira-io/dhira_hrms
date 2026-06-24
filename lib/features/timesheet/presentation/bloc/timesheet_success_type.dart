@@ -3,4 +3,5 @@ enum TimesheetSuccessType {
   timesheetSubmitted,
   taskUpdated,
   taskDeleted,
+  timesheetDeleted,
 }

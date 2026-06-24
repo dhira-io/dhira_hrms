@@ -25,38 +25,47 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     final colors = AppColors.of(context);
 
     return AppBar(
-      backgroundColor: backgroundColor ?? colors.surface,
+      backgroundColor:
+          backgroundColor ?? colors.surfaceContainerLowest,
       elevation: 0,
-      centerTitle: centerTitle,
+      centerTitle: subtitle == null,
       scrolledUnderElevation: 0,
       leading: IconButton(
         icon: Icon(
           Icons.arrow_back_ios_new,
-          color: colors.onSurface,
+          color: colors.textPrimary,
           size: 24,
         ),
         onPressed: onBack ?? () => Navigator.pop(context),
       ),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            style: AppTextStyle.h3.copyWith(
-              color: colors.charcoal,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          if (subtitle != null && subtitle!.isNotEmpty)
-            Text(
-              subtitle!,
-              style: AppTextStyle.bodySmall.copyWith(
-                color: colors.black,
+      title: subtitle != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyle.h3.copyWith(
+                    color: AppColors.of(context).textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  subtitle!,
+                  style: AppTextStyle.bodySmall.copyWith(
+                    color: AppColors.of(context).textPrimary,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            )
+          : Text(
+              title,
+              style: AppTextStyle.h3.copyWith(
+                color: AppColors.of(context).textPrimary,
+                fontWeight: FontWeight.w600,
               ),
             ),
-        ],
-      ),
       actions: actions,
     );
   }
