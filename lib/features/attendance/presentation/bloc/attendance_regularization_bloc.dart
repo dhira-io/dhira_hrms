@@ -26,6 +26,7 @@ class AttendanceRegularizationBloc
     required this.imageCompressService,
   }) : super(const AttendanceRegularizationState.initial()) {
     on<DateChanged>(_onDateChanged);
+    on<RegularizationStarted>(_onRegularizationStarted);
     on<RequestTypeChanged>(_onRequestTypeChanged);
     on<InTimeChanged>(_onInTimeChanged);
     on<OutTimeChanged>(_onOutTimeChanged);
@@ -35,6 +36,13 @@ class AttendanceRegularizationBloc
     on<FileRemoved>(_onFileRemoved);
     on<SubmitRequested>(_onSubmitRequested);
     on<ResetRequested>(_onResetRequested);
+  }
+
+  void _onRegularizationStarted(
+    RegularizationStarted event,
+    Emitter<AttendanceRegularizationState> emit,
+  ) {
+    emit(const AttendanceRegularizationState.initial());
   }
 
   Future<void> _onDateChanged(
@@ -142,7 +150,7 @@ class AttendanceRegularizationBloc
     emit(
       AttendanceRegularizationState.loading(
         formData: state.formData.copyWith(selectedFileName: event.fileName),
-        isUploading: true,
+        kind: RegularizationLoadingKind.upload,
       ),
     );
 
@@ -182,7 +190,7 @@ class AttendanceRegularizationBloc
       (fileUrl) => emit(
         AttendanceRegularizationState.success(
           formData: state.formData.copyWith(uploadedFileUrl: fileUrl),
-          isFileUploadSuccess: true,
+          kind: RegularizationSuccessKind.fileUpload,
         ),
       ),
     );
@@ -213,7 +221,7 @@ class AttendanceRegularizationBloc
       emit(
         AttendanceRegularizationState.error(
           formData: formData,
-          message: 'Please select a date',
+          validationError: RegularizationValidationError.dateRequired,
         ),
       );
       return;
@@ -223,7 +231,7 @@ class AttendanceRegularizationBloc
       emit(
         AttendanceRegularizationState.error(
           formData: formData,
-          message: 'Punch in and punch out times are required',
+          validationError: RegularizationValidationError.timeRequired,
         ),
       );
       return;
@@ -233,7 +241,7 @@ class AttendanceRegularizationBloc
       emit(
         AttendanceRegularizationState.error(
           formData: formData,
-          message: 'Reason must be at least 10 characters long',
+          validationError: RegularizationValidationError.reasonTooShort,
         ),
       );
       return;
@@ -244,7 +252,7 @@ class AttendanceRegularizationBloc
     emit(
       AttendanceRegularizationState.loading(
         formData: formData,
-        isSubmitting: true,
+        kind: RegularizationLoadingKind.submit,
       ),
     );
 
@@ -271,7 +279,7 @@ class AttendanceRegularizationBloc
       (_) => emit(
         AttendanceRegularizationState.success(
           formData: formData,
-          isSubmissionSuccess: true,
+          kind: RegularizationSuccessKind.submission,
         ),
       ),
     );

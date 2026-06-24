@@ -337,6 +337,7 @@ class AppConstants {
 
   // File Upload
   static const int maxAttachmentBytes = 10 * 1024 * 1024;
+  static const List<String> allowedExtensions = ['pdf', 'png', 'jpg', 'jpeg'];
 
   // Error Messages
   static const String invalidDateTitle = 'Invalid date selected';

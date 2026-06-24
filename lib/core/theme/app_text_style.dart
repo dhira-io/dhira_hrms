@@ -8,19 +8,19 @@ class AppTextStyle {
   static const String headingFont = 'Manrope';
 
   // Headings
-  static       TextStyle h1 = TextStyle(
+  static TextStyle h1 = TextStyle(
     fontFamily: headingFont,
     fontSize: 22.sp,
     fontWeight: FontWeight.bold,
   );
 
-  static       TextStyle h2 = TextStyle(
+  static TextStyle h2 = TextStyle(
     fontFamily: headingFont,
     fontSize: 18.sp,
     fontWeight: FontWeight.w600,
   );
 
-  static       TextStyle h3 = TextStyle(
+  static TextStyle h3 = TextStyle(
     fontFamily: headingFont,
     fontSize: 16.sp,
     fontWeight: FontWeight.w600,
@@ -50,7 +50,7 @@ class AppTextStyle {
 
   static TextStyle get button => GoogleFonts.inter(
     fontSize: 14.sp,
-    fontWeight: FontWeight.w700,
+
     color: AppColors.surfaceContainerLowest,
   );
 
@@ -63,7 +63,7 @@ class AppTextStyle {
     color: AppColors.error,
   );
 
-  static       TextStyle headlineSmall = TextStyle(
+  static TextStyle headlineSmall = TextStyle(
     fontSize: 22.0.sp,
     fontWeight: FontWeight.w400,
     // Add other properties like font family if needed

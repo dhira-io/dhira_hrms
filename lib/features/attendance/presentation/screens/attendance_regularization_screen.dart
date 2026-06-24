@@ -14,11 +14,6 @@ import '../bloc/attendance_regularization_state.dart';
 import '../widgets/attendance_regularization_body.dart';
 import '../../../../core/widgets/common_app_bar.dart';
 import 'package:get/get.dart';
-// import '../../approvals/presentation/bloc/approvals_bloc.dart';
-// import '../../approvals/presentation/bloc/approvals_event.dart';
-// import '../../approvals/domain/entities/approval_request_entity.dart';
-// import '../../approvals/domain/entities/approval_type.dart';
-// import '../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 
 class AttendanceRegularizationScreen extends StatelessWidget {
   const AttendanceRegularizationScreen({super.key});
@@ -39,14 +34,14 @@ class AttendanceRegularizationScreen extends StatelessWidget {
       ),
       listener: (context, state) {
         state.whenOrNull(
-          error: (_, message) => ToastUtils.showError(message),
-          success: (_, isFileUploadSuccess, isSubmissionSuccess) {
-            if (isFileUploadSuccess) {
+          error: (_, message, validationError) => ToastUtils.showError(
+            message ?? _validationMessage(l10n, validationError),
+          ),
+          success: (_, kind) {
+            if (kind == RegularizationSuccessKind.fileUpload) {
               ToastUtils.showSuccess(l10n.fileUploadSuccess);
             }
-            if (isSubmissionSuccess) {
-              ToastUtils.showSuccess(l10n.submissionSuccess);
-
+            if (kind == RegularizationSuccessKind.submission) {
               // Switch to Approvals tab and show Raised Requests for Attendance
               Get.find<BottomNavCubit>().changeIndex(
                 BottomNavCubit.approvalsIndex,
@@ -74,5 +69,21 @@ class AttendanceRegularizationScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _validationMessage(
+    AppLocalizations l10n,
+    RegularizationValidationError? error,
+  ) {
+    switch (error) {
+      case RegularizationValidationError.dateRequired:
+        return l10n.pleaseSelectDate;
+      case RegularizationValidationError.timeRequired:
+        return l10n.pleaseSelectTimes;
+      case RegularizationValidationError.reasonTooShort:
+        return l10n.reasonMinTenError;
+      case null:
+        return l10n.submissionError;
+    }
   }
 }

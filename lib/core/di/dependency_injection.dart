@@ -98,6 +98,14 @@ import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
 import '../../features/attendance/domain/usecases/upload_file_use_case.dart';
 
+// Redesigned Attendance Regularization Feature Imports
+import '../../features/attendance_regularization/data/datasources/attendance_regularization_remote_datasource.dart';
+import '../../features/attendance_regularization/data/repositories/attendance_regularization_repository_impl.dart';
+import '../../features/attendance_regularization/domain/repositories/i_attendance_regularization_repository.dart';
+import '../../features/attendance_regularization/domain/usecases/submit_attendance_regularization_usecase.dart';
+import '../../features/attendance_regularization/domain/usecases/upload_attendance_regularization_file_usecase.dart';
+import '../../features/attendance_regularization/domain/usecases/get_regularization_punch_summary_usecase.dart';
+
 // Leave
 import '../../features/leave/domain/repositories/leave_repository.dart';
 import '../../features/leave/data/datasources/leave_remote_datasource.dart';
@@ -414,6 +422,37 @@ class DependencyInjection {
     Get.lazyPut<AttendanceRegularizationUploadFileUseCase>(
       () => AttendanceRegularizationUploadFileUseCase(
         Get.find<IAttendanceRepository>(),
+      ),
+      fenix: true,
+    );
+
+    // Redesigned Attendance Regularization Feature
+    Get.lazyPut<IAttendanceRegularizationRemoteDataSource>(
+      () => AttendanceRegularizationRemoteDataSourceImpl(dioClient: Get.find()),
+      fenix: true,
+    );
+    Get.lazyPut<IAttendanceRegularizationRepository>(
+      () => AttendanceRegularizationRepositoryImpl(
+        remoteDataSource: Get.find<IAttendanceRegularizationRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<SubmitAttendanceRegularizationUseCase>(
+      () => SubmitAttendanceRegularizationUseCase(
+        Get.find<IAttendanceRegularizationRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<UploadAttendanceRegularizationFileUseCase>(
+      () => UploadAttendanceRegularizationFileUseCase(
+        Get.find<IAttendanceRegularizationRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetRegularizationPunchSummaryUseCase>(
+      () => GetRegularizationPunchSummaryUseCase(
+        Get.find<IAttendanceRegularizationRepository>(),
       ),
       fenix: true,
     );

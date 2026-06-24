@@ -19,6 +19,8 @@ class CommonButton extends StatelessWidget {
     this.padding,
     this.borderRadius,
     this.backgroundColor,
+    this.fontweight,
+    this.textColor,
   });
 
   final String text;
@@ -31,6 +33,8 @@ class CommonButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
   final Color? backgroundColor;
+  final FontWeight? fontweight;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -41,38 +45,38 @@ class CommonButton extends StatelessWidget {
       child: Center(
         child: isLoading
             ? SizedBox(
-                width: 20.w,
-                height: 20.h,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                variant == ButtonVariant.outlined ||
-                        variant == ButtonVariant.text
-                    ? AppColors.of(context).primaryContainer
-                    : AppColors.of(context).white,
-              ),
-              strokeWidth: 2,
-            ),
-          )
-        : Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (customIcon != null) ...[
+                width: 15.w,
+                height: 15.h,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    variant == ButtonVariant.outlined ||
+                            variant == ButtonVariant.text
+                        ? AppColors.of(context).primaryContainer
+                        : AppColors.of(context).white,
+                  ),
+                  strokeWidth: 2,
+                ),
+              )
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (customIcon != null) ...[
                     customIcon!,
                     const SizedBox(width: AppConstants.p8),
-              ] else if (icon != null) ...[
-                Icon(
-                  icon,
-                  size: AppConstants.iconXSmall,
-                  color: _getTextColor(AppColors.of(context)),
-                ),
-                const SizedBox(width: AppConstants.p8),
-              ],
-              Text(
-                text,
-                style: AppTextStyle.button.copyWith(
-                  color: _getTextColor(AppColors.of(context)),
-                  fontWeight: FontWeight.w600,
+                  ] else if (icon != null) ...[
+                    Icon(
+                      icon,
+                      size: AppConstants.iconXSmall,
+                      color: _getTextColor(AppColors.of(context)),
+                    ),
+                    const SizedBox(width: AppConstants.p8),
+                  ],
+                  Text(
+                    text,
+                    style: AppTextStyle.button.copyWith(
+                      color: textColor ?? _getTextColor(AppColors.of(context)),
+                      fontWeight: fontweight ?? FontWeight.w700,
                     ),
                   ),
                 ],

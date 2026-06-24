@@ -5,6 +5,12 @@ import '../../domain/entities/regularization_constants.dart';
 
 part 'attendance_regularization_state.freezed.dart';
 
+enum RegularizationLoadingKind { punchSummary, upload, submit }
+
+enum RegularizationSuccessKind { fileUpload, submission }
+
+enum RegularizationValidationError { dateRequired, timeRequired, reasonTooShort }
+
 @freezed
 abstract class RegularizationFormData with _$RegularizationFormData {
   const factory RegularizationFormData({
@@ -22,6 +28,12 @@ abstract class RegularizationFormData with _$RegularizationFormData {
   }) = _RegularizationFormData;
 
   const RegularizationFormData._();
+
+  bool get canContinue =>
+      date != null &&
+      inTime != null &&
+      outTime != null &&
+      reason.trim().length >= 10;
 }
 
 @freezed
@@ -33,19 +45,18 @@ sealed class AttendanceRegularizationState
 
   const factory AttendanceRegularizationState.loading({
     required RegularizationFormData formData,
-    @Default(false) bool isUploading,
-    @Default(false) bool isSubmitting,
+    required RegularizationLoadingKind kind,
   }) = _Loading;
 
   const factory AttendanceRegularizationState.success({
     required RegularizationFormData formData,
-    @Default(false) bool isFileUploadSuccess,
-    @Default(false) bool isSubmissionSuccess,
+    required RegularizationSuccessKind kind,
   }) = _Success;
 
   const factory AttendanceRegularizationState.error({
     required RegularizationFormData formData,
-    required String message,
+    String? message,
+    RegularizationValidationError? validationError,
   }) = _Error;
 
   const AttendanceRegularizationState._();

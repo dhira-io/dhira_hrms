@@ -92,6 +92,10 @@ class LocalStorageService {
     return _prefs.getString(StorageConstants.leaveApprover);
   }
 
+  String? getApproverName() {
+    return _prefs.getString(StorageConstants.leaveApproverName);
+  }
+
   // Gender Management
   Future<void> saveGender(String gender) async {
     await _prefs.setString(StorageConstants.gender, gender);
