@@ -19,6 +19,7 @@ class LeaveConfirmationStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = AppColors.of(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -37,7 +38,7 @@ class LeaveConfirmationStep extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: AppColors.of(context).success,
+                        color: colors.success,
                         width: 2,
                       ),
                     ),
@@ -45,7 +46,7 @@ class LeaveConfirmationStep extends StatelessWidget {
                       child: Icon(
                         Icons.check,
                         size: 24.w,
-                        color: AppColors.of(context).success,
+                        color: colors.success,
                       ),
                     ),
                   ),
@@ -54,7 +55,7 @@ class LeaveConfirmationStep extends StatelessWidget {
                     l10n.requestSubmitted,
                     style: AppTextStyle.headlineSmall.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.of(context).onSurface,
+                      color: colors.onSurface,
                     ),
                   ),
                   SizedBox(height: AppConstants.p16.h),
@@ -62,7 +63,7 @@ class LeaveConfirmationStep extends StatelessWidget {
                     l10n.leaveSubmitSuccess,
                     textAlign: TextAlign.center,
                     style: AppTextStyle.bodyMedium.copyWith(
-                      color: AppColors.of(context).outline,
+                      color: colors.outline,
                     ),
                   ),
                   SizedBox(height: 32.h),
@@ -73,7 +74,7 @@ class LeaveConfirmationStep extends StatelessWidget {
                           text: l10n.myRequests,
                           variant: ButtonVariant.outlined,
                           textStyle: AppTextStyle.bodyLarge.copyWith(
-                            color: AppColors.of(context).onSurface,
+                            color: colors.onSurface,
                             fontWeight: FontWeight.w600,
                           ),
                           onPressed: onMyRequests,

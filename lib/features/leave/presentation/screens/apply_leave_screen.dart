@@ -97,6 +97,8 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = AppColors.of(context);
+    
     _approverName =
         Get.find<LocalStorageService>().getApproverName() ?? l10n.notAvailable;
 
@@ -127,7 +129,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
             }
           },
           child: Scaffold(
-            backgroundColor: AppColors.of(context).surface,
+            backgroundColor: colors.surface,
             appBar: CommonAppBar(
               title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
               subtitle: l10n.applyLeaveSubtitle,
