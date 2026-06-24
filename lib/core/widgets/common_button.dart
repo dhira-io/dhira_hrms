@@ -16,6 +16,7 @@ class CommonButton extends StatelessWidget {
     this.isLoading = false,
     this.icon,
     this.customIcon,
+    this.suffixIcon,
     this.padding,
     this.borderRadius,
     this.backgroundColor,
@@ -31,6 +32,7 @@ class CommonButton extends StatelessWidget {
   final bool isLoading;
   final IconData? icon;
   final Widget? customIcon;
+  final IconData? suffixIcon;
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
   final Color? backgroundColor;

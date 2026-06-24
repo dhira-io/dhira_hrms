@@ -7,6 +7,7 @@ class AppColors {
   static const Color primaryFixed = Color(0xFFDCE1FF);
   static const Color onPrimaryFixed = Color(0xFF00164E);
   static const Color secondary = Color(0xff0066FF);
+  static const Color blue400 = Color(0xFF51A2FF);
 
   static const Color username = Color(0xFF111827);
 
@@ -25,6 +26,7 @@ class AppColors {
   static const Color outlineVariant = Color(0xFFC3C5D9);
   static const Color onSecondaryFixedVariant = Color(0xFF3F484F);
   static const Color primaryBlue = Color(0xff1100CC);
+  static const Color darkText = Color(0xFF0F172B);
 
   // HTML Mockup Colors
   static const Color onPrimary = Color(0xffffffff);
@@ -118,7 +120,7 @@ class AppColors {
   static const Color _darkWelcomeSubtitle = Color(0xFF8899AA);
 
   // Additional Utils
-  static const Color slateBorder = Color(0xff90A1B9);
+  // static const Color slateBorder = Color(0xff90A1B9);
   static const Color blue50 = Color(0xFFEFF6FF);
   static const Color slate50 = Color(0xFFF8FAFC);
   static const Color slate100 = Color(0xFFF1F5F9);
@@ -180,6 +182,7 @@ class AppColors {
   static const Color weekendText = Color(0xFF4A5565);
   static const Color weekendBg = Color(0xFFF4F4F5);
   static const Color slateBg = Color(0xFFF1F5F9);
+  static const Color slateBorder = Color(0xFFCAD5E2);
   static const Color slateText = Color(0xFF64748B);
   static const Color blueIcon = Color(0xFF3B82F6);
   static const Color darkSlate = Color(0xFF1E293B);
@@ -287,6 +290,9 @@ class AppColors {
   static const Color _darkOnSurface = Color(0xFFE1E1E1);
   static const Color _darkSurfaceContainer = Color(0xFF2C2C2C);
   static const Color _darkOutline = Color(0xFF6B7280);
+  static const Color _darkInfoBg = Color(0xFF0C2445);
+  static const Color _darkInfo = Color(0xFF38BDF8);
+  static const Color _darkTertiary = Color(0xFFFFB49D);
 
   static const Color _darkCalendarDefaultBg = Color(0xFF1A1A1A);
   static const Color _darkCalendarDefaultText = Color(0xFFE1E1E1);
@@ -294,6 +300,9 @@ class AppColors {
 
   // Slate alternatives for dark mode
   static const Color _darkSlateBg = Color(0xFF1E293B);
+  static const Color _darkWeekendBg = Color(0xFF2D3748);
+  static const Color _darkSlateBorder = Color(0xFF334155);
+  static const Color _darkSlateText = Color(0xFF94A3B8);
   static const Color _darkSlate50 = Color(0xFF0F172A);
   static const Color _darkSlate100 = Color(0xFF1E293B);
   static const Color _darkSlate200 = Color(0xFF334155);
@@ -474,6 +483,7 @@ class AppColorsResolved {
   final Color weekendText;
   final Color weekendBg;
   final Color slateBg;
+  // final Color slateBorder;
   final Color slateText;
   final Color blueIcon;
   final Color darkSlate;
@@ -540,6 +550,8 @@ class AppColorsResolved {
   final Color welcomeTopBg;
   final Color welcomeTitlePrimary;
   final Color welcomeSubtitleColor;
+
+  final Color blue400;
 
   // Timesheet card colors (theme-aware)
   final Color colorBlue50;
@@ -663,6 +675,7 @@ class AppColorsResolved {
     required this.weekendText,
     required this.weekendBg,
     required this.slateBg,
+    //    required this.slateBorder,
     required this.slateText,
     required this.blueIcon,
     required this.darkSlate,
@@ -726,6 +739,7 @@ class AppColorsResolved {
     required this.welcomeTopBg,
     required this.welcomeTitlePrimary,
     required this.welcomeSubtitleColor,
+    required this.blue400,
     required this.colorBlue50,
     required this.colorGreen50,
     required this.colorOrange50,
@@ -849,6 +863,7 @@ class AppColorsResolved {
     weekendText: AppColors.weekendText,
     weekendBg: AppColors.weekendBg,
     slateBg: AppColors.slateBg,
+    //    slateBorder: AppColors.slateBorder,
     slateText: AppColors.slateText,
     blueIcon: AppColors.blueIcon,
     darkSlate: AppColors.darkSlate,
@@ -869,6 +884,7 @@ class AppColorsResolved {
     halfDayBg: AppColors.halfDayBg,
     approvedBg: AppColors.approvedBg,
     approvedText: AppColors.approvedText,
+    blue400: AppColors.blue400,
     pendingStatusBg: AppColors.pendingStatusBg,
     pendingStatusText: AppColors.pendingStatusText,
     cancelledBg: AppColors.cancelledBg,
@@ -976,9 +992,11 @@ class AppColorsResolved {
     black: AppColors.black,
     transparent: AppColors.transparent,
     placeholdergrey: AppColors.placeholdergrey,
-    info: AppColors.info,
-    infoBg: AppColors.infoBg,
+    // info: AppColors.info,
+    // infoBg: AppColors.infoBg,
     stepperColor: AppColors.stepperColor,
+    info: AppColors._darkInfo,
+    infoBg: AppColors._darkInfoBg,
     infoBorder: AppColors.infoBorder,
     quickStatsBg: AppColors._darkQuickStatsBg,
     successBg: AppColors.successBg,
@@ -1034,9 +1052,10 @@ class AppColorsResolved {
     absentText: AppColors.absentText,
     absentBg: AppColors.absentBg,
     weekendText: AppColors.weekendText,
-    weekendBg: AppColors.weekendBg,
+    weekendBg: AppColors._darkWeekendBg,
     slateBg: AppColors._darkSlateBg,
-    slateText: AppColors.slateText,
+    //   slateBorder: AppColors._darkSlateBorder,
+    slateText: AppColors._darkSlateText,
     blueIcon: AppColors.blueIcon,
     darkSlate: AppColors.slate100,
     calendarDefaultBg: AppColors._darkCalendarDefaultBg,
@@ -1055,6 +1074,7 @@ class AppColorsResolved {
     halfDayBg: AppColors._darkHalfDayBg,
     approvedBg: AppColors._darkApprovedBg,
     approvedText: AppColors._darkApprovedText,
+    blue400: AppColors.blue400,
     pendingStatusBg: AppColors._darkPendingStatusBg,
     pendingStatusText: AppColors._darkPendingStatusText,
     cancelledBg: AppColors._darkCancelledBg,

@@ -88,12 +88,12 @@ class LocalStorageService {
     await _prefs.setString(StorageConstants.leaveApproverName, approverName);
   }
 
-  String? getApprover() {
-    return _prefs.getString(StorageConstants.leaveApprover);
-  }
-
   String? getApproverName() {
     return _prefs.getString(StorageConstants.leaveApproverName);
+  }
+
+  String? getApprover() {
+    return _prefs.getString(StorageConstants.leaveApprover);
   }
 
   // Gender Management

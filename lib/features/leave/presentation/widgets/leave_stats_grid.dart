@@ -57,7 +57,7 @@ class LeaveStatsGrid extends StatelessWidget {
           mainAxisSpacing: AppConstants.p12,
           childAspectRatio: 1.3,
           children: [
-            _buildStatCard(
+            LeaveStatCard(
               title: l10n.applied,
               value: l10n.daysCount(_formatLeaveValue(statistics.appliedDays)),
               subtitle: l10n.daysLabel,
@@ -66,7 +66,7 @@ class LeaveStatsGrid extends StatelessWidget {
               bgColor: AppColors.infoBg,
               borderColor: AppColors.infoBorder,
             ),
-            _buildStatCard(
+            LeaveStatCard(
               title: l10n.approved,
               value: l10n.daysCount(_formatLeaveValue(statistics.approvedDays)),
               subtitle: l10n.approved,
@@ -75,7 +75,7 @@ class LeaveStatsGrid extends StatelessWidget {
               bgColor: AppColors.successBg,
               borderColor: AppColors.successBorder,
             ),
-            _buildStatCard(
+            LeaveStatCard(
               title: l10n.approvalPending,
               value: l10n.daysCount(_formatLeaveValue(statistics.pendingDays)),
               subtitle: l10n.pendingApproval,
@@ -84,7 +84,7 @@ class LeaveStatsGrid extends StatelessWidget {
               bgColor: AppColors.warningBg,
               borderColor: AppColors.warningBorder,
             ),
-            _buildStatCard(
+            LeaveStatCard(
               title: l10n.rejected,
               value: l10n.daysCount(
                 _formatLeaveValue(statistics.cancelledDays),
@@ -101,20 +101,41 @@ class LeaveStatsGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard({
-    required String title,
-    required String value,
-    required String subtitle,
-    required IconData icon,
-    required Color themeColor,
-    required Color bgColor,
-    required Color borderColor,
-  }) {
+  String _formatLeaveValue(num value) {
+    if (value == value.toInt()) {
+      return value.toInt().toString();
+    }
+    return value.toString();
+  }
+}
+
+class LeaveStatCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final String subtitle;
+  final IconData icon;
+  final Color themeColor;
+  final Color bgColor;
+  final Color borderColor;
+
+  const LeaveStatCard({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.subtitle,
+    required this.icon,
+    required this.themeColor,
+    required this.bgColor,
+    required this.borderColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppConstants.p12),
+      padding: EdgeInsets.all(AppConstants.p12.w),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(AppConstants.r12),
+        borderRadius: BorderRadius.circular(AppConstants.r12.r),
         border: Border.all(color: borderColor),
       ),
       child: Stack(
@@ -165,17 +186,10 @@ class LeaveStatsGrid extends StatelessWidget {
             right: 0.w,
             top: 0.h,
             bottom: 0.h,
-            child: Icon(icon, color: themeColor, size: 32),
+            child: Icon(icon, color: themeColor, size: 32.sp),
           ),
         ],
       ),
     );
-  }
-
-  String _formatLeaveValue(num value) {
-    if (value == value.toInt()) {
-      return value.toInt().toString();
-    }
-    return value.toString();
   }
 }

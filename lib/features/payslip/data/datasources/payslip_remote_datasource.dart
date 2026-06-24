@@ -39,8 +39,11 @@ class PayslipRemoteDataSourceImpl implements PayslipRemoteDataSource {
             'posting_date',
             'status',
             'net_pay',
+            'gross_pay',
+            'total_deduction',
             'start_date',
             'end_date',
+            'total_working_days',
           ]),
           'filters': jsonEncode([
             ['employee', '=', employeeId],

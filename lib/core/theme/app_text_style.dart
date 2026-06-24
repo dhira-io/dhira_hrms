@@ -202,14 +202,12 @@ class AppTextStyle {
   static TextStyle get welcomeTitle => GoogleFonts.inter(
     fontSize: 30.sp,
     fontWeight: FontWeight.w600,
-    height: 40.h / 36,
     letterSpacing: 0.0,
   );
 
   static TextStyle get welcomeSubtitle => GoogleFonts.rubik(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
-    height: 1.4.h,
     letterSpacing: 0.2,
   );
 
@@ -224,14 +222,14 @@ class AppTextStyle {
   static TextStyle get onboardingTitle => GoogleFonts.inter(
     fontSize: 20.sp,
     fontWeight: FontWeight.w600,
-    height: 36.h / 30,
+    height: 36 / 30,
     letterSpacing: 0.0,
   );
 
   static TextStyle get onboardingSubtitle => GoogleFonts.inter(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
-    height: 28.h / 18,
+    height: 28 / 18,
     letterSpacing: 0.0,
   );
 
@@ -246,7 +244,6 @@ class AppTextStyle {
   static TextStyle get loginHeaderSubtitle => GoogleFonts.inter(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
-    height: 1.4.h,
     letterSpacing: -0.01 * 14,
   );
 
@@ -273,7 +270,7 @@ class AppTextStyle {
 
   static TextStyle get loginOffice365Text => GoogleFonts.inter(
     fontSize: 14.sp,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w500,
     height: 24.h / 16,
     letterSpacing: 0.0,
   );

@@ -10,6 +10,9 @@ class PayslipEntity extends Equatable {
   final double netPay;
   final String startDate;
   final String endDate;
+  final double? totalWorkingDays;
+  final double grossPay;
+  final double totalDeduction;
 
   const PayslipEntity({
     required this.name,
@@ -21,6 +24,9 @@ class PayslipEntity extends Equatable {
     required this.netPay,
     required this.startDate,
     required this.endDate,
+    this.totalWorkingDays,
+    this.grossPay = 0.0,
+    this.totalDeduction = 0.0,
   });
 
   @override
@@ -34,6 +40,9 @@ class PayslipEntity extends Equatable {
     netPay,
     startDate,
     endDate,
+    totalWorkingDays,
+    grossPay,
+    totalDeduction,
   ];
 }
 

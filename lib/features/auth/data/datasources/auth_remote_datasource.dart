@@ -83,9 +83,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      throw const ServerException(
-        message: AppConstants.couldNotLaunchMsLogin,
-      );
+      throw const ServerException(message: AppConstants.couldNotLaunchMsLogin);
     }
   }
 
