@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-class LeaveTypeSelectionGrid extends StatelessWidget {
+class LeaveTypeSelectionGrid extends StatefulWidget {
   final String? selectedLeaveType;
   final List<LeaveTypeEntity> leaveTypes;
   final LeaveBalanceEntity balance;
@@ -25,40 +25,71 @@ class LeaveTypeSelectionGrid extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    // Filter leave types based on gender
-    final filteredTypes = leaveTypes.where((type) {
-      if (gender.toLowerCase() == Gender.male &&
+  State<LeaveTypeSelectionGrid> createState() => _LeaveTypeSelectionGridState();
+}
+
+class _LeaveTypeSelectionGridState extends State<LeaveTypeSelectionGrid> {
+  late List<LeaveTypeEntity> _filteredTypes;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateFilteredTypes();
+    _checkDefaultSelection();
+  }
+
+  @override
+  void didUpdateWidget(covariant LeaveTypeSelectionGrid oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.leaveTypes != widget.leaveTypes ||
+        oldWidget.gender != widget.gender) {
+      _updateFilteredTypes();
+      _checkDefaultSelection();
+    } else if (oldWidget.selectedLeaveType != widget.selectedLeaveType) {
+      _checkDefaultSelection();
+    }
+  }
+
+  void _updateFilteredTypes() {
+    _filteredTypes = widget.leaveTypes.where((type) {
+      if (widget.gender.toLowerCase() == Gender.male &&
           type.leaveTypeName.toLowerCase().contains(LeaveType.maternity)) {
         return false;
-      } else if (gender.toLowerCase() == Gender.female &&
+      } else if (widget.gender.toLowerCase() == Gender.female &&
           type.leaveTypeName.toLowerCase().contains(LeaveType.paternity)) {
         return false;
       }
       return true;
     }).toList();
+  }
 
+  void _checkDefaultSelection() {
+    if (widget.selectedLeaveType == null && _filteredTypes.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onChanged(_filteredTypes.first.name);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return FormField<String>(
-      initialValue: selectedLeaveType,
-      validator: validator,
+      initialValue: widget.selectedLeaveType,
+      validator: widget.validator,
       builder: (state) {
-        if (selectedLeaveType == null && filteredTypes.isNotEmpty) {
+        // Sync form field state if external value changes
+        if (state.value != widget.selectedLeaveType) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            onChanged(filteredTypes.first.name);
-            state.didChange(filteredTypes.first.name);
+            state.didChange(widget.selectedLeaveType);
           });
         }
+        
         final l10n = AppLocalizations.of(context)!;
 
         return LayoutBuilder(
           builder: (context, constraints) {
-            double totalAvailable = 0;
-            double totalAllocated = 0;
-            
-            for (var detail in balance.details) {
-              totalAvailable += detail.available;
-              totalAllocated += detail.allocated;
-            }
+            final double totalAvailable = widget.balance.calculatedTotalAvailable;
+            final double totalAllocated = widget.balance.calculatedTotalAllocated;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,42 +103,26 @@ class LeaveTypeSelectionGrid extends StatelessWidget {
                     mainAxisSpacing: AppConstants.p8.h,
                     mainAxisExtent: 70.h,
                   ),
-                  itemCount: filteredTypes.length,
+                  itemCount: _filteredTypes.length,
                   itemBuilder: (context, index) {
-                    final type = filteredTypes[index];
-                    final isSelected = selectedLeaveType == type.name;
+                    final type = _filteredTypes[index];
+                    final isSelected = widget.selectedLeaveType == type.name;
 
-                    return GestureDetector(
+                    return _LeaveTypeGridItem(
+                      type: type,
+                      isSelected: isSelected,
                       onTap: () {
-                        onChanged(type.name);
+                        widget.onChanged(type.name);
                         state.didChange(type.name);
                       },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: AppConstants.p8.w, vertical: AppConstants.p8.h),
-                        decoration: BoxDecoration(
-                          color: isSelected ? AppColors.of(context).primary.withValues(alpha: 0.05) : AppColors.of(context).transparent,
-                          borderRadius: BorderRadius.circular(AppConstants.r8),
-                          border: Border.all(
-                            color: isSelected ? AppColors.of(context).primary : AppColors.of(context).outlineVariant,
-                            width: 1,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          type.leaveTypeName,
-                          textAlign: TextAlign.center,
-                          style: AppTextStyle.labelLarge.copyWith(
-                            color: isSelected ? AppColors.of(context).primary : AppColors.of(context).onSurface,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                          ),
-                        ),
-                      ),
                     );
                   },
                 ),
                 const SizedBox(height: AppConstants.p16),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: AppConstants.p16.w, vertical: AppConstants.p12.h),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: AppConstants.p16.w,
+                      vertical: AppConstants.p12.h),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(AppConstants.r8),
                     border: Border.all(
@@ -127,7 +142,7 @@ class LeaveTypeSelectionGrid extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            balance.details.isNotEmpty
+                            widget.balance.details.isNotEmpty
                                 ? "${totalAvailable % 1 == 0 ? totalAvailable.toInt() : totalAvailable}/${totalAllocated % 1 == 0 ? totalAllocated.toInt() : totalAllocated} ${l10n.daysLabel}"
                                 : l10n.loading,
                             style: AppTextStyle.labelLarge.copyWith(
@@ -139,10 +154,12 @@ class LeaveTypeSelectionGrid extends StatelessWidget {
                       ),
                       const SizedBox(height: AppConstants.p8),
                       LinearProgressIndicator(
-                        value: totalAllocated > 0 
-                          ? (totalAllocated - totalAvailable) / totalAllocated 
-                          : 0.0,
-                        backgroundColor: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+                        value: totalAllocated > 0
+                            ? (totalAllocated - totalAvailable) / totalAllocated
+                            : 0.0,
+                        backgroundColor: AppColors.of(context)
+                            .outlineVariant
+                            .withValues(alpha: 0.5),
                         color: AppColors.of(context).primary,
                         minHeight: AppConstants.p8.h,
                         borderRadius: BorderRadius.circular(AppConstants.r4),
@@ -152,17 +169,66 @@ class LeaveTypeSelectionGrid extends StatelessWidget {
                 ),
                 if (state.hasError)
                   Padding(
-                    padding: EdgeInsets.only(top: AppConstants.p8.h, left: AppConstants.p16.w),
+                    padding: EdgeInsets.only(
+                        top: AppConstants.p8.h, left: AppConstants.p16.w),
                     child: Text(
                       state.errorText!,
-                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).error),
+                      style: AppTextStyle.bodySmall
+                          .copyWith(color: AppColors.of(context).error),
                     ),
                   ),
               ],
             );
-          }
+          },
         );
       },
     );
   }
 }
+
+class _LeaveTypeGridItem extends StatelessWidget {
+  final LeaveTypeEntity type;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _LeaveTypeGridItem({
+    required this.type,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: AppConstants.p8.w, vertical: AppConstants.p8.h),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.of(context).primary.withValues(alpha: 0.05)
+              : AppColors.of(context).transparent,
+          borderRadius: BorderRadius.circular(AppConstants.r8),
+          border: Border.all(
+            color: isSelected
+                ? AppColors.of(context).primary
+                : AppColors.of(context).outlineVariant,
+            width: 1,
+          ),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          type.leaveTypeName,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.labelLarge.copyWith(
+            color: isSelected
+                ? AppColors.of(context).primary
+                : AppColors.of(context).onSurface,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+}
+

@@ -13,30 +13,31 @@ class LeaveReasonField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colors = AppColors.of(context);
+    
     return TextFormField(
       controller: controller,
       maxLines: 3,
       decoration: InputDecoration(
-        hintText: 'Please describe the reason for your Leave request (min 10 characters)...',
+        hintText: l10n.provideReasonHint,
         hintStyle: AppTextStyle.bodyMedium.copyWith(
-          color: AppColors.of(context).outline.withValues(alpha: 0.5),
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
+          color: colors.outline.withValues(alpha: 0.5),
         ),
         filled: false,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),
-          borderSide: const BorderSide(color: AppColors.slateBorder, width: 1.0),
+          borderSide: BorderSide(color: colors.outlineVariant, width: 1.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),
-          borderSide: const BorderSide(color: AppColors.slateBorder, width: 1.0),
+          borderSide: BorderSide(color: colors.outlineVariant, width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),
-          borderSide: BorderSide(color: AppColors.of(context).primary, width: 1.0),
+          borderSide: BorderSide(color: colors.primary, width: 1.0),
         ),
-        errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
+        errorStyle: AppTextStyle.bodySmall.copyWith(color: colors.error),
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator,

@@ -28,6 +28,7 @@ class LeaveReviewStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = AppColors.of(context);
 
     final totalDays = LeaveFormUtils.computeTotalDays(
       fromDate: state.fromDate,
@@ -72,7 +73,7 @@ class LeaveReviewStep extends StatelessWidget {
           child: Text(
             reason.isNotEmpty ? reason : l10n.notAvailable,
             style: AppTextStyle.bodyMedium.copyWith(
-              color: AppColors.of(context).onSurface,
+              color: colors.onSurface,
             ),
           ),
         ),
@@ -89,10 +90,8 @@ class LeaveReviewStep extends StatelessWidget {
           child: CommonButton(
             text: l10n.editDetails,
             variant: ButtonVariant.outlined,
-            textStyle: AppTextStyle.bodyMedium.copyWith(
-              color: AppColors.darkText,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
+            textStyle: AppTextStyle.bodyLarge.copyWith(
+              color: colors.onSurface,
             ),
             onPressed: onBack,
           ),
@@ -123,12 +122,14 @@ class ReviewDetailCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(AppConstants.r16.r),
-        border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5)),
+        border: Border.all(color: colors.outlineVariant.withValues(alpha: 0.5)),
       ),
       padding: EdgeInsets.all(AppConstants.p16.h),
       child: Column(
@@ -138,7 +139,7 @@ class ReviewDetailCard extends StatelessWidget {
             title,
             style: AppTextStyle.labelLarge.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.of(context).onSurface,
+              color: colors.onSurface,
             ),
           ),
           SizedBox(height: AppConstants.p16.h),
@@ -163,13 +164,15 @@ class ReviewDetailRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
           style: AppTextStyle.bodyMedium.copyWith(
-            color: AppColors.of(context).outline,
+            color: colors.outline,
           ),
         ),
         SizedBox(width: 16.w),
@@ -178,7 +181,7 @@ class ReviewDetailRow extends StatelessWidget {
             value,
             textAlign: TextAlign.right,
             style: AppTextStyle.bodyMedium.copyWith(
-              color: isLink ? AppColors.of(context).primary : AppColors.of(context).onSurface,
+              color: isLink ? colors.primary : colors.onSurface,
               fontWeight: isLink ? FontWeight.bold : FontWeight.w500,
             ),
             maxLines: 1,

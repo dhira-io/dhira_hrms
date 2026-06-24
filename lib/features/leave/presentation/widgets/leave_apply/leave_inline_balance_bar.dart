@@ -2,6 +2,7 @@ import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_balance_entity.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class LeaveInlineBalanceBar extends StatelessWidget {
@@ -17,6 +18,8 @@ class LeaveInlineBalanceBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (selectedLeaveType == null) return const SizedBox.shrink();
+
+    final l10n = AppLocalizations.of(context)!;
 
     LeaveDetailedBalanceEntity? detailedBalance;
     for (var detail in balance.details) {
@@ -40,7 +43,7 @@ class LeaveInlineBalanceBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Available balance",
+              l10n.availableBalance,
               style: AppTextStyle.bodySmall.copyWith(
                 color: AppColors.of(context).outline,
               ),

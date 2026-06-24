@@ -89,7 +89,7 @@ class LeaveStepIndicator extends StatelessWidget {
           ),
           child: Center(
             child: isCompleted
-              ? Icon(Icons.check, size: 16.sp, color: AppColors.of(context).white)
+              ? Icon(Icons.check, size: 16.w, color: AppColors.of(context).white)
               : Container(
                   width: 12.w,
                   height: 12.w,

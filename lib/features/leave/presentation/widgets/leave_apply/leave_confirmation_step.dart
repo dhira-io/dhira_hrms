@@ -42,7 +42,7 @@ class LeaveConfirmationStep extends StatelessWidget {
               child: Center(
                 child: Icon(
                   Icons.check,
-                  size: 32.sp,
+                  size: 32.w,
                   color: AppColors.of(context).onPrimary,
                 ),
               ),

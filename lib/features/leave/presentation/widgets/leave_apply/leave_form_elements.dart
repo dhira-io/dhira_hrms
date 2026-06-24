@@ -37,7 +37,6 @@ class LeaveFormLabel extends StatelessWidget {
           style: AppTextStyle.bodyMedium.copyWith(
             color: AppColors.of(context).onSurfaceVariant,
             fontWeight: FontWeight.bold,
-            fontSize: 14.sp,
           ),
           children: [
             if (isRequired)
@@ -46,7 +45,6 @@ class LeaveFormLabel extends StatelessWidget {
                 style: AppTextStyle.bodyMedium.copyWith(
                   color: AppColors.of(context).error,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
                 ),
               ),
           ],

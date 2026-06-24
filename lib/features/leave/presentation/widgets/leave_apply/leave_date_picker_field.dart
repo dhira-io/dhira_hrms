@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../core/constants/app_constants.dart';
 import '../../../../../../core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 
 class LeaveDatePickerField extends StatelessWidget {
   final String text;
@@ -37,8 +38,8 @@ class LeaveDatePickerField extends StatelessWidget {
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(AppConstants.r12),
               border: errorText != null
-                  ? Border.all(color: Colors.red, width: 1.w)
-                  : Border.all(color: const Color(0xFF90A1B9), width: 1.w),
+                  ? Border.all(color: AppColors.of(context).error, width: 1.w)
+                  : Border.all(color: AppColors.of(context).outlineVariant, width: 1.w),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,7 +47,7 @@ class LeaveDatePickerField extends StatelessWidget {
                 Text(
                   text,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: (isReadOnly || text == 'dd/MM/yyyy')
+                    color: (isReadOnly || text == DateTimeUtils.patternDDMMYYYY)
                         ? AppColors.of(context).outline
                         : AppColors.of(context).onSurface,
                   ),
@@ -68,7 +69,7 @@ class LeaveDatePickerField extends StatelessWidget {
             padding:       EdgeInsets.symmetric(horizontal: 4.w),
             child: Text(
               errorText!,
-              style: AppTextStyle.bodySmall.copyWith(color: Colors.red),
+              style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).error),
             ),
           ),
         ],

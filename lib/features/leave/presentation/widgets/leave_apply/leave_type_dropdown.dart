@@ -76,7 +76,7 @@ class LeaveTypeDropdown extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppConstants.r12),
           borderSide: BorderSide.none,
         ),
-        errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
+        errorStyle: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).error),
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       icon: Padding(

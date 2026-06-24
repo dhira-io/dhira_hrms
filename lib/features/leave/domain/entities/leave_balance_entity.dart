@@ -16,6 +16,9 @@ abstract class LeaveBalanceEntity with _$LeaveBalanceEntity {
   }) = _LeaveBalanceEntity;
 
   const LeaveBalanceEntity._();
+
+  double get calculatedTotalAvailable => details.fold(0.0, (sum, detail) => sum + detail.available);
+  double get calculatedTotalAllocated => details.fold(0.0, (sum, detail) => sum + detail.allocated);
 }
 
 @freezed

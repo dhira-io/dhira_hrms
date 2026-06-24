@@ -37,6 +37,9 @@ class LeaveFormFields extends StatelessWidget {
   final GlobalKey<FormFieldState<DateTime>> toDateKey;
   final LeaveFormCallbacks callbacks;
 
+  static const String _fromDateKeyPrefix = 'fromDate_';
+  static const String _toDateKeyPrefix = 'toDate_';
+
   const LeaveFormFields({
     super.key,
     required this.state,
@@ -86,7 +89,7 @@ class LeaveFormFields extends StatelessWidget {
               children: [
                 LeaveFormLabel(label: l10n.fromDate, isRequired: true),
                 FormField<DateTime>(
-                  key: ValueKey('fromDate_${state.isHalfDay}'),
+                  key: ValueKey('$_fromDateKeyPrefix${state.isHalfDay}'),
                   initialValue: state.fromDate,
                   validator: (val) =>
                       state.fromDate == null ? l10n.required : null,
@@ -94,7 +97,7 @@ class LeaveFormFields extends StatelessWidget {
                   builder: (field) {
                     return LeaveDatePickerField(
                       text: state.fromDate == null
-                          ? "dd/MM/yyyy"
+                          ? DateTimeUtils.patternDDMMYYYY
                           : state.fromDate!.format(DateTimeUtils.patternDDMMYYYY),
                       onTap: () async {
                         await callbacks.onSelectDate(context, true);
@@ -112,7 +115,7 @@ class LeaveFormFields extends StatelessWidget {
               children: [
                 LeaveFormLabel(label: l10n.toDate, isRequired: !state.isHalfDay),
                 FormField<DateTime>(
-                  key: ValueKey('toDate_${state.isHalfDay}'),
+                  key: ValueKey('$_toDateKeyPrefix${state.isHalfDay}'),
                   initialValue: state.toDate,
                   validator: (val) =>
                       (state.toDate == null && !state.isHalfDay)
@@ -122,7 +125,7 @@ class LeaveFormFields extends StatelessWidget {
                   builder: (field) {
                     return LeaveDatePickerField(
                       text: state.toDate == null
-                          ? "dd/MM/yyyy"
+                          ? DateTimeUtils.patternDDMMYYYY
                           : state.toDate!.format(DateTimeUtils.patternDDMMYYYY),
                       onTap: state.isHalfDay
                           ? null
@@ -141,7 +144,7 @@ class LeaveFormFields extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: AppConstants.p8.h),
                 child: Text(
-                  'Duration: ${totalDays % 1 == 0 ? totalDays.toInt() : totalDays} ${totalDays <= 1 ? 'day' : 'days'}',
+                  '${l10n.duration}: ${totalDays % 1 == 0 ? totalDays.toInt() : totalDays} ${l10n.daysLabel}',
                   style: AppTextStyle.bodyMedium.copyWith(
                     color: AppColors.of(context).primary,
                   ),
@@ -221,18 +224,18 @@ class LeaveFormFields extends StatelessWidget {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(AppConstants.r12),
-                          borderSide: const BorderSide(color: Color(0xFF90A1B9), width: 1.0),
+                          borderSide: BorderSide(color: AppColors.of(context).outlineVariant, width: 1.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(AppConstants.r12),
-                          borderSide: const BorderSide(color: Color(0xFF90A1B9), width: 1.0),
+                          borderSide: BorderSide(color: AppColors.of(context).outlineVariant, width: 1.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(AppConstants.r12),
                           borderSide: BorderSide(color: AppColors.of(context).primary, width: 1.0),
                         ),
                         errorStyle: AppTextStyle.bodySmall.copyWith(
-                          color: Colors.red,
+                          color: AppColors.of(context).error,
                         ),
                       ),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -252,7 +255,7 @@ class LeaveFormFields extends StatelessWidget {
         ],
 
         // Reason
-        LeaveFormLabel(label: 'Reason', isRequired: true),
+        LeaveFormLabel(label: l10n.leaveReason, isRequired: true),
         LeaveReasonField(
           controller: reasonController,
           validator: (val) {
