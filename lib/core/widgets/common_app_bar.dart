@@ -8,6 +8,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final VoidCallback? onBack;
   final Color? backgroundColor;
+  final bool centerTitle;
 
   const CommonAppBar({
     super.key,
@@ -16,12 +17,14 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.onBack,
     this.backgroundColor,
+    this.centerTitle = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: backgroundColor ?? AppColors.of(context).surfaceContainerLowest,
+      backgroundColor:
+          backgroundColor ?? AppColors.of(context).surfaceContainerLowest,
       elevation: 0,
       centerTitle: subtitle == null,
       scrolledUnderElevation: 0,
