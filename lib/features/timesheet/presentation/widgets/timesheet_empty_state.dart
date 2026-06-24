@@ -1,34 +1,90 @@
-import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
+import 'package:dhira_hrms/features/leave/presentation/widgets/dashed_border_painter.dart';
+import 'package:dhira_hrms/features/timesheet/domain/constants/timesheet_constants.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
-import 'package:flutter/material.dart';
 
 class TimesheetEmptyState extends StatelessWidget {
-  const TimesheetEmptyState({super.key});
+  final VoidCallback onAddTask;
+
+  const TimesheetEmptyState({
+    super.key,
+    required this.onAddTask,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppConstants.p24),
+    return CustomPaint(
+      foregroundPainter: DashedBorderPainter(
+        color: AppColors.of(context).tableBorder,
+        borderRadius: 12.r,
+        strokeWidth: 2.0,
+        dashWidth: 7,
+        dashSpace: 3,
+      ),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(
+          vertical: 12.h,
+          horizontal: 16.w,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.of(context).surfaceContainerLowest,
+          borderRadius: BorderRadius.circular(12.r),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.assignment_turned_in_outlined,
-              color: AppColors.of(context).textSecondary.withValues(alpha: 0.4),
-              size: 40,
+            Container(
+              padding: EdgeInsets.all(12.w),
+              decoration: BoxDecoration(
+                color: AppColors.of(context).slate100,
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: SvgPicture.asset(
+                TimesheetConstants.clockSvgIcon,
+                colorFilter: ColorFilter.mode(
+                  AppColors.of(context).slate400,
+                  BlendMode.srcIn,
+                ),
+                width: 24.w,
+                height: 24.w,
+              ),
             ),
-            const SizedBox(height: AppConstants.p12),
+            SizedBox(height: 16.h),
             Text(
-              l10n.timesheetNoTasksForDay,
+              l10n.noTasksLogged,
+              style: AppTextStyle.labelLarge.copyWith(
+                color: AppColors.of(context).textPrimary,
+              ),
+            ),
+            SizedBox(height: 6.h),
+            Text(
+              l10n.logWorkHoursPrompt,
+              textAlign: TextAlign.center,
               style: AppTextStyle.bodySmall.copyWith(
                 color: AppColors.of(context).textSecondary,
+                fontWeight: FontWeight.w400,
               ),
-              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 16.h),
+            SizedBox(
+              height: 26.h,
+              width: 100.w,
+              child: CommonButton(
+                fontWeight: FontWeight.w100,
+                text: l10n.addTask,
+                onPressed: onAddTask,
+                icon: Icons.add,
+                borderRadius: 8.r,
+                padding: EdgeInsets.zero,
+              ),
             ),
           ],
         ),

@@ -1,30 +1,28 @@
-import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
-import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
-import 'package:dhira_hrms/features/timesheet/domain/entities/project_assignment_entity.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bottomsheet/add_task_bottom_sheet.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
-import 'package:dhira_hrms/shared/dialogs/app_dialogs.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'timesheet_empty_state.dart';
 import 'timesheet_task_card.dart';
 
-class TimesheetTaskSection extends StatefulWidget {
+class TimesheetTaskSection extends StatelessWidget {
   const TimesheetTaskSection({super.key});
 
-  @override
-  State<TimesheetTaskSection> createState() => _TimesheetTaskSectionState();
-}
-
-class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
-  bool _isExpanded = false;
+  void _openAddTask(BuildContext context) {
+    final state = context.read<TimesheetBloc>().state;
+    AddTaskBottomSheet.show(
+      context,
+      timesheetId: state.activeTimesheetIdOrDefault,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,51 +33,57 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
           previous.assignmentsForSelectedDay !=
               current.assignmentsForSelectedDay ||
           previous.selectedDate != current.selectedDate ||
-          previous.status != current.status,
+          previous.status != current.status ||
+          previous.isActionLoading != current.isActionLoading,
       builder: (context, state) {
         final assignments = state.assignmentsForSelectedDay;
-        final selectedDate = state.selectedDate;
-        final isLoading = state.status == TimesheetStateStatus.loading;
-
-        final title =
-            (selectedDate != null && !DateTimeUtils.isToday(selectedDate))
-            ? l10n.timesheetDateTasks(
-                DateTimeUtils.formatDate(selectedDate, pattern: 'EEEE, MMM d'),
-              )
-            : l10n.timesheetTodaysTasks;
-
-        final displayCount = _isExpanded
-            ? assignments.length
-            : min(2, assignments.length);
+        final isLoading =
+            state.status == TimesheetStateStatus.loading ||
+            state.isActionLoading;
+        final colors = AppColors.of(context);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(title, style: AppTextStyle.h3.copyWith(fontSize: 14.sp)),
-                      SizedBox(width: 8.w),
-                Container(
-                  padding:       EdgeInsets.symmetric(
-                    horizontal: 6.w,
-                    vertical: 2.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.of(context).primaryFixed,
-                    borderRadius: BorderRadius.circular(6.r),
-                  ),
-                  child: Text(
-                    isLoading ? "0" : assignments.length.toString(),
-                    style: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.of(context).onPrimaryFixedVariant,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10.sp,
+            SizedBox(
+              height: 26.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 12.w),
+                    child: Text(
+                      l10n.taskEntries,
+                      style: AppTextStyle.headingSmallTwoBold.copyWith(
+                        color: colors.textPrimary,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  if (assignments.isNotEmpty && !isLoading)
+                    SizedBox(
+                      height: 26.h,
+                      width: 110.w,
+                      child: CommonButton(
+                        fontWeight: FontWeight.w100,
+                        text: l10n.addTask,
+                        onPressed: () => _openAddTask(context),
+                        icon: Icons.add,
+                        borderRadius: 8.r,
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                ],
+              ),
             ),
-                  SizedBox(height: 12.h),
+            Padding(
+              padding: EdgeInsets.only(top: 8.h, bottom: 16.h),
+              child: Divider(
+                height: 1,
+                thickness: 0.8,
+                color: colors.tableBorder,
+              ),
+            ),
             if (isLoading)
               ListView.builder(
                 shrinkWrap: true,
@@ -90,111 +94,17 @@ class _TimesheetTaskSectionState extends State<TimesheetTaskSection> {
                 },
               )
             else if (assignments.isEmpty)
-              Center(
-                child: Padding(
-                  padding:       EdgeInsets.symmetric(vertical: 20.h),
-                  child: Text(
-                    l10n.timesheetNoTasksForDay,
-                    style: AppTextStyle.bodySmall,
-                  ),
-                ),
-              )
+              TimesheetEmptyState(onAddTask: () => _openAddTask(context))
             else ...[
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: displayCount,
+                itemCount: assignments.length,
                 itemBuilder: (context, index) {
                   final task = assignments[index];
-                  return TimesheetTaskCard(
-                    task: task,
-                    index: index,
-                    onEdit: (task, index) {
-                      final bloc = context.read<TimesheetBloc>();
-                      final realIndex = bloc.state.editAssignments.indexOf(
-                        task,
-                      );
-                      bloc.add(
-                        TimesheetEvent.editTaskRequested(
-                          task: task,
-                          index: realIndex,
-                        ),
-                      );
-                      final timesheetId =
-                          bloc.state.currentWeekActiveId ??
-                          bloc.state.initialTimesheetId ??
-                          '0';
-                      AddTaskBottomSheet.show(
-                        context,
-                        timesheetId: timesheetId,
-                        editingTask: task,
-                        editingIndex: realIndex,
-                      );
-                    },
-                    onDelete: (task) async {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      final confirmed = await AppDialogs.showConfirmation(
-                        context: context,
-                        title: l10n.confirmDeletion,
-                        message: l10n.deleteTaskConfirmationSubtitle,
-                        confirmLabel: l10n.delete,
-                        isDestructive: true,
-                      );
-
-                      if (confirmed && context.mounted) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-
-                        final bloc = context.read<TimesheetBloc>();
-                        final tasksForWeek = bloc.state.editAssignments
-                            .where((e) => e.parent == task.parent)
-                            .toList();
-
-                        final isLastTask = tasksForWeek.length == 1;
-                        if (isLastTask) {
-                          bloc.add(
-                            TimesheetEvent.deleteTimesheetRequested(
-                              timesheetName: task.parent ?? "",
-                            ),
-                          );
-                          return;
-                        }
-
-                        if (task.name != null) {
-                          bloc.add(
-                            TimesheetEvent.deleteEntryRequested(
-                              name: task.name!,
-                              parent: task.parent ?? "",
-                              date: task.date ?? "",
-                            ),
-                          );
-                        } else {
-                          final updated = List<ProjectAssignmentEntity>.from(
-                            bloc.state.editAssignments,
-                          )..remove(task);
-                          bloc.add(TimesheetEvent.assignmentsChanged(updated));
-                        }
-                      }
-                    },
-                  );
+                  return TimesheetTaskCard(task: task, index: index);
                 },
               ),
-              if (assignments.length > 2)
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isExpanded = !_isExpanded;
-                      });
-                    },
-                    child: Text(
-                      _isExpanded ? l10n.showLess : l10n.showMore,
-                      style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.of(context).primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
             ],
           ],
         );
@@ -208,72 +118,92 @@ class TaskCardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
-      margin:       EdgeInsets.only(bottom: 12.h),
-      padding:       EdgeInsets.all(16.w),
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1),
-        ),
+        color: colors.white,
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(color: colors.slate200, width: 1.w),
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-                ShimmerLoading(height: 40.h, width: 40.w, borderRadius: 12),
-                SizedBox(width: 16.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                          ShimmerLoading(
-                      height: 16.h,
-                      width: 120.w,
-                      borderRadius: 4,
+                    ShimmerLoading(
+                      height: 14.h,
+                      width: 140.w,
+                      borderRadius: 4.r,
                     ),
-                    Row(
-                      children:       [
-                        ShimmerLoading(
-                          height: 20.h,
-                          width: 60.w,
-                          borderRadius: 99,
-                        ),
-                        SizedBox(width: 8.w),
-                        ShimmerLoading(
-                          height: 18.h,
-                          width: 18.w,
-                          borderRadius: 99,
-                        ),
-                        SizedBox(width: 4.w),
-                        ShimmerLoading(
-                          height: 18.h,
-                          width: 18.w,
-                          borderRadius: 99,
-                        ),
-                      ],
+                    SizedBox(height: 4.h),
+                    ShimmerLoading(
+                      height: 10.h,
+                      width: 180.w,
+                      borderRadius: 4.r,
                     ),
                   ],
                 ),
-                      SizedBox(height: 8.h),
-                      ShimmerLoading(
-                  height: 14.h,
-                  width: double.infinity,
-                  borderRadius: 4,
+              ),
+              ShimmerLoading(height: 22.h, width: 64.w, borderRadius: 9999.r),
+            ],
+          ),
+          SizedBox(height: 11.h),
+          Row(
+            children: [
+              ShimmerLoading(height: 14.h, width: 14.w, borderRadius: 4.r),
+              SizedBox(width: 4.w),
+              ShimmerLoading(height: 12.h, width: 60.w, borderRadius: 4.r),
+              SizedBox(width: 24.w),
+              ShimmerLoading(height: 12.h, width: 70.w, borderRadius: 4.r),
+            ],
+          ),
+          SizedBox(height: 11.h),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ShimmerLoading(height: 12.h, width: 80.w, borderRadius: 4.r),
+              SizedBox(height: 4.h),
+              Container(
+                width: double.infinity,
+                height: 36.h,
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: colors.white,
+                  borderRadius: BorderRadius.circular(6.r),
+                  border: Border.all(color: colors.slate200, width: 1.w),
                 ),
-                      SizedBox(height: 12.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children:       [
-                    ShimmerLoading(height: 14.h, width: 50.w, borderRadius: 4),
-                    ShimmerLoading(height: 14.h, width: 50.w, borderRadius: 4),
-                  ],
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ShimmerLoading(
+                    height: 10.h,
+                    width: double.infinity,
+                    borderRadius: 4.r,
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
+          SizedBox(height: 11.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ShimmerLoading(height: 24.h, width: 90.w, borderRadius: 8.r),
+              Row(
+                children: [
+                  ShimmerLoading(height: 24.h, width: 24.w, borderRadius: 6.r),
+                  SizedBox(width: 8.w),
+                  ShimmerLoading(height: 24.h, width: 24.w, borderRadius: 6.r),
+                ],
+              ),
+            ],
           ),
         ],
       ),

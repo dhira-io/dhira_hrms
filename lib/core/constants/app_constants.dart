@@ -536,3 +536,8 @@ class HalfDaySegments {
   static const String afternoon = 'afternoon';
   static const String secondShort = '2nd';
 }
+
+class Gender {
+  static const String male = 'male';
+  static const String female = 'female';
+}

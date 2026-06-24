@@ -48,5 +48,8 @@ abstract class LeaveState with _$LeaveState {
     String? selectedLeaveType,
     String? leaveId,
     @Default(0) int uploadCount,
+    @Default(0) int currentStep,
+    @Default(false) bool addEmergencyContact,
+    @Default('') String emergencyContactNumber,
   }) = _LeaveState;
 }

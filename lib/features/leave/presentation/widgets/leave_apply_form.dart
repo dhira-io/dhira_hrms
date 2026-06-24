@@ -1,7 +1,11 @@
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -9,10 +13,7 @@ import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
 import 'leave_apply/leave_overlap_section.dart';
-import '../../../../core/widgets/common_guidelines.dart';
-import 'leave_apply/leave_form_action_buttons.dart';
 import 'leave_apply/leave_form_fields.dart';
-import 'leave_apply/leave_form_elements.dart';
 import '../utils/leave_form_utils.dart';
 import 'package:dhira_hrms/core/utils/file_validation_utils.dart';
 import 'package:file_picker/file_picker.dart';
@@ -23,6 +24,9 @@ class LeaveApplyForm extends StatefulWidget {
   final LeaveEntity? leave;
   final String empName;
   final String gender;
+  final String initialReason;
+  final ValueChanged<String> onNext;
+  final Future<void> Function() onRefresh;
 
   const LeaveApplyForm({
     super.key,
@@ -30,13 +34,16 @@ class LeaveApplyForm extends StatefulWidget {
     this.leave,
     required this.empName,
     required this.gender,
+    this.initialReason = "",
+    required this.onNext,
+    required this.onRefresh,
   });
 
   @override
-  State<LeaveApplyForm> createState() => _LeaveApplyFormState();
+  State<LeaveApplyForm> createState() => LeaveApplyFormState();
 }
 
-class _LeaveApplyFormState extends State<LeaveApplyForm> {
+class LeaveApplyFormState extends State<LeaveApplyForm> {
   final _formKey = GlobalKey<FormState>();
   final _toDateKey = GlobalKey<FormFieldState<DateTime>>();
   final TextEditingController _reasonController = TextEditingController();
@@ -45,30 +52,38 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
   void initState() {
     super.initState();
     final bloc = context.read<LeaveBloc>();
+    
+    _reasonController.addListener(() {
+      setState(() {});
+    });
 
     // Initialize form state from BLoC
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Trigger types fetch if empty
-      if (bloc.state.leaveTypes.isEmpty &&
-          !bloc.state.isLoading &&
-          !bloc.state.isInitialLoading) {
-        bloc.add(const LeaveEvent.typesRequested());
-      }
+      if (mounted) {
+        // Trigger types fetch if empty
+        if (bloc.state.leaveTypes.isEmpty &&
+            !bloc.state.isLoading &&
+            !bloc.state.isInitialLoading) {
+          bloc.add(const LeaveEvent.typesRequested());
+        }
 
-      bloc.add(
-        LeaveEvent.formInitialized(
-          leave: widget.leave,
-          employeeName: widget.empName,
-          gender: widget.gender,
-        ),
-      );
+        bloc.add(
+          LeaveEvent.formInitialized(
+            leave: widget.leave,
+            employeeName: widget.empName,
+            gender: widget.gender,
+          ),
+        );
 
-      if (widget.leave != null) {
-        _checkOverlap();
+        if (widget.leave != null) {
+          _checkOverlap();
+        }
       }
     });
 
-    if (widget.leave != null) {
+    if (widget.initialReason.isNotEmpty) {
+      _reasonController.text = widget.initialReason;
+    } else if (widget.leave != null) {
       _reasonController.text = widget.leave!.description ?? "";
     }
   }
@@ -193,56 +208,33 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
     }
   }
 
-  void _submitForm() {
+  void _handleNext() {
     if (_formKey.currentState!.validate()) {
       final bloc = context.read<LeaveBloc>();
-      final state = bloc.state;
       bloc.add(const LeaveEvent.overlapHiddenStatusChanged(true));
+      widget.onNext(_reasonController.text);
+    }
+  }
 
-      final fromStr = (state.fromDate ?? DateTime.now()).format();
-      final toStr = (state.toDate ?? DateTime.now()).format();
-      final totalDays = LeaveFormUtils.computeTotalDays(
+  bool get _isNextButtonEnabled {
+    final state = context.read<LeaveBloc>().state;
+    final isMandatoryFilled = state.selectedLeaveType != null &&
+        state.fromDate != null &&
+        (state.isHalfDay ? state.daySegment != null : state.toDate != null) &&
+        _reasonController.text.trim().length >= 10;
+        
+    final requiresDocs = LeaveFormUtils.requiresSupportingDocs(
+      leaveType: state.selectedLeaveType,
+      totalDays: LeaveFormUtils.computeTotalDays(
         fromDate: state.fromDate,
         toDate: state.toDate,
         isHalfDay: state.isHalfDay,
-      );
+      ),
+    );
 
-      if (widget.leave == null) {
-        bloc.add(
-          LeaveEvent.applyRequested(
-            employeeId: widget.employeeId,
-            employeeName: widget.empName.isEmpty
-                ? AppLocalizations.of(context)!.user
-                : widget.empName,
-            leaveType: state.selectedLeaveType!,
-            fromDate: fromStr,
-            toDate: toStr,
-            reason: _reasonController.text,
-            halfDay: state.isHalfDay ? 1 : 0,
-            halfDayDate: state.isHalfDay && state.halfDayDate != null
-                ? state.halfDayDate!.format()
-                : null,
-            halfDaySegment: state.isHalfDay ? state.daySegment : null,
-            totalleavedays: totalDays,
-          ),
-        );
-      } else {
-        bloc.add(
-          LeaveEvent.updateRequested(
-            leaveId: widget.leave!.name,
-            fromDate: fromStr,
-            toDate: toStr,
-            reason: _reasonController.text,
-            halfDay: state.isHalfDay ? 1 : 0,
-            halfDayDate: state.isHalfDay && state.halfDayDate != null
-                ? state.halfDayDate!.format()
-                : null,
-            halfDaySegment: state.isHalfDay ? state.daySegment : null,
-            totalleavedays: totalDays,
-          ),
-        );
-      }
-    }
+    if (state.isInitialLoading || state.isUploading) return false;
+    if (requiresDocs && state.uploadedFileUrl == null) return false;
+    return isMandatoryFilled;
   }
 
   @override
@@ -263,52 +255,116 @@ class _LeaveApplyFormState extends State<LeaveApplyForm> {
         return Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (state.isInitialLoading)
-                const LeaveFormSkeleton()
-              else ...[
-                LeaveFormSectionTitle(title: l10n.requestDetails),
-                const SizedBox(height: AppConstants.p16),
-                LeaveFormFields(
-                  state: state,
-                  gender: widget.gender,
-                  totalDays: totalDays,
-                  requiresDocs: requiresDocs,
-                  reasonController: _reasonController,
-                  toDateKey: _toDateKey,
-                  onSelectDate: _selectDate,
-                  onSelectHalfDayDate: _selectHalfDayDate,
-                  onPickAndUploadFile: _pickAndUploadFile,
-                ),
-                const SizedBox(height: AppConstants.p24),
-                CommonGuidelines(
-                  title: l10n.leaveRequestGuidelines,
-                  items: [
-                    l10n.guideline1,
-                    l10n.guideline2,
-                    l10n.guideline3,
-                    l10n.guideline4,
-                    l10n.guideline5,
-                    l10n.guideline6,
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    final content = SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(AppConstants.p16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                          if (state.isInitialLoading)
+                            const LeaveFormSkeleton()
+                          else if (state.leaveTypes.isEmpty)
+                            Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 40.h),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.wifi_off_rounded, size: 48.w, color: AppColors.of(context).outline),
+                                    SizedBox(height: 16.h),
+                                    Text(
+                                      l10n.noInternetConnection,
+                                      style: AppTextStyle.bodyLarge.copyWith(color: AppColors.of(context).onSurface, fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    Text(
+                                      l10n.pleaseCheckYourInternetConnection,
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).outline),
+                                    ),
+                                    SizedBox(height: 24.h),
+                                    CommonButton(
+                                      text: l10n.retry,
+                                      onPressed: widget.onRefresh,
+                                      variant: ButtonVariant.outlined,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          else ...[
+                            Container(
+                              padding: EdgeInsets.all(AppConstants.p16.w),
+                              decoration: BoxDecoration(
+                                color: AppColors.of(context).slateBg,
+                                borderRadius: BorderRadius.circular(AppConstants.r12.r),
+                                border: Border.all(
+                                  color: AppColors.of(context).slateBorder,
+                                ),
+                              ),
+                              child: LeaveFormFields(
+                                state: state,
+                                gender: widget.gender,
+                                totalDays: totalDays,
+                                requiresDocs: requiresDocs,
+                                reasonController: _reasonController,
+                                toDateKey: _toDateKey,
+                                callbacks: LeaveFormCallbacks(
+                                  onSelectDate: _selectDate,
+                                  onSelectHalfDayDate: _selectHalfDayDate,
+                                  onPickAndUploadFile: _pickAndUploadFile,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: AppConstants.p16.h),
+                            LeaveOverlapSection(
+                              overlapLeaves: state.overlapLeaves,
+                              hideOverlapAfterSubmit: state.hideOverlapAfterSubmit,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  );
+                  
+                  if (state.leaveTypes.isEmpty && !state.isInitialLoading) {
+                    return RefreshIndicator(
+                      onRefresh: widget.onRefresh,
+                      color: AppColors.of(context).primary,
+                      child: content,
+                    );
+                  }
+                  return content;
+                },
+              ),
+            ),
+              Container(
+                padding: const EdgeInsets.all(AppConstants.p20),
+                decoration: BoxDecoration(
+                  color: AppColors.of(context).surface,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.of(context).outline.withValues(alpha: 0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, -4),
+                    ),
                   ],
                 ),
-                const SizedBox(height: AppConstants.p24),
-                LeaveOverlapSection(
-                  overlapLeaves: state.overlapLeaves,
-                  hideOverlapAfterSubmit: state.hideOverlapAfterSubmit,
+                child: SafeArea(
+                  top: false,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: CommonButton(
+                      text: l10n.nextText,
+                      onPressed: _isNextButtonEnabled ? _handleNext : null,
+                    ),
+                  ),
                 ),
-              ],
-              const SizedBox(height: AppConstants.p32),
-              LeaveFormActionButtons(
-                onCancel: () => Navigator.pop(context),
-                onSubmit: _submitForm,
-                isLoading: state.isLoading,
-                isSubmitDisabled:
-                    state.isInitialLoading ||
-                    state.isLoading ||
-                    state.isUploading ||
-                    (requiresDocs && state.uploadedFileUrl == null),
               ),
             ],
           ),

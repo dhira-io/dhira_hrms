@@ -93,8 +93,7 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
                   Text(
                     uploadError!,
                     style: AppTextStyle.bodySmall.copyWith(
-                      color: Colors.red,
-                      fontSize: 10.sp,
+                      color: AppColors.of(context).error,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -118,7 +117,6 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
                         ? l10n.changeFile
                         : l10n.browseFiles,
                     style: AppTextStyle.button.copyWith(
-                      fontSize: 12.sp,
                       color: AppColors.of(context).primary,
                     ),
                   ),
