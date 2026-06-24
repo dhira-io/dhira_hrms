@@ -73,10 +73,8 @@ class LeaveConfirmationStep extends StatelessWidget {
                         child: CommonButton(
                           text: l10n.myRequests,
                           variant: ButtonVariant.outlined,
-                          textStyle: AppTextStyle.bodyLarge.copyWith(
-                            color: colors.onSurface,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          foregroundColor: colors.onSurface,
+                          fontWeight: FontWeight.w600,
                           onPressed: onMyRequests,
                         ),
                       ),

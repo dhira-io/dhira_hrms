@@ -119,10 +119,8 @@ class LeaveReviewStep extends StatelessWidget {
                   child: CommonButton(
                     text: l10n.editDetails,
                     variant: ButtonVariant.outlined,
-                    textStyle: AppTextStyle.bodyLarge.copyWith(
-                      color: colors.onSurface,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    foregroundColor: colors.onSurface,
+                    fontWeight: FontWeight.bold,
                     onPressed: onBack,
                   ),
                 ),
