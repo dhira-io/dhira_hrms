@@ -9,7 +9,7 @@ import '../models/project_assignment_model.dart';
 import '../models/timesheet_overview_model.dart';
 
 class TimesheetRepositoryImpl implements ITimesheetRepository {
-  final TimesheetRemoteDataSource remoteDataSource;
+  final ITimesheetRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
   TimesheetRepositoryImpl(this.remoteDataSource, this.networkInfo);
@@ -20,7 +20,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
       try {
         final models = await remoteDataSource.fetchProjects();
         return Right(models.map((e) => e.toEntity()).toList());
-      } catch (e) {
+      } on Exception catch (e) {
         return Left(Failure.fromException(e));
       }
     });
@@ -65,7 +65,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
 
         final result = await remoteDataSource.createTimesheet(payload);
         return Right(result);
-      } catch (e) {
+      } on Exception catch (e) {
         return Left(Failure.fromException(e));
       }
     });
@@ -96,7 +96,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
 
         final result = await remoteDataSource.updateTimesheet(payload);
         return Right(result);
-      } catch (e) {
+      } on Exception catch (e) {
         return Left(Failure.fromException(e));
       }
     });
@@ -186,7 +186,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
         }
 
         return Right(allAssignments);
-      } catch (e) {
+      } on Exception catch (e) {
         return Left(Failure.fromException(e));
       }
     });
@@ -203,7 +203,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
         final payload = {"name": name, "parent": parent, "date": date};
         await remoteDataSource.deleteTimesheetEntry(payload);
         return const Right(null);
-      } catch (e) {
+      } on Exception catch (e) {
         return Left(Failure.fromException(e));
       }
     });
@@ -220,7 +220,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
         await remoteDataSource.deleteTimesheet(payload);
 
         return const Right(null);
-      } catch (e) {
+      } on Exception catch (e) {
         return Left(Failure.fromException(e));
       }
     });
@@ -242,7 +242,7 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
           return Right(model.toEntity());
         }
         return Left(ServerFailure("Invalid overview response"));
-      } catch (e) {
+      } on Exception catch (e) {
         return Left(Failure.fromException(e));
       }
     });
@@ -250,11 +250,13 @@ class TimesheetRepositoryImpl implements ITimesheetRepository {
 
   @override
   Future<Either<Failure, String>> uploadFile({required String filePath}) async {
-    try {
-      final result = await remoteDataSource.uploadFile(filePath);
-      return Right(result);
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
-    }
+    return networkInfo.connectedAndRun(() async {
+      try {
+        final result = await remoteDataSource.uploadFile(filePath);
+        return Right(result);
+      } on Exception catch (e) {
+        return Left(Failure.fromException(e));
+      }
+    });
   }
 }

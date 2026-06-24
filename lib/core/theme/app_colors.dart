@@ -65,6 +65,7 @@ class AppColors {
   static const Color black = Colors.black;
   static const Color transparent = Colors.transparent;
   static const Color placeholdergrey = Color(0xff9E9E9E);
+  static const Color confirmationRedBg = Color(0xFFFEF2F2);
 
   // Status Palettes (Tailwind-like)
   static const Color info = Color(0xFF0369A1);
@@ -122,6 +123,7 @@ class AppColors {
   static const Color slate300 = Color(0xFFCBD5E1);
   static const Color slate400 = Color(0xFF94A3B8);
   static const Color slate500 = Color(0xFF64748B);
+  static const Color slate500Confirmation = Color(0xFF62748E);
   static const Color slate600 = Color(0xFF475569);
   static const Color slate700 = Color(0xFF334155);
   static const Color slate800 = Color(0xFF1E293B);
@@ -133,6 +135,32 @@ class AppColors {
   static const Color charcoal = Color(0xFF101828);
   static const Color slateGrey = Color(0xFF475467);
 
+  // Timesheet HTML Colors
+  static const Color colorBlue50 = Color(0xFFEFF6FF);
+  static const Color colorBlue200 = Color(0xFFBEDBFF);
+  static const Color colorBlue300 = Color(0xFF8EC5FF);
+  static const Color colorBlue400 = Color(0xFF51A2FF);
+  static const Color colorBlue500 = Color(0xFF2B7FFF);
+  static const Color colorBlue600 = Color(0xFF155DFC);
+  static const Color colorNeutral100 = Color(0xFFF5F5F5);
+  static const Color colorNeutral200 = Color(0xFFE5E5E5);
+  static const Color colorNeutral400 = Color(0xFFA1A1A1);
+  static const Color colorGreen50 = Color(0xFFF0FDF4);
+  static const Color colorGreen200 = Color(0xFFB9F8CF);
+  static const Color colorGreen300 = Color(0xFF7BF1A8);
+  static const Color colorGreen600 = Color(0xFF00A63E);
+  static const Color colorGreen700 = Color(0xFF008236);
+  static const Color colorOrange50 = Color(0xFFFFF7ED);
+  static const Color colorOrange200 = Color(0xFFFFD6A8);
+  static const Color colorOrange300 = Color(0xFFFFB86A);
+  static const Color colorOrange400 = Color(0xFFFF8904);
+  static const Color colorOrange500 = Color(0xFFFF6900);
+  static const Color colorOrange600 = Color(0xFFF54A00);
+  static const Color colorEmerald400 = Color(0xFF00D492);
+  static const Color colorEmerald500 = Color(0xFF008236);
+  static const Color colorRed500 = Color(0xFFFB2C36);
+  static const Color colorRed300 = Color(0xFFFF6467);
+  static const Color colorRed600 = Color(0xFFE7000B);
   static const Color purpleHoliday = Color(0xFF9810FA);
   static const Color blueAttendance = Color(0xFF3B82F6);
 
@@ -267,6 +295,12 @@ class AppColors {
   static const Color _darkSlate50 = Color(0xFF0F172A);
   static const Color _darkSlate100 = Color(0xFF1E293B);
   static const Color _darkSlate200 = Color(0xFF334155);
+
+  // Timesheet colors for dark mode
+  static const Color _darkColorBlue50 = Color(0xFF0F2D5C);
+  static const Color _darkColorGreen50 = Color(0xFF0A3D1F);
+  static const Color _darkColorOrange50 = Color(0xFF4A2C10);
+  static const Color _darkColorNeutral100 = Color(0xFF2C2C2C);
 
   // Profile specific dark mode
   static const Color _darkProfileHeaderBg = Color(0xFF0A1929);
@@ -410,6 +444,7 @@ class AppColorsResolved {
   final Color slate300;
   final Color slate400;
   final Color slate500;
+  final Color slate500Confirmation;
   final Color slate600;
   final Color slate700;
   final Color slate800;
@@ -499,6 +534,12 @@ class AppColorsResolved {
   final Color welcomeTitlePrimary;
   final Color welcomeSubtitleColor;
 
+  // Timesheet card colors (theme-aware)
+  final Color colorBlue50;
+  final Color colorGreen50;
+  final Color colorOrange50;
+  final Color colorNeutral100;
+
   const AppColorsResolved._({
     required this.primary,
     required this.primaryContainer,
@@ -587,6 +628,7 @@ class AppColorsResolved {
     required this.slate300,
     required this.slate400,
     required this.slate500,
+    required this.slate500Confirmation,
     required this.slate600,
     required this.slate700,
     required this.slate800,
@@ -673,6 +715,10 @@ class AppColorsResolved {
     required this.welcomeTopBg,
     required this.welcomeTitlePrimary,
     required this.welcomeSubtitleColor,
+    required this.colorBlue50,
+    required this.colorGreen50,
+    required this.colorOrange50,
+    required this.colorNeutral100,
   });
 
   factory AppColorsResolved.light() => const AppColorsResolved._(
@@ -763,6 +809,7 @@ class AppColorsResolved {
     slate300: AppColors.slate300,
     slate400: AppColors.slate400,
     slate500: AppColors.slate500,
+    slate500Confirmation: AppColors.slate500Confirmation,
     slate600: AppColors.slate600,
     slate700: AppColors.slate700,
     slate800: AppColors.slate800,
@@ -849,6 +896,10 @@ class AppColorsResolved {
     welcomeTopBg: AppColors.leaveBg,
     welcomeTitlePrimary: AppColors.slate900,
     welcomeSubtitleColor: AppColors.slate500,
+    colorBlue50: AppColors.colorBlue50,
+    colorGreen50: AppColors.colorGreen50,
+    colorOrange50: AppColors.colorOrange50,
+    colorNeutral100: AppColors.colorNeutral100,
   );
 
   factory AppColorsResolved.dark() => const AppColorsResolved._(
@@ -903,7 +954,7 @@ class AppColorsResolved {
     draft: AppColors.draft,
     accent: AppColors.accent,
     tertiaryFixed: AppColors.tertiaryFixed,
-    white: AppColors.white,
+    white: AppColors._darkSurface,
     black: AppColors.black,
     transparent: AppColors.transparent,
     placeholdergrey: AppColors.placeholdergrey,
@@ -938,12 +989,13 @@ class AppColorsResolved {
     slate200: AppColors._darkSlate200,
     slate300: AppColors.slate300,
     slate400: AppColors.slate400,
-    slate500: AppColors.slate500,
+    slate500: AppColors.slate400,
+    slate500Confirmation: AppColors.slate500Confirmation,
     slate600: AppColors.slate200,
-    slate700: AppColors.slate700,
-    slate800: AppColors.slate800,
-    slate900: AppColors.slate900,
-    slate950: AppColors.slate950,
+    slate700: AppColors.slate300,
+    slate800: AppColors.slate200,
+    slate900: AppColors.white,
+    slate950: AppColors.white,
     gray400: AppColors.gray400,
     darkGradientEnd: AppColors.darkGradientEnd,
     lightGrey: AppColors.lightGrey,
@@ -1025,5 +1077,9 @@ class AppColorsResolved {
     welcomeTopBg: AppColors._darkWelcomeTopBg,
     welcomeTitlePrimary: AppColors._darkWelcomeTitlePrimary,
     welcomeSubtitleColor: AppColors._darkWelcomeSubtitle,
+    colorBlue50: AppColors._darkColorBlue50,
+    colorGreen50: AppColors._darkColorGreen50,
+    colorOrange50: AppColors._darkColorOrange50,
+    colorNeutral100: AppColors._darkColorNeutral100,
   );
 }

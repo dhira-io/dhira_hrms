@@ -55,6 +55,10 @@ abstract class TimesheetEvent with _$TimesheetEvent {
     required String date,
   }) = TimesheetDeleteEntryRequested;
 
+  const factory TimesheetEvent.deleteTaskRequested({
+    required ProjectAssignmentEntity task,
+  }) = TimesheetDeleteTaskRequested;
+
   const factory TimesheetEvent.deleteTimesheetRequested({
     required String timesheetName,
   }) = TimesheetDeleteTimesheetRequested;
@@ -93,4 +97,10 @@ abstract class TimesheetEvent with _$TimesheetEvent {
   const factory TimesheetEvent.previousWeekRequested() =
       TimesheetPreviousWeekRequested;
   const factory TimesheetEvent.nextWeekRequested() = TimesheetNextWeekRequested;
+  const factory TimesheetEvent.refreshRequested() = TimesheetRefreshRequested;
+  const factory TimesheetEvent.viewAttachmentRequested({
+    required String attachment,
+  }) = TimesheetViewAttachmentRequested;
+  const factory TimesheetEvent.clearAttachmentViewRequested() =
+      TimesheetClearAttachmentViewRequested;
 }

@@ -1036,6 +1036,17 @@
   "timesheetEntry": "टाइमशीट प्रविष्टि",
   "updateTask": "कार्य अपडेट करें",
   "addNewTask": "नया कार्य जोड़ें",
+  "addingNewTask": "नया कार्य जोड़ना",
+  "taskLabel": "कार्य",
+  "expectedHrsLabel": "अपेक्षित घंटे",
+  "actualHrsLabel": "वास्तविक घंटे",
+  "descriptionLabel": "विवरण",
+  "supportingDocumentLabel": "सहायक दस्तावेज (वैकल्पिक)",
+  "selectAnyFileToUpload": "अपलोड करने के लिए किसी भी फ़ाइल का चयन करें",
+  "pdfJpgPngLimit": "PDF, JPG, PNG 5MB तक",
+  "selectAllocationTime": "आवंटन समय चुनें",
+  "enterTaskName": "कार्य का नाम दर्ज करें",
+  "brieflyDescribeWhatYouWorkedOn": "संक्षेप में वर्णन करें कि आपने क्या काम किया...",
   "expectedH": "अपेक्षित (घंटे)",
   "actualH": "वास्तविक (घंटे)",
   "detailedDescription": "विस्तृत विवरण",
@@ -1049,7 +1060,7 @@
   "timesheetPending": "लंबित",
   "timesheetRejected": "अस्वीकृत",
   "timesheetUpcoming": "आगामी",
-  "submitWeeklyTimesheet": "साप्ताहिक टाइमशीट जमा करें",
+  "submitWeeklyTimesheet": "टाइमशीट जमा करें",
   "tapToBrowseFiles": "फ़ाइलें ब्राउज़ करने के लिए टैप करें",
   "fileSizeLimit": "अधिकतम आकार 5MB (PDF, JPG, PNG)",
   "uploadedFile": "अपलोड किया गया: {fileName}",
@@ -1062,9 +1073,21 @@
   "timesheetSubmittedSuccessfully": "टाइमशीट सफलतापूर्वक जमा की गई",
   "taskUpdatedSuccessfully": "कार्य सफलतापूर्वक अपडेट किया गया",
   "taskDeletedSuccessfully": "कार्य सफलतापूर्वक हटा दिया गया",
+  "timesheetDeletedSuccessfully": "टाइमशीट सफलतापूर्वक हटा दी गई",
   "noDraftTasksFound": "सप्ताह के लिए कोई ड्राफ्ट कार्य नहीं मिला",
   "weeksCount": "{count, plural, =1{1 सप्ताह} other{{count} सप्ताह}}",
   "timesheetDateTasks": "{date}, कार्य ",
+  "taskNumberDate": "कार्य {count}, {date}",
+  "@taskNumberDate": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "timesheetSubtitle": "काम के घंटों को आसानी से ट्रैक करें, समय लॉग करें और रिपोर्ट देखें।",
   "leaveSubtitle": "छुट्टी और उपस्थिति का प्रबंधन करें, नियमितीकरण जमा करें और स्वीकृतियों को कुशलतापूर्वक ट्रैक करें",
   "compOffSubtitle": "अतिरिक्त कार्य क्रेडिट प्रबंधित करें",
@@ -1563,7 +1586,7 @@
     "timesheetPending": "लंबित",
     "timesheetRejected": "अस्वीकृत",
     "timesheetUpcoming": "आगामी",
-    "submitWeeklyTimesheet": "साप्ताहिक टाइमशीट जमा करें",
+    "submitWeeklyTimesheet": "टाइमशीट जमा करें",
     "tapToBrowseFiles": "फ़ाइलें ब्राउज़ करने के लिए टैप करें",
     "fileSizeLimit": "अधिकतम आकार 5MB (PDF, JPG, PNG)",
     "uploadedFile": "अपलोड किया गया: {fileName}",
@@ -1576,9 +1599,21 @@
     "timesheetSubmittedSuccessfully": "टाइमशीट सफलतापूर्वक जमा की गई",
     "taskUpdatedSuccessfully": "कार्य सफलतापूर्वक अपडेट किया गया",
     "taskDeletedSuccessfully": "कार्य सफलतापूर्वक हटा दिया गया",
+    "timesheetDeletedSuccessfully": "टाइमशीट सफलतापूर्वक हटा दी गई",
     "noDraftTasksFound": "सप्ताह के लिए कोई ड्राफ्ट कार्य नहीं मिला",
     "weeksCount": "{count, plural, =1{1 सप्ताह} other{{count} सप्ताह}}",
     "timesheetDateTasks": "{date}, कार्य ",
+    "taskNumberDate": "कार्य {count}, {date}",
+    "@taskNumberDate": {
+        "placeholders": {
+            "count": {
+                "type": "num"
+            },
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "timesheetSubtitle": "काम के घंटों को आसानी से ट्रैक करें, समय लॉग करें और रिपोर्ट देखें।",
     "leaveSubtitle": "छुट्टी और उपस्थिति का प्रबंधन करें, नियमितीकरण जमा करें और स्वीकृतियों को कुशलतापूर्वक ट्रैक करें",
     "compOffSubtitle": "अतिरिक्त कार्य क्रेडिट प्रबंधित करें",
@@ -1999,8 +2034,26 @@
     "deleteKeyProjectConfirmation": "क्या आप वाकई इस प्रमुख परियोजना को हटाना चाहते हैं?",
     "deleteLanguageConfirmation": "क्या आप वाकई इस भाषा को हटाना चाहते हैं?",
     "deleteEducationConfirmation": "क्या आप वाकई इस शिक्षा विवरण को हटाना चाहते हैं?",
-    "deleteCertificationConfirmation": "क्या आप वाकई इस प्रमाणपत्र को हटाना चाहते हैं?"
-,
+    "deleteCertificationConfirmation": "क्या आप वाकई इस प्रमाणपत्र को हटाना चाहते हैं?",
+    "thisWeek": "इस सप्ताह",
+    "weeklyRange": "साप्ताहिक सीमा",
+    "logged": "दर्ज किया गया",
+    "target": "लक्ष्य",
+    "remaining": "शेष",
+    "percentComplete": "{percent}% पूर्ण",
+    "dailyProgress": "दैनिक प्रगति",
+    "partial": "आंशिक",
+    "missing": "अनुपस्थित",
+    "dailyTarget": "दैनिक लक्ष्य: {hours} घंटे",
+    "hoursRemaining": "{hours} घंटे शेष",
+    "taskEntries": "कार्य प्रविष्टियां",
+    "noTasksLogged": "कोई कार्य दर्ज नहीं",
+    "logWorkHoursPrompt": "इस दिन के लिए कार्य जोड़कर अपने काम के घंटे दर्ज करें",
+    "addTask": "कार्य जोड़ें",
+    "trackWeeklyWorkHours": "साप्ताहिक कार्य के घंटे ट्रैक करें",
+    "monFri": "सोम-शुक्र",
+    "viewAttach": "अटैचमेंट देखें",
+    "hoursVariance": "{hours} घंटे भिन्नता",
     "policies": "नीतियां",
     "policyHub": "नीति हब",
     "policyHubSubtitle": "केन्द्रीकृत कंपनी नीतियां और दिशा-निर्देश",
