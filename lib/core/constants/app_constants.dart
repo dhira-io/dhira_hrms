@@ -305,6 +305,10 @@ class AppConstants {
   static const int docStatusDraft = 0;
   static const int docStatusSubmitted = 1;
 
+  // Frappe Actions
+  static const String actionSave = 'Save';
+  static const String actionSubmit = 'Submit';
+
   // Font Sizes
   static const double fs1 = 1.0;
   static const double fs2 = 2.0;

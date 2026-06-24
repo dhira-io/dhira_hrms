@@ -8,8 +8,9 @@ import '../models/attendance_regularization_model.dart';
 
 abstract class IAttendanceRegularizationRemoteDataSource {
   Future<void> submitRegularization(
-    AttendanceRegularizationModel regularization,
-  );
+    AttendanceRegularizationModel regularization, {
+    String action,
+  });
   Future<String> uploadFile({
     required String filePath,
     required String fileName,
@@ -27,14 +28,15 @@ class AttendanceRegularizationRemoteDataSourceImpl
 
   @override
   Future<void> submitRegularization(
-    AttendanceRegularizationModel regularization,
-  ) async {
+    AttendanceRegularizationModel regularization, {
+    String action = 'Save',
+  }) async {
     final payload = regularization.toJson();
     SecureLogger.i('Submitting regularization redesigned', payload);
 
     final formData = FormData.fromMap({
       'doc': jsonEncode(payload),
-      'action': 'Save',
+      'action': action,
     });
 
     await dioClient.post(

@@ -26,6 +26,7 @@ class AttendanceRegularizationRepositoryImpl
       try {
         await remoteDataSource.submitRegularization(
           AttendanceRegularizationModel.fromEntity(regularization),
+          action: regularization.action,
         );
         return const Right(unit);
       } on ServerException catch (e) {

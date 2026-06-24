@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 
 class AttendanceRegularizationEntity extends Equatable {
   final DateTime date;
@@ -9,6 +10,7 @@ class AttendanceRegularizationEntity extends Equatable {
   final bool routeToHR;
   final String reason;
   final String? supportingDocument;
+  final String action;
 
   const AttendanceRegularizationEntity({
     required this.date,
@@ -19,6 +21,7 @@ class AttendanceRegularizationEntity extends Equatable {
     required this.routeToHR,
     required this.reason,
     this.supportingDocument,
+    this.action = AppConstants.actionSave,
   });
 
   @override
@@ -31,5 +34,6 @@ class AttendanceRegularizationEntity extends Equatable {
         routeToHR,
         reason,
         supportingDocument,
+        action,
       ];
 }

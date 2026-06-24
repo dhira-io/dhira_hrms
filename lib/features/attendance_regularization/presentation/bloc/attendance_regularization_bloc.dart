@@ -365,6 +365,7 @@ class AttendanceRegularizationBloc
       routeToHR: formData.routeToHR,
       reason: formData.reason,
       supportingDocument: formData.uploadedFileUrl,
+      action: AppConstants.actionSave,
     );
 
     final result = await submitRegularizationUseCase(entity);

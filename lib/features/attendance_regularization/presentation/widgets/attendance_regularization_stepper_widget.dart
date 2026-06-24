@@ -66,8 +66,7 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildStep(
-                    context: context,
+                  _StepItem(
                     stepNum: 1,
                     title: l10n.step1EnterDetails,
                     isActive: currentStep == 0,
@@ -76,8 +75,7 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
                     textColor: textColor,
                     mutedColor: mutedColor,
                   ),
-                  _buildStep(
-                    context: context,
+                  _StepItem(
                     stepNum: 2,
                     title: l10n.step2ReviewDetails,
                     isActive: currentStep == 1,
@@ -86,8 +84,7 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
                     textColor: textColor,
                     mutedColor: mutedColor,
                   ),
-                  _buildStep(
-                    context: context,
+                  _StepItem(
                     stepNum: 3,
                     title: l10n.step3Confirmation,
                     isActive: currentStep == 2,
@@ -104,17 +101,29 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
       },
     );
   }
+}
 
-  Widget _buildStep({
-    required BuildContext context,
-    required int stepNum,
-    required String title,
-    required bool isActive,
-    required bool isCompleted,
-    required Color primaryColor,
-    required Color textColor,
-    required Color mutedColor,
-  }) {
+class _StepItem extends StatelessWidget {
+  final int stepNum;
+  final String title;
+  final bool isActive;
+  final bool isCompleted;
+  final Color primaryColor;
+  final Color textColor;
+  final Color mutedColor;
+
+  const _StepItem({
+    required this.stepNum,
+    required this.title,
+    required this.isActive,
+    required this.isCompleted,
+    required this.primaryColor,
+    required this.textColor,
+    required this.mutedColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final colors = AppColors.of(context);
     Widget circle;
     if (isCompleted) {
@@ -137,7 +146,6 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
     } else if (isActive) {
       circle = Container(
         alignment: Alignment.center,
-
         width: 30.r,
         height: 30.r,
         child: Container(
@@ -152,7 +160,7 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
             color: colors.white,
             boxShadow: [
               BoxShadow(
-                color: primaryColor.withOpacity(0.24), // Soft blue shade
+                color: primaryColor.withValues(alpha: 0.24), // Soft blue shade
                 blurRadius: 4.r,
                 spreadRadius: 2.r,
               ),
