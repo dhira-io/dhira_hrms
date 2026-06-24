@@ -8,13 +8,11 @@ import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/leave_balance_entity.dart';
 import 'leave_info_row.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/leave_bloc.dart';
 import '../bloc/leave_event.dart';
 import '../bloc/leave_state.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
-import 'package:dhira_hrms/core/widgets/no_internet_widget.dart';
 
 class LeaveBalanceOverviewCard extends StatefulWidget {
   final String employeeId;
@@ -201,7 +199,6 @@ class LeaveDetailCard extends StatelessWidget {
             style: AppTextStyle.bodyLarge.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.of(context).onSurface,
-              fontSize: AppConstants.fs15.sp,
             ),
           ),
           SizedBox(height: 16.h),

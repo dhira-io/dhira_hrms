@@ -17,6 +17,7 @@ abstract class ILeaveRepository {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     String? attachmentUrl,
   });
 
@@ -32,6 +33,7 @@ abstract class ILeaveRepository {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     String? workflowState,
     String? attachmentUrl,
   });

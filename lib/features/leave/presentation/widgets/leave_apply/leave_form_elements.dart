@@ -13,7 +13,6 @@ class LeaveFormSectionTitle extends StatelessWidget {
     return Text(
       title,
       style: AppTextStyle.h3.copyWith(
-        fontFamily: 'Manrope',
         fontWeight: FontWeight.bold,
         color: AppColors.of(context).onSurface,
       ),
@@ -23,18 +22,31 @@ class LeaveFormSectionTitle extends StatelessWidget {
 
 class LeaveFormLabel extends StatelessWidget {
   final String label;
+  final bool isRequired;
 
-  const LeaveFormLabel({super.key, required this.label});
+  const LeaveFormLabel({super.key, required this.label, this.isRequired = false});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:       EdgeInsets.only(left: 4.w, bottom: 6.h),
-      child: Text(
-        label,
-        style: AppTextStyle.bodySmall.copyWith(
-          color: AppColors.of(context).onSurfaceVariant,
-          fontWeight: FontWeight.bold,
+      padding: EdgeInsets.only(left: 4.w, bottom: 6.h),
+      child: RichText(
+        text: TextSpan(
+          text: label,
+          style: AppTextStyle.bodyMedium.copyWith(
+            color: AppColors.of(context).onSurfaceVariant,
+            fontWeight: FontWeight.w600,
+          ),
+          children: [
+            if (isRequired)
+              TextSpan(
+                text: '*',
+                style: AppTextStyle.bodyMedium.copyWith(
+                  color: AppColors.of(context).error,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+          ],
         ),
       ),
     );

@@ -8,28 +8,33 @@ class AppTextStyle {
   static const String headingFont = 'Manrope';
 
   // Headings
-  static       TextStyle h1 = TextStyle(
+  static TextStyle h1 = TextStyle(
     fontFamily: headingFont,
     fontSize: 22.sp,
     fontWeight: FontWeight.bold,
   );
 
-  static       TextStyle h2 = TextStyle(
+  static TextStyle h2 = TextStyle(
     fontFamily: headingFont,
     fontSize: 18.sp,
     fontWeight: FontWeight.w600,
   );
 
-  static       TextStyle h3 = TextStyle(
+  static TextStyle h3 = TextStyle(
     fontFamily: headingFont,
     fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+  );
+
+  static TextStyle h3Small = TextStyle(
+    fontFamily: headingFont,
+    fontSize: 15.sp,
     fontWeight: FontWeight.w600,
   );
 
   static final TextStyle h1Bold = h1.copyWith(fontWeight: FontWeight.bold);
   static final TextStyle h2Bold = h2.copyWith(fontWeight: FontWeight.bold);
   static final TextStyle h3Bold = h3.copyWith(fontWeight: FontWeight.bold);
-
 
   //Display
   static TextStyle get displayLarge =>
@@ -43,8 +48,6 @@ class AppTextStyle {
   static TextStyle get displaySmallTwo =>
       GoogleFonts.inter(fontSize: 16.sp, fontWeight: FontWeight.w600);
 
-
-
   //Title
   static TextStyle get titleLarge =>
       GoogleFonts.inter(fontSize: 18.sp, fontWeight: FontWeight.w600);
@@ -54,7 +57,6 @@ class AppTextStyle {
       GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w600);
   static TextStyle get titleSmallOne =>
       GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w600);
-
 
   //Heading
   static TextStyle get headingLarge =>
@@ -66,14 +68,19 @@ class AppTextStyle {
   static TextStyle get headingSmallOne =>
       GoogleFonts.manrope(fontSize: 16.sp, fontWeight: FontWeight.w600);
   static TextStyle get headingSmallTwo =>
-      GoogleFonts.manrope(fontSize: 14.sp, fontWeight: FontWeight.w500);
-
+      GoogleFonts.manrope(fontSize: 14.sp, fontWeight: FontWeight.w600);
+  static TextStyle get headingSmallTwoBold =>
+      GoogleFonts.manrope(fontSize: 14.sp, fontWeight: FontWeight.w700);
+  static TextStyle get headingSmallThree =>
+      GoogleFonts.manrope(fontSize: 13.sp, fontWeight: FontWeight.w600);
 
   // Body
   static TextStyle get bodyLarge =>
       GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w400);
   static TextStyle get bodyMedium =>
       GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w400);
+  static TextStyle get bodyMediumOne =>
+      GoogleFonts.inter(fontSize: 11.sp, fontWeight: FontWeight.w400);
   static TextStyle get bodySmall =>
       GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w400);
   static TextStyle get bodySmallOne =>
@@ -81,12 +88,15 @@ class AppTextStyle {
   static TextStyle get bodySmallTwo =>
       GoogleFonts.inter(fontSize: 8.sp, fontWeight: FontWeight.w400);
 
-
   // Labels
+  static TextStyle get labelLargeOne =>
+      GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w600);
   static TextStyle get labelLarge =>
       GoogleFonts.inter(fontSize: 13.sp, fontWeight: FontWeight.w600);
   static TextStyle get labelMedium =>
       GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w500);
+  static TextStyle get labelMediumOne =>
+      GoogleFonts.inter(fontSize: 11.sp, fontWeight: FontWeight.w500);
   static TextStyle get labelSmall =>
       GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w500);
   static TextStyle get labelSmallOne =>
@@ -94,10 +104,9 @@ class AppTextStyle {
   static TextStyle get labelSmallTwo =>
       GoogleFonts.inter(fontSize: 8.sp, fontWeight: FontWeight.w400);
 
-
   static TextStyle get button => GoogleFonts.inter(
     fontSize: 14.sp,
-    fontWeight: FontWeight.w700,
+    //  fontWeight: FontWeight.w700,
     color: AppColors.surfaceContainerLowest,
   );
 
@@ -110,7 +119,7 @@ class AppTextStyle {
     color: AppColors.error,
   );
 
-  static       TextStyle headlineSmall = TextStyle(
+  static TextStyle headlineSmall = TextStyle(
     fontSize: 22.0.sp,
     fontWeight: FontWeight.w400,
     // Add other properties like font family if needed
@@ -142,14 +151,12 @@ class AppTextStyle {
   static TextStyle get welcomeTitle => GoogleFonts.inter(
     fontSize: 30.sp,
     fontWeight: FontWeight.w600,
-    height: 40.h / 36,
     letterSpacing: 0.0,
   );
 
   static TextStyle get welcomeSubtitle => GoogleFonts.rubik(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
-    height: 1.4.h,
     letterSpacing: 0.2,
   );
 
@@ -164,14 +171,14 @@ class AppTextStyle {
   static TextStyle get onboardingTitle => GoogleFonts.inter(
     fontSize: 20.sp,
     fontWeight: FontWeight.w600,
-    height: 36.h / 30,
+    height: 36 / 30,
     letterSpacing: 0.0,
   );
 
   static TextStyle get onboardingSubtitle => GoogleFonts.inter(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
-    height: 28.h / 18,
+    height: 28 / 18,
     letterSpacing: 0.0,
   );
 
@@ -186,7 +193,6 @@ class AppTextStyle {
   static TextStyle get loginHeaderSubtitle => GoogleFonts.inter(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
-    height: 1.4.h,
     letterSpacing: -0.01 * 14,
   );
 
@@ -213,7 +219,7 @@ class AppTextStyle {
 
   static TextStyle get loginOffice365Text => GoogleFonts.inter(
     fontSize: 14.sp,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w500,
     height: 24.h / 16,
     letterSpacing: 0.0,
   );

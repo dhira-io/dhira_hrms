@@ -5,7 +5,7 @@ import '../../../../core/error/exceptions.dart';
 import '../constants/timesheet_api_constants.dart';
 import '../models/project_model.dart';
 
-abstract class TimesheetRemoteDataSource {
+abstract class ITimesheetRemoteDataSource {
   Future<List<ProjectModel>> fetchProjects();
   Future<String> createTimesheet(Map<String, dynamic> payload);
   Future<String> updateTimesheet(Map<String, dynamic> payload);
@@ -22,7 +22,7 @@ abstract class TimesheetRemoteDataSource {
   Future<String> uploadFile(String filePath);
 }
 
-class TimesheetRemoteDataSourceImpl implements TimesheetRemoteDataSource {
+class TimesheetRemoteDataSourceImpl implements ITimesheetRemoteDataSource {
   final DioClient dioClient;
 
   TimesheetRemoteDataSourceImpl(this.dioClient);

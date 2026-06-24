@@ -15,6 +15,10 @@ class AppAssets {
   // Onboarding & Welcome
   static const String welcomeIllustration =
       'assets/svg/welcome_illustration.svg';
+  static const String welcomeIllustrationNew =
+      'assets/svg/welcome_illustration_new.svg';
+  static const String welcomeIllustrationPng =
+      'assets/welcome_illustration.png';
   static const String getStartedIllustration =
       'assets/svg/get_started_illustration.svg';
   static const String onboardingLeave = 'assets/svg/onboarding_leave.svg';

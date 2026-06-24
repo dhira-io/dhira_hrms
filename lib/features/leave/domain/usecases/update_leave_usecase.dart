@@ -19,6 +19,7 @@ class UpdateLeaveUseCase {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     String? workflowState,
     String? attachmentUrl,
   }) async {
@@ -34,6 +35,7 @@ class UpdateLeaveUseCase {
       halfDayDate: halfDayDate,
       halfDaySegment: halfDaySegment,
       totalleavedays: totalleavedays,
+      emergencyContactNumber: emergencyContactNumber,
       workflowState: workflowState,
       attachmentUrl: attachmentUrl,
     );
