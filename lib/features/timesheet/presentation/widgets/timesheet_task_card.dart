@@ -86,9 +86,9 @@ class TimesheetTaskCard extends StatelessWidget {
                 ),
                 child: Text(
                   task.status ?? AppConstants.placeholderText,
-                  style: AppTextStyle.labelLarge.copyWith(
+                  style: AppTextStyle.labelMedium.copyWith(
                     color: statusColor,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
