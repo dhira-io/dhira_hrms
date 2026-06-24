@@ -14,6 +14,8 @@ enum AttendanceRegularizationSuccessKind { fileUpload, submission }
 
 enum AttendanceRegularizationValidationError { dateRequired, timeRequired, reasonTooShort, fileTooLarge }
 
+enum AttendanceRegularizationStatus { initial, loading, success, error }
+
 @freezed
 class AttendanceRegularizationFormData with _$AttendanceRegularizationFormData {
   const factory AttendanceRegularizationFormData({
@@ -69,31 +71,32 @@ class AttendanceRegularizationFormData with _$AttendanceRegularizationFormData {
 
 @freezed
 class AttendanceRegularizationState with _$AttendanceRegularizationState {
-  const factory AttendanceRegularizationState.initial({
-    @Default(AttendanceRegularizationFormData()) AttendanceRegularizationFormData formData,
+  const factory AttendanceRegularizationState({
+    @Default(AttendanceRegularizationStatus.initial)
+    AttendanceRegularizationStatus status,
+    @Default(AttendanceRegularizationFormData())
+    AttendanceRegularizationFormData formData,
     @Default(0) int currentStep,
-  }) = _Initial;
-
-  const factory AttendanceRegularizationState.loading({
-    required AttendanceRegularizationFormData formData,
-    required AttendanceRegularizationLoadingKind kind,
-    @Default(0) int currentStep,
-  }) = _Loading;
-
-  const factory AttendanceRegularizationState.success({
-    required AttendanceRegularizationFormData formData,
-    required AttendanceRegularizationSuccessKind kind,
-    @Default(0) int currentStep,
-  }) = _Success;
-
-  const factory AttendanceRegularizationState.error({
-    required AttendanceRegularizationFormData formData,
-    String? message,
+    @Default('') String managerName,
+    AttendanceRegularizationLoadingKind? loadingKind,
+    AttendanceRegularizationSuccessKind? successKind,
+    String? errorMessage,
     AttendanceRegularizationValidationError? validationError,
-    @Default(0) int currentStep,
-  }) = _Error;
+  }) = _AttendanceRegularizationState;
 
   const AttendanceRegularizationState._();
+
+  bool get isInitial => status == AttendanceRegularizationStatus.initial;
+  bool get isLoading => status == AttendanceRegularizationStatus.loading;
+  bool get isSuccess => status == AttendanceRegularizationStatus.success;
+  bool get isError => status == AttendanceRegularizationStatus.error;
+
+  bool get isSubmitting =>
+      isLoading && loadingKind == AttendanceRegularizationLoadingKind.submit;
+  bool get isUploading =>
+      isLoading && loadingKind == AttendanceRegularizationLoadingKind.upload;
+  bool get isPunchSummaryLoading =>
+      isLoading && loadingKind == AttendanceRegularizationLoadingKind.punchSummary;
 }
 
 extension AttendanceRegularizationValidationErrorX on AttendanceRegularizationValidationError {

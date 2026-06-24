@@ -26,7 +26,7 @@ class AttendanceRegularizationBloc
     required this.getAttendancePunchSummaryUseCase,
     required this.localStorageService,
     required this.imageCompressService,
-  }) : super(const AttendanceRegularizationState.initial()) {
+  }) : super(const AttendanceRegularizationState()) {
     on<AttendanceRegularizationStarted>(_onStarted);
     on<AttendanceRegularizationDateChanged>(_onDateChanged);
     on<AttendanceRegularizationRequestTypeChanged>(_onRequestTypeChanged);
@@ -47,7 +47,8 @@ class AttendanceRegularizationBloc
     AttendanceRegularizationStarted event,
     Emitter<AttendanceRegularizationState> emit,
   ) {
-    emit(const AttendanceRegularizationState.initial());
+    final manager = localStorageService.getApproverName() ?? '';
+    emit(AttendanceRegularizationState(managerName: manager));
   }
 
   Future<void> _onDateChanged(
@@ -64,9 +65,12 @@ class AttendanceRegularizationBloc
     );
 
     emit(
-      AttendanceRegularizationState.initial(
+      state.copyWith(
+        status: AttendanceRegularizationStatus.initial,
         formData: updatedFormData,
         currentStep: currentStep,
+        errorMessage: null,
+        validationError: null,
       ),
     );
 
@@ -77,7 +81,8 @@ class AttendanceRegularizationBloc
 
     result.fold(
       (failure) => emit(
-        AttendanceRegularizationState.initial(
+        state.copyWith(
+          status: AttendanceRegularizationStatus.initial,
           formData: state.formData.copyWith(
             punchSummary: null,
             isPunchSummaryLoading: false,
@@ -86,12 +91,12 @@ class AttendanceRegularizationBloc
         ),
       ),
       (summary) {
-        // Derive Clock In & Clock Out from punch summary
         final derivedIn = _parseTime(summary.firstIn);
         final derivedOut = _parseTime(summary.lastOut);
 
         emit(
-          AttendanceRegularizationState.initial(
+          state.copyWith(
+            status: AttendanceRegularizationStatus.initial,
             formData: state.formData.copyWith(
               punchSummary: summary,
               isPunchSummaryLoading: false,
@@ -110,9 +115,9 @@ class AttendanceRegularizationBloc
     Emitter<AttendanceRegularizationState> emit,
   ) {
     emit(
-      AttendanceRegularizationState.initial(
+      state.copyWith(
+        status: AttendanceRegularizationStatus.initial,
         formData: state.formData.copyWith(requestType: event.type),
-        currentStep: state.currentStep,
       ),
     );
   }
@@ -122,9 +127,9 @@ class AttendanceRegularizationBloc
     Emitter<AttendanceRegularizationState> emit,
   ) {
     emit(
-      AttendanceRegularizationState.initial(
+      state.copyWith(
+        status: AttendanceRegularizationStatus.initial,
         formData: state.formData.copyWith(inTime: event.time),
-        currentStep: state.currentStep,
       ),
     );
   }
@@ -134,9 +139,9 @@ class AttendanceRegularizationBloc
     Emitter<AttendanceRegularizationState> emit,
   ) {
     emit(
-      AttendanceRegularizationState.initial(
+      state.copyWith(
+        status: AttendanceRegularizationStatus.initial,
         formData: state.formData.copyWith(outTime: event.time),
-        currentStep: state.currentStep,
       ),
     );
   }
@@ -146,9 +151,9 @@ class AttendanceRegularizationBloc
     Emitter<AttendanceRegularizationState> emit,
   ) {
     emit(
-      AttendanceRegularizationState.initial(
+      state.copyWith(
+        status: AttendanceRegularizationStatus.initial,
         formData: state.formData.copyWith(routeToHR: event.value),
-        currentStep: state.currentStep,
       ),
     );
   }
@@ -158,9 +163,9 @@ class AttendanceRegularizationBloc
     Emitter<AttendanceRegularizationState> emit,
   ) {
     emit(
-      AttendanceRegularizationState.initial(
+      state.copyWith(
+        status: AttendanceRegularizationStatus.initial,
         formData: state.formData.copyWith(reason: event.reason),
-        currentStep: state.currentStep,
       ),
     );
   }
@@ -171,20 +176,22 @@ class AttendanceRegularizationBloc
   ) async {
     if (event.fileSize > AppConstants.maxAttachmentBytes) {
       emit(
-        AttendanceRegularizationState.error(
-          formData: state.formData,
+        state.copyWith(
+          status: AttendanceRegularizationStatus.error,
           validationError: AttendanceRegularizationValidationError.fileTooLarge,
-          currentStep: state.currentStep,
+          errorMessage: null,
         ),
       );
       return;
     }
 
     emit(
-      AttendanceRegularizationState.loading(
+      state.copyWith(
+        status: AttendanceRegularizationStatus.loading,
+        loadingKind: AttendanceRegularizationLoadingKind.upload,
         formData: state.formData.copyWith(selectedFileName: event.fileName),
-        kind: AttendanceRegularizationLoadingKind.upload,
-        currentStep: state.currentStep,
+        errorMessage: null,
+        validationError: null,
       ),
     );
 
@@ -192,7 +199,6 @@ class AttendanceRegularizationBloc
     String nameToBeUploaded = event.fileName;
     final extension = event.filePath.split('.').last.toLowerCase();
 
-    // Compress only if it's an image
     if (AppConstants.imageExtensions.contains(extension)) {
       final compressedFile = await imageCompressService.compressImage(
         event.filePath,
@@ -214,17 +220,18 @@ class AttendanceRegularizationBloc
 
     result.fold(
       (failure) => emit(
-        AttendanceRegularizationState.error(
-          formData: state.formData,
-          message: failure.message,
-          currentStep: state.currentStep,
+        state.copyWith(
+          status: AttendanceRegularizationStatus.error,
+          errorMessage: failure.message,
+          loadingKind: null,
         ),
       ),
       (fileUrl) => emit(
-        AttendanceRegularizationState.success(
+        state.copyWith(
+          status: AttendanceRegularizationStatus.success,
+          successKind: AttendanceRegularizationSuccessKind.fileUpload,
           formData: state.formData.copyWith(uploadedFileUrl: fileUrl),
-          kind: AttendanceRegularizationSuccessKind.fileUpload,
-          currentStep: state.currentStep,
+          loadingKind: null,
         ),
       ),
     );
@@ -257,12 +264,12 @@ class AttendanceRegularizationBloc
     Emitter<AttendanceRegularizationState> emit,
   ) {
     emit(
-      AttendanceRegularizationState.initial(
+      state.copyWith(
+        status: AttendanceRegularizationStatus.initial,
         formData: state.formData.copyWith(
           selectedFileName: null,
           uploadedFileUrl: null,
         ),
-        currentStep: state.currentStep,
       ),
     );
   }
@@ -275,10 +282,10 @@ class AttendanceRegularizationBloc
 
     if (formData.date == null) {
       emit(
-        AttendanceRegularizationState.error(
-          formData: formData,
+        state.copyWith(
+          status: AttendanceRegularizationStatus.error,
           validationError: AttendanceRegularizationValidationError.dateRequired,
-          currentStep: state.currentStep,
+          errorMessage: null,
         ),
       );
       return;
@@ -286,10 +293,10 @@ class AttendanceRegularizationBloc
 
     if (formData.inTime == null || formData.outTime == null) {
       emit(
-        AttendanceRegularizationState.error(
-          formData: formData,
+        state.copyWith(
+          status: AttendanceRegularizationStatus.error,
           validationError: AttendanceRegularizationValidationError.timeRequired,
-          currentStep: state.currentStep,
+          errorMessage: null,
         ),
       );
       return;
@@ -297,20 +304,21 @@ class AttendanceRegularizationBloc
 
     if (formData.reason.length < 10) {
       emit(
-        AttendanceRegularizationState.error(
-          formData: formData,
-          validationError:
-              AttendanceRegularizationValidationError.reasonTooShort,
-          currentStep: state.currentStep,
+        state.copyWith(
+          status: AttendanceRegularizationStatus.error,
+          validationError: AttendanceRegularizationValidationError.reasonTooShort,
+          errorMessage: null,
         ),
       );
       return;
     }
 
     emit(
-      AttendanceRegularizationState.initial(
-        formData: formData,
-        currentStep: 1, // Advance to Review
+      state.copyWith(
+        status: AttendanceRegularizationStatus.initial,
+        currentStep: 1,
+        errorMessage: null,
+        validationError: null,
       ),
     );
   }
@@ -320,9 +328,11 @@ class AttendanceRegularizationBloc
     Emitter<AttendanceRegularizationState> emit,
   ) {
     emit(
-      AttendanceRegularizationState.initial(
-        formData: state.formData,
-        currentStep: 0, // Go back to Form
+      state.copyWith(
+        status: AttendanceRegularizationStatus.initial,
+        currentStep: 0,
+        errorMessage: null,
+        validationError: null,
       ),
     );
   }
@@ -335,10 +345,12 @@ class AttendanceRegularizationBloc
     final currentStep = state.currentStep;
 
     emit(
-      AttendanceRegularizationState.loading(
-        formData: formData,
-        kind: AttendanceRegularizationLoadingKind.submit,
+      state.copyWith(
+        status: AttendanceRegularizationStatus.loading,
+        loadingKind: AttendanceRegularizationLoadingKind.submit,
         currentStep: currentStep,
+        errorMessage: null,
+        validationError: null,
       ),
     );
 
@@ -359,17 +371,18 @@ class AttendanceRegularizationBloc
 
     result.fold(
       (failure) => emit(
-        AttendanceRegularizationState.error(
-          formData: formData,
-          message: failure.message,
-          currentStep: currentStep,
+        state.copyWith(
+          status: AttendanceRegularizationStatus.error,
+          errorMessage: failure.message,
+          loadingKind: null,
         ),
       ),
       (_) => emit(
-        AttendanceRegularizationState.success(
-          formData: formData,
-          kind: AttendanceRegularizationSuccessKind.submission,
-          currentStep: 2, // Go to Confirmation
+        state.copyWith(
+          status: AttendanceRegularizationStatus.success,
+          successKind: AttendanceRegularizationSuccessKind.submission,
+          currentStep: 2,
+          loadingKind: null,
         ),
       ),
     );
@@ -379,13 +392,14 @@ class AttendanceRegularizationBloc
     AttendanceRegularizationResetRequested event,
     Emitter<AttendanceRegularizationState> emit,
   ) {
-    emit(const AttendanceRegularizationState.initial());
+    emit(AttendanceRegularizationState(
+      managerName: localStorageService.getApproverName() ?? '',
+    ));
   }
 
   TimeOfDay? _parseTime(String? timeStr) {
     if (timeStr == null || timeStr.isEmpty) return null;
     try {
-      // 1. Try parsing as a full DateTime
       final parsedDateTime = DateTime.tryParse(timeStr);
       if (parsedDateTime != null) {
         return TimeOfDay(
@@ -394,7 +408,6 @@ class AttendanceRegularizationBloc
         );
       }
 
-      // 2. If it's a time-only string, strip any date prefix
       final spaceParts = timeStr.trim().split(' ');
       final timeOnlyStr = spaceParts.last;
 

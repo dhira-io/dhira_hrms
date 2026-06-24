@@ -30,7 +30,7 @@ class RegularizationDocumentsSection extends StatelessWidget {
       children: [
         Text(
           l10n.supportingDocuments,
-          style: AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.bold),
+          style: AppTextStyle.labelLargeBold,
         ),
         const SizedBox(height: AppConstants.p12),
         if (uploadedFileUrl != null)
@@ -78,9 +78,8 @@ class _EmptyDropZone extends StatelessWidget {
               const SizedBox(height: AppConstants.p12),
               Text(
                 l10n.uploadFile,
-                style: AppTextStyle.bodyMedium.copyWith(
+                style: AppTextStyle.bodyMediumBold.copyWith(
                   color: AppColors.of(context).primary,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: AppConstants.p4),
@@ -125,8 +124,7 @@ class _UploadedDropZone extends StatelessWidget {
               children: [
                 Text(
                   fileName,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    fontWeight: FontWeight.bold,
+                  style: AppTextStyle.bodyMediumBold.copyWith(
                     color: AppColors.of(context).textPrimary,
                   ),
                   maxLines: 1,

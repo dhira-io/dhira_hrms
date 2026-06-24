@@ -36,9 +36,7 @@ class RegularizationDetailsSection extends StatelessWidget {
           decoration: const BoxDecoration(),
           child: Text(
             l10n.requestedDetails,
-            style: AppTextStyle.labelLarge.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTextStyle.labelLargeBold,
           ),
         ),
         const SizedBox(height: AppConstants.p16),
@@ -88,15 +86,13 @@ class RegularizationDetailsSection extends StatelessWidget {
                   children: [
                     Text(
                       l10n.routeToHR,
-                      style: AppTextStyle.labelSmall.copyWith(
+                      style: AppTextStyle.bodySmallBold.copyWith(
                         color: AppColors.of(context).primary,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       l10n.routeToHRSub,
-                      style: AppTextStyle.labelSmall.copyWith(
-                        fontSize: AppConstants.fs9.sp,
+                      style: AppTextStyle.labelSmallOne.copyWith(
                         color: AppColors.of(context).textSecondary,
                       ),
                     ),
@@ -110,9 +106,7 @@ class RegularizationDetailsSection extends StatelessWidget {
         Text.rich(
           TextSpan(
             text: l10n.reasonForCorrection,
-            style: AppTextStyle.labelSmall.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTextStyle.bodySmallBold,
             children: [
               TextSpan(
                 text: AppConstants.mandatoryIndicator,
@@ -163,10 +157,8 @@ class _TimeInput extends StatelessWidget {
         Text.rich(
           TextSpan(
             text: label,
-            style: AppTextStyle.labelSmall.copyWith(
+            style: AppTextStyle.bodySmallOneBold.copyWith(
               color: AppColors.of(context).onSurfaceVariant,
-              fontSize: AppConstants.fs9.sp,
-              fontWeight: FontWeight.bold,
             ),
             children: [
               TextSpan(
@@ -213,7 +205,7 @@ class _TimeInput extends StatelessWidget {
               vertical: AppConstants.p10,
             ),
           ),
-          style: AppTextStyle.bodySmall.copyWith(fontWeight: FontWeight.bold),
+          style: AppTextStyle.bodySmallBold,
         ),
       ],
     );

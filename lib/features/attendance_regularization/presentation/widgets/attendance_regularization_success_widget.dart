@@ -48,9 +48,7 @@ class AttendanceRegularizationSuccessWidget extends StatelessWidget {
           // Title
           Text(
             l10n.requestSubmitted,
-            style: AppTextStyle.h2.copyWith(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
+            style: AppTextStyle.h3.copyWith(
               color: themeColors.textPrimary,
             ),
           ),
@@ -60,10 +58,8 @@ class AttendanceRegularizationSuccessWidget extends StatelessWidget {
           Text(
             l10n.regularizationSuccessDesc,
             textAlign: TextAlign.center,
-            style: AppTextStyle.bodyMedium.copyWith(
-              fontSize: 12.sp,
+            style: AppTextStyle.bodyMediumWithHeight.copyWith(
               color: themeColors.textSecondary,
-              height: 1.4,
             ),
           ),
           SizedBox(height: 30.h),

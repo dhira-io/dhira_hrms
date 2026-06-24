@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/core/presentation/screens/common_web_view_screen.dart';
 import 'package:dhira_hrms/features/notifications/data/constants/notification_constants.dart';
 import 'package:dhira_hrms/features/attendance_regularization/presentation/bloc/attendance_regularization_bloc.dart';
+import 'package:dhira_hrms/features/attendance_regularization/presentation/bloc/attendance_regularization_event.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/login_screen.dart';
 import 'package:dhira_hrms/features/auth/presentation/screens/otp_verification_screen.dart';
@@ -484,14 +485,21 @@ class AppRouter {
       GoRoute(
         path: attendanceRegularizationPath,
         builder: (context, state) => BlocProvider(
-          create: (context) => AttendanceRegularizationBloc(
-            submitRegularizationUseCase: Get.find(),
-            uploadFileUseCase: Get.find(),
-            getAttendancePunchSummaryUseCase: Get.find(),
-            localStorageService: Get.find(),
-            imageCompressService: Get.find(),
+          create: (context) => Get.find<AttendanceRegularizationBloc>()
+            ..add(const AttendanceRegularizationEvent.regularizationStarted()),
+          child: AttendanceRegularizationScreen(
+            onMyRequestsPressed: () {
+              Get.find<BottomNavCubit>().changeIndex(
+                BottomNavCubit.approvalsIndex,
+              );
+              Get.find<ApprovalsBloc>().add(
+                const ApprovalsEvent.started(
+                  initialCategory: ApprovalCategory.raised,
+                  initialType: ApprovalType.attendance,
+                ),
+              );
+            },
           ),
-          child: const AttendanceRegularizationScreen(),
         ),
       ),
       GoRoute(

@@ -58,7 +58,6 @@ class RegularizationSystemRecord extends StatelessWidget {
                     Text(
                       l10n.systemRecord.toUpperCase(),
                       style: AppTextStyle.labelSmall.copyWith(
-                        fontWeight: FontWeight.w500,
                         color: AppColors.of(context).onSurfaceVariant,
                         letterSpacing: 0.5,
                       ),
@@ -79,9 +78,8 @@ class RegularizationSystemRecord extends StatelessWidget {
           if (!isLoading && !hasRecord)
             Text(
               l10n.noRecordFound,
-              style: AppTextStyle.bodyMedium.copyWith(
+              style: AppTextStyle.bodyMediumSemibold.copyWith(
                 color: AppColors.of(context).onSurfaceVariant,
-                fontWeight: FontWeight.w600,
               ),
             )
           else ...[
@@ -113,9 +111,8 @@ class RegularizationSystemRecord extends StatelessWidget {
             SizedBox(height: 14.h),
             Text(
               l10n.systemPunchSummaryNote,
-              style: AppTextStyle.bodyMedium.copyWith(
+              style: AppTextStyle.labelMedium.copyWith(
                 color: AppColors.of(context).onSurfaceVariant,
-                fontWeight: FontWeight.w500,
               ),
             ),
           ],
@@ -183,9 +180,8 @@ class RegularizationSystemRecord extends StatelessWidget {
           label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTextStyle.labelMedium.copyWith(
+          style: AppTextStyle.bodyMediumBold.copyWith(
             color: textColor,
-            fontWeight: FontWeight.w700,
           ),
         ),
       ),
@@ -210,10 +206,8 @@ class RegularizationSystemRecord extends StatelessWidget {
         children: [
           Text(
             label,
-            style: AppTextStyle.labelSmall.copyWith(
-              fontWeight: FontWeight.w600,
+            style: AppTextStyle.bodySmallOneSemibold.copyWith(
               color: AppColors.of(context).onSurfaceVariant,
-              fontSize: AppConstants.fs9.sp,
             ),
           ),
           SizedBox(height: 4.h),
@@ -225,10 +219,8 @@ class RegularizationSystemRecord extends StatelessWidget {
                 )
               : Text(
                   value,
-                  style: AppTextStyle.h3.copyWith(
-                    fontWeight: FontWeight.w900,
+                  style: AppTextStyle.h2Black.copyWith(
                     color: valueColor,
-                    fontSize: AppConstants.fs18.sp,
                   ),
                 ),
         ],

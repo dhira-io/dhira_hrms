@@ -194,11 +194,8 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: AppTextStyle.bodySmall.copyWith(
-              fontSize: 8.sp,
-              fontWeight: FontWeight.w500,
+            style: AppTextStyle.labelSmallTwoMedium.copyWith(
               color: isActive || isCompleted ? textColor : mutedColor,
-              height: 1.2,
             ),
           ),
         ],

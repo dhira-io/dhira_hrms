@@ -247,10 +247,8 @@ class _RequiredLabel extends StatelessWidget {
     return Text.rich(
       TextSpan(
         text: label,
-        style: AppTextStyle.labelSmall.copyWith(
+        style: AppTextStyle.labelSmallWithHeight.copyWith(
           color: AppColors.of(context).textPrimary,
-          fontWeight: FontWeight.w500,
-          height: 16.h / 12.sp,
         ),
         children: [
           TextSpan(
@@ -344,10 +342,8 @@ class _InputBox extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: AppTextStyle.bodyMedium.copyWith(
+              style: AppTextStyle.bodyMediumWithHeight.copyWith(
                 color: muted ? colors.slate500 : colors.slate700,
-                fontWeight: FontWeight.w400,
-                height: 20.h / 14.sp,
               ),
             ),
           ),
@@ -437,11 +433,8 @@ class _ReasonTypeButton extends StatelessWidget {
           textAlign: TextAlign.center,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: AppTextStyle.labelLarge.copyWith(
+          style: AppTextStyle.labelMediumWithHeight.copyWith(
             color: colors.slate900,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
-            height: 18.h / 12.sp,
           ),
         ),
       ),
@@ -524,10 +517,8 @@ class _HrRouteTile extends StatelessWidget {
                 children: [
                   Text(
                     l10n.routeToHRDepartment,
-                    style: AppTextStyle.labelLarge.copyWith(
+                    style: AppTextStyle.labelMedium.copyWith(
                       color: colors.slate950,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   SizedBox(height: 2.h),
@@ -535,8 +526,6 @@ class _HrRouteTile extends StatelessWidget {
                     l10n.routeToHRDepartmentSub,
                     style: AppTextStyle.labelSmall.copyWith(
                       color: colors.slate500,
-                      fontSize: 10.sp,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -567,15 +556,13 @@ class _ReasonField extends StatelessWidget {
             controller: controller,
             minLines: 3,
             maxLines: 4,
-            style: AppTextStyle.bodySmall.copyWith(
+            style: AppTextStyle.bodyMedium.copyWith(
               color: colors.textPrimary,
-              fontSize: 12.sp,
             ),
             decoration: InputDecoration(
               hintText: l10n.reasonRegularizationHint,
-              hintStyle: AppTextStyle.bodySmall.copyWith(
+              hintStyle: AppTextStyle.bodyMedium.copyWith(
                 color: colors.slate500,
-                fontSize: 12.sp,
               ),
               filled: true,
               fillColor: colors.surfaceContainerLowest,
@@ -597,10 +584,8 @@ class _ReasonField extends StatelessWidget {
           SizedBox(height: 4.h),
           Text(
             l10n.reasonMinCharacters,
-            style: AppTextStyle.labelSmall.copyWith(
+            style: AppTextStyle.labelSmallTwo.copyWith(
               color: colors.slate500,
-              fontSize: 8.sp,
-              height: 16.h / 8.sp,
             ),
           ),
         ],
@@ -633,8 +618,6 @@ class _DocumentPicker extends StatelessWidget {
           l10n.supportingDocsOptional,
           style: AppTextStyle.labelLarge.copyWith(
             color: colors.slate600,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w600,
           ),
         ),
         SizedBox(height: 6.h),
@@ -671,10 +654,8 @@ class _DocumentPicker extends StatelessWidget {
                     fileName ?? l10n.attachDocument,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyle.bodySmall.copyWith(
+                    style: AppTextStyle.labelMedium.copyWith(
                       color: colors.primary,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
@@ -752,8 +733,7 @@ class _BottomActionBar extends StatelessWidget {
                     )
                   : Text(
                       l10n.nextText,
-                      style: AppTextStyle.button.copyWith(
-                        fontSize: 12.sp,
+                      style: AppTextStyle.labelMedium.copyWith(
                         color: colors.surfaceContainerLowest,
                       ),
                     ),

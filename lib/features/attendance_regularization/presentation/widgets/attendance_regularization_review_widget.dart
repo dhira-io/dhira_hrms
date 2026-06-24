@@ -58,11 +58,8 @@ class AttendanceRegularizationReviewWidget extends StatelessWidget {
           children: [
             Text(
               formData.reason,
-              style: AppTextStyle.bodyMedium.copyWith(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w400,
+              style: AppTextStyle.bodyMediumWithHeight.copyWith(
                 color: themeColors.textPrimary,
-                height: 1.4,
               ),
             ),
           ],
@@ -88,9 +85,7 @@ class AttendanceRegularizationReviewWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     formData.selectedFileName ?? l10n.none,
-                    style: AppTextStyle.bodyMedium.copyWith(
-                      fontSize: 10.sp,
-                      fontWeight: FontWeight.w500,
+                    style: AppTextStyle.labelSmall.copyWith(
                       color: formData.uploadedFileUrl != null
                           ? themeColors.primary
                           : themeColors.textSecondary,
@@ -161,9 +156,7 @@ class AttendanceRegularizationReviewCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppTextStyle.bodyMedium.copyWith(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w500,
+            style: AppTextStyle.labelLargeMedium.copyWith(
               color: themeColors.textPrimary,
             ),
           ),
@@ -196,17 +189,13 @@ class AttendanceRegularizationReviewRow extends StatelessWidget {
         children: [
           Text(
             label,
-            style: AppTextStyle.bodyMedium.copyWith(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w500,
+            style: AppTextStyle.labelMedium.copyWith(
               color: themeColors.slate550,
             ),
           ),
           Text(
             value,
-            style: AppTextStyle.bodyMedium.copyWith(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w500,
+            style: AppTextStyle.labelMedium.copyWith(
               color: themeColors.textPrimary,
             ),
           ),

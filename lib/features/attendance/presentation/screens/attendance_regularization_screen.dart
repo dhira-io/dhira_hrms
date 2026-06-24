@@ -61,7 +61,10 @@ class AttendanceRegularizationScreen extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
-        appBar: CommonAppBar(title: l10n.regularizeAttendance),
+        appBar: CommonAppBar(
+          title: l10n.regularizeAttendance,
+          subtitle: l10n.correctAttendanceRecord,
+        ),
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => FocusScope.of(context).unfocus(),

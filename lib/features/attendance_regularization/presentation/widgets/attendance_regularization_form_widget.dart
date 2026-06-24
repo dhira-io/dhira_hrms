@@ -191,15 +191,13 @@ class AttendanceRegularizationFormWidget extends StatelessWidget {
               maxLines: 4,
               maxLength: 200,
               style: AppTextStyle.bodyMedium.copyWith(
-                fontSize: 12.sp,
                 color: themeColors.textPrimary,
               ),
               decoration: InputDecoration(
                 filled: false,
                 fillColor: Colors.transparent,
                 hintText: l10n.reasonRegularizationHint,
-                hintStyle: AppTextStyle.bodyMedium.copyWith(
-                  fontSize: 10.sp,
+                hintStyle: AppTextStyle.bodySmall.copyWith(
                   color: themeColors.textSecondary,
                 ),
                 border: InputBorder.none,
@@ -215,8 +213,7 @@ class AttendanceRegularizationFormWidget extends StatelessWidget {
           SizedBox(height: 2.h),
           Text(
             l10n.reasonMinCharacters,
-            style: AppTextStyle.bodySmall.copyWith(
-              fontSize: 8.sp,
+            style: AppTextStyle.bodySmallTwo.copyWith(
               color: themeColors.textSecondary,
             ),
           ),
@@ -231,11 +228,7 @@ class AttendanceRegularizationFormWidget extends StatelessWidget {
             selector: (state) => (
               state.formData.selectedFileName,
               state.formData.uploadedFileUrl,
-              state.maybeWhen(
-                loading: (_, kind, __) =>
-                    kind == AttendanceRegularizationLoadingKind.upload,
-                orElse: () => false,
-              ),
+              state.isUploading,
             ),
             builder: (context, data) {
               return AttendanceRegularizationAttachmentSection(
@@ -302,16 +295,16 @@ class AttendanceRegularizationFormLabel extends StatelessWidget {
     return RichText(
       text: TextSpan(
         text: label,
-        style: AppTextStyle.bodyMedium.copyWith(
-          fontSize: 10.sp,
-          fontWeight: FontWeight.w700,
+        style: AppTextStyle.bodySmallBold.copyWith(
           color: themeColors.textPrimary,
         ),
         children: isRequired
             ? [
                 TextSpan(
                   text: ' *',
-                  style: TextStyle(color: themeColors.error, fontSize: 10.sp),
+                  style: AppTextStyle.bodySmallBold.copyWith(
+                    color: themeColors.error,
+                  ),
                 ),
               ]
             : null,
@@ -355,9 +348,7 @@ class AttendanceRegularizationReasonTypeButton extends StatelessWidget {
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: AppTextStyle.bodyMedium.copyWith(
-            fontSize: 11.sp,
-            fontWeight: FontWeight.w600,
+          style: AppTextStyle.bodyMediumOneSemibold.copyWith(
             color: isSelected ? themeColors.primary : themeColors.textPrimary,
           ),
         ),
@@ -483,7 +474,6 @@ class AttendanceRegularizationTimeSelector extends StatelessWidget {
                           ? time!.format(context)
                           : l10n.timeFormatPlaceholder,
                       style: AppTextStyle.bodyMedium.copyWith(
-                        fontSize: 12.sp,
                         color: time != null
                             ? themeColors.textPrimary
                             : themeColors.textSecondary,
@@ -555,18 +545,14 @@ class AttendanceRegularizationRouteToHRCard extends StatelessWidget {
                 children: [
                   Text(
                     l10n.routeToHRDepartment,
-                    style: AppTextStyle.bodyMedium.copyWith(
-                      fontSize: 11.sp,
-                      fontWeight: FontWeight.w700,
+                    style: AppTextStyle.bodyMediumOneBold.copyWith(
                       color: themeColors.textPrimary,
                     ),
                   ),
                   Text(
                     l10n.routeToHRDepartmentSub,
-                    style: AppTextStyle.bodySmall.copyWith(
-                      fontSize: 8.sp,
+                    style: AppTextStyle.bodySmallTwo.copyWith(
                       color: themeColors.textSecondary,
-                      height: 1.2,
                     ),
                   ),
                 ],
@@ -605,9 +591,7 @@ class AttendanceRegularizationAttachmentSection extends StatelessWidget {
       children: [
         Text(
           l10n.supportingDocOptional,
-          style: AppTextStyle.bodyMedium.copyWith(
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w600,
+          style: AppTextStyle.bodySmallSemibold.copyWith(
             color: themeColors.textSecondary,
           ),
         ),
@@ -636,8 +620,7 @@ class AttendanceRegularizationAttachmentSection extends StatelessWidget {
                     fileName ?? 'document.pdf',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyle.bodyMedium.copyWith(
-                      fontSize: 10.sp,
+                    style: AppTextStyle.bodySmall.copyWith(
                       color: themeColors.primary,
                     ),
                   ),
@@ -677,8 +660,7 @@ class AttendanceRegularizationAttachmentSection extends StatelessWidget {
                   SizedBox(width: 8.w),
                   Text(
                     l10n.attachDocument,
-                    style: AppTextStyle.bodyMedium.copyWith(
-                      fontSize: 10.sp,
+                    style: AppTextStyle.bodySmall.copyWith(
                       color: themeColors.primary,
                     ),
                   ),

@@ -45,9 +45,7 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
         Text.rich(
           TextSpan(
             text: l10n.requestType,
-            style: AppTextStyle.labelLarge.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTextStyle.labelLargeBold,
             children: [
               TextSpan(
                 text: AppConstants.mandatoryIndicator,
@@ -99,12 +97,11 @@ class RegularizationRequestTypeWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         item.label,
-                        style: AppTextStyle.labelLarge.copyWith(
+                        style: (isSelected
+                                ? AppTextStyle.bodyMediumOneBold
+                                : AppTextStyle.bodyMediumOneMedium)
+                            .copyWith(
                           color: AppColors.of(context).textPrimary,
-                          fontWeight: isSelected
-                              ? FontWeight.bold
-                              : FontWeight.w500,
-                          fontSize: AppConstants.fs11.sp,
                         ),
                       ),
                     ),

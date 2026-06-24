@@ -105,6 +105,7 @@ import '../../features/attendance_regularization/domain/repositories/i_attendanc
 import '../../features/attendance_regularization/domain/usecases/submit_attendance_regularization_usecase.dart';
 import '../../features/attendance_regularization/domain/usecases/upload_attendance_regularization_file_usecase.dart';
 import '../../features/attendance_regularization/domain/usecases/get_regularization_punch_summary_usecase.dart';
+import '../../features/attendance_regularization/presentation/bloc/attendance_regularization_bloc.dart';
 
 // Leave
 import '../../features/leave/domain/repositories/leave_repository.dart';
@@ -1105,6 +1106,15 @@ class DependencyInjection {
     Get.lazyPut<TaskBloc>(
       () => TaskBloc(getTasksUseCase: Get.find<GetTasksUseCase>()),
       fenix: true,
+    );
+    Get.create<AttendanceRegularizationBloc>(
+      () => AttendanceRegularizationBloc(
+        submitRegularizationUseCase: Get.find<SubmitAttendanceRegularizationUseCase>(),
+        uploadFileUseCase: Get.find<UploadAttendanceRegularizationFileUseCase>(),
+        getAttendancePunchSummaryUseCase: Get.find<GetRegularizationPunchSummaryUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
+        imageCompressService: Get.find<ImageCompressService>(),
+      ),
     );
     Get.lazyPut<PerformanceBloc>(
       () => PerformanceBloc(

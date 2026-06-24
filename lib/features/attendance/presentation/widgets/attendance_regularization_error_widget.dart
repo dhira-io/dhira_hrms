@@ -2,7 +2,6 @@ import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AttendanceRegularizationErrorWidget extends StatelessWidget {
   final VoidCallback onRetry;
@@ -19,9 +18,8 @@ class AttendanceRegularizationErrorWidget extends StatelessWidget {
       onPressed: onRetry,
       child: Text(
         l10n.retry,
-        style: AppTextStyle.button.copyWith(
+        style: AppTextStyle.labelMedium.copyWith(
           color: AppColors.of(context).primary,
-          fontSize: 12.sp,
         ),
       ),
     );
