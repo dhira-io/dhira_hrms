@@ -69,6 +69,8 @@ class AppTextStyle {
       GoogleFonts.manrope(fontSize: 16.sp, fontWeight: FontWeight.w600);
   static TextStyle get headingSmallTwo =>
       GoogleFonts.manrope(fontSize: 14.sp, fontWeight: FontWeight.w600);
+  static TextStyle get headingSmallTwoBold =>
+      GoogleFonts.manrope(fontSize: 14.sp, fontWeight: FontWeight.w700);
   static TextStyle get headingSmallThree =>
       GoogleFonts.manrope(fontSize: 13.sp, fontWeight: FontWeight.w600);
 

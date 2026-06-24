@@ -737,7 +737,7 @@ class TimesheetUploadCard extends StatelessWidget {
                 color: AppColors.of(context).slate500,
                 size: 20,
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 6.h),
               Text(
                 l10n.selectAnyFileToUpload,
                 style: AppTextStyle.bodyMedium.copyWith(
@@ -745,7 +745,7 @@ class TimesheetUploadCard extends StatelessWidget {
                   color: AppColors.of(context).slate500,
                 ),
               ),
-              SizedBox(height: 2.h),
+              SizedBox(height: 1.h),
               Text(
                 l10n.pdfJpgPngLimit,
                 style: AppTextStyle.bodyMedium.copyWith(

@@ -51,11 +51,13 @@ class TimesheetTaskSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    l10n.taskEntries,
-                    style: AppTextStyle.headingSmallTwo.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: colors.textPrimary,
+                  Padding(
+                    padding: EdgeInsets.only(left: 12.w),
+                    child: Text(
+                      l10n.taskEntries,
+                      style: AppTextStyle.headingSmallTwoBold.copyWith(
+                        color: colors.textPrimary,
+                      ),
                     ),
                   ),
                   if (assignments.isNotEmpty && !isLoading)
@@ -176,10 +178,7 @@ class TaskCardSkeleton extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: colors.white,
                   borderRadius: BorderRadius.circular(6.r),
-                  border: Border.all(
-                    color: colors.slate200,
-                    width: 1.w,
-                  ),
+                  border: Border.all(color: colors.slate200, width: 1.w),
                 ),
                 child: Align(
                   alignment: Alignment.centerLeft,
