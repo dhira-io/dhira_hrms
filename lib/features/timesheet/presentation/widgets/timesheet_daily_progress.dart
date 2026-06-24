@@ -37,8 +37,7 @@ class TimesheetDailyProgress extends StatelessWidget {
               children: [
                 Text(
                   l10n.dailyProgress,
-                  style: AppTextStyle.headingSmallTwo.copyWith(
-                    fontWeight: FontWeight.w700,
+                  style: AppTextStyle.h3Small.copyWith(
                     color: AppColors.of(context).textPrimary,
                   ),
                 ),

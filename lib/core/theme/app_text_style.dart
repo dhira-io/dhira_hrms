@@ -26,6 +26,12 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
   );
 
+  static TextStyle h3Small = TextStyle(
+    fontFamily: headingFont,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w600,
+  );
+
   static final TextStyle h1Bold = h1.copyWith(fontWeight: FontWeight.bold);
   static final TextStyle h2Bold = h2.copyWith(fontWeight: FontWeight.bold);
   static final TextStyle h3Bold = h3.copyWith(fontWeight: FontWeight.bold);
@@ -81,6 +87,8 @@ class AppTextStyle {
       GoogleFonts.inter(fontSize: 8.sp, fontWeight: FontWeight.w400);
 
   // Labels
+  static TextStyle get labelLargeOne =>
+      GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w600);
   static TextStyle get labelLarge =>
       GoogleFonts.inter(fontSize: 13.sp, fontWeight: FontWeight.w600);
   static TextStyle get labelMedium =>

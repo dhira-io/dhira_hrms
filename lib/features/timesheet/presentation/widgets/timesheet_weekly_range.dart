@@ -45,10 +45,7 @@ class TimesheetWeeklyRange extends StatelessWidget {
             children: [
               Text(
                 l10n.weeklyRange,
-                style: AppTextStyle.headingSmallTwo.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: colors.textPrimary,
-                ),
+                style: AppTextStyle.h3Small.copyWith(color: colors.textPrimary),
               ),
               SizedBox(height: 6.h),
               Row(
