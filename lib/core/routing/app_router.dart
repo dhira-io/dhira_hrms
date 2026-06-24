@@ -409,22 +409,32 @@ class AppRouter {
         path: timesheetPath,
         builder: (context, state) {
           final today = DateTime.now();
-          return BlocProvider.value(
-            value: Get.find<TimesheetBloc>()
-              ..add(TimesheetEvent.daySelected(today))
-              ..add(
-                TimesheetEvent.fetchMonthWiseRequested(
-                  month: today.month,
-                  year: today.year,
-                ),
-              )
-              ..add(
-                TimesheetEvent.fetchOverviewRequested(
-                  month: today.month,
-                  year: today.year,
-                ),
-              )
-              ..add(const TimesheetEvent.started(timesheetId: "current")),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<TimesheetBloc>.value(
+                value: Get.find<TimesheetBloc>()
+                  ..add(TimesheetEvent.daySelected(today))
+                  ..add(
+                    TimesheetEvent.fetchMonthWiseRequested(
+                      month: today.month,
+                      year: today.year,
+                    ),
+                  )
+                  ..add(
+                    TimesheetEvent.fetchOverviewRequested(
+                      month: today.month,
+                      year: today.year,
+                    ),
+                  )
+                  ..add(const TimesheetEvent.started(timesheetId: "current")),
+              ),
+              BlocProvider<BottomNavCubit>.value(
+                value: Get.find<BottomNavCubit>(),
+              ),
+              BlocProvider<ApprovalsBloc>.value(
+                value: Get.find<ApprovalsBloc>(),
+              ),
+            ],
             child: const ApplyTimesheetScreen(timesheetId: "current"),
           );
         },
@@ -462,22 +472,32 @@ class AppRouter {
           final timesheetId = state.extra as String? ?? "0";
           final today = DateTime.now();
 
-          return BlocProvider.value(
-            value: Get.find<TimesheetBloc>()
-              ..add(TimesheetEvent.daySelected(today))
-              ..add(
-                TimesheetEvent.fetchMonthWiseRequested(
-                  month: today.month,
-                  year: today.year,
-                ),
-              )
-              ..add(
-                TimesheetEvent.fetchOverviewRequested(
-                  month: today.month,
-                  year: today.year,
-                ),
-              )
-              ..add(TimesheetEvent.started(timesheetId: timesheetId)),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<TimesheetBloc>.value(
+                value: Get.find<TimesheetBloc>()
+                  ..add(TimesheetEvent.daySelected(today))
+                  ..add(
+                    TimesheetEvent.fetchMonthWiseRequested(
+                      month: today.month,
+                      year: today.year,
+                    ),
+                  )
+                  ..add(
+                    TimesheetEvent.fetchOverviewRequested(
+                      month: today.month,
+                      year: today.year,
+                    ),
+                  )
+                  ..add(TimesheetEvent.started(timesheetId: timesheetId)),
+              ),
+              BlocProvider<BottomNavCubit>.value(
+                value: Get.find<BottomNavCubit>(),
+              ),
+              BlocProvider<ApprovalsBloc>.value(
+                value: Get.find<ApprovalsBloc>(),
+              ),
+            ],
             child: ApplyTimesheetScreen(timesheetId: timesheetId),
           );
         },
