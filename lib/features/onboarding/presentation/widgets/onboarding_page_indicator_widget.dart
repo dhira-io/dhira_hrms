@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_text_style.dart';
 
 /// Animated row of dot indicators reflecting the current onboarding page.
 class OnboardingPageIndicatorWidget extends StatelessWidget {
@@ -21,7 +22,7 @@ class OnboardingPageIndicatorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
+    final appcolors = AppColors.of(context);
     
     return Column(
       children: [
@@ -33,10 +34,10 @@ class OnboardingPageIndicatorWidget extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
-                  color: colors.slate100,
+                  color: appcolors.slate100,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.chevron_left, color: colors.slate500, size: 20.sp),
+                child: Icon(Icons.chevron_left, color: appcolors.slate500, size: 20.sp),
               ),
             ),
             SizedBox(width: 16.w),
@@ -52,10 +53,10 @@ class OnboardingPageIndicatorWidget extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
-                  color: colors.slate100,
+                  color: appcolors.slate100,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.chevron_right, color: colors.slate500, size: 20.sp),
+                child: Icon(Icons.chevron_right, color: appcolors.slate500, size: 20.sp),
               ),
             ),
           ],
@@ -63,9 +64,8 @@ class OnboardingPageIndicatorWidget extends StatelessWidget {
         SizedBox(height: 12.h),
         Text(
           '${current + 1}/$count',
-          style: TextStyle(
-            color: colors.slate500,
-            fontSize: 14.sp,
+          style: AppTextStyle.bodyLarge.copyWith(
+            color: appcolors.slate500,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -82,6 +82,8 @@ class _Dot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Appcolors = AppColors.of(context);
+    
     return AnimatedContainer(
       duration: const Duration(milliseconds: AppConstants.animFast),
       margin: EdgeInsets.symmetric(horizontal: AppConstants.p4.w),
@@ -89,8 +91,8 @@ class _Dot extends StatelessWidget {
       width: 8.h,
       decoration: BoxDecoration(
         color: isActive
-            ? AppColors.of(context).primary
-            : AppColors.of(context).primary.withValues(alpha: 0.2),
+            ? Appcolors.primary
+            : Appcolors.primary.withValues(alpha: 0.2),
         shape: BoxShape.circle,
       ),
     );

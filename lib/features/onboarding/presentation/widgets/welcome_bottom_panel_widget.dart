@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
@@ -16,7 +14,7 @@ class WelcomeBottomPanelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final colors = AppColors.of(context);
+    final appcolors = AppColors.of(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -39,27 +37,22 @@ class WelcomeBottomPanelWidget extends StatelessWidget {
                       localizations.welcomeTo,
                       textAlign: TextAlign.center,
                       style: AppTextStyle.welcomeTitle.copyWith(
-                        color: colors.slate950,
-                        fontWeight: FontWeight.bold,
+                        color: appcolors.slate950,
                       ),
                     ),
                     Text(
                       localizations.dhiraHrms,
                       textAlign: TextAlign.center,
                       style: AppTextStyle.welcomeTitle.copyWith(
-                        color: colors.primaryContainer,
-                        fontSize: 36.sp,
-                        fontWeight: FontWeight.bold,
+                        color: appcolors.primaryContainer,
                       ),
                     ),
                     SizedBox(height: 8.h),
                     Text(
                       localizations.getStartedSubtitle,
                       textAlign: TextAlign.center,
-                      style: AppTextStyle.welcomeSubtitle.copyWith(
-                        color: colors.slate500,
-                        fontSize: 13.sp,
-                        fontFamily: 'Inter',
+                      style: AppTextStyle.titleSmallOne.copyWith(
+                        color: appcolors.slate500,
                       ),
                     ),
                     const Spacer(),

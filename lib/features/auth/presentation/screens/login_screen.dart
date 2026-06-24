@@ -2,7 +2,6 @@ import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:math' as math;
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_assets.dart';
@@ -33,9 +32,10 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appcolors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.of(context).primaryContainer,
+      backgroundColor: appcolors.primaryContainer,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         behavior: HitTestBehavior.opaque,
@@ -45,7 +45,9 @@ class LoginView extends StatelessWidget {
               listener: (context, state) {
                 state.whenOrNull(
                   authenticated: (user) {
-                    Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.homeIndex);
+                    Get.find<BottomNavCubit>().changeIndex(
+                      BottomNavCubit.homeIndex,
+                    );
                     context.go(AppRouter.dashboardPath);
                   },
                   error: (message) => ToastUtils.showError(message),
@@ -83,8 +85,8 @@ class LoginView extends StatelessWidget {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          AppColors.of(context).primaryContainer.withValues(alpha: 0.85),
-                          AppColors.of(context).primaryContainer,
+                          appcolors.primaryContainer.withValues(alpha: 0.85),
+                          appcolors.primaryContainer,
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -107,13 +109,10 @@ class LoginView extends StatelessWidget {
                         // Top Logo (ColorFiltered to White)
                         ColorFiltered(
                           colorFilter: ColorFilter.mode(
-                            AppColors.of(context).white,
+                            appcolors.white,
                             BlendMode.srcIn,
                           ),
-                          child: Image.asset(
-                            AppAssets.logo,
-                            height: 48.h,
-                          ),
+                          child: Image.asset(AppAssets.logo, height: 48.h),
                         ),
                         SizedBox(height: 8.h),
                         // Heading: "Welcome to DHIRA ERP!"
@@ -121,7 +120,7 @@ class LoginView extends StatelessWidget {
                           l10n.welcomeToDhiraErp,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.loginHeaderTitle.copyWith(
-                            color: AppColors.of(context).white,
+                            color: appcolors.white,
                             fontSize: 24.sp,
                           ),
                         ),
@@ -130,9 +129,8 @@ class LoginView extends StatelessWidget {
                         Text(
                           l10n.dhiraErpSubtitle,
                           textAlign: TextAlign.center,
-                          style: AppTextStyle.loginHeaderSubtitle.copyWith(
-                            color: AppColors.of(context).white.withValues(alpha: 0.9),
-                            fontSize: 14.sp,
+                          style: AppTextStyle.titleSmall.copyWith(
+                            color: appcolors.white.withValues(alpha: 0.9),
                           ),
                         ),
                       ],
@@ -146,8 +144,10 @@ class LoginView extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).background,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+                    color: appcolors.background,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(32.r),
+                    ),
                   ),
                   child: SingleChildScrollView(
                     padding: EdgeInsets.fromLTRB(24.w, 12.h, 24.w, 32.h),

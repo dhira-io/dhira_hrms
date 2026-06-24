@@ -33,11 +33,12 @@ class ForgotPasswordView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       behavior: HitTestBehavior.opaque,
       child: Scaffold(
-        backgroundColor: AppColors.of(context).primaryContainer,
+        backgroundColor: colors.primaryContainer,
         body: Column(
           children: [
             // Top Blue Header Section
@@ -48,8 +49,8 @@ class ForgotPasswordView extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        AppColors.of(context).primaryContainer.withValues(alpha: 0.85),
-                        AppColors.of(context).primaryContainer,
+                        colors.primaryContainer.withValues(alpha: 0.85),
+                        colors.primaryContainer,
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -72,14 +73,11 @@ class ForgotPasswordView extends StatelessWidget {
                       // Top Logo (ColorFiltered to White)
                       ColorFiltered(
                         colorFilter: ColorFilter.mode(
-                          AppColors.of(context).white,
+                          colors.white,
                           BlendMode.srcIn,
                         ),
                         child: Center(
-                          child: Image.asset(
-                            AppAssets.logo,
-                            height: 54.h,
-                          ),
+                          child: Image.asset(AppAssets.logo, height: 54.h),
                         ),
                       ),
                     ],
@@ -92,8 +90,10 @@ class ForgotPasswordView extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: AppColors.of(context).background,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+                  color: colors.background,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(32.r),
+                  ),
                 ),
                 child: SingleChildScrollView(
                   padding: EdgeInsets.fromLTRB(24.w, 12.h, 24.w, 32.h),
