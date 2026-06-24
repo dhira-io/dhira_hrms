@@ -1,6 +1,7 @@
 {
   "@@locale": "hi",
   "home": "होम",
+  "notification": "सूचना",
   "yourOverview": "आपका संक्षिप्त विवरण",
   "signIn": "साइन इन करें",
   "signInToYourAccount": "अपने खाते में\nसाइन इन करें",

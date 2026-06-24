@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
   "home": "Home",
+  "notification": "Notification",
   "yourOverview": "Your Overview",
   "signIn": "Sign In",
   "signInToYourAccount": "Sign in to your\nAccount",
