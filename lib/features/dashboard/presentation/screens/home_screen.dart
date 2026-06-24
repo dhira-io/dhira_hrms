@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -40,8 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
           return Column(
             children: [
               AppHeader(
-                backgroundColor: AppColors.of(context).surface,
-                iconColor: AppColors.of(context).onSurface,
+                backgroundColor: colors.surface,
+                iconColor: colors.onSurface,
               ),
               Expanded(
                 child: CustomScrollView(

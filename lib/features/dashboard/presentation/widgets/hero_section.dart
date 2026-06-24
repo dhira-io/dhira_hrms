@@ -15,6 +15,7 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final greetingPrefix = l10n.helloLabel; // "Hello,"
     final greeting = DateTimeUtils.getGreetingMessage(
@@ -25,7 +26,7 @@ class HeroSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.of(context).primary,
+        color: colors.primary,
         borderRadius: BorderRadius.circular(AppConstants.r24),
       ),
       child: Stack(
@@ -42,22 +43,21 @@ class HeroSection extends StatelessWidget {
                       Text(
                         greeting,
                         style: AppTextStyle.bodyLarge.copyWith(
-                          color: AppColors.of(context).white,
+                          color: colors.white,
                         ),
                       ),
                       const SizedBox(height: AppConstants.p8),
                       Text(
                         userName,
                         style: AppTextStyle.h1.copyWith(
-                          color: AppColors.of(context).white,
-                          fontSize: AppConstants.p22,
-                        ),
+                          color: colors.white,
+                          ),
                       ),
                       const SizedBox(height: AppConstants.p4),
                       Text(
                         role,
                         style: AppTextStyle.bodySmall.copyWith(
-                          color: AppColors.of(context).white,
+                          color: colors.white,
                         ),
                       ),
                     ],

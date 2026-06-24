@@ -19,6 +19,7 @@ class HomeUserHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(
@@ -28,7 +29,7 @@ class HomeUserHeader extends StatelessWidget {
         AppConstants.p40,
       ),
       decoration: BoxDecoration(
-        color: AppColors.of(context).primaryBlue,
+        color: colors.primaryBlue,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(AppConstants.r24),
           bottomRight: Radius.circular(AppConstants.r24),
@@ -74,7 +75,7 @@ class HomeUserHeader extends StatelessWidget {
                     Text(
                       userProfile?.fullName.split(' ').first ?? l10n.user,
                       style: AppTextStyle.h1.copyWith(
-                        color: AppColors.of(context).white,
+                        color: colors.white,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -82,7 +83,7 @@ class HomeUserHeader extends StatelessWidget {
                     Text(
                       l10n.softwareEngineer,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.of(context).white,
+                        color: colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

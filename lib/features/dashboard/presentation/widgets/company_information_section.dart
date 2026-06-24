@@ -18,7 +18,7 @@ class CompanyInformationSection extends StatelessWidget {
       children: [
         Text(
           l10n.companyInformation,
-          style: AppTextStyle.h3.copyWith(fontSize: AppConstants.p18),
+          style: AppTextStyle.h2,
         ),
         const SizedBox(height: AppConstants.p16),
         _CompanyInfoTile(
@@ -50,13 +50,14 @@ class _CompanyInfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppConstants.r16),
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p16),
         decoration: BoxDecoration(
-          color: AppColors.of(context).surfaceContainerLow,
+          color: colors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r16),
         ),
         child: Row(
@@ -75,15 +76,14 @@ class _CompanyInfoTile extends StatelessWidget {
                     label,
                     style: AppTextStyle.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
-                      fontSize: AppConstants.p14,
-                    ),
+                      ),
                   ),
                 ],
               ),
             ),
             Icon(
               Icons.chevron_right,
-              color: AppColors.of(context).onSurfaceVariant,
+              color: colors.onSurfaceVariant,
               size: AppConstants.iconXSmall,
             ),
           ],

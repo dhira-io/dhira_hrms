@@ -12,6 +12,7 @@ class SalarySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,7 +20,6 @@ class SalarySection extends StatelessWidget {
         Text(
           l10n.salary,
           style: AppTextStyle.h3.copyWith(
-            fontSize: AppConstants.p16.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -32,8 +32,8 @@ class SalarySection extends StatelessWidget {
                 icon: Icons.receipt_long_outlined,
                 label: l10n.payslip,
                 subtitle: l10n.homepayslipSubtitle,
-                iconBgColor: AppColors.of(context).iconbgviolet,
-                iconColor: AppColors.of(context).brandPurple,
+                iconBgColor: colors.iconbgviolet,
+                iconColor: colors.brandPurple,
                 onTap: () {
                   context.push(AppRouter.payslipPath);
                 },
@@ -67,19 +67,20 @@ class _SalaryActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Material(
-      color: Colors.transparent,
+      color: colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         child: Ink(
           padding: const EdgeInsets.all(AppConstants.p10),
           decoration: BoxDecoration(
-            color: AppColors.of(context).surfaceContainerLowest,
+            color: colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
+                color: colors.black.withValues(alpha: 0.03),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -109,7 +110,6 @@ class _SalaryActionCard extends StatelessWidget {
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: AppConstants.fs12.sp,
                   height: 1.2.h,
                 ),
                 maxLines: 2,
@@ -119,8 +119,7 @@ class _SalaryActionCard extends StatelessWidget {
               Text(
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.of(context).textSecondary,
-                  fontSize: AppConstants.fs10.sp,
+                  color: colors.textSecondary,
                   height: 1.2.h,
                 ),
                 maxLines: 2,

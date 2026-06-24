@@ -55,10 +55,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (_) {}
 
     final result = await logoutUseCase();
-    result.fold((failure) => emit(AuthState.error(failure.message)), (_) {
-      _cleanupSessionData();
-      emit(const AuthState.unauthenticated());
-    });
+    // Always clean up locally, even if the remote logout request failed
+    _cleanupSessionData();
+    emit(const AuthState.unauthenticated());
   }
 
   void _cleanupSessionData() {

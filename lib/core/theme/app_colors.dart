@@ -30,7 +30,6 @@ class AppColors {
   static const Color searchHint = Color(0xFFA1A1A1);
   static const Color clockCardBg = Color(0xFFEFF6FF);
   static const Color clockCardBorder = Color(0xFFB4D5FF);
-  static const Color darkText = Color(0xFF0F172B);
 
   // HTML Mockup Colors
   static const Color onPrimary = Color(0xffffffff);

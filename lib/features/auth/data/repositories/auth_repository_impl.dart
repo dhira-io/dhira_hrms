@@ -81,20 +81,22 @@ class AuthRepositoryImpl implements IAuthRepository {
 
   @override
   Future<Either<Failure, void>> logout() async {
-    return networkInfo.connectedAndRun(() async {
-      try {
+    try {
+      // Try to call server logout if connected, but ignore failures
+      if (await networkInfo.isConnected) {
         try {
           await remoteDataSource.logout();
         } catch (_) {
           // Ignore API failure (e.g., token expired 401)
         }
-        await localStorageService.clearAll();
-        svg.cache.clear();
-        return const Right(null);
-      } catch (e) {
-        return Left(Failure.fromException(e));
       }
-    });
+      // Always clear local session
+      await localStorageService.clearAll();
+      svg.cache.clear();
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure.fromException(e));
+    }
   }
 
   @override

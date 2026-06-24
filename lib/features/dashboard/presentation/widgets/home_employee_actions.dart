@@ -16,6 +16,7 @@ class HomeEmployeeActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     
     final allActions = [
@@ -23,32 +24,32 @@ class HomeEmployeeActions extends StatelessWidget {
         iconPath: AppAssets.timesheetIcon,
         label: l10n.timesheet,
         subtitle: l10n.emptimesheetSubtitle,
-        iconBgColor: AppColors.of(context).leaveBg, // Light blue
-        iconColor: AppColors.of(context).timesheeticon,
+        iconBgColor: colors.leaveBg, // Light blue
+        iconColor: colors.timesheeticon,
         onTap: () => context.push(AppRouter.timesheetPath),
       ),
       _ActionItem(
         iconPath: AppAssets.leaveIcon,
         label: l10n.leaveApplications,
         subtitle: l10n.empleaveSubtitle,
-        iconBgColor: AppColors.of(context).successBg, // Light green
-        iconColor: AppColors.of(context).calendarupicon,
+        iconBgColor: colors.successBg, // Light green
+        iconColor: colors.calendarupicon,
         onTap: () => context.push(AppRouter.applyLeavePath),
       ),
       _ActionItem(
         iconPath: AppAssets.comofficon,
         label: l10n.comOff,
         subtitle: l10n.empcompoffSubtitle,
-        iconBgColor: AppColors.of(context).bereavementTrack, // Light teal
-        iconColor: AppColors.of(context).compofficon,
-        onTap: () => context.push(AppRouter.comingSoonPath), // Comp off has no path defined yet
+        iconBgColor: colors.bereavementTrack, // Light teal
+        iconColor: colors.compofficon,
+        onTap: () => context.push(AppRouter.compensatoryLeavePath),
       ),
       _ActionItem(
         iconPath: AppAssets.attendanceIcon,
         label: l10n.attendanceRegularization,
         subtitle: l10n.empattendanceRegSubtitle,
-        iconBgColor: AppColors.of(context).attendancebg, // Light purple
-        iconColor: AppColors.of(context).attendanceicon,
+        iconBgColor: colors.attendancebg, // Light purple
+        iconColor: colors.attendanceicon,
         onTap: () => context.push(AppRouter.attendanceRegularizationPath),
       ),
     ];
@@ -64,14 +65,14 @@ class HomeEmployeeActions extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: AppConstants.p20.w),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.of(context).surface,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+            color: colors.outlineVariant.withValues(alpha: 0.5),
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.02),
+              color: colors.black.withValues(alpha: 0.02),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -85,16 +86,15 @@ class HomeEmployeeActions extends StatelessWidget {
               child: Text(
                 l10n.employeeActions,
                 style: AppTextStyle.bodyLarge.copyWith(
-                  color: AppColors.of(context).onSurface,
+                  color: colors.onSurface,
                   fontWeight: FontWeight.w500,
-                  fontSize: 16.sp,
-                ),
+                  ),
               ),
             ),
             Divider(
               height: 1,
               thickness: 1,
-              color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
+              color: colors.outlineVariant.withValues(alpha: 0.3),
             ),
             Padding(
               padding: EdgeInsets.all(16.w),
@@ -105,7 +105,7 @@ class HomeEmployeeActions extends StatelessWidget {
                         child: Text(
                           l10n.noDataFound,
                           style: AppTextStyle.bodyMedium.copyWith(
-                            color: AppColors.of(context).textSecondary,
+                            color: colors.textSecondary,
                           ),
                         ),
                       ),
@@ -123,7 +123,7 @@ class HomeEmployeeActions extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+                            color: colors.outlineVariant.withValues(alpha: 0.5),
                           ),
                           borderRadius: BorderRadius.circular(8.r),
                         ),
@@ -163,26 +163,24 @@ class HomeEmployeeActions extends StatelessWidget {
                                   Text(
                                     action.label,
                                     style: AppTextStyle.bodySmall.copyWith(
-                                      color: AppColors.employeeActionText,
+                                      color: colors.textPrimary,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 12.sp,
-                                    ),
+                                      ),
                                   ),
                                   SizedBox(height: 2.h),
                                   Text(
                                     action.subtitle,
                                     style: AppTextStyle.bodySmall.copyWith(
-                                      color: AppColors.employeeActionSubtitle,
+                                      color: colors.textSecondary,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 10.sp,
-                                    ),
+                                      ),
                                   ),
                                 ],
                               ),
                             ),
                             Icon(
                               Icons.chevron_right,
-                              color: AppColors.of(context).onSurfaceVariant,
+                              color: colors.onSurfaceVariant,
                               size: 20.w,
                             ),
                           ],

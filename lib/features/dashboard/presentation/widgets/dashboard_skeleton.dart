@@ -9,14 +9,15 @@ class DashboardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(
         horizontal: AppConstants.p20,
         vertical: AppConstants.p24,
       ),
       child: Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
+        baseColor: colors.surfaceContainerHighest,
+        highlightColor: colors.surfaceContainerLow,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -25,7 +26,7 @@ class DashboardSkeleton extends StatelessWidget {
               width: AppConstants.p150,
               height: AppConstants.p20,
               decoration: BoxDecoration(
-                color: AppColors.of(context).white,
+                color: colors.white,
                 borderRadius: BorderRadius.circular(AppConstants.p4),
               ),
             ),
@@ -34,7 +35,7 @@ class DashboardSkeleton extends StatelessWidget {
               width: AppConstants.p250,
               height: AppConstants.p32,
               decoration: BoxDecoration(
-                color: AppColors.of(context).white,
+                color: colors.white,
                 borderRadius: BorderRadius.circular(AppConstants.p4),
               ),
             ),
@@ -45,7 +46,7 @@ class DashboardSkeleton extends StatelessWidget {
               width: double.infinity,
               height: AppConstants.p180,
               decoration: BoxDecoration(
-                color: AppColors.of(context).white,
+                color: colors.white,
                 borderRadius: BorderRadius.circular(AppConstants.r16),
               ),
             ),
@@ -60,7 +61,7 @@ class DashboardSkeleton extends StatelessWidget {
                     height: 80.h,
                     margin: const EdgeInsets.only(right: AppConstants.p12),
                     decoration: BoxDecoration(
-                      color: AppColors.of(context).white,
+                      color: colors.white,
                       borderRadius: BorderRadius.circular(AppConstants.r12),
                     ),
                   ),
@@ -77,7 +78,7 @@ class DashboardSkeleton extends StatelessWidget {
                   width: AppConstants.p140,
                   height: AppConstants.p24,
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).white,
+                    color: colors.white,
                     borderRadius: BorderRadius.circular(AppConstants.p4),
                   ),
                 ),
@@ -85,7 +86,7 @@ class DashboardSkeleton extends StatelessWidget {
                   width: 60.w,
                   height: AppConstants.p16,
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).white,
+                    color: colors.white,
                     borderRadius: BorderRadius.circular(AppConstants.p4),
                   ),
                 ),
@@ -105,7 +106,7 @@ class DashboardSkeleton extends StatelessWidget {
                 4,
                 (index) => Container(
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).white,
+                    color: colors.white,
                     borderRadius: BorderRadius.circular(AppConstants.r16),
                   ),
                 ),

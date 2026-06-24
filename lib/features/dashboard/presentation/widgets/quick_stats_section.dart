@@ -13,6 +13,7 @@ class QuickStatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return BlocBuilder<DashboardCubit, DashboardState>(
@@ -28,7 +29,7 @@ class QuickStatsSection extends StatelessWidget {
                     ? stats.daysPresent.toString()
                     : AppConstants.placeholderText,
                 label: l10n.daysPresent,
-                valueColor: AppColors.of(context).primary,
+                valueColor: colors.primary,
               ),
               const SizedBox(width: AppConstants.p12),
               _StatCardWidget(
@@ -36,7 +37,7 @@ class QuickStatsSection extends StatelessWidget {
                     ? stats.leaveBalance.toString()
                     : AppConstants.placeholderText,
                 label: l10n.leaveBalance,
-                valueColor: AppColors.of(context).tertiary,
+                valueColor: colors.tertiary,
               ),
               const SizedBox(width: AppConstants.p12),
               _StatCardWidget(
@@ -46,7 +47,7 @@ class QuickStatsSection extends StatelessWidget {
                           : stats.nextHoliday)
                     : AppConstants.placeholderText,
                 label: l10n.upcomingHoliday,
-                valueColor: AppColors.of(context).textPrimary,
+                valueColor: colors.textPrimary,
               ),
             ],
           ),
@@ -72,9 +73,10 @@ class _StatCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Expanded(
       child: Material(
-        color: Colors.transparent,
+        color: colors.transparent,
         child: InkWell(
           onTap: () {},
           borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -84,7 +86,7 @@ class _StatCardWidget extends StatelessWidget {
               horizontal: AppConstants.p8,
             ),
             decoration: BoxDecoration(
-              color: AppColors.of(context).quickStatsBg,
+              color: colors.quickStatsBg,
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Column(
@@ -95,9 +97,6 @@ class _StatCardWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTextStyle.h1.copyWith(
                     color: valueColor,
-                    fontSize: isSmallValue
-                        ? AppConstants.fs18.sp
-                        : AppConstants.fs18.sp,
                     height: 1.2.h,
                     fontWeight: FontWeight.w800,
                   ),
@@ -109,10 +108,9 @@ class _StatCardWidget extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.of(context).onSurfaceVariant,
+                    color: colors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
-                    fontSize: AppConstants.fs10.sp,
-                  ),
+                    ),
                 ),
               ],
             ),

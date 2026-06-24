@@ -1,13 +1,11 @@
 import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
-import '../../../../core/utils/toast_utils.dart';
 import 'action_card.dart';
 
 class EmployeeActionsSection extends StatelessWidget {
@@ -15,6 +13,7 @@ class EmployeeActionsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,7 +21,6 @@ class EmployeeActionsSection extends StatelessWidget {
         Text(
           l10n.employeeActions,
           style: AppTextStyle.h3.copyWith(
-            fontSize: AppConstants.p16.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -38,8 +36,8 @@ class EmployeeActionsSection extends StatelessWidget {
                       iconPath: AppAssets.timesheetIcon,
                       label: l10n.timesheet,
                       subtitle: l10n.emptimesheetSubtitle,
-                      iconBgColor: AppColors.of(context).leaveBg,
-                      iconColor: AppColors.of(context).timesheeticon,
+                      iconBgColor: colors.leaveBg,
+                      iconColor: colors.timesheeticon,
                       onTap: () => context.push(AppRouter.timesheetPath),
                     ),
                   ),
@@ -49,8 +47,8 @@ class EmployeeActionsSection extends StatelessWidget {
                       iconPath: AppAssets.leaveIcon,
                       label: l10n.leaveApplications,
                       subtitle: l10n.empleaveSubtitle,
-                      iconBgColor: AppColors.of(context).successBg,
-                      iconColor: AppColors.of(context).calendarupicon,
+                      iconBgColor: colors.successBg,
+                      iconColor: colors.calendarupicon,
                       onTap: () => context.push(AppRouter.applyLeavePath),
                     ),
                   ),
@@ -67,8 +65,8 @@ class EmployeeActionsSection extends StatelessWidget {
                       iconPath: AppAssets.comofficon,
                       label: l10n.compensatoryLeave,
                       subtitle: l10n.requestCompensatoryLeave,
-                      iconBgColor: AppColors.of(context).iconbggreen,
-                      iconColor: AppColors.of(context).compofficon,
+                      iconBgColor: colors.iconbggreen,
+                      iconColor: colors.compofficon,
                       onTap: () => context.push(AppRouter.compensatoryLeavePath),
                     ),
                   ),
@@ -78,8 +76,8 @@ class EmployeeActionsSection extends StatelessWidget {
                       iconPath: AppAssets.attendanceIcon,
                       label: l10n.attendanceRegularization,
                       subtitle: l10n.empattendanceRegSubtitle,
-                      iconBgColor: AppColors.of(context).attendancebg,
-                      iconColor: AppColors.of(context).attendanceicon,
+                      iconBgColor: colors.attendancebg,
+                      iconColor: colors.attendanceicon,
                       onTap: () =>
                           context.push(AppRouter.attendanceRegularizationPath),
                     ),

@@ -112,6 +112,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -119,7 +120,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
         Container(
           padding: EdgeInsets.only(top: 8.h, bottom: 50.h),
           decoration: BoxDecoration(
-            color: AppColors.of(context).primary,
+            color: colors.primary,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,7 +144,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                     return Text(
                       "${AppLocalizations.of(context)!.welcomeName} $displayFirstName!",
                       style: AppTextStyle.bodyMedium.copyWith(
-                        color: AppColors.of(context).onPrimary,
+                        color: colors.onPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     );
@@ -159,7 +160,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                     height: 40.h,
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
-                      color: AppColors.of(context).surface,
+                      color: colors.surface,
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Row(
@@ -186,7 +187,6 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                               hintText: AppLocalizations.of(context)!.searchForSomething,
                               hintStyle: AppTextStyle.bodySmall.copyWith(
                                 color: AppColors.searchHint,
-                                fontSize: 12.sp,
                                 fontWeight: FontWeight.w400,
                               ),
                               border: InputBorder.none,
@@ -218,16 +218,17 @@ class _SearchOverlayContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Material(
       elevation: 4,
       borderRadius: BorderRadius.circular(8.r),
-      color: AppColors.of(context).surface,
+      color: colors.surface,
       child: Container(
         constraints: BoxConstraints(maxHeight: 300.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.r),
-          color: AppColors.of(context).surface,
-          border: Border.all(color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5)),
+          color: colors.surface,
+          border: Border.all(color: colors.outlineVariant.withValues(alpha: 0.5)),
         ),
         child: BlocBuilder<SearchCubit, SearchState>(
           builder: (context, state) {
@@ -238,7 +239,7 @@ class _SearchOverlayContent extends StatelessWidget {
                 padding: EdgeInsets.all(16.w),
                 child: Text(
                   AppLocalizations.of(context)!.noDataFound,
-                  style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurfaceVariant),
+                  style: AppTextStyle.bodyMedium.copyWith(color: colors.onSurfaceVariant),
                   textAlign: TextAlign.center,
                 ),
               );
@@ -254,11 +255,10 @@ class _SearchOverlayContent extends StatelessWidget {
                     child: Text(
                       AppLocalizations.of(context)!.allPages.toUpperCase(),
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.of(context).onSurfaceVariant,
+                        color: colors.onSurfaceVariant,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.5,
-                        fontSize: 10.sp,
-                      ),
+                        ),
                     ),
                   )
                 else
@@ -267,11 +267,10 @@ class _SearchOverlayContent extends StatelessWidget {
                     child: Text(
                       AppLocalizations.of(context)!.pages.toUpperCase(),
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.of(context).onSurfaceVariant,
+                        color: colors.onSurfaceVariant,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.5,
-                        fontSize: 10.sp,
-                      ),
+                        ),
                     ),
                   ),
                 Flexible(
@@ -290,13 +289,13 @@ class _SearchOverlayContent extends StatelessWidget {
                               Container(
                                 padding: EdgeInsets.all(6.w),
                                 decoration: BoxDecoration(
-                                  color: AppColors.of(context).primary.withValues(alpha: 0.2),
+                                  color: colors.primary.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 child: Icon(
                                   item.icon,
                                   size: 20.w,
-                                  color: AppColors.of(context).primary,
+                                  color: colors.primary,
                                 ),
                               ),
                               SizedBox(width: 12.w),
@@ -307,7 +306,7 @@ class _SearchOverlayContent extends StatelessWidget {
                                     Text(
                                       item.title,
                                       style: AppTextStyle.bodyMedium.copyWith(
-                                        color: AppColors.of(context).onSurface,
+                                        color: colors.onSurface,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -316,9 +315,8 @@ class _SearchOverlayContent extends StatelessWidget {
                                       Text(
                                         item.subtitle!,
                                         style: AppTextStyle.bodySmall.copyWith(
-                                          color: AppColors.of(context).onSurfaceVariant,
-                                          fontSize: 11.sp,
-                                        ),
+                                          color: colors.onSurfaceVariant,
+                                          ),
                                       ),
                                     ],
                                   ],

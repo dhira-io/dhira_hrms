@@ -17,6 +17,7 @@ class CustomBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<BottomNavCubit, int>(
       builder: (context, state) {
@@ -24,7 +25,7 @@ class CustomBottomNav extends StatelessWidget {
           child: Container(
             height: 70.h,
             decoration: BoxDecoration(
-              color: AppColors.of(context).surface,
+              color: colors.surface,
               border: Border(
                 top: BorderSide(color: AppColors.bordergrey, width: 1),
               ),
@@ -70,7 +71,6 @@ class CustomBottomNav extends StatelessWidget {
       },
     );
   }
-
 }
 
 class _BottomNavItemWidget extends StatelessWidget {
@@ -90,6 +90,7 @@ class _BottomNavItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final isActive = index == currentIndex;
     return GestureDetector(
       onTap: () {
@@ -127,8 +128,8 @@ class _BottomNavItemWidget extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: isActive
-              ? AppColors.of(context).primary
-              : Colors.transparent,
+              ? colors.primary
+              : colors.transparent,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Column(
@@ -137,8 +138,8 @@ class _BottomNavItemWidget extends StatelessWidget {
             Icon(
               isActive ? activeIcon : icon,
               color: isActive
-                  ? AppColors.of(context).onPrimary
-                  : AppColors.of(context).onSurfaceVariant,
+                  ? colors.onPrimary
+                  : colors.onSurfaceVariant,
               size: AppConstants.iconMedium,
             ),
             if (isActive) ...[
@@ -146,10 +147,9 @@ class _BottomNavItemWidget extends StatelessWidget {
               Text(
                 label,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.of(context).onPrimary,
+                  color: colors.onPrimary,
                   fontWeight: FontWeight.w600,
-                  fontSize: 10.sp,
-                ),
+                  ),
               ),
             ],
           ],

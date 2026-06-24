@@ -15,6 +15,7 @@ class LeaveBalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return BlocSelector<LeaveBloc, LeaveState, String>(
       selector: (state) {
@@ -25,7 +26,7 @@ class LeaveBalanceCard extends StatelessWidget {
           label: l10n.leaveBalance,
           value: balance,
           icon: Icons.calendar_month,
-          iconColor: AppColors.of(context).warning,
+          iconColor: colors.warning,
         );
       },
     );
@@ -37,6 +38,7 @@ class TimesheetSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return BlocSelector<TimesheetBloc, TimesheetState, String>(
       selector: (state) {
@@ -49,7 +51,7 @@ class TimesheetSummaryCard extends StatelessWidget {
           label: l10n.weekHours,
           value: summary,
           icon: Icons.timer,
-          iconColor: AppColors.of(context).success,
+          iconColor: colors.success,
         );
       },
     );
@@ -71,10 +73,11 @@ class _OverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.of(context).white,
+        color: colors.white,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         boxShadow: [
           BoxShadow(
@@ -94,7 +97,7 @@ class _OverviewCard extends StatelessWidget {
           Text(
             label,
             style: AppTextStyle.bodySmall.copyWith(
-              color: AppColors.of(context).textSecondary,
+              color: colors.textSecondary,
             ),
           ),
           Text(value, style: AppTextStyle.h3),

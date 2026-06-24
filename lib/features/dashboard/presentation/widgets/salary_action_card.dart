@@ -24,19 +24,20 @@ class SalaryActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Material(
-      color: Colors.transparent,
+      color: colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         child: Ink(
           padding: const EdgeInsets.all(AppConstants.p10),
           decoration: BoxDecoration(
-            color: AppColors.of(context).surfaceContainerLowest,
+            color: colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
+                color: colors.black.withValues(alpha: 0.03),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -66,8 +67,7 @@ class SalaryActionCard extends StatelessWidget {
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: AppConstants.p14,
-                ),
+                  ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -75,9 +75,8 @@ class SalaryActionCard extends StatelessWidget {
               Text(
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.of(context).textSecondary,
-                  fontSize: 11.sp,
-                ),
+                  color: colors.textSecondary,
+                  ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

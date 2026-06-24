@@ -113,6 +113,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final baseUrl = AppConstants.baseUrl;
 
@@ -134,14 +135,14 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
         margin: EdgeInsets.symmetric(horizontal: AppConstants.p16.w),
         padding: EdgeInsets.all(AppConstants.p16.w),
         decoration: BoxDecoration(
-          color: AppColors.of(context).surface,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+            color: colors.outlineVariant.withValues(alpha: 0.5),
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.02),
+              color: colors.black.withValues(alpha: 0.02),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -191,7 +192,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                           height: 48.w,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: AppColors.of(context).primary, // Dark green-ish from mockup
+                            color: colors.primary, // Dark green-ish from mockup
                           ),
                           clipBehavior: Clip.antiAlias,
                           child: (profileImage != null && profileImage.isNotEmpty)
@@ -204,14 +205,14 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                                       Center(
                                     child: Text(
                                       displayInitials,
-                                      style: AppTextStyle.bodyLarge.copyWith(color: Colors.white),
+                                      style: AppTextStyle.bodyLarge.copyWith(color: colors.white),
                                     ),
                                   ),
                                 )
                               : Center(
                                   child: Text(
                                     displayInitials,
-                                    style: AppTextStyle.bodyLarge.copyWith(color: Colors.white),
+                                    style: AppTextStyle.bodyLarge.copyWith(color: colors.white),
                                   ),
                                 ),
                         ),
@@ -223,7 +224,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                               Text(
                                 fullName ?? l10n.employeeName,
                                 style: AppTextStyle.bodyMedium.copyWith(
-                                  color: AppColors.of(context).onSurface,
+                                  color: colors.onSurface,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -231,13 +232,13 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                                 decoration: BoxDecoration(
-                                  color: AppColors.of(context).primary.withValues(alpha: 0.1),
+                                  color: colors.primary.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(4.r),
                                 ),
                                 child: Text(
                                   designation ?? l10n.designation,
                                   style: AppTextStyle.bodySmall.copyWith(
-                                    color: AppColors.of(context).primary,
+                                    color: colors.primary,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -248,16 +249,16 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                                 runSpacing: 4.h,
                                 children: [
                                   _Badge(
-                                    icon: Icon(Icons.business, size: 12.w, color: AppColors.of(context).holidayText),
+                                    icon: Icon(Icons.business, size: 12.w, color: colors.holidayText),
                                     text: company ?? "", // From API or default to Dhira
-                                    backgroundColor: AppColors.of(context).holidayBg,
-                                    textColor: AppColors.of(context).holidayText,
+                                    backgroundColor: colors.holidayBg,
+                                    textColor: colors.holidayText,
                                   ),
                                   _Badge(
-                                    icon: Icon(Icons.badge_outlined, size: 12.w, color: AppColors.of(context).holidayText),
+                                    icon: Icon(Icons.badge_outlined, size: 12.w, color: colors.holidayText),
                                     text: empId ?? l10n.notAvailable,
-                                    backgroundColor: AppColors.of(context).holidayBg,
-                                    textColor: AppColors.of(context).holidayText,
+                                    backgroundColor: colors.holidayBg,
+                                    textColor: colors.holidayText,
                                   ),
                                 ],
                               ),
@@ -295,6 +296,7 @@ class _Badge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(

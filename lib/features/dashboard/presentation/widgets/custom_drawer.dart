@@ -23,12 +23,13 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final baseUrl = Get.find<DioClient>().baseUrl;
 
     return Drawer(
-      backgroundColor: AppColors.of(context).surface,
-      surfaceTintColor: Colors.transparent,
+      backgroundColor: colors.surface,
+      surfaceTintColor: colors.transparent,
       child: SafeArea(
         child: Column(
           children: [
@@ -43,14 +44,14 @@ class CustomDrawer extends StatelessWidget {
                     height: 28.h,
                   ),
                   IconButton(
-                    icon: Icon(Icons.close, color: AppColors.of(context).onSurface),
+                    icon: Icon(Icons.close, color: colors.onSurface),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
             ),
             
-            Divider(height: 1, thickness: 1, color: AppColors.of(context).outlineVariant),
+            Divider(height: 1, thickness: 1, color: colors.outlineVariant),
             
             // Profile Section
             Padding(
@@ -82,10 +83,10 @@ class CustomDrawer extends StatelessWidget {
                         children: [
                           Container(
                             width: 50.w,
-                            height: 50.w,
+                            height: 50.h,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: AppColors.of(context).primaryFixed,
+                              color: colors.primaryFixed,
                             ),
                             clipBehavior: Clip.antiAlias,
                             child: (profileImage != null && profileImage.isNotEmpty)
@@ -98,14 +99,14 @@ class CustomDrawer extends StatelessWidget {
                                         Center(
                                       child: Text(
                                         displayInitials,
-                                        style: AppTextStyle.bodyLarge.copyWith(color: AppColors.of(context).onPrimaryFixed),
+                                        style: AppTextStyle.bodyLarge.copyWith(color: colors.onPrimaryFixed),
                                       ),
                                     ),
                                   )
                                 : Center(
                                     child: Text(
                                       displayInitials,
-                                      style: AppTextStyle.bodyLarge.copyWith(color: AppColors.of(context).onPrimaryFixed),
+                                      style: AppTextStyle.bodyLarge.copyWith(color: colors.onPrimaryFixed),
                                     ),
                                   ),
                           ),
@@ -117,22 +118,21 @@ class CustomDrawer extends StatelessWidget {
                                 Text(
                                   fullName ?? l10n.employeeName,
                                   style: AppTextStyle.bodyLarge.copyWith(
-                                    color: AppColors.of(context).onSurface,
+                                    color: colors.onSurface,
                                     fontWeight: FontWeight.bold, // Made bold as requested
-                                    fontSize: 15.sp,
-                                  ),
+                                    ),
                                 ),
                                 SizedBox(height: 8.h), // Increased space
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                                   decoration: BoxDecoration(
-                                    color: AppColors.of(context).primary.withValues(alpha: 0.1),
+                                    color: colors.primary.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(4.r),
                                   ),
                                   child: Text(
                                     designation ?? l10n.designation,
                                     style: AppTextStyle.bodySmall.copyWith(
-                                      color: AppColors.of(context).primary,
+                                      color: colors.primary,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -148,7 +148,7 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             
-            Divider(height: 1, thickness: 1, color: AppColors.of(context).outlineVariant),
+            Divider(height: 1, thickness: 1, color: colors.outlineVariant),
             
             Expanded(
               child: CustomScrollView(
@@ -185,7 +185,7 @@ class CustomDrawer extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 8.h),
-                          child: Divider(height: 1, thickness: 1, color: AppColors.of(context).outlineVariant),
+                          child: Divider(height: 1, thickness: 1, color: colors.outlineVariant),
                         ),
                         _DrawerMenuItemWidget(
                           icon: Icons.headset_mic_outlined,
@@ -222,7 +222,7 @@ class CustomDrawer extends StatelessWidget {
               child: Text(
                 "${l10n.version} ${AppConstants.appVersion}",
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.of(context).onSurfaceVariant,
+                  color: colors.onSurfaceVariant,
                 ),
               ),
             ),
@@ -247,6 +247,7 @@ class _DrawerMenuItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Padding(
       padding: EdgeInsets.all(8.w),
       child: ListTile(
@@ -290,11 +291,12 @@ class _ExpandablePerformanceMenuItemState
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.w),
       child: Theme(
         data: Theme.of(context).copyWith(
-          dividerColor: Colors.transparent,
+          dividerColor: colors.transparent,
         ),
         child: ExpansionTile(
           onExpansionChanged: (expanded) {
@@ -329,7 +331,7 @@ class _ExpandablePerformanceMenuItemState
               decoration: BoxDecoration(
                 border: Border(
                   left: BorderSide(
-                    color: AppColors.of(context).onSurfaceVariant,
+                    color: colors.onSurfaceVariant,
                     width: 1.5,
                   ),
                 ),

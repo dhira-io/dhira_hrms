@@ -75,11 +75,16 @@ class CommonButton extends StatelessWidget {
                 ),
                 const SizedBox(width: AppConstants.p8),
               ],
-              Text(
-                text,
-                style: AppTextStyle.button.copyWith(
-                  color: _getTextColor(colors, isButtonDisabled),
-                  fontWeight: fontWeight ?? FontWeight.w700,
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    text,
+                    style: AppTextStyle.button.copyWith(
+                      color: _getTextColor(colors, isButtonDisabled),
+                      fontWeight: fontWeight ?? FontWeight.w700,
+                    ),
+                  ),
                 ),
               ),
             ],
