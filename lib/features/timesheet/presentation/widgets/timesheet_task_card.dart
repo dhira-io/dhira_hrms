@@ -63,6 +63,7 @@ class TimesheetTaskCard extends StatelessWidget {
                     Text(
                       task.project,
                       style: AppTextStyle.labelLargeOne.copyWith(
+                        fontWeight: FontWeight.w500,
                         color: AppColors.of(context).textPrimary,
                       ),
                     ),
@@ -105,6 +106,7 @@ class TimesheetTaskCard extends StatelessWidget {
               Text(
                 '${task.spentHours}h ${l10n.logged}',
                 style: AppTextStyle.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w500,
                   color: AppColors.of(context).textSecondary,
                 ),
               ),
@@ -113,6 +115,7 @@ class TimesheetTaskCard extends StatelessWidget {
                 Text(
                   varianceText,
                   style: AppTextStyle.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w500,
                     color: task.variance >= 0
                         ? AppColors.colorEmerald500
                         : AppColors.of(context).error,
