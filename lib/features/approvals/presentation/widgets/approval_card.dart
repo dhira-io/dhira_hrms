@@ -1,4 +1,6 @@
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routing/app_router.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/screens/leave_edit_screen.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
@@ -47,7 +49,16 @@ class ApprovalCard extends StatelessWidget {
             value: context.read<ApprovalsBloc>(),
             child: FractionallySizedBox(
               heightFactor: 0.9,
-              child: RequestDetailsBottomSheet(data: data),
+              child: RequestDetailsBottomSheet(
+                data: data,
+                onEditRequest: () {
+                  if (data.type == ApprovalType.leave) {
+                    _onEditLeave(context);
+                  } else if (data.type == ApprovalType.timesheet) {
+                    _onEditTimesheet(context);
+                  }
+                },
+              ),
             ),
           ),
         );
@@ -131,7 +142,7 @@ class ApprovalCard extends StatelessWidget {
         Navigator.pop(context); // Remove loading indicator
 
         final leaveType = data.displayDetails[RequestDetailKeys.leaveType] ?? "";
-        final reason = data.displayDetails[RequestDetailKeys.reason] ?? "";
+        final reason = data.displayDetails['Reason'] ?? "";
         final daysText = data.displayDetails[RequestDetailKeys.days] ?? "0";
         final double days = double.tryParse(daysText.split(' ').first) ?? 0.0;
 
@@ -169,18 +180,13 @@ class ApprovalCard extends StatelessWidget {
           fileUrl: data.fileUrl,
         );
 
-        final bool? success = await showDialog<bool>(
-          context: context,
-          builder: (context) => Dialog.fullscreen(
-            child: LeaveEditScreen(employeeId: employee.empId, leave: leave),
-          ),
+        context.push(
+          AppRouter.applyLeavePath,
+          extra: {
+            AppRouter.argEmployeeId: employee.empId,
+            AppRouter.argLeave: leave,
+          },
         );
-
-        if (context.mounted && success == true) {
-          context.read<ApprovalsBloc>().add(
-            ApprovalsEvent.categoryChanged(data.type, data.category),
-          );
-        }
       }
     } catch (e) {
       if (context.mounted) {

@@ -22,14 +22,20 @@ class EditTimesheetBottomSheet extends StatelessWidget {
         return state.maybeMap(
           success: (s) {
             if (s.data.isTimesheetLoading) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(4, (index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: ShimmerLoading(width: double.infinity, height: 40),
-                  )),
+              return Container(
+                decoration: BoxDecoration(
+                  color: AppColors.of(context).surfaceContainerLowest,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(4, (index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: ShimmerLoading(width: double.infinity, height: 40),
+                    )),
+                  ),
                 ),
               );
             }

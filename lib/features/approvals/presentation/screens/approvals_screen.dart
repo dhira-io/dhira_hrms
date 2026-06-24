@@ -103,80 +103,81 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
         children: [
           Scaffold(
             backgroundColor: AppColors.of(context).background,
-        body: RefreshIndicator(
-          onRefresh: () async {
-            final completer = Completer<void>();
-            context.read<ApprovalsBloc>().add(
-              ApprovalsEvent.refreshRequested(completer: completer),
-            );
-            return completer.future;
-          },
-          child: BlocBuilder<ApprovalsBloc, ApprovalsState>(
-            builder: (context, state) {
-              return CustomScrollView(
-                controller: _scrollController,
-                slivers: [
-                  const SliverToBoxAdapter(child: AppHeader()),
-                  ...state.when(
-                    initial: () => [
-                      const SliverToBoxAdapter(
-                        child: ApprovalsFullScreenShimmer(),
+        body: BlocBuilder<ApprovalsBloc, ApprovalsState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                const AppHeader(),
+                state.maybeWhen(
+                  success: (data) => Column(
+                    children: [
+                      const ApprovalsPrimaryTabsSection(),
+                      Container(
+                        color: AppColors.of(context).background,
+                        child: const ApprovalsFilterSection(),
                       ),
                     ],
-                    loading: () => [
-                      const SliverToBoxAdapter(
-                        child: ApprovalsFullScreenShimmer(),
-                      ),
-                    ],
-                    failure: (message) => [
-                      SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: NoInternetWidget(
-                          message: message,
-                          onReload: () => context.read<ApprovalsBloc>().add(
-                            const ApprovalsEvent.started(),
-                          ),
-                        ),
-                      ),
-                    ],
-                    success: (data) => [
-                      // 1. Primary Tabs (Team/Raised)
-                      const SliverToBoxAdapter(
-                        child: ApprovalsPrimaryTabsSection(),
-                      ),
-                      // 2. Sub Tabs (Leave/Attendance/...) - Sticky
-                      SliverPersistentHeader(
-                        pinned: true,
-                        delegate: _PersistentHeaderDelegate(
-                          height: (data.category == ApprovalCategory.team &&
-                                  data.statusFilter.toLowerCase().contains(ApprovalsApiConstants.statusPending))
-                              ? 155.h
-                              : 128.h,
-                          child: Container(
-                            color: AppColors.of(context).background,
-                            child: const ApprovalsFilterSection(),
-                          ),
-                        ),
-                      ),
-                      // 3. Data Section — spread flat slivers
-                      ...ApprovalsListContent.buildSlivers(
-                        requests: data.filteredRequests,
-                        selectedRequestIds: data.selectedRequestIds,
-                        isLoading: data.isListLoading,
-                        isLoadMoreLoading: data.isLoadMoreLoading,
-                        context: context,
-                      ),
-                      // Bottom padding
+                  ),
+                  orElse: () => const SizedBox.shrink(),
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      final completer = Completer<void>();
+                      context.read<ApprovalsBloc>().add(
+                        ApprovalsEvent.refreshRequested(completer: completer),
+                      );
+                      return completer.future;
+                    },
+                    child: CustomScrollView(
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: [
+                        ...state.when(
+                          initial: () => [
+                            const SliverToBoxAdapter(
+                              child: ApprovalsFullScreenShimmer(),
+                            ),
+                          ],
+                          loading: () => [
+                            const SliverToBoxAdapter(
+                              child: ApprovalsFullScreenShimmer(),
+                            ),
+                          ],
+                          failure: (message) => [
+                            SliverFillRemaining(
+                              hasScrollBody: false,
+                              child: NoInternetWidget(
+                                message: message,
+                                onReload: () => context.read<ApprovalsBloc>().add(
+                                  const ApprovalsEvent.started(),
+                                ),
+                              ),
+                            ),
+                          ],
+                          success: (data) => [
+                            // 3. Data Section — spread flat slivers
+                            ...ApprovalsListContent.buildSlivers(
+                              requests: data.filteredRequests,
+                              selectedRequestIds: data.selectedRequestIds,
+                              isLoading: data.isListLoading,
+                              isLoadMoreLoading: data.isLoadMoreLoading,
+                              context: context,
+                            ),
+                            // Bottom padding
                             SliverPadding(
-                        padding: EdgeInsets.only(bottom: 100.h),
-                      ),
-                        ], // closes success
-                      ), // closes maybeWhen
-                    ], // closes slivers
-                  ); // closes CustomScrollView
-                },
-              ),
-            ),
+                              padding: EdgeInsets.only(bottom: 100.h),
+                            ),
+                          ], // closes success
+                        ), // closes maybeWhen
+                      ], // closes slivers
+                    ), // closes CustomScrollView
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
           ),
           BlocBuilder<ApprovalsBloc, ApprovalsState>(
             builder: (context, state) {
@@ -318,27 +319,4 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
       ),
     );
   }
-}
-
-class _PersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final double height;
-  final Widget child;
-
-  _PersistentHeaderDelegate({required this.height, required this.child});
-
-  @override
-  double get minExtent => height;
-  @override
-  double get maxExtent => height;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) => child;
-
-  @override
-  bool shouldRebuild(_PersistentHeaderDelegate oldDelegate) =>
-      oldDelegate.height != height || oldDelegate.child != child;
 }

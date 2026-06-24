@@ -22,8 +22,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class RequestDetailsBottomSheet extends StatefulWidget {
   final ApprovalRequestEntity data;
+  final VoidCallback? onEditRequest;
 
-  const RequestDetailsBottomSheet({super.key, required this.data});
+  const RequestDetailsBottomSheet({
+    super.key,
+    required this.data,
+    this.onEditRequest,
+  });
 
   @override
   State<RequestDetailsBottomSheet> createState() => _RequestDetailsBottomSheetState();
@@ -658,6 +663,9 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                             child: OutlinedButton(
                               onPressed: () {
                                 Navigator.pop(context);
+                                if (widget.onEditRequest != null) {
+                                  widget.onEditRequest!();
+                                }
                               },
                               style: OutlinedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(vertical: 12),
