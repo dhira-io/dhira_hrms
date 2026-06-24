@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/constants/app_constants.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_style.dart';
-import '../../../../../l10n/app_localizations.dart';
 import '../../../domain/entities/leave_type_entity.dart';
 import '../../../../../core/constants/leave_constants.dart';
 
@@ -25,17 +24,18 @@ class LeaveTypeDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final userGender = gender.toLowerCase();
 
     final filteredTypes = leaveTypes.where((type) {
       final typeName = type.name.toLowerCase();
-      if (userGender == 'male' &&
-          typeName.contains(LeaveTypes.maternityLeave.toLowerCase()))
+      if (userGender == Gender.male &&
+          typeName.contains(LeaveTypes.maternityLeave.toLowerCase())) {
         return false;
-      if (userGender == 'female' &&
-          typeName.contains(LeaveTypes.paternityLeave.toLowerCase()))
+      }
+      if (userGender == Gender.female &&
+          typeName.contains(LeaveTypes.paternityLeave.toLowerCase())) {
         return false;
+      }
       return true;
     }).toList();
 
@@ -76,7 +76,7 @@ class LeaveTypeDropdown extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppConstants.r12),
           borderSide: BorderSide.none,
         ),
-        errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
+        errorStyle: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).error),
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       icon: Padding(

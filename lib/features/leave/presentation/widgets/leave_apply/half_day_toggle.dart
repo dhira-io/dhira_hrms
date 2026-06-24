@@ -47,9 +47,9 @@ class HalfDayToggle extends StatelessWidget {
             child: Switch(
               value: value,
               onChanged: onChanged,
-              activeThumbColor: Colors.white,
+              activeThumbColor: AppColors.of(context).onPrimary,
               activeTrackColor: AppColors.of(context).primary,
-              inactiveThumbColor: Colors.white,
+              inactiveThumbColor: AppColors.of(context).surface,
               inactiveTrackColor: AppColors.of(
                 context,
               ).outlineVariant.withValues(alpha: 0.3),

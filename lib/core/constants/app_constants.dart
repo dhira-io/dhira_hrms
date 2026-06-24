@@ -505,3 +505,8 @@ class ProjectStatus {
   static const String inactive = 'Inactive';
   static const List<String> values = [active, inactive];
 }
+
+class Gender {
+  static const String male = 'male';
+  static const String female = 'female';
+}

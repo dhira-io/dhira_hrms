@@ -36,6 +36,7 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     String? attachmentUrl,
   }) async {
     return networkInfo.connectedAndRun(() async {
@@ -51,6 +52,7 @@ class LeaveRepositoryImpl implements ILeaveRepository {
           halfDayDate: halfDayDate,
           halfDaySegment: halfDaySegment,
           totalleavedays: totalleavedays,
+          emergencyContactNumber: emergencyContactNumber,
           attachmentUrl: attachmentUrl,
         );
         return Right(success);
@@ -73,6 +75,7 @@ class LeaveRepositoryImpl implements ILeaveRepository {
     String? halfDayDate,
     String? halfDaySegment,
     double? totalleavedays,
+    String? emergencyContactNumber,
     String? workflowState,
     String? attachmentUrl,
   }) async {
@@ -90,6 +93,7 @@ class LeaveRepositoryImpl implements ILeaveRepository {
           halfDayDate: halfDayDate,
           halfDaySegment: halfDaySegment,
           totalleavedays: totalleavedays,
+          emergencyContactNumber: emergencyContactNumber,
           workflowState: workflowState,
           attachmentUrl: attachmentUrl,
         );

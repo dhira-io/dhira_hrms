@@ -435,7 +435,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                   ],
                 ),
               ),
-              const SizedBox(height: AppConstants.p24),
+              const SizedBox(height: AppConstants.p20),
               if (_requiresSupportingDocs) ...[
                 LeaveCardSection(
                   title: l10n.supportingDocuments,

@@ -1,5 +1,4 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,10 +12,7 @@ import '../bloc/leave_bloc.dart';
 import '../bloc/leave_state.dart';
 import '../bloc/leave_event.dart';
 import '../widgets/leave_apply_form.dart';
-import '../widgets/leave_stats_grid.dart';
-import '../widgets/leave_balance_overview_card.dart';
 import '../../../../core/utils/date_time_utils.dart';
-
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/widgets/common_app_bar.dart';
 import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
@@ -24,18 +20,15 @@ import '../../../approvals/presentation/bloc/approvals_bloc.dart';
 import '../../../approvals/presentation/bloc/approvals_event.dart';
 import '../../../approvals/domain/entities/approval_type.dart';
 import '../../../approvals/domain/entities/approval_request_entity.dart';
-
-import '../../domain/usecases/get_leave_types_usecase.dart';
-import '../../domain/usecases/get_leave_balance_usecase.dart';
-import '../../domain/usecases/get_leave_statistics_usecase.dart';
-import '../../domain/usecases/submit_leave_usecase.dart';
-import '../../domain/usecases/update_leave_usecase.dart';
-import '../../domain/usecases/get_overlap_leaves_usecase.dart';
-import '../../domain/usecases/upload_file_usecase.dart';
+import '../widgets/leave_apply/leave_stepper_header.dart';
+import '../widgets/leave_apply/leave_review_step.dart';
+import '../widgets/leave_apply/leave_confirmation_step.dart';
+import '../utils/leave_form_utils.dart';
 
 class ApplyLeaveScreen extends StatefulWidget {
   final String employeeId;
   final LeaveEntity? leave;
+
   const ApplyLeaveScreen({super.key, required this.employeeId, this.leave});
 
   @override
@@ -46,6 +39,9 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
   late final LeaveBloc _leaveBloc;
   late final String _gender;
   late final String _effectiveEmployeeId;
+  late final String _empName;
+  late String _approverName;
+  String _reason = "";
 
   @override
   void initState() {
@@ -53,120 +49,167 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
 
     final localStorage = Get.find<LocalStorageService>();
     _gender = localStorage.getGender() ?? "";
+    _empName = localStorage.getEmpName() ?? "";
     _effectiveEmployeeId = widget.employeeId.isEmpty
         ? (localStorage.getEmpId() ?? "")
         : widget.employeeId;
 
-    _leaveBloc = LeaveBloc(
-      getLeaveTypesUseCase: Get.find<GetLeaveTypesUseCase>(),
-      getLeaveBalanceUseCase: Get.find<GetLeaveBalanceUseCase>(),
-      getLeaveStatisticsUseCase: Get.find<GetLeaveStatisticsUseCase>(),
-      submitLeaveUseCase: Get.find<SubmitLeaveUseCase>(),
-      updateLeaveUseCase: Get.find<UpdateLeaveUseCase>(),
-      getOverlapLeavesUseCase: Get.find<GetOverlapLeavesUseCase>(),
-      uploadFileUseCase: Get.find<UploadFileUseCase>(),
-    );
+    _leaveBloc = context.read<LeaveBloc>();
 
-    // Trigger initial data fetches immediately to avoid UI flickering
-    final now = DateTime.now();
-    _leaveBloc.add(
-      LeaveEvent.statisticsRequested(
-        employeeId: _effectiveEmployeeId,
-        fromDate: now.firstDayOfMonth.format(),
-        toDate: now.lastDayOfMonth.format(),
-      ),
-    );
+    // Trigger initial data fetches in post-frame to avoid UI flickering and lifecycle issues
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final now = DateTime.now();
+        _leaveBloc.add(
+          LeaveEvent.statisticsRequested(
+            employeeId: _effectiveEmployeeId,
+            fromDate: now.firstDayOfMonth.format(),
+            toDate: now.lastDayOfMonth.format(),
+          ),
+        );
 
-    _leaveBloc.add(
-      LeaveEvent.balanceRequested(
-        employeeId: _effectiveEmployeeId,
-        todayDate: DateTimeUtils.todayDate(),
-        gender: _gender,
-      ),
-    );
+        _leaveBloc.add(
+          LeaveEvent.balanceRequested(
+            employeeId: _effectiveEmployeeId,
+            todayDate: DateTimeUtils.todayDate(),
+            gender: _gender,
+          ),
+        );
+
+        // Explicitly initialize form to reset state (like success step) when opening screen
+        _leaveBloc.add(
+          LeaveEvent.formInitialized(
+            leave: widget.leave,
+            employeeName: _empName,
+            gender: _gender,
+            isNewForm: widget.leave == null,
+          ),
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
-    _leaveBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocProvider<LeaveBloc>.value(
-      value: _leaveBloc,
-      child: Scaffold(
-        backgroundColor: AppColors.of(context).surface,
-        appBar: CommonAppBar(
-          title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
-        ),
-        body: SafeArea(
-          child: GestureDetector(
-            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-            behavior: HitTestBehavior.opaque,
-            child: BlocListener<LeaveBloc, LeaveState>(
-              listenWhen: (previous, current) =>
-                  (previous.success != current.success && current.success) ||
-                  (previous.errorMessage != current.errorMessage &&
-                      current.errorMessage != null),
-              listener: (context, state) {
-                if (state.success) {
-                  ToastUtils.showSuccess(l10n.leaveSubmitSuccess);
-                  Get.find<BottomNavCubit>().changeIndex(
-                    BottomNavCubit.approvalsIndex,
-                  );
-                  Get.find<ApprovalsBloc>().add(
-                    const ApprovalsEvent.categoryChanged(
-                      ApprovalType.leave,
-                      ApprovalCategory.raised,
-                    ),
-                  );
+    final colors = AppColors.of(context);
+    
+    _approverName =
+        Get.find<LocalStorageService>().getApproverName() ?? l10n.notAvailable;
+
+    return BlocConsumer<LeaveBloc, LeaveState>(
+      listenWhen: (previous, current) =>
+          (previous.success != current.success && current.success) ||
+          (previous.errorMessage != current.errorMessage &&
+              current.errorMessage != null),
+      listener: (context, state) {
+        if (state.success) {
+          _leaveBloc.add(const LeaveEvent.stepChanged(2));
+        }
+
+        if (state.errorMessage != null) {
+          ToastUtils.showError(state.errorMessage!);
+          _leaveBloc.add(const LeaveEvent.clearError());
+        }
+      },
+      builder: (context, state) {
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
+            if (state.currentStep == 1) {
+              _leaveBloc.add(const LeaveEvent.stepChanged(0));
+            } else {
+              context.go(AppRouter.dashboardPath);
+            }
+          },
+          child: Scaffold(
+            backgroundColor: colors.surface,
+            appBar: CommonAppBar(
+              title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
+              subtitle: l10n.applyLeaveSubtitle,
+              onBack: () {
+                if (state.currentStep == 1) {
+                  _leaveBloc.add(const LeaveEvent.stepChanged(0));
+                } else {
                   context.go(AppRouter.dashboardPath);
                 }
-
-                if (state.errorMessage != null) {
-                  ToastUtils.showError(state.errorMessage!);
-                  // Clear error state after showing toast to allow repeated errors
-                  _leaveBloc.add(const LeaveEvent.clearError());
-                }
               },
-              child: RefreshIndicator(
-                onRefresh: _onRefresh,
-                color: AppColors.of(context).primary,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppConstants.p20),
-                    child: Column(
-                      children: [
-                        // Stats and Balance are now independent "Smart" widgets
-                        LeaveStatsGrid(employeeId: _effectiveEmployeeId),
-                        const SizedBox(height: AppConstants.p20),
-                        LeaveBalanceOverviewCard(
-                          employeeId: _effectiveEmployeeId,
-                          gender: _gender,
-                        ),
-                        const SizedBox(height: AppConstants.p24),
-                        LeaveApplyForm(
+            ),
+            body: SafeArea(
+              child: GestureDetector(
+                onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+                behavior: HitTestBehavior.opaque,
+                child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppConstants.p20,
+                      0,
+                      AppConstants.p20,
+                      12,
+                    ),
+                    child: LeaveStepperHeader(currentStep: state.currentStep),
+                  ),
+                  Expanded(
+                    child: Builder(builder: (context) {
+                      if (state.currentStep == 0) {
+                        return LeaveApplyForm(
                           employeeId: _effectiveEmployeeId,
                           leave: widget.leave,
-                          empName:
-                              Get.find<LocalStorageService>().getEmpName() ??
-                              "",
+                          empName: _empName,
                           gender: _gender,
-                        ),
-                              SizedBox(height: 100.h),
-                      ],
-                    ),
+                          initialReason: _reason,
+                          onNext: (reason) {
+                            setState(() {
+                              _reason = reason;
+                            });
+                            _leaveBloc.add(const LeaveEvent.stepChanged(1));
+                          },
+                          onRefresh: _onRefresh,
+                        );
+                      } else if (state.currentStep == 1) {
+                        return LeaveReviewStep(
+                          state: state,
+                          reason: _reason,
+                          approverName: _approverName,
+                          onSubmit: () => _submitForm(state),
+                          onBack: () =>
+                              _leaveBloc.add(const LeaveEvent.stepChanged(0)),
+                          onRefresh: _onRefresh,
+                        );
+                      } else {
+                        return LeaveConfirmationStep(
+                          onMyRequests: () {
+                            Get.find<BottomNavCubit>().changeIndex(
+                              BottomNavCubit.approvalsIndex,
+                            );
+                            Get.find<ApprovalsBloc>().add(
+                              const ApprovalsEvent.categoryChanged(
+                                ApprovalType.leave,
+                                ApprovalCategory.raised,
+                              ),
+                            );
+                            context.go(AppRouter.dashboardPath);
+                          },
+                          onBackToHome: () {
+                            context.go(AppRouter.dashboardPath);
+                          },
+                        );
+                      }
+                    }),
                   ),
-                ),
+                ],
               ),
             ),
           ),
-        ),
-      ),
+        ));
+      },
     );
   }
 
@@ -187,6 +230,58 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
       await refreshFuture;
     } catch (_) {
       // Safety timeout
+    }
+  }
+
+  void _submitForm(LeaveState state) {
+    final fromStr = (state.fromDate ?? DateTime.now()).format();
+    final toStr = (state.toDate ?? DateTime.now()).format();
+    final totalDays = LeaveFormUtils.computeTotalDays(
+      fromDate: state.fromDate,
+      toDate: state.toDate,
+      isHalfDay: state.isHalfDay,
+    );
+
+    if (widget.leave == null) {
+      _leaveBloc.add(
+        LeaveEvent.applyRequested(
+          employeeId: _effectiveEmployeeId,
+          employeeName: _empName.isNotEmpty
+              ? _empName
+              : AppLocalizations.of(context)!.user,
+          leaveType: state.selectedLeaveType!,
+          fromDate: fromStr,
+          toDate: toStr,
+          reason: _reason,
+          halfDay: state.isHalfDay ? 1 : 0,
+          halfDayDate: state.isHalfDay && state.halfDayDate != null
+              ? state.halfDayDate!.format()
+              : null,
+          halfDaySegment: state.isHalfDay ? state.daySegment : null,
+          totalleavedays: totalDays,
+          emergencyContactNumber: state.addEmergencyContact
+              ? state.emergencyContactNumber
+              : null,
+        ),
+      );
+    } else {
+      _leaveBloc.add(
+        LeaveEvent.updateRequested(
+          leaveId: widget.leave!.name,
+          fromDate: fromStr,
+          toDate: toStr,
+          reason: _reason,
+          halfDay: state.isHalfDay ? 1 : 0,
+          halfDayDate: state.isHalfDay && state.halfDayDate != null
+              ? state.halfDayDate!.format()
+              : null,
+          halfDaySegment: state.isHalfDay ? state.daySegment : null,
+          totalleavedays: totalDays,
+          emergencyContactNumber: state.addEmergencyContact
+              ? state.emergencyContactNumber
+              : null,
+        ),
+      );
     }
   }
 }
