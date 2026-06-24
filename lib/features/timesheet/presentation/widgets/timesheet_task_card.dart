@@ -140,7 +140,7 @@ class TimesheetTaskCard extends StatelessWidget {
             ),
             child: Text(
               task.description ?? '',
-              style: AppTextStyle.labelLarge.copyWith(
+              style: AppTextStyle.labelMediumOne.copyWith(
                 color: AppColors.of(context).textSecondary,
               ),
             ),
