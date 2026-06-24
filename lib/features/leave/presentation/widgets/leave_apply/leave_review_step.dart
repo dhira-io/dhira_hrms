@@ -53,19 +53,19 @@ class LeaveReviewStep extends StatelessWidget {
                       child: Column(
                         children: [
                           ReviewDetailRow(label: l10n.leaveType, value: state.selectedLeaveType ?? ""),
-                          const ReviewDetailDivider(),
+                          SizedBox(height: AppConstants.p16.h),
                           ReviewDetailRow(label: l10n.fromDate, value: state.fromDate?.format() ?? ""),
-                          const ReviewDetailDivider(),
+                          SizedBox(height: AppConstants.p16.h),
                           if (!state.isHalfDay)
                             ...[
                               ReviewDetailRow(label: l10n.toDate, value: state.toDate?.format() ?? ""),
-                              const ReviewDetailDivider(),
+                              SizedBox(height: AppConstants.p16.h),
                             ],
                           ReviewDetailRow(label: l10n.duration, value: "$totalDays ${l10n.daysLabel}"),
 
                           if (state.uploadedFileUrl != null || state.selectedFileName != null)
                             ...[
-                              const ReviewDetailDivider(),
+                              SizedBox(height: AppConstants.p16.h),
                               ReviewDetailRow(
                                 label: l10n.supportingDocuments, 
                                 value: state.selectedFileName ?? l10n.fileAttached,
@@ -121,6 +121,7 @@ class LeaveReviewStep extends StatelessWidget {
                     variant: ButtonVariant.outlined,
                     textStyle: AppTextStyle.bodyLarge.copyWith(
                       color: colors.onSurface,
+                      fontWeight: FontWeight.bold,
                     ),
                     onPressed: onBack,
                   ),
@@ -215,7 +216,7 @@ class ReviewDetailRow extends StatelessWidget {
             textAlign: TextAlign.right,
             style: AppTextStyle.bodyMedium.copyWith(
               color: isLink ? colors.primary : colors.onSurface,
-              fontWeight: isLink ? FontWeight.bold : FontWeight.w500,
+              fontWeight: isLink ? FontWeight.bold : FontWeight.w600,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

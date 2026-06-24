@@ -20,38 +20,32 @@ class LeaveConfirmationStep extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.minHeight),
             child: Padding(
-              padding: const EdgeInsets.all(AppConstants.p12),
+              padding: const EdgeInsets.symmetric(horizontal: AppConstants.p32),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 80.w,
-                    height: 80.w,
+                    width: 46.w,
+                    height: 46.w,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.of(context).primary.withValues(alpha: 0.1),
+                      border: Border.all(
+                        color: AppColors.of(context).success,
+                        width: 2,
+                      ),
                     ),
                     child: Center(
-                      child: Container(
-                        width: 56.w,
-                        height: 56.w,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.of(context).primary,
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.check,
-                            size: 32.w,
-                            color: AppColors.of(context).onPrimary,
-                          ),
-                        ),
+                      child: Icon(
+                        Icons.check,
+                        size: 24.w,
+                        color: AppColors.of(context).success,
                       ),
                     ),
                   ),
@@ -71,49 +65,35 @@ class LeaveConfirmationStep extends StatelessWidget {
                       color: AppColors.of(context).outline,
                     ),
                   ),
+                  SizedBox(height: 32.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CommonButton(
+                          text: l10n.myRequests,
+                          variant: ButtonVariant.outlined,
+                          textStyle: AppTextStyle.bodyLarge.copyWith(
+                            color: AppColors.of(context).onSurface,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          onPressed: onMyRequests,
+                        ),
+                      ),
+                      SizedBox(width: 16.w),
+                      Expanded(
+                        child: CommonButton(
+                          text: l10n.backToHome,
+                          onPressed: onBackToHome,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(AppConstants.p20),
-          decoration: BoxDecoration(
-            color: AppColors.of(context).surface,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.of(context).outline.withValues(alpha: 0.1),
-                blurRadius: 10,
-                offset: const Offset(0, -4),
-              ),
-            ],
-          ),
-          child: SafeArea(
-            top: false,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: CommonButton(
-                    text: l10n.myRequests,
-                    onPressed: onMyRequests,
-                  ),
-                ),
-                SizedBox(height: AppConstants.p16.h),
-                SizedBox(
-                  width: double.infinity,
-                  child: CommonButton(
-                    text: l10n.backToHome,
-                    variant: ButtonVariant.outlined,
-                    onPressed: onBackToHome,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
