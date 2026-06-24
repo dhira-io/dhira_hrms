@@ -1,3 +1,4 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,8 +13,8 @@ class ToastUtils {
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.green,
-      textColor: Colors.white,
+      backgroundColor: AppColors.success,
+      textColor: AppColors.white,
       fontSize: 14.0.sp,
     );
   }
@@ -24,8 +25,8 @@ class ToastUtils {
       msg: message,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.redAccent,
-      textColor: Colors.white,
+      backgroundColor: AppColors.error,
+      textColor: AppColors.white,
       fontSize: 14.0.sp,
     );
   }
@@ -36,9 +37,10 @@ class ToastUtils {
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.blueGrey,
-      textColor: Colors.white,
+      backgroundColor: AppColors.slate500,
+      textColor: AppColors.white,
       fontSize: 14.0.sp,
     );
   }
 }
+

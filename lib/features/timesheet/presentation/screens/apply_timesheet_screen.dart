@@ -1,5 +1,4 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
@@ -12,17 +11,19 @@ import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_state.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_status.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_success_type.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/bottomsheet/add_task_bottom_sheet.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/utils/timesheet_error_mapper.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_content_view.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_error_view.dart';
+import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_loading_view.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:dhira_hrms/core/widgets/common_pdf_viewer.dart';
+import 'package:dhira_hrms/core/widgets/common_image_viewer.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_attachment_type.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/widgets/timesheet_bottom_actions.dart';
 
 class ApplyTimesheetScreen extends StatefulWidget {
   final String timesheetId;
@@ -59,10 +60,42 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
     final l10n = AppLocalizations.of(context)!;
     return BlocListener<TimesheetBloc, TimesheetState>(
       listenWhen: (previous, current) =>
-          previous.status != current.status &&
-          (current.status == TimesheetStateStatus.success ||
-              current.status == TimesheetStateStatus.error),
+          (previous.status != current.status &&
+              (current.status == TimesheetStateStatus.success ||
+                  current.status == TimesheetStateStatus.error)) ||
+          (previous.viewAttachmentUrl != current.viewAttachmentUrl &&
+              current.viewAttachmentUrl != null),
       listener: (context, state) {
+        if (state.viewAttachmentUrl != null) {
+          final url = state.viewAttachmentUrl!;
+          final type = state.viewAttachmentType;
+          if (type == TimesheetAttachmentType.pdf) {
+            CommonPdfViewer.show(
+              context: context,
+              title: l10n.attachmentsLabel,
+              fileUrl: url,
+            );
+          } else if (type == TimesheetAttachmentType.image) {
+            CommonImageViewer.show(
+              context: context,
+              title: l10n.attachmentsLabel,
+              imageUrl: url,
+            );
+          } else if (type == TimesheetAttachmentType.external) {
+            final uri = Uri.tryParse(url);
+            if (uri != null) {
+              canLaunchUrl(uri).then((canLaunch) {
+                if (canLaunch) {
+                  launchUrl(uri, mode: LaunchMode.externalApplication);
+                }
+              });
+            }
+          }
+          context.read<TimesheetBloc>().add(
+            const TimesheetEvent.clearAttachmentViewRequested(),
+          );
+        }
+
         if (state.status == TimesheetStateStatus.success) {
           final displayMessage = _getSuccessMessage(
             state.successType,
@@ -72,7 +105,6 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
           ToastUtils.showSuccess(displayMessage);
 
           if (state.successType == TimesheetSuccessType.timesheetSubmitted) {
-            // Switch to Approvals tab and show Raised Requests for Timesheet
             context.read<BottomNavCubit>().changeIndex(
               BottomNavCubit.approvalsIndex,
             );
@@ -94,7 +126,10 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
-        appBar: CommonAppBar(title: l10n.timesheetEntry),
+        appBar: CommonAppBar(
+          title: l10n.timesheetEntry,
+          subtitle: l10n.trackWeeklyWorkHours,
+        ),
         body: SafeArea(
           child: GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -105,15 +140,12 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                       current.editAssignments.isEmpty ||
                   previous.errorMessage != current.errorMessage,
               builder: (context, state) {
-                if ((state.status == TimesheetStateStatus.initial ||
-                        state.status == TimesheetStateStatus.loading) &&
-                    state.editAssignments.isEmpty) {
+                if (state.isInitialLoading) {
                   return const TimesheetLoadingView();
                 }
-          
-                if (state.status == TimesheetStateStatus.error &&
-                    state.editAssignments.isEmpty) {
-                  return TimesheetErrorView(
+
+                if (state.isErrorEmpty) {
+                  return GenericErrorWidget(
                     message: state.errorMessage ?? l10n.somethingWentWrong,
                     onRetry: () {
                       context.read<TimesheetBloc>().add(
@@ -122,27 +154,13 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
                     },
                   );
                 }
-          
+
                 return const TimesheetContentView();
               },
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            AddTaskBottomSheet.show(context, timesheetId: widget.timesheetId);
-          },
-          backgroundColor: AppColors.of(context).primaryContainer,
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Icon(
-            Icons.add_task,
-            color: AppColors.of(context).white,
-            size: 24,
-          ),
-        ),
+        bottomNavigationBar: const TimesheetBottomActions(),
       ),
     );
   }
@@ -159,6 +177,8 @@ class _ApplyTimesheetScreenState extends State<ApplyTimesheetScreen> {
         l10n.timesheetSubmittedSuccessfully,
       TimesheetSuccessType.taskUpdated => l10n.taskUpdatedSuccessfully,
       TimesheetSuccessType.taskDeleted => l10n.taskDeletedSuccessfully,
+      TimesheetSuccessType.timesheetDeleted =>
+        l10n.timesheetDeletedSuccessfully,
     };
   }
 }

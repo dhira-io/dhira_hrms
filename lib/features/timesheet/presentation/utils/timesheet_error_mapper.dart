@@ -9,6 +9,7 @@ extension TimesheetErrorMapper on String {
       "actualHoursValidation" => l10n.actualHoursValidation,
       "descriptionValidation" => l10n.descriptionValidation,
       "noChangesDone" => l10n.noChangesDone,
+      "noDraftTaskFound" => l10n.noDraftTaskFound,
       _ => this,
     };
   }
