@@ -59,8 +59,8 @@ class LeaveFormFields extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Leave Type
-        LeaveFormLabel(label: l10n.leaveType, isRequired: true),
+        // Reason Type
+        LeaveFormLabel(label: l10n.reasonType, isRequired: true),
         LeaveTypeSelectionGrid(
           selectedLeaveType: state.selectedLeaveType,
           leaveTypes: state.leaveTypes,
@@ -69,7 +69,7 @@ class LeaveFormFields extends StatelessWidget {
           onChanged: (val) => bloc.add(LeaveEvent.leaveTypeChanged(val)),
           validator: (val) => val == null ? l10n.required : null,
         ),
-        SizedBox(height: AppConstants.p20.h),
+        SizedBox(height: AppConstants.p12.h),
 
         // Half Day Toggle
         HalfDayToggle(
@@ -78,7 +78,7 @@ class LeaveFormFields extends StatelessWidget {
             bloc.add(LeaveEvent.halfDayToggled(val));
           },
         ),
-        SizedBox(height: AppConstants.p20.h),
+        SizedBox(height: AppConstants.p12.h),
 
         // Date Range
         Column(
@@ -217,7 +217,8 @@ class LeaveFormFields extends StatelessWidget {
                       onChanged: (val) =>
                           bloc.add(LeaveEvent.daySegmentChanged(val)),
                       decoration: InputDecoration(
-                        filled: false,
+                        filled: true,
+                        fillColor: AppColors.of(context).white,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: AppConstants.p16,
                           vertical: AppConstants.p18,
@@ -277,7 +278,7 @@ class LeaveFormFields extends StatelessWidget {
 
         // Supporting Docs
         if (requiresDocs) ...[
-          LeaveFormLabel(label: l10n.supportingDocuments),
+          LeaveFormLabel(label: l10n.supportingDocuments, isRequired: true),
           LeaveSupportingDocsUpload(
             isUploading: state.isUploading,
             uploadedFileUrl: state.uploadedFileUrl,
@@ -287,8 +288,6 @@ class LeaveFormFields extends StatelessWidget {
           ),
           SizedBox(height: AppConstants.p20.h),
         ],
-
-
       ],
     );
   }

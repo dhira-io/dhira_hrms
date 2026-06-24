@@ -1,5 +1,4 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,96 +100,114 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
     _approverName =
         Get.find<LocalStorageService>().getApproverName() ?? l10n.notAvailable;
 
-    return Scaffold(
-      backgroundColor: AppColors.of(context).surface,
-      appBar: CommonAppBar(
-        title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
-        subtitle: l10n.applyLeaveSubtitle,
-      ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          behavior: HitTestBehavior.opaque,
-          child: BlocConsumer<LeaveBloc, LeaveState>(
-            listenWhen: (previous, current) =>
-                (previous.success != current.success && current.success) ||
-                (previous.errorMessage != current.errorMessage &&
-                    current.errorMessage != null),
-            listener: (context, state) {
-              if (state.success) {
-                _leaveBloc.add(const LeaveEvent.stepChanged(2));
-                // Clear success to avoid repeated trigger if needed, or just stay on step 2
-              }
+    return BlocConsumer<LeaveBloc, LeaveState>(
+      listenWhen: (previous, current) =>
+          (previous.success != current.success && current.success) ||
+          (previous.errorMessage != current.errorMessage &&
+              current.errorMessage != null),
+      listener: (context, state) {
+        if (state.success) {
+          _leaveBloc.add(const LeaveEvent.stepChanged(2));
+        }
 
-              if (state.errorMessage != null) {
-                ToastUtils.showError(state.errorMessage!);
-                // Clear error state after showing toast to allow repeated errors
-                _leaveBloc.add(const LeaveEvent.clearError());
-              }
-            },
-            builder: (context, state) {
-              return RefreshIndicator(
-                onRefresh: _onRefresh,
-                color: AppColors.of(context).primary,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppConstants.p20),
-                    child: Column(
-                      children: [
-                        LeaveStepperHeader(currentStep: state.currentStep),
-                        const SizedBox(height: AppConstants.p24),
-                        if (state.currentStep == 0)
-                          LeaveApplyForm(
-                            employeeId: _effectiveEmployeeId,
-                            leave: widget.leave,
-                            empName: _empName,
-                            gender: _gender,
-                            initialReason: _reason,
-                            onNext: (reason) {
-                              setState(() {
-                                _reason = reason;
-                              });
-                              _leaveBloc.add(const LeaveEvent.stepChanged(1));
-                            },
-                          )
-                        else if (state.currentStep == 1)
-                          LeaveReviewStep(
-                            state: state,
-                            reason: _reason,
-                            approverName: _approverName,
-                            onSubmit: () => _submitForm(state),
-                            onBack: () =>
-                                _leaveBloc.add(const LeaveEvent.stepChanged(0)),
-                          )
-                        else if (state.currentStep == 2)
-                          LeaveConfirmationStep(
-                            onMyRequests: () {
-                              Get.find<BottomNavCubit>().changeIndex(
-                                BottomNavCubit.approvalsIndex,
-                              );
-                              Get.find<ApprovalsBloc>().add(
-                                const ApprovalsEvent.categoryChanged(
-                                  ApprovalType.leave,
-                                  ApprovalCategory.raised,
-                                ),
-                              );
-                              context.go(AppRouter.dashboardPath);
-                            },
-                            onBackToHome: () {
-                              context.go(AppRouter.dashboardPath);
-                            },
-                          ),
-                        SizedBox(height: 100.h),
-                      ],
+        if (state.errorMessage != null) {
+          ToastUtils.showError(state.errorMessage!);
+          _leaveBloc.add(const LeaveEvent.clearError());
+        }
+      },
+      builder: (context, state) {
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
+            if (state.currentStep == 1) {
+              _leaveBloc.add(const LeaveEvent.stepChanged(0));
+            } else {
+              context.go(AppRouter.dashboardPath);
+            }
+          },
+          child: Scaffold(
+            backgroundColor: AppColors.of(context).surface,
+            appBar: CommonAppBar(
+              title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
+              subtitle: l10n.applyLeaveSubtitle,
+              onBack: () {
+                if (state.currentStep == 1) {
+                  _leaveBloc.add(const LeaveEvent.stepChanged(0));
+                } else {
+                  context.go(AppRouter.dashboardPath);
+                }
+              },
+            ),
+            body: SafeArea(
+              child: GestureDetector(
+                onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+                behavior: HitTestBehavior.opaque,
+                child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppConstants.p20,
+                      0,
+                      AppConstants.p20,
+                      12,
                     ),
+                    child: LeaveStepperHeader(currentStep: state.currentStep),
                   ),
-                ),
-              );
-            },
+                  Expanded(
+                    child: Builder(builder: (context) {
+                      if (state.currentStep == 0) {
+                        return LeaveApplyForm(
+                          employeeId: _effectiveEmployeeId,
+                          leave: widget.leave,
+                          empName: _empName,
+                          gender: _gender,
+                          initialReason: _reason,
+                          onNext: (reason) {
+                            setState(() {
+                              _reason = reason;
+                            });
+                            _leaveBloc.add(const LeaveEvent.stepChanged(1));
+                          },
+                          onRefresh: _onRefresh,
+                        );
+                      } else if (state.currentStep == 1) {
+                        return LeaveReviewStep(
+                          state: state,
+                          reason: _reason,
+                          approverName: _approverName,
+                          onSubmit: () => _submitForm(state),
+                          onBack: () =>
+                              _leaveBloc.add(const LeaveEvent.stepChanged(0)),
+                          onRefresh: _onRefresh,
+                        );
+                      } else {
+                        return LeaveConfirmationStep(
+                          onMyRequests: () {
+                            Get.find<BottomNavCubit>().changeIndex(
+                              BottomNavCubit.approvalsIndex,
+                            );
+                            Get.find<ApprovalsBloc>().add(
+                              const ApprovalsEvent.categoryChanged(
+                                ApprovalType.leave,
+                                ApprovalCategory.raised,
+                              ),
+                            );
+                            context.go(AppRouter.dashboardPath);
+                          },
+                          onBackToHome: () {
+                            context.go(AppRouter.dashboardPath);
+                          },
+                        );
+                      }
+                    }),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        ));
+      },
     );
   }
 

@@ -15,6 +15,7 @@ class LeaveReviewStep extends StatelessWidget {
   final VoidCallback onBack;
   final String reason;
   final String approverName;
+  final Future<void> Function() onRefresh;
 
   const LeaveReviewStep({
     super.key,
@@ -23,6 +24,7 @@ class LeaveReviewStep extends StatelessWidget {
     required this.onBack,
     required this.reason,
     required this.approverName,
+    required this.onRefresh,
   });
 
   @override
@@ -37,72 +39,103 @@ class LeaveReviewStep extends StatelessWidget {
     );
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ReviewDetailCard(
-          title: l10n.leaveDetails,
-          child: Column(
-            children: [
-              ReviewDetailRow(label: l10n.leaveType, value: state.selectedLeaveType ?? ""),
-              const ReviewDetailDivider(),
-              ReviewDetailRow(label: l10n.fromDate, value: state.fromDate?.format() ?? ""),
-              const ReviewDetailDivider(),
-              if (!state.isHalfDay)
-                ...[
-                  ReviewDetailRow(label: l10n.toDate, value: state.toDate?.format() ?? ""),
-                  const ReviewDetailDivider(),
-                ],
-              ReviewDetailRow(label: l10n.duration, value: "$totalDays ${l10n.daysLabel}"),
+        Expanded(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Padding(
+                padding: const EdgeInsets.all(AppConstants.p20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ReviewDetailCard(
+                      title: l10n.leaveDetails,
+                      child: Column(
+                        children: [
+                          ReviewDetailRow(label: l10n.leaveType, value: state.selectedLeaveType ?? ""),
+                          const ReviewDetailDivider(),
+                          ReviewDetailRow(label: l10n.fromDate, value: state.fromDate?.format() ?? ""),
+                          const ReviewDetailDivider(),
+                          if (!state.isHalfDay)
+                            ...[
+                              ReviewDetailRow(label: l10n.toDate, value: state.toDate?.format() ?? ""),
+                              const ReviewDetailDivider(),
+                            ],
+                          ReviewDetailRow(label: l10n.duration, value: "$totalDays ${l10n.daysLabel}"),
 
-              if (state.uploadedFileUrl != null || state.selectedFileName != null)
-                ...[
-                  const ReviewDetailDivider(),
-                  ReviewDetailRow(
-                    label: l10n.supportingDocuments, 
-                    value: state.selectedFileName ?? l10n.fileAttached,
-                    isLink: true,
-                  ),
-                ]
+                          if (state.uploadedFileUrl != null || state.selectedFileName != null)
+                            ...[
+                              const ReviewDetailDivider(),
+                              ReviewDetailRow(
+                                label: l10n.supportingDocuments, 
+                                value: state.selectedFileName ?? l10n.fileAttached,
+                                isLink: true,
+                              ),
+                            ]
+                        ],
+                      ),
+                    ),
+                    
+                    SizedBox(height: AppConstants.p16.h),
+                    ReviewDetailCard(
+                      title: l10n.leaveReason,
+                      child: Text(
+                        reason.isNotEmpty ? reason : l10n.notAvailable,
+                        style: AppTextStyle.bodyMedium.copyWith(
+                          color: colors.onSurface,
+                        ),
+                      ),
+                    ),
+                    
+                    SizedBox(height: AppConstants.p16.h),
+                    ReviewDetailCard(
+                      title: l10n.approvalDetails,
+                      child: ReviewDetailRow(label: l10n.reportingManager, value: approverName),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        Container(
+          padding: const EdgeInsets.all(AppConstants.p20),
+          decoration: BoxDecoration(
+            color: colors.surface,
+            boxShadow: [
+              BoxShadow(
+                color: colors.outline.withValues(alpha: 0.1),
+                blurRadius: 10,
+                offset: const Offset(0, -4),
+              ),
             ],
           ),
-        ),
-        
-        SizedBox(height: AppConstants.p16.h),
-        ReviewDetailCard(
-          title: l10n.leaveReason,
-          child: Text(
-            reason.isNotEmpty ? reason : l10n.notAvailable,
-            style: AppTextStyle.bodyMedium.copyWith(
-              color: colors.onSurface,
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: CommonButton(
+                    text: l10n.editDetails,
+                    variant: ButtonVariant.outlined,
+                    textStyle: AppTextStyle.bodyLarge.copyWith(
+                      color: colors.onSurface,
+                    ),
+                    onPressed: onBack,
+                  ),
+                ),
+                SizedBox(height: AppConstants.p16.h),
+                SizedBox(
+                  width: double.infinity,
+                  child: CommonButton(
+                    text: l10n.submitRequest,
+                    onPressed: onSubmit,
+                    isLoading: state.isLoading,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ),
-        
-        SizedBox(height: AppConstants.p16.h),
-        ReviewDetailCard(
-          title: l10n.approvalDetails,
-          child: ReviewDetailRow(label: l10n.reportingManager, value: approverName),
-        ),
-        
-        SizedBox(height: AppConstants.p32.h),
-        SizedBox(
-          width: double.infinity,
-          child: CommonButton(
-            text: l10n.editDetails,
-            variant: ButtonVariant.outlined,
-            textStyle: AppTextStyle.bodyLarge.copyWith(
-              color: colors.onSurface,
-            ),
-            onPressed: onBack,
-          ),
-        ),
-        SizedBox(height: AppConstants.p16.h),
-        SizedBox(
-          width: double.infinity,
-          child: CommonButton(
-            text: l10n.submitRequest,
-            onPressed: onSubmit,
-            isLoading: state.isLoading,
           ),
         ),
       ],

@@ -101,7 +101,7 @@ class _LeaveTypeSelectionGridState extends State<LeaveTypeSelectionGrid> {
                     crossAxisCount: 2,
                     crossAxisSpacing: AppConstants.p8.w,
                     mainAxisSpacing: AppConstants.p8.h,
-                    mainAxisExtent: 70.h,
+                    mainAxisExtent: 40.h,
                   ),
                   itemCount: _filteredTypes.length,
                   itemBuilder: (context, index) {
@@ -124,6 +124,7 @@ class _LeaveTypeSelectionGridState extends State<LeaveTypeSelectionGrid> {
                       horizontal: AppConstants.p16.w,
                       vertical: AppConstants.p12.h),
                   decoration: BoxDecoration(
+                    color: AppColors.of(context).white,
                     borderRadius: BorderRadius.circular(AppConstants.r8),
                     border: Border.all(
                       color: AppColors.of(context).outlineVariant,
@@ -143,9 +144,9 @@ class _LeaveTypeSelectionGridState extends State<LeaveTypeSelectionGrid> {
                           ),
                           Text(
                             widget.balance.details.isNotEmpty
-                                ? "${totalAvailable % 1 == 0 ? totalAvailable.toInt() : totalAvailable}/${totalAllocated % 1 == 0 ? totalAllocated.toInt() : totalAllocated} ${l10n.daysLabel}"
+                                ? "${totalAvailable % 1 == 0 ? totalAvailable.toInt() : totalAvailable}/${totalAllocated % 1 == 0 ? totalAllocated.toInt() : totalAllocated}"
                                 : l10n.loading,
-                            style: AppTextStyle.labelLarge.copyWith(
+                            style: AppTextStyle.bodyMedium.copyWith(
                               color: AppColors.of(context).onSurface,
                               fontWeight: FontWeight.bold,
                             ),
@@ -160,7 +161,7 @@ class _LeaveTypeSelectionGridState extends State<LeaveTypeSelectionGrid> {
                         backgroundColor: AppColors.of(context)
                             .outlineVariant
                             .withValues(alpha: 0.5),
-                        color: AppColors.of(context).primary,
+                        color: AppColors.of(context).primaryContainer,
                         minHeight: AppConstants.p8.h,
                         borderRadius: BorderRadius.circular(AppConstants.r4),
                       ),
@@ -203,11 +204,11 @@ class _LeaveTypeGridItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-            horizontal: AppConstants.p8.w, vertical: AppConstants.p8.h),
+            horizontal: 4.w, vertical: 4.h),
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.of(context).primary.withValues(alpha: 0.05)
-              : AppColors.of(context).transparent,
+              : AppColors.of(context).white,
           borderRadius: BorderRadius.circular(AppConstants.r8),
           border: Border.all(
             color: isSelected
@@ -220,11 +221,11 @@ class _LeaveTypeGridItem extends StatelessWidget {
         child: Text(
           type.leaveTypeName,
           textAlign: TextAlign.center,
-          style: AppTextStyle.labelLarge.copyWith(
+          style: AppTextStyle.bodySmall.copyWith(
             color: isSelected
                 ? AppColors.of(context).primary
                 : AppColors.of(context).onSurface,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
           ),
         ),
       ),

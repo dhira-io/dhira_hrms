@@ -17,7 +17,7 @@ class LeaveStepperHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Container(
-      padding: EdgeInsets.symmetric(vertical: AppConstants.p20.h),
+      padding: EdgeInsets.only(top: AppConstants.p4.h, bottom: AppConstants.p10.h, right: AppConstants.p10,left: AppConstants.p10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -74,7 +74,7 @@ class LeaveStepIndicator extends StatelessWidget {
     
     final Color color = isCompleted 
         ? AppColors.of(context).success 
-        : (isActive ? AppColors.of(context).primary : AppColors.of(context).outline);
+        : (isActive ? AppColors.of(context).primaryContainer : AppColors.of(context).outlineVariant);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -95,7 +95,7 @@ class LeaveStepIndicator extends StatelessWidget {
                   height: 12.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isActive ? color : Colors.transparent,
+                    color: color,
                   ),
                 ),
           ),
@@ -104,16 +104,15 @@ class LeaveStepIndicator extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: AppTextStyle.labelSmall.copyWith(
-            color: isActive || isCompleted ? AppColors.of(context).onSurface : AppColors.of(context).outline,
-            fontWeight: FontWeight.bold,
+          style: AppTextStyle.labelSmallOne.copyWith(
+            color: AppColors.of(context).textPrimary,
           ),
         ),
         Text(
           subtitle,
           textAlign: TextAlign.center,
-          style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.of(context).outline,
+          style: AppTextStyle.labelSmallOne.copyWith(
+            color: AppColors.of(context).textPrimary,
           ),
         ),
       ],
@@ -135,7 +134,7 @@ class LeaveStepDivider extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(top: 16.h),
         height: 2.h,
-        color: isActive ? AppColors.of(context).primary : AppColors.of(context).outlineVariant,
+        color: isActive ? AppColors.of(context).primaryContainer : AppColors.of(context).outlineVariant,
       ),
     );
   }

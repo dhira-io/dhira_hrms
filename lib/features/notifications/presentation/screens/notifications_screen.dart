@@ -78,7 +78,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.notification, // Singular as per image
-        centerTitle: false,
         backgroundColor: AppColors.of(context).white,
         onBack: () {
           if (context.canPop()) {

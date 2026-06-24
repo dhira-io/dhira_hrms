@@ -35,7 +35,7 @@ class LeaveDatePickerField extends StatelessWidget {
             decoration: BoxDecoration(
               color: isReadOnly
                   ? AppColors.of(context).surfaceContainerLow
-                  : Colors.transparent,
+                  : AppColors.of(context).white,
               borderRadius: BorderRadius.circular(AppConstants.r12),
               border: errorText != null
                   ? Border.all(color: AppColors.of(context).error, width: 1.w)

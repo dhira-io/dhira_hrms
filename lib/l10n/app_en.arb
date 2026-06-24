@@ -81,6 +81,7 @@
   "toDate": "To Date",
   "reason": "Reason",
   "enterReason": "Enter reason for leave",
+  "reasonType": "Reason Type",
   "required": "Required",
   "submit": "Submit",
   "selectDate": "Select Date",

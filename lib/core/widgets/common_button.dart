@@ -138,7 +138,13 @@ class CommonButton extends StatelessWidget {
                 (variant == ButtonVariant.secondary
                     ? AppColors.of(context).secondary
                     : AppColors.of(context).primaryContainer),
+            disabledBackgroundColor: backgroundColor != null
+                ? backgroundColor!.withValues(alpha: 0.5)
+                : (variant == ButtonVariant.secondary
+                    ? AppColors.of(context).secondary
+                    : AppColors.of(context).primaryContainer).withValues(alpha: 0.5),
             foregroundColor: AppColors.of(context).white,
+            disabledForegroundColor: AppColors.of(context).white,
             elevation: 0,
             padding:
                 padding ??

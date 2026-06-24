@@ -24,7 +24,8 @@ class LeaveReasonField extends StatelessWidget {
         hintStyle: AppTextStyle.bodyMedium.copyWith(
           color: colors.outline.withValues(alpha: 0.5),
         ),
-        filled: false,
+        filled: true,
+        fillColor: colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),
           borderSide: BorderSide(color: colors.outlineVariant, width: 1.0),
