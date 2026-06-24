@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
+import '../../../../core/widgets/common_button.dart';
 import '../../../../l10n/app_localizations.dart';
-import 'welcome_continue_button_widget.dart';
 
 /// Bottom panel on WelcomeScreen: brand title, subtitle and Continue button.
 class WelcomeBottomPanelWidget extends StatelessWidget {
@@ -15,60 +14,62 @@ class WelcomeBottomPanelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final appcolors = AppColors.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.p32,
-        vertical: AppConstants.p24,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// Title line 1 — "Welcome to"
-          /// ✅ Dark mode: welcomeTitlePrimary → #E8EDF2 (light near-white)
-          Text(
-            localizations.welcomeTo,
-            style: AppTextStyle.welcomeTitle.copyWith(
-              color: AppColors.of(context).welcomeTitlePrimary,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: constraints.maxHeight,
             ),
-          ),
-
-          /// Title line 2 — "DHIRA HRMS" (brand blue, same in both modes)
-          Text(
-            localizations.dhiraHrms,
-            style: AppTextStyle.welcomeTitle.copyWith(
-              color: AppColors.of(context).primaryContainer,
-            ),
-          ),
-
-          const SizedBox(height: AppConstants.p16),
-
-          /// Subtitle
-          /// ✅ Dark mode: welcomeSubtitleColor → #8899AA (muted steel)
-          Text(
-            localizations.welcomeSubtitle,
-            style: AppTextStyle.welcomeSubtitle.copyWith(
-              color: AppColors.of(context).welcomeSubtitleColor,
-            ),
-          ),
-
-          const Spacer(),
-
-          /// Continue button aligned to bottom-right
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: AppConstants.p180,
-                bottom: AppConstants.p20,
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 24.w,
+                  vertical: 24.h,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Spacer(),
+                    Text(
+                      localizations.welcomeTo,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.welcomeTitle.copyWith(
+                        color: appcolors.slate950,
+                      ),
+                    ),
+                    Text(
+                      localizations.dhiraHrms,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.welcomeTitle.copyWith(
+                        color: appcolors.primaryContainer,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      localizations.getStartedSubtitle,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.titleSmallOne.copyWith(
+                        color: appcolors.slate500,
+                      ),
+                    ),
+                    const Spacer(),
+                    CommonButton(
+                      text: localizations.getStarted,
+                      width: double.infinity,
+                      suffixIcon: Icons.arrow_forward,
+                      onPressed: () => context.go(AppRouter.onboardingPath),
+                    ),
+                    SizedBox(height: 12.h),
+                  ],
+                ),
               ),
-              child: WelcomeContinueButtonWidget(
-                onPressed: () => context.go(AppRouter.getStartedPath),
-              ),
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

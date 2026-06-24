@@ -64,4 +64,24 @@ class PayslipState with _$PayslipState {
         })
         .fold(0.0, (sum, p) => sum + p.netPay);
   }
+
+  double get ytdGross {
+    final now = DateTime.now();
+    return payslips
+        .where((p) {
+          final d = DateTime.tryParse(p.startDate);
+          return d != null && d.year == now.year;
+        })
+        .fold(0.0, (sum, p) => sum + p.grossPay);
+  }
+
+  double get ytdDeduction {
+    final now = DateTime.now();
+    return payslips
+        .where((p) {
+          final d = DateTime.tryParse(p.startDate);
+          return d != null && d.year == now.year;
+        })
+        .fold(0.0, (sum, p) => sum + p.totalDeduction);
+  }
 }

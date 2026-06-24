@@ -2,6 +2,7 @@ import 'package:dhira_hrms/features/payslip/presentation/widgets/filter_row.dart
 import 'package:dhira_hrms/features/payslip/presentation/widgets/payslip_card.dart';
 import 'package:dhira_hrms/features/payslip/presentation/widgets/ytd_banner.dart';
 import 'package:dhira_hrms/features/payslip/presentation/widgets/payslip_shimmers.dart';
+import 'package:dhira_hrms/features/payslip/presentation/bottom_sheets/payslip_detail_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -106,7 +107,10 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
                 // YTD Stats Banner
                 SliverToBoxAdapter(
                   child: YtdBanner(
-                    ytd: state.ytdTotal,
+                    payslipsCount: state.payslips.where((p) => DateTime.tryParse(p.startDate)?.year == DateTime.now().year).length,
+                    ytdGross: state.ytdGross,
+                    ytdDeduction: state.ytdDeduction,
+                    ytdNet: state.ytdTotal,
                     formatter: formatter,
                     l10n: l10n,
                   ),
@@ -159,6 +163,9 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
                               child: PayslipCard(
                                 payslip: payslip,
                                 formatter: formatter,
+                                onViewDetails: () {
+                                  PayslipDetailBottomSheet.show(context, payslip.name);
+                                },
                               ),
                             );
                           },

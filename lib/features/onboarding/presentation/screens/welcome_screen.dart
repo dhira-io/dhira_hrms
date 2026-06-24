@@ -32,24 +32,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               top: 0.h,
               left: 0.w,
               right: 0.w,
-              height: screenHeight * 0.54,
-              child: ClipPath(
-                clipper: WaveClipperTwo(reverse: false, flip: true),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.of(context).welcomeTopBg,
-                  ),
-                  child: const SafeArea(
-                    bottom: false,
-                    child: WelcomeIllustrationWidget(),
-                  ),
-                ),
+              height: screenHeight * 0.45,
+              child: const SafeArea(
+                bottom: false,
+                child: WelcomeIllustrationWidget(),
               ),
             ),
         
             /// Bottom Content Panel
             Positioned(
-              top: screenHeight * 0.54,
+              top: screenHeight * 0.45,
               left: 0.w,
               right: 0.w,
               bottom: 0.h,

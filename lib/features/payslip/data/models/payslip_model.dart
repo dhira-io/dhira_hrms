@@ -16,6 +16,9 @@ class PayslipModel with _$PayslipModel {
     @JsonKey(name: 'net_pay') required double netPay,
     @JsonKey(name: 'start_date') required String startDate,
     @JsonKey(name: 'end_date') required String endDate,
+    @JsonKey(name: 'total_working_days') double? totalWorkingDays,
+    @JsonKey(name: 'gross_pay') @Default(0.0) double grossPay,
+    @JsonKey(name: 'total_deduction') @Default(0.0) double totalDeduction,
   }) = _PayslipModel;
 
   const PayslipModel._();
@@ -34,6 +37,9 @@ class PayslipModel with _$PayslipModel {
       netPay: netPay,
       startDate: startDate,
       endDate: endDate,
+      totalWorkingDays: totalWorkingDays,
+      grossPay: grossPay,
+      totalDeduction: totalDeduction,
     );
   }
 }
