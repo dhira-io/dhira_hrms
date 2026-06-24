@@ -261,6 +261,15 @@
   "daysPresent": "Days Present",
   "upcomingHoliday": "Upcoming Holiday",
   "viewAll": "View All",
+  "viewDetails": "View Details",
+  "paidOn": "Paid on",
+  "netPay": "Net Pay",
+  "paid": "Paid",
+  "salaryBreakdown": "Salary Breakdown",
+  "workInformation": "Work Information",
+  "paidDays": "Paid Days",
+  "totalLoggedHours": "Total Logged Hours",
+  "downloadPayslip": "Download Payslip",
   "compensatoryOff": "Compensatory Off",
   "compensatoryLeave": "Compensatory leave",
   "requestCompensatoryLeave": "Request Compensatory Leave",
@@ -1386,6 +1395,24 @@
   "payslipDetail": "Payslip Detail",
   "noPayslipsFound": "No payslips found.",
   "failedToLoadPayslips": "Failed to load payslips",
+  "ytdSummaryYear": "YTD Summary · {year}",
+  "@ytdSummaryYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "payslipsCountText": "{count, plural, =1{1 Pay slip} other{{count} Pay slips}}",
+  "@payslipsCountText": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "totalEarned": "Total Earned",
+  "netPaid": "Net Paid",
   "totalEarnings": "Total Earnings",
   "welcomeTo": "Welcome to",
   "dhiraHrms": "DHIRA HRMS",
