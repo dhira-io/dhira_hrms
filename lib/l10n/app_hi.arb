@@ -2,6 +2,7 @@
   "@@locale": "hi",
   "timeFormatPlaceholder": "--:-- --",
   "home": "होम",
+  "notification": "सूचना",
   "yourOverview": "आपका संक्षिप्त विवरण",
   "signIn": "साइन इन करें",
   "signInToYourAccount": "अपने खाते में\nसाइन इन करें",
@@ -2054,6 +2055,8 @@
     "attendanceDetails": "उपस्थिति विवरण",
     "hours": "घंटे",
     "supportingDocOptional": "सहायक दस्तावेज़ (वैकल्पिक)"
+    "noSubject": "कोई विषय नहीं",
+    "newNotification": "नई अधिसूचना"
 }
 
 

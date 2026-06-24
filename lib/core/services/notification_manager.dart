@@ -14,6 +14,7 @@ import '../../features/notifications/domain/usecases/store_fcm_token_usecase.dar
 import '../../features/notifications/domain/usecases/deactivate_device_usecase.dart';
 import '../../core/services/local_storage_service.dart';
 import '../../core/services/device_id_service.dart';
+import '../../l10n/app_localizations.dart';
 import '../routing/app_router.dart';
 
 class NotificationManager {
@@ -70,6 +71,8 @@ class NotificationManager {
             LocalNotificationConstants.channelName,
             description: LocalNotificationConstants.channelDescription,
             importance: fln.Importance.max,
+            playSound: true,
+            enableVibration: true,
           );
 
       await _localNotifications
@@ -80,9 +83,8 @@ class NotificationManager {
 
       // 4. Handle Foreground Messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        if (message.notification != null) {
-          _showLocalNotification(message, channel);
-        }
+        // Show local notification for both formal notification objects AND data-only payloads
+        _showLocalNotification(message, channel);
         _refreshNotificationList();
       });
 
@@ -159,18 +161,34 @@ class NotificationManager {
     fln.AndroidNotificationChannel channel,
   ) {
     // Extract title and body from notification object OR data payload as fallback
+    final String? notificationTitle = message.notification?.title;
+    final String? notificationBody = message.notification?.body;
+
+    final context = AppRouter.navigatorKey.currentContext;
+    final String defaultTitle = (context != null && AppLocalizations.of(context) != null)
+        ? AppLocalizations.of(context)!.newNotification
+        : 'New Notification';
+
     final String title =
-        message.notification?.title ??
-        message.data[PushNotificationPayloadKeys.title]?.toString() ??
-        message.data[PushNotificationPayloadKeys.subject]?.toString() ??
-        'New Notification';
+        notificationTitle?.trim() ??
+        message.data[PushNotificationPayloadKeys.title]?.toString()?.trim() ??
+        message.data[PushNotificationPayloadKeys.subject]?.toString()?.trim() ??
+        defaultTitle;
 
     String body =
-        message.notification?.body ??
-        message.data[PushNotificationPayloadKeys.message]?.toString() ??
-        message.data[PushNotificationPayloadKeys.content]?.toString() ??
-        message.data[PushNotificationPayloadKeys.body]?.toString() ??
-        '';
+        (notificationBody ??
+                message.data[PushNotificationPayloadKeys.message]?.toString() ??
+                message.data[PushNotificationPayloadKeys.content]?.toString() ??
+                message.data[PushNotificationPayloadKeys.body]?.toString() ??
+                '')
+            .trim();
+
+    if (message.notification == null &&
+        body.isEmpty &&
+        (title.toLowerCase().trim() ==
+            defaultTitle.toLowerCase().trim())) {
+      return;
+    }
 
     // Section 7 Edge Cases: items JSON fails to parse on bulk -> show generic message
     if (message.data[PushNotificationPayloadKeys.isBulk] ==
@@ -196,6 +214,9 @@ class NotificationManager {
           channelDescription: channel.description,
           importance: fln.Importance.max,
           priority: fln.Priority.high,
+          playSound: true,
+          enableVibration: true,
+          fullScreenIntent: true,
         ),
         iOS: const fln.DarwinNotificationDetails(
           presentAlert: true,

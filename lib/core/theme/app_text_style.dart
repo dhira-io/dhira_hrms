@@ -30,23 +30,72 @@ class AppTextStyle {
   static final TextStyle h2Bold = h2.copyWith(fontWeight: FontWeight.bold);
   static final TextStyle h3Bold = h3.copyWith(fontWeight: FontWeight.bold);
 
-  static TextStyle get bodyLarge =>
-      GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w500);
 
-  static TextStyle get bodyMedium =>
-      GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w500);
+  //Display
+  static TextStyle get displayLarge =>
+      GoogleFonts.inter(fontSize: 24.sp, fontWeight: FontWeight.w700);
+  static TextStyle get displayMedium =>
+      GoogleFonts.inter(fontSize: 22.sp, fontWeight: FontWeight.w700);
+  static TextStyle get displaySmall =>
+      GoogleFonts.inter(fontSize: 20.sp, fontWeight: FontWeight.w700);
+  static TextStyle get displaySmallOne =>
+      GoogleFonts.inter(fontSize: 18.sp, fontWeight: FontWeight.w600);
+  static TextStyle get displaySmallTwo =>
+      GoogleFonts.inter(fontSize: 16.sp, fontWeight: FontWeight.w600);
 
-  static TextStyle get bodySmall =>
-      GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w500);
 
-  static TextStyle get labelLarge =>
+
+  //Title
+  static TextStyle get titleLarge =>
+      GoogleFonts.inter(fontSize: 18.sp, fontWeight: FontWeight.w600);
+  static TextStyle get titleMedium =>
+      GoogleFonts.inter(fontSize: 16.sp, fontWeight: FontWeight.w600);
+  static TextStyle get titleSmall =>
+      GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w600);
+  static TextStyle get titleSmallOne =>
       GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w600);
 
-  static TextStyle get labelMedium =>
-      GoogleFonts.inter(fontSize: 11.sp, fontWeight: FontWeight.w600);
 
+  //Heading
+  static TextStyle get headingLarge =>
+      GoogleFonts.manrope(fontSize: 22.sp, fontWeight: FontWeight.w700);
+  static TextStyle get headingMedium =>
+      GoogleFonts.manrope(fontSize: 20.sp, fontWeight: FontWeight.w600);
+  static TextStyle get headingSmall =>
+      GoogleFonts.manrope(fontSize: 18.sp, fontWeight: FontWeight.w600);
+  static TextStyle get headingSmallOne =>
+      GoogleFonts.manrope(fontSize: 16.sp, fontWeight: FontWeight.w600);
+  static TextStyle get headingSmallTwo =>
+      GoogleFonts.manrope(fontSize: 14.sp, fontWeight: FontWeight.w600);
+  static TextStyle get headingSmallThree =>
+      GoogleFonts.manrope(fontSize: 13.sp, fontWeight: FontWeight.w600);
+
+
+  // Body
+  static TextStyle get bodyLarge =>
+      GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w400);
+  static TextStyle get bodyMedium =>
+      GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w400);
+  static TextStyle get bodySmall =>
+      GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w400);
+  static TextStyle get bodySmallOne =>
+      GoogleFonts.inter(fontSize: 9.sp, fontWeight: FontWeight.w400);
+  static TextStyle get bodySmallTwo =>
+      GoogleFonts.inter(fontSize: 8.sp, fontWeight: FontWeight.w400);
+
+
+  // Labels
+  static TextStyle get labelLarge =>
+      GoogleFonts.inter(fontSize: 13.sp, fontWeight: FontWeight.w600);
+  static TextStyle get labelMedium =>
+      GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w500);
   static TextStyle get labelSmall =>
       GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w500);
+  static TextStyle get labelSmallOne =>
+      GoogleFonts.inter(fontSize: 9.sp, fontWeight: FontWeight.w400);
+  static TextStyle get labelSmallTwo =>
+      GoogleFonts.inter(fontSize: 8.sp, fontWeight: FontWeight.w400);
+
 
   static TextStyle get button => GoogleFonts.inter(
     fontSize: 14.sp,

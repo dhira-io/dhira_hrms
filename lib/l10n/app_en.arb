@@ -2,6 +2,7 @@
   "@@locale": "en",
   "timeFormatPlaceholder": "--:-- --",
   "home": "Home",
+  "notification": "Notification",
   "yourOverview": "Your Overview",
   "signIn": "Sign In",
   "signInToYourAccount": "Sign in to your\nAccount",
@@ -2166,6 +2167,8 @@
     "attendanceDetails": "Attendance Details",
     "hours": "hours",
     "supportingDocOptional": "Supporting Document (Optional)"
+    "noSubject": "No Subject",
+    "newNotification": "New Notification"
 }
 
 
