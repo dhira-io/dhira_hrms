@@ -148,18 +148,18 @@ class NotificationIcon extends StatelessWidget {
     if (rawType == NotificationTypeKeys.attendanceRegularization ||
         rawType == NotificationTypeKeys.attendance) {
       iconData = Icons.checklist;
-      bgColor = colors.infoBg;
+      bgColor = colors.surfaceContainer;
       iconColor = colors.info;
     } else if (rawType == NotificationTypeKeys.leave ||
         rawType == NotificationTypeKeys.leaveApplication) {
       iconData = Icons.event;
-      bgColor = colors.infoBg;
+      bgColor = colors.surfaceContainer;
       iconColor = colors.info;
     } else {
       switch (type) {
         case NotificationType.leave:
           iconData = Icons.event_available;
-          bgColor = colors.infoBg;
+          bgColor = colors.surfaceContainer;
           iconColor = colors.info;
           break;
         case NotificationType.timesheet:
@@ -169,17 +169,17 @@ class NotificationIcon extends StatelessWidget {
           break;
         case NotificationType.policy:
           iconData = Icons.description;
-          bgColor = colors.secondaryContainer;
-          iconColor = colors.onSecondaryFixedVariant;
+          bgColor = colors.surfaceContainer;
+          iconColor = colors.onSurfaceVariant;
           break;
         case NotificationType.team:
           iconData = Icons.group;
-          bgColor = colors.tertiaryFixed;
-          iconColor = colors.onTertiaryFixed;
+          bgColor = colors.surfaceContainer;
+          iconColor = colors.onSurfaceVariant;
           break;
         case NotificationType.celebration:
           iconData = Icons.celebration;
-          bgColor = colors.primaryFixed.withValues(alpha: 0.5);
+          bgColor = colors.surfaceContainer;
           iconColor = colors.primary;
           break;
       }
@@ -188,7 +188,16 @@ class NotificationIcon extends StatelessWidget {
     return Container(
       width: 44.w,
       height: 44.w,
-      decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
+      decoration: BoxDecoration(
+        color: bgColor,
+        shape: BoxShape.circle,
+        border: notification.isRead
+            ? null
+            : Border.all(
+                color: iconColor.withValues(alpha: 0.2),
+                width: 1,
+              ),
+      ),
       child: Icon(
         iconData,
         size: 20.w,
