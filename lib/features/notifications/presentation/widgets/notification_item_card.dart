@@ -142,29 +142,6 @@ class NotificationIcon extends StatelessWidget {
     final colors = AppColors.of(context);
     final type = notification.type;
 
-    // Check if we should show initials (for team/mentions)
-    if (type == NotificationType.team || notification.rawType == 'Mention') {
-      final initials = _getInitials(notification.title);
-      if (initials.isNotEmpty) {
-        return Container(
-          width: 44.w,
-          height: 44.w,
-          decoration: BoxDecoration(
-            color: colors.warningBg,
-            shape: BoxShape.circle,
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            initials,
-            style: AppTextStyle.labelMedium.copyWith(
-              color: colors.warning,
-              fontWeight: FontWeight.bold,
-              fontSize: AppConstants.fs14.sp,
-            ),
-          ),
-        );
-      }
-    }
 
     final title = notification.title.toLowerCase();
     final rawType = notification.rawType?.toLowerCase();
@@ -227,28 +204,4 @@ class NotificationIcon extends StatelessWidget {
     );
   }
 
-  String _getInitials(String title) {
-    if (title.isEmpty) return '';
-
-    // Try to extract name from title if it looks like "Someone mentioned you..."
-    // Or just take the first two words' first letters.
-    final words = title.split(' ');
-    if (words.length >= 2) {
-      final first = words[0][0].toUpperCase();
-      final second = words[1][0].toUpperCase();
-      // Basic check if it's actually initials (not "Notification for...")
-      if (_isCapital(first) && _isCapital(second)) {
-        return '$first$second';
-      }
-      return first;
-    } else if (words.isNotEmpty) {
-      return words[0][0].toUpperCase();
-    }
-    return '';
-  }
-
-  bool _isCapital(String char) {
-    return char.toUpperCase() == char &&
-        RegExp(r'[A-Z]').hasMatch(char);
-  }
 }
