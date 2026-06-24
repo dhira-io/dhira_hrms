@@ -12,4 +12,5 @@ class PayslipStatusConstants {
 
   static const String submitted = 'submitted';
   static const String draft = 'draft';
+  static const String paid = 'paid';
 }

@@ -165,7 +165,7 @@ class _DetailContent extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(AppConstants.p16),
               decoration: BoxDecoration(
-                color: const Color(0xFF3B82F6), // Blue background
+                color: AppColors.of(context).primary, // Blue background
                 borderRadius: BorderRadius.circular(AppConstants.r16),
               ),
               child: Column(
@@ -193,17 +193,17 @@ class _DetailContent extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFE8D4FF), // Light purple
+                              color: AppColors.of(context).surfaceContainerLowest, // Light background
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.badge_outlined, size: 12, color: Color(0xFF9333EA)),
+                                Icon(Icons.badge_outlined, size: 12, color: AppColors.of(context).primary),
                                 const SizedBox(width: 4),
                                 Text(
                                   detail.employee,
-                                  style: AppTextStyle.labelSmall.copyWith(color: const Color(0xFF9333EA)),
+                                  style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).primary),
                                 ),
                               ],
                             ),
@@ -351,7 +351,7 @@ class _DetailContent extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                   ),
-                  icon: const Icon(Icons.download_outlined, size: 20),
+                  icon: Icon(Icons.download_outlined, size: 20.w),
                   label: Text(l10n.downloadPayslip, style: AppTextStyle.labelLarge.copyWith(fontWeight: FontWeight.w700)),
                 ),
               ),
@@ -422,7 +422,7 @@ class _StatusChip extends StatelessWidget {
     
     switch (status.toLowerCase()) {
       case PayslipStatusConstants.submitted:
-      case 'paid':
+      case PayslipStatusConstants.paid:
         bg = AppColors.of(context).approvedBg;
         text = AppColors.of(context).approvedText;
         border = AppColors.of(context).success;
@@ -442,7 +442,7 @@ class _StatusChip extends StatelessWidget {
     }
     
     // Fallback if l10n.paid isn't there, we'll just use the status directly
-    if (status.toLowerCase() == 'submitted') {
+    if (status.toLowerCase() == PayslipStatusConstants.submitted) {
         displayStatus = l10n.submitted; // Frappe uses Submitted
     } else {
         displayStatus = status;

@@ -207,7 +207,7 @@ class _StatusChip extends StatelessWidget {
     
     switch (status.toLowerCase()) {
       case PayslipStatusConstants.submitted:
-      case 'paid':
+      case PayslipStatusConstants.paid:
         bg = AppColors.of(context).approvedBg;
         text = AppColors.of(context).approvedText;
         border = AppColors.of(context).success;

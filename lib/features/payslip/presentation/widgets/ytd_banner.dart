@@ -48,8 +48,8 @@ class YtdBanner extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'YTD Summary · ${DateTime.now().year}',
+                  Text(
+                    l10n.ytdSummaryYear(DateTime.now().year.toString()),
                   style: AppTextStyle.labelMedium.copyWith(
                     fontWeight: FontWeight.w700,
                     color: AppColors.of(context).textPrimary,
@@ -63,7 +63,7 @@ class YtdBanner extends StatelessWidget {
                     border: Border.all(color: AppColors.of(context).primary.withValues(alpha: 0.2)),
                   ),
                   child: Text(
-                    '$payslipsCount Pay slips',
+                    l10n.payslipsCountText(payslipsCount),
                     style: AppTextStyle.labelMedium.copyWith(
                       color: AppColors.of(context).primary,
                       fontWeight: FontWeight.w600,
@@ -83,7 +83,7 @@ class YtdBanner extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Total Earned',
+                        l10n.totalEarned,
                         style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary),
                       ),
                       const SizedBox(height: AppConstants.p4),
@@ -108,7 +108,7 @@ class YtdBanner extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Deduction', // Or l10n.deductions if preferred
+                        l10n.deductions,
                         style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary),
                       ),
                       const SizedBox(height: AppConstants.p4),
@@ -133,7 +133,7 @@ class YtdBanner extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Net Paid',
+                        l10n.netPaid,
                         style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).textSecondary),
                       ),
                       const SizedBox(height: AppConstants.p4),
