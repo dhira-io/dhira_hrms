@@ -66,7 +66,6 @@ class OnboardingPageIndicatorWidget extends StatelessWidget {
           '${current + 1}/$count',
           style: AppTextStyle.bodyLarge.copyWith(
             color: appcolors.slate500,
-            fontWeight: FontWeight.w500,
           ),
         ),
       ],

@@ -27,6 +27,8 @@ class OnboardingSlideViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppConstants.p32.w),
       child: Column(
@@ -37,7 +39,7 @@ class OnboardingSlideViewWidget extends StatelessWidget {
           Text(
             slideData.title,
             style: AppTextStyle.onboardingTitle.copyWith(
-              color: AppColors.of(context).primary,
+              color: colors.primary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -47,7 +49,7 @@ class OnboardingSlideViewWidget extends StatelessWidget {
           Text(
             slideData.subtitle,
             style: AppTextStyle.onboardingSubtitle.copyWith(
-              color: AppColors.of(context).textSecondary,
+              color: colors.textSecondary,
             ),
             textAlign: TextAlign.center,
           ),

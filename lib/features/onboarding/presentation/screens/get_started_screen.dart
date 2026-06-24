@@ -18,18 +18,19 @@ class GetStartedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final screenHeight = MediaQuery.of(context).size.height;
+    final colors = AppColors.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.of(context).background,
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _IllustrationSection(
               screenHeight: screenHeight,
-              colors: AppColors.of(context),
+              colors: colors,
             ),
-            _ContentSection(l10n: l10n, colors: AppColors.of(context)),
+            _ContentSection(l10n: l10n, colors: colors),
           ],
         ),
       ),
