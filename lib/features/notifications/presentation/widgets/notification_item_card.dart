@@ -64,9 +64,7 @@ class NotificationItemCard extends StatelessWidget {
                           notification.title.isEmpty
                               ? AppLocalizations.of(context)!.noSubject
                               : notification.title,
-                          style: AppTextStyle.h3.copyWith(
-                            fontSize: AppConstants.fs14.sp,
-                            fontWeight: FontWeight.bold,
+                          style: AppTextStyle.headingSmallThree.copyWith(
                             color: colors.onSurface,
                           ),
                           maxLines: 2,
@@ -78,7 +76,6 @@ class NotificationItemCard extends StatelessWidget {
                             notification.description,
                             style: AppTextStyle.bodySmall.copyWith(
                               color: colors.onSurfaceVariant,
-                              fontSize: AppConstants.fs13.sp,
                               height: 1.4,
                             ),
                             maxLines: 3,
