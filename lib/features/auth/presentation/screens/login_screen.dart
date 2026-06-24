@@ -9,6 +9,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/utils/toast_utils.dart';
+import '../../../../core/widgets/geometric_background_pattern.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
@@ -31,113 +32,137 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appcolors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: AppColors.of(context).background,
+      backgroundColor: appcolors.primaryContainer,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         behavior: HitTestBehavior.opaque,
         child: MultiBlocListener(
           listeners: [
             BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              state.whenOrNull(
-                authenticated: (user) {
-                  Get.find<BottomNavCubit>().changeIndex(BottomNavCubit.homeIndex);
-                  context.go(AppRouter.dashboardPath);
-                },
-                error: (message) => ToastUtils.showError(message),
-              );
-            },
-          ),
-          BlocListener<LoginCubit, LoginState>(
-            listener: (context, state) {
-              state.whenOrNull(
-                success: (user) {
-                  context.read<AuthBloc>().add(AuthEvent.loggedIn(user));
-                },
-                error: (message) => ToastUtils.showError(message),
-              );
-            },
-          ),
-          BlocListener<SSOCubit, SSOState>(
-            listener: (context, state) {
-              state.whenOrNull(
-                success: (user) {
-                  context.read<AuthBloc>().add(AuthEvent.loggedIn(user));
-                },
-                error: (message) => ToastUtils.showError(message),
-              );
-            },
-          ),
-        ],
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Premium starry/dark slate header
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + 32,
-                  left: 24.w,
-                  right: 24.w,
-                  bottom: 36.h,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.of(context).primaryContainer,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Top Logo (ColorFiltered to White)
-                    ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        AppColors.of(context).white,
-                        BlendMode.srcIn,
-                      ),
-                      child: Image.asset(
-                        AppAssets.logo,
-                        height: 37.h,
-                      ),),
-                            SizedBox(height: 36.h),
-                      // Heading: "Sign in to your Account"
-                      Text(
-                        l10n.signInToYourAccount,
-                        style: AppTextStyle.loginHeaderTitle.copyWith(
-                          color: AppColors.of(context).white,
-                        ),
-                      ),
-                            SizedBox(height: 12.h),
-                      // Subheading: "Enter your email and password to log in"
-                      Text(
-                        l10n.enterEmailAndPasswordToLogin,
-                        style: AppTextStyle.loginHeaderSubtitle.copyWith(
-                          color: AppColors.of(context).lightGrey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Bottom container with Login form
-                Container(
-                  color: AppColors.of(context).background,
-                  padding:       EdgeInsets.symmetric(
-                    horizontal: 24.w,
-                    vertical: 32.h,
-                  ),
-                  child: LoginForm(
-                    onForgotPasswordTap: () {
-                      context.push(AppRouter.forgotPasswordPath);
-                    },
-                  ),
-                ),
-              ],
+              listener: (context, state) {
+                state.whenOrNull(
+                  authenticated: (user) {
+                    Get.find<BottomNavCubit>().changeIndex(
+                      BottomNavCubit.homeIndex,
+                    );
+                    context.go(AppRouter.dashboardPath);
+                  },
+                  error: (message) => ToastUtils.showError(message),
+                );
+              },
             ),
+            BlocListener<LoginCubit, LoginState>(
+              listener: (context, state) {
+                state.whenOrNull(
+                  success: (user) {
+                    context.read<AuthBloc>().add(AuthEvent.loggedIn(user));
+                  },
+                  error: (message) => ToastUtils.showError(message),
+                );
+              },
+            ),
+            BlocListener<SSOCubit, SSOState>(
+              listener: (context, state) {
+                state.whenOrNull(
+                  success: (user) {
+                    context.read<AuthBloc>().add(AuthEvent.loggedIn(user));
+                  },
+                  error: (message) => ToastUtils.showError(message),
+                );
+              },
+            ),
+          ],
+          child: Column(
+            children: [
+              // Top Blue Header Section
+              Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          appcolors.primaryContainer.withValues(alpha: 0.85),
+                          appcolors.primaryContainer,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                  ),
+                  // Background geometric pattern mimicking the target design
+                  const GeometricBackgroundPattern(),
+                  // Content
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 8.h,
+                      left: 16.w,
+                      right: 16.w,
+                      bottom: 24.h,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Top Logo (ColorFiltered to White)
+                        ColorFiltered(
+                          colorFilter: ColorFilter.mode(
+                            appcolors.white,
+                            BlendMode.srcIn,
+                          ),
+                          child: Image.asset(AppAssets.logo, height: 48.h),
+                        ),
+                        SizedBox(height: 8.h),
+                        // Heading: "Welcome to DHIRA ERP!"
+                        Text(
+                          l10n.welcomeToDhiraErp,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.loginHeaderTitle.copyWith(
+                            color: appcolors.white,
+                            fontSize: 24.sp,
+                          ),
+                        ),
+                        SizedBox(height: 4.h),
+                        // Subheading: "A unified platform..."
+                        Text(
+                          l10n.dhiraErpSubtitle,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.titleSmall.copyWith(
+                            color: appcolors.white.withValues(alpha: 0.9),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              // Bottom White Container (Expanded to fill remaining space)
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: appcolors.background,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(32.r),
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.fromLTRB(24.w, 12.h, 24.w, 32.h),
+                    child: LoginForm(
+                      onForgotPasswordTap: () {
+                        context.push(AppRouter.forgotPasswordPath);
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
-  );
-}
+    );
+  }
 }

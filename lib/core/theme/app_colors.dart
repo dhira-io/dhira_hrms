@@ -7,6 +7,7 @@ class AppColors {
   static const Color primaryFixed = Color(0xFFDCE1FF);
   static const Color onPrimaryFixed = Color(0xFF00164E);
   static const Color secondary = Color(0xff0066FF);
+  static const Color blue400 = Color(0xFF51A2FF);
 
   static const Color username = Color(0xFF111827);
 
@@ -540,6 +541,8 @@ class AppColorsResolved {
   final Color welcomeTitlePrimary;
   final Color welcomeSubtitleColor;
 
+  final Color blue400;
+
   // Timesheet card colors (theme-aware)
   final Color colorBlue50;
   final Color colorGreen50;
@@ -722,6 +725,7 @@ class AppColorsResolved {
     required this.welcomeTopBg,
     required this.welcomeTitlePrimary,
     required this.welcomeSubtitleColor,
+    required this.blue400,
     required this.colorBlue50,
     required this.colorGreen50,
     required this.colorOrange50,
@@ -860,6 +864,7 @@ class AppColorsResolved {
     halfDayBg: AppColors.halfDayBg,
     approvedBg: AppColors.approvedBg,
     approvedText: AppColors.approvedText,
+    blue400: AppColors.blue400,
     pendingStatusBg: AppColors.pendingStatusBg,
     pendingStatusText: AppColors.pendingStatusText,
     cancelledBg: AppColors.cancelledBg,
@@ -1042,6 +1047,7 @@ class AppColorsResolved {
     halfDayBg: AppColors._darkHalfDayBg,
     approvedBg: AppColors._darkApprovedBg,
     approvedText: AppColors._darkApprovedText,
+    blue400: AppColors.blue400,
     pendingStatusBg: AppColors._darkPendingStatusBg,
     pendingStatusText: AppColors._darkPendingStatusText,
     cancelledBg: AppColors._darkCancelledBg,

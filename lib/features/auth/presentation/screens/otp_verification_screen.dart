@@ -47,11 +47,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return BlocProvider<OtpVerificationCubit>.value(
       value: Get.find<OtpVerificationCubit>(),
       child: Scaffold(
-        backgroundColor: AppColors.of(context).surface,
+        backgroundColor: colors.surface,
         appBar: AppBar(title: Text(l10n.verifyOtp)),
         body: BlocListener<OtpVerificationCubit, OtpVerificationState>(
           listener: (context, state) {
@@ -101,7 +102,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                               width: 20.w,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                color: AppColors.of(context).surface,
+                                color: colors.surface,
                               ),
                             )
                           : Text(l10n.verifyOtp, style: AppTextStyle.button),
@@ -111,7 +112,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       child: Text(
                         l10n.resendOtp,
                         style: AppTextStyle.bodyMedium.copyWith(
-                          color: AppColors.of(context).primary,
+                          color: colors.primary,
                         ),
                       ),
                     ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
@@ -11,7 +12,6 @@ import '../widgets/onboarding_bottom_action_widget.dart';
 import '../widgets/onboarding_page_indicator_widget.dart';
 import '../widgets/onboarding_slide_view_widget.dart';
 import '../bloc/onboarding_cubit.dart';
-import '../widgets/onboarding_top_bar_widget.dart';
 
 /// Multi-page carousel slider introducing core modules of the app.
 class OnboardingScreen extends StatefulWidget {
@@ -47,6 +47,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() {
       _currentPage = page;
     });
+  }
+
+  void _handlePrevious() {
+    if (_currentPage > 0) {
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: AppConstants.animNormal),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   void _handleNext(int totalPages) {
@@ -101,10 +110,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // 1. Top bar — logo + Skip button
-            OnboardingTopBarWidget(onSkipPressed: _handleSkip),
-
-            // 2. Carousel page content
+            // 1. Carousel page content
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
@@ -116,15 +122,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
 
-            // 3. Dot indicators
+            // 2. Dot indicators and arrows
             OnboardingPageIndicatorWidget(
               count: slides.length,
               current: _currentPage,
+              onPrevious: _handlePrevious,
+              onNext: () => _handleNext(slides.length),
             ),
-            const SizedBox(height: AppConstants.p40),
+            SizedBox(height: 32.h),
 
-            // 4. Next / Get Started button
+            // 3. Skip / Next buttons row
             OnboardingBottomActionWidget(
+              onSkipPressed: _handleSkip,
               onNextPressed: () => _handleNext(slides.length),
             ),
             const SizedBox(height: AppConstants.p24),
