@@ -20,7 +20,7 @@ class NotificationGroupWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /* Padding(
+        Padding(
           padding: const EdgeInsets.only(
             left: AppConstants.p8,
             bottom: AppConstants.p12,
@@ -33,7 +33,7 @@ class NotificationGroupWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-        ), */
+        ),
         ...notifications.map(
           (n) => NotificationItemCard(key: ValueKey(n.id), notification: n),
         ),

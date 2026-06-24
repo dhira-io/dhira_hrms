@@ -284,6 +284,9 @@ class AppColors {
   static const Color _darkOnSurface = Color(0xFFE1E1E1);
   static const Color _darkSurfaceContainer = Color(0xFF2C2C2C);
   static const Color _darkOutline = Color(0xFF6B7280);
+  static const Color _darkInfoBg = Color(0xFF0C2445);
+  static const Color _darkInfo = Color(0xFF38BDF8);
+  static const Color _darkTertiary = Color(0xFFFFB49D);
 
   static const Color _darkCalendarDefaultBg = Color(0xFF1A1A1A);
   static const Color _darkCalendarDefaultText = Color(0xFFE1E1E1);
@@ -963,8 +966,8 @@ class AppColorsResolved {
     black: AppColors.black,
     transparent: AppColors.transparent,
     placeholdergrey: AppColors.placeholdergrey,
-    info: AppColors.info,
-    infoBg: AppColors.infoBg,
+    info: AppColors._darkInfo,
+    infoBg: AppColors._darkInfoBg,
     infoBorder: AppColors.infoBorder,
     quickStatsBg: AppColors._darkQuickStatsBg,
     successBg: AppColors.successBg,

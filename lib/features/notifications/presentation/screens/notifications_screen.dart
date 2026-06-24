@@ -78,7 +78,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
         title: l10n.notification, // Singular as per image
-        backgroundColor: AppColors.of(context).white,
+        centerTitle: false,
+        backgroundColor: AppColors.of(context).background,
         onBack: () {
           if (context.canPop()) {
             context.pop();
@@ -129,7 +130,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       ),
       body: SafeArea(
         child: Container(
-          color: AppColors.of(context).white,
+          color: AppColors.of(context).background,
           child: BlocBuilder<NotificationBloc, NotificationState>(
             builder: (context, state) {
               return state.when(
@@ -197,7 +198,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         itemBuilder: (context, index) {
           if (index == sortedGroups.length) {
             return const Padding(
-              padding: EdgeInsets.all(AppConstants.p16),
+              padding: EdgeInsets.symmetric(vertical: AppConstants.p16),
               child: Center(child: NotificationItemShimmer()),
             );
           }
