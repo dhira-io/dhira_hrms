@@ -15,6 +15,7 @@ import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/core/services/notification_manager.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
+import 'package:dhira_hrms/features/approvals/presentation/widgets/approval_card/office_doc_viewer.dart';
 
 class CommonPdfViewer extends StatefulWidget {
   final String title;
@@ -73,11 +74,20 @@ class _CommonPdfViewerState extends State<CommonPdfViewer> {
   bool _hasLocalError = false;
   Key _pdfViewerKey = UniqueKey();
 
+  bool _isOffice = false;
+
   @override
   void initState() {
     super.initState();
     if (widget.fileUrl != null) {
-      _isLocalLoading = true;
+      final path = Uri.parse(widget.fileUrl!).path.toLowerCase();
+      _isOffice = path.endsWith('.docx') ||
+          path.endsWith('.doc') ||
+          path.endsWith('.xlsx') ||
+          path.endsWith('.xls') ||
+          path.endsWith('.pptx') ||
+          path.endsWith('.ppt');
+      _isLocalLoading = !_isOffice;
     }
   }
 
@@ -85,8 +95,17 @@ class _CommonPdfViewerState extends State<CommonPdfViewer> {
   void didUpdateWidget(covariant CommonPdfViewer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.fileUrl != oldWidget.fileUrl) {
+      final path = widget.fileUrl != null
+          ? Uri.parse(widget.fileUrl!).path.toLowerCase()
+          : '';
+      _isOffice = path.endsWith('.docx') ||
+          path.endsWith('.doc') ||
+          path.endsWith('.xlsx') ||
+          path.endsWith('.xls') ||
+          path.endsWith('.pptx') ||
+          path.endsWith('.ppt');
       setState(() {
-        _isLocalLoading = widget.fileUrl != null;
+        _isLocalLoading = widget.fileUrl != null && !_isOffice;
         _hasLocalError = false;
         _pdfViewerKey = UniqueKey();
       });
@@ -118,7 +137,24 @@ class _CommonPdfViewerState extends State<CommonPdfViewer> {
             : '$baseUrl${widget.fileUrl}';
         
         final cleanTitle = widget.title.replaceAll(RegExp(r'[^\w\s\-]'), '').replaceAll(RegExp(r'\s+'), '_');
-        final fileName = '${cleanTitle}.pdf';
+        
+        final String path = Uri.parse(widget.fileUrl!).path.toLowerCase();
+        String extension = '.pdf';
+        if (path.endsWith('.docx')) {
+          extension = '.docx';
+        } else if (path.endsWith('.doc')) {
+          extension = '.doc';
+        } else if (path.endsWith('.xlsx')) {
+          extension = '.xlsx';
+        } else if (path.endsWith('.xls')) {
+          extension = '.xls';
+        } else if (path.endsWith('.pptx')) {
+          extension = '.pptx';
+        } else if (path.endsWith('.ppt')) {
+          extension = '.ppt';
+        }
+        
+        final fileName = '$cleanTitle$extension';
         
         await fileOpCubit.downloadFile(url, fileName, l10n, appendTimestamp: false);
       } catch (e) {
@@ -163,7 +199,7 @@ class _CommonPdfViewerState extends State<CommonPdfViewer> {
         }
 
         final cleanTitle = widget.title.replaceAll(RegExp(r'[^\w\s\-]'), '').replaceAll(RegExp(r'\s+'), '_');
-        final finalFileName = '${cleanTitle}.pdf';
+        final finalFileName = '$cleanTitle.pdf';
 
         final savePath = "$downloadPath${AppConstants.androidPathSeparator}$finalFileName";
 
@@ -213,14 +249,6 @@ class _CommonPdfViewerState extends State<CommonPdfViewer> {
             ),
             child: Row(
               children: [
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(
-                    Icons.close,
-                    color: AppColors.of(context).slateText,
-                  ),
-                ),
-                const SizedBox(width: AppConstants.p10),
                 Expanded(
                   child: Text(
                     widget.title,
@@ -241,6 +269,13 @@ class _CommonPdfViewerState extends State<CommonPdfViewer> {
                     ),
                     tooltip: l10n.download,
                   ),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(
+                    Icons.close,
+                    color: AppColors.of(context).slateText,
+                  ),
+                ),
               ],
             ),
           ),
@@ -389,6 +424,11 @@ class _CommonPdfViewerState extends State<CommonPdfViewer> {
     }
 
     if (widget.fileUrl != null) {
+      if (_isOffice) {
+        final viewerUrl =
+            'https://docs.google.com/gview?embedded=true&url=${Uri.encodeComponent(widget.fileUrl!)}';
+        return OfficeDocViewer(viewerUrl: viewerUrl);
+      }
       return Stack(
         children: [
           RotatedBox(
