@@ -1,4 +1,3 @@
-import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
@@ -10,7 +9,6 @@ import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/get_
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/update_leave_approval_usecase.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/upload_leave_file_usecase.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/widgets/leave_edit_form.dart';
-import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_bloc.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_event.dart';
@@ -22,11 +20,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/services/local_storage_service.dart';
-import 'package:go_router/go_router.dart';
-import '../../../presentation/bloc/approvals_bloc.dart';
-import '../../../presentation/bloc/approvals_event.dart';
-import '../../../domain/entities/approval_type.dart';
-import '../../../domain/entities/approval_request_entity.dart';
 
 class LeaveEditScreen extends StatefulWidget {
   final String employeeId;
@@ -94,12 +87,13 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return BlocProvider<LeaveApprovalBloc>.value(
       value: _leaveApprovalBloc,
       child: Scaffold(
-        backgroundColor: AppColors.of(context).background,
+        backgroundColor: colors.background,
         body: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           behavior: HitTestBehavior.opaque,
@@ -150,22 +144,23 @@ class LeaveEditSliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return SliverAppBar(
       pinned: true,
       expandedHeight: 120,
-      backgroundColor: AppColors.of(context).background,
+      backgroundColor: colors.background,
       elevation: 0,
       leading: IconButton(
-        icon: Icon(Icons.close, color: AppColors.of(context).onSurface),
+        icon: Icon(Icons.close, color: colors.onSurface),
         onPressed: () => Navigator.of(context).pop(),
       ),
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding:       EdgeInsets.only(left: 56.w, bottom: 16.h),
+        titlePadding: EdgeInsets.only(left: 56.w, bottom: 16.h),
         title: Text(
           l10n.editLeave,
           style: AppTextStyle.h3.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.of(context).onSurface,
+            color: colors.onSurface,
           ),
         ),
         background: Container(
@@ -174,8 +169,8 @@ class LeaveEditSliverAppBar extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                AppColors.of(context).primaryFixed,
-                AppColors.of(context).background,
+                colors.primaryFixed,
+                colors.background,
               ],
             ),
           ),

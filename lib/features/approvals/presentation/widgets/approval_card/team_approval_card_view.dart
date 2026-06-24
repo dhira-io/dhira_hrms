@@ -35,6 +35,7 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final titleInfo = _getTitleAndSubtitle(context);
     final l10n = AppLocalizations.of(context)!;
 
@@ -90,7 +91,7 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
               Text(
                 titleInfo.subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.of(context).onSurfaceVariant,
+                  color: colors.onSurfaceVariant,
                 ),
               ),
             ],
@@ -98,7 +99,7 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
         ),
         if (!isProcessed && (showApprove || showReject)) ...[
           const SizedBox(height: AppConstants.p16),
-          Divider(color: AppColors.of(context).outlineVariant, height: 1),
+          Divider(color: colors.outlineVariant, height: 1),
           const SizedBox(height: AppConstants.p16),
           Row(
             children: [
@@ -112,17 +113,17 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       backgroundColor: AppColors.rejectedBg,
-                      side: BorderSide(color: AppColors.of(context).error.withValues(alpha: 0.5)),
+                      side: BorderSide(color: colors.error.withValues(alpha: 0.5)),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                     ),
                     child: widget.isProcessing && _lastAction == ApprovalActions.reject
-                        ? SizedBox(height: 20.h, width: 20.w, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.of(context).error))
+                        ? SizedBox(height: 20.h, width: 20.w, child: CircularProgressIndicator(strokeWidth: 2, color: colors.error))
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.cancel_outlined, color: AppColors.of(context).error, size: 20),
+                              Icon(Icons.cancel_outlined, color: colors.error, size: 20),
                               SizedBox(width: 8.w),
-                              Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).error)),
+                              Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: colors.error)),
                             ],
                           ),
                   ),
@@ -139,18 +140,18 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       backgroundColor: isApproveEnabled ? AppColors.approvedBg : Colors.transparent,
                       side: BorderSide(
-                        color: isApproveEnabled ? AppColors.of(context).success.withValues(alpha: 0.5) : AppColors.of(context).outlineVariant,
+                        color: isApproveEnabled ? colors.success.withValues(alpha: 0.5) : colors.outlineVariant,
                       ),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                     ),
                     child: widget.isProcessing && _lastAction == ApprovalActions.approve
-                        ? SizedBox(height: 18.h, width: 18.w, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.of(context).success))
+                        ? SizedBox(height: 18.h, width: 18.w, child: CircularProgressIndicator(strokeWidth: 2, color: colors.success))
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.check_circle_outline, color: isApproveEnabled ? AppColors.of(context).success : AppColors.of(context).outlineVariant, size: 20),
+                              Icon(Icons.check_circle_outline, color: isApproveEnabled ? colors.success : colors.outlineVariant, size: 20),
                               SizedBox(width: 8.w),
-                              Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: isApproveEnabled ? AppColors.of(context).success : AppColors.of(context).outlineVariant)),
+                              Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: isApproveEnabled ? colors.success : colors.outlineVariant)),
                             ],
                           ),
                   ),

@@ -26,6 +26,7 @@ class ApprovalCardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     String displayName = data.employeeName;
     String displayRole = data.employeeRole;
     String? displayImage = data.profileImage;
@@ -100,7 +101,7 @@ class ApprovalCardHeader extends StatelessWidget {
                   onSelectionChanged!(value ?? false);
                 }
               },
-              activeColor: AppColors.of(context).primary,
+              activeColor: colors.primary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
@@ -114,11 +115,11 @@ class ApprovalCardHeader extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: (displayImage == null || displayImage!.isEmpty)
-                ? AppColors.of(context).primary
+                ? colors.primary
                 : Colors.transparent,
             border: (displayImage != null && displayImage!.isNotEmpty)
                 ? Border.all(
-                    color: AppColors.of(context).primary.withValues(alpha: 0.1),
+                    color: colors.primary.withValues(alpha: 0.1),
                     width: 2.w,
                   )
                 : null,
@@ -130,12 +131,12 @@ class ApprovalCardHeader extends StatelessWidget {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: AppColors.of(context).primary,
+                        color: colors.primary,
                         child: Center(
                           child: Text(
                             displayName.isNotEmpty ? displayName.getInitials : "",
                             style: AppTextStyle.titleMedium.copyWith(
-                              color: AppColors.of(context).onPrimary,
+                              color: colors.onPrimary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -147,7 +148,7 @@ class ApprovalCardHeader extends StatelessWidget {
                     child: Text(
                       displayName.isNotEmpty ? displayName.getInitials : "",
                       style: AppTextStyle.titleMedium.copyWith(
-                        color: AppColors.of(context).onPrimary,
+                        color: colors.onPrimary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -163,7 +164,7 @@ class ApprovalCardHeader extends StatelessWidget {
                 displayName,
                 style: AppTextStyle.labelLarge.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.of(context).onSurface,
+                  color: colors.onSurface,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -172,7 +173,7 @@ class ApprovalCardHeader extends StatelessWidget {
                 Text(
                   displayRole,
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.of(context).onSurfaceVariant,
+                    color: colors.onSurfaceVariant,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

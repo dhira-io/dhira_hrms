@@ -1,4 +1,3 @@
-import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
@@ -45,6 +44,7 @@ class EditTimesheetDaySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final totalHrs = assignments.fold(
       0.0,
@@ -59,7 +59,7 @@ class EditTimesheetDaySection extends StatelessWidget {
     return Container(
       margin:       EdgeInsets.only(bottom: 16.h),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.of(context).border),
+        border: Border.all(color: colors.border),
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Column(
@@ -73,7 +73,7 @@ class EditTimesheetDaySection extends StatelessWidget {
                   Icon(
                     Icons.calendar_today_outlined,
                     size: 20,
-                    color: AppColors.of(context).textPrimary,
+                    color: colors.textPrimary,
                   ),
                         SizedBox(width: 12.w),
                   Expanded(
@@ -93,7 +93,7 @@ class EditTimesheetDaySection extends StatelessWidget {
                         Text(
                           l10n.submittedOn(assignments.first.date ?? ""),
                           style: AppTextStyle.labelSmall.copyWith(
-                            color: AppColors.of(context).textSecondary,
+                            color: colors.textSecondary,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -107,13 +107,13 @@ class EditTimesheetDaySection extends StatelessWidget {
                       vertical: 4.h,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.of(context).infoBg,
+                      color: colors.infoBg,
                       borderRadius: BorderRadius.circular(20.r),
                     ),
                     child: Text(
                       l10n.totalHrs(totalHrs.toInt()),
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.of(context).info,
+                        color: colors.info,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -123,7 +123,7 @@ class EditTimesheetDaySection extends StatelessWidget {
                     isExpanded
                         ? Icons.keyboard_arrow_up
                         : Icons.keyboard_arrow_down,
-                    color: AppColors.of(context).textSecondary,
+                    color: colors.textSecondary,
                   ),
                 ],
               ),
@@ -205,6 +205,7 @@ class EditTimesheetDaySection extends StatelessWidget {
   }
 
   Widget _buildTableDropdown(BuildContext context, String key) {
+    final colors = AppColors.of(context);
     return SizedBox(
       width: 150.w,
       child: DropdownButtonHideUnderline(
@@ -212,9 +213,9 @@ class EditTimesheetDaySection extends StatelessWidget {
           value: selectedProjects[key],
           isExpanded: true,
           isDense: true,
-          dropdownColor: AppColors.of(context).surfaceContainerHighest,
+          dropdownColor: colors.surfaceContainerHighest,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.of(context).textPrimary,
+            color: colors.textPrimary,
           ),
           items: projects
               .map(
@@ -223,7 +224,7 @@ class EditTimesheetDaySection extends StatelessWidget {
                   child: Text(
                     p.projectName,
                     style: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.of(context).textPrimary,
+                      color: colors.textPrimary,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -243,12 +244,13 @@ class EditTimesheetDaySection extends StatelessWidget {
     bool isLarge = false,
     String? suffix,
   }) {
+    final colors = AppColors.of(context);
     return SizedBox(
       width: width,
       child: TextField(
         controller: controller,
         style: AppTextStyle.bodySmall.copyWith(
-          color: AppColors.of(context).textPrimary,
+          color: colors.textPrimary,
         ),
         maxLines: isLarge ? 3 : 1,
         minLines: 1,
@@ -261,11 +263,11 @@ class EditTimesheetDaySection extends StatelessWidget {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(6.r)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6.r),
-            borderSide: BorderSide(color: AppColors.of(context).border),
+            borderSide: BorderSide(color: colors.border),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6.r),
-            borderSide: BorderSide(color: AppColors.of(context).primary),
+            borderSide: BorderSide(color: colors.primary),
           ),
           suffixText: suffix,
         ),

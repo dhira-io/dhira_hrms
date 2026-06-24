@@ -61,6 +61,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return BlocListener<ApprovalsBloc, ApprovalsState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -102,7 +103,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
       child: Stack(
         children: [
           Scaffold(
-            backgroundColor: AppColors.of(context).background,
+            backgroundColor: colors.background,
         body: BlocBuilder<ApprovalsBloc, ApprovalsState>(
           builder: (context, state) {
             return Column(
@@ -113,7 +114,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                     children: [
                       const ApprovalsPrimaryTabsSection(),
                       Container(
-                        color: AppColors.of(context).background,
+                        color: colors.background,
                         child: const ApprovalsFilterSection(),
                       ),
                     ],
@@ -189,10 +190,10 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                   right: 0,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.of(context).surfaceContainerLowest,
+                      color: colors.surfaceContainerLowest,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.of(context).black.withValues(alpha: 0.1),
+                          color: colors.black.withValues(alpha: 0.1),
                           blurRadius: 10,
                           offset: const Offset(0, -5),
                         ),
@@ -249,21 +250,21 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                                       },
                                 style: OutlinedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(vertical: 12),
-                                  side: BorderSide(color: AppColors.of(context).error),
+                                  side: BorderSide(color: colors.error),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                                 ),
                                 child: state.data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.reject
                                     ? SizedBox(
                                         height: 20.h,
                                         width: 20.w,
-                                        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.of(context).error),
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: colors.error),
                                       )
                                     : Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.cancel_outlined, color: AppColors.of(context).error, size: 20),
+                                          Icon(Icons.cancel_outlined, color: colors.error, size: 20),
                                           SizedBox(width: 8.w),
-                                          Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).error)),
+                                          Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: colors.error)),
                                         ],
                                       ),
                               ),
@@ -286,21 +287,21 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                                       },
                                 style: OutlinedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(vertical: 12),
-                                  side: BorderSide(color: AppColors.of(context).success),
+                                  side: BorderSide(color: colors.success),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                                 ),
                                 child: state.data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.approve
                                     ? SizedBox(
                                         height: 20.h,
                                         width: 20.w,
-                                        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.of(context).success),
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: colors.success),
                                       )
                                     : Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.check_circle_outline, color: AppColors.of(context).success, size: 20),
+                                          Icon(Icons.check_circle_outline, color: colors.success, size: 20),
                                           SizedBox(width: 8.w),
-                                          Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).success)),
+                                          Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: colors.success)),
                                         ],
                                       ),
                               ),

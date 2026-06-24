@@ -23,6 +23,7 @@ class TimesheetFilterBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return PopupMenuButton<String?>(
@@ -44,9 +45,9 @@ class TimesheetFilterBox extends StatelessWidget {
       child: Container(
         padding:       EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: AppColors.of(context).slate50,
+          color: colors.slate50,
           borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: AppColors.of(context).slate200),
+          border: Border.all(color: colors.slate200),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,7 +56,7 @@ class TimesheetFilterBox extends StatelessWidget {
               child: Text(
                 _getDisplayText(l10n),
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.of(context).onSurface,
+                  color: colors.onSurface,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -63,7 +64,7 @@ class TimesheetFilterBox extends StatelessWidget {
             Icon(
               Icons.keyboard_arrow_down,
               size: 18,
-              color: AppColors.of(context).onSurfaceVariant,
+              color: colors.onSurfaceVariant,
             ),
           ],
         ),

@@ -11,6 +11,7 @@ class TimesheetEditHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -29,20 +30,20 @@ class TimesheetEditHeader extends StatelessWidget {
                 Text(
                   l10n.requestDetails,
                   style: AppTextStyle.h2Bold.copyWith(
-                    color: AppColors.of(context).onSurface,
+                    color: colors.onSurface,
                   ),
                 ),
                 Text(
                   l10n.timesheetRequestDetails,
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.of(context).onSurfaceVariant,
+                    color: colors.onSurfaceVariant,
                   ),
                 ),
               ],
             ),
           ),
           IconButton(
-            icon: Icon(Icons.close, color: AppColors.of(context).onSurface),
+            icon: Icon(Icons.close, color: colors.onSurface),
             onPressed: onClose,
           ),
         ],

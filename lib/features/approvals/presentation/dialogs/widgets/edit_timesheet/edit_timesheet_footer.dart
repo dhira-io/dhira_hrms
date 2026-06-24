@@ -20,6 +20,7 @@ class EditTimesheetFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final btnShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8.r),
@@ -29,8 +30,8 @@ class EditTimesheetFooter extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surfaceContainerLowest,
-        border: Border(top: BorderSide(color: AppColors.of(context).border)),
+        color: colors.surfaceContainerLowest,
+        border: Border(top: BorderSide(color: colors.border)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -40,7 +41,7 @@ class EditTimesheetFooter extends StatelessWidget {
               Text(
                 l10n.rowsSelected(selectedCount, totalCount),
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.of(context).textSecondary,
+                  color: colors.textSecondary,
                 ),
               ),
               const Spacer(),
@@ -52,7 +53,7 @@ class EditTimesheetFooter extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onUpdate,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.of(context).primary,
+                backgroundColor: colors.primary,
                 minimumSize: btnSize,
                 shape: btnShape,
                 padding:       EdgeInsets.symmetric(
@@ -64,7 +65,7 @@ class EditTimesheetFooter extends StatelessWidget {
               child: Text(
                 l10n.update,
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.of(context).white,
+                  color: colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -78,7 +79,7 @@ class EditTimesheetFooter extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 minimumSize: btnSize,
                 shape: btnShape,
-                side: BorderSide(color: AppColors.of(context).primary),
+                side: BorderSide(color: colors.primary),
                 padding:       EdgeInsets.symmetric(
                   horizontal: 20.w,
                   vertical: 12.h,
@@ -87,7 +88,7 @@ class EditTimesheetFooter extends StatelessWidget {
               child: Text(
                 l10n.cancel,
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.of(context).primary,
+                  color: colors.primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),

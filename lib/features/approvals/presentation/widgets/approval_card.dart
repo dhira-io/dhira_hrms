@@ -2,10 +2,11 @@ import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
-import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/screens/leave_edit_screen.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/edit_timesheet_bottom_sheet.dart';
-import 'package:dhira_hrms/features/approvals/presentation/dialogs/delete_timesheet_dialog.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/delete_timesheet_bottom_sheet.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/withdraw_leave_bottom_sheet.dart';
+import 'package:dhira_hrms/features/approvals/presentation/dialogs/action_confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -19,8 +20,6 @@ import '../../../leave/domain/entities/leave_entity.dart';
 import '../../domain/entities/approval_request_entity.dart';
 import '../bloc/approvals_bloc.dart';
 import '../bloc/approvals_event.dart';
-
-import '../dialogs/action_confirmation_dialog.dart';
 import '../bottom_sheets/request_details_bottom_sheet.dart';
 import 'approval_card/team_approval_card_view.dart';
 import 'approval_card/raised_approval_card_view.dart';
@@ -39,6 +38,7 @@ class ApprovalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return InkWell(
       onTap: () {
         showModalBottomSheet(
@@ -68,11 +68,11 @@ class ApprovalCard extends StatelessWidget {
         padding: const EdgeInsets.all(AppConstants.p16),
         margin: const EdgeInsets.only(bottom: AppConstants.p16),
         decoration: BoxDecoration(
-          color: AppColors.of(context).surfaceContainerLowest,
+          color: colors.surfaceContainerLowest,
           borderRadius: BorderRadius.circular(AppConstants.r16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.of(context).black.withValues(alpha: 0.05),
+              color: colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -198,23 +198,45 @@ class ApprovalCard extends StatelessWidget {
 
   void _showActionConfirmation(BuildContext context, String action) {
     final approvalsBloc = context.read<ApprovalsBloc>();
-    showDialog(
-      context: context,
-      builder: (context) => ActionConfirmationDialog(
-        action: action,
-        data: data,
-        onConfirm: () {
-          approvalsBloc.add(
-            ApprovalsEvent.workflowActionSubmitted(
-              requestId: data.id,
-              action: action,
-              type: data.type,
-              category: data.category,
-            ),
-          );
-        },
-      ),
-    );
+    
+    if (action == ApprovalActions.cancel) {
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (context) => WithdrawLeaveBottomSheet(
+          data: data,
+          onConfirm: () {
+            approvalsBloc.add(
+              ApprovalsEvent.workflowActionSubmitted(
+                requestId: data.id,
+                action: action,
+                type: data.type,
+                category: data.category,
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => ActionConfirmationDialog(
+          action: action,
+          data: data,
+          onConfirm: () {
+            approvalsBloc.add(
+              ApprovalsEvent.workflowActionSubmitted(
+                requestId: data.id,
+                action: action,
+                type: data.type,
+                category: data.category,
+              ),
+            );
+          },
+        ),
+      );
+    }
   }
 
   void _onEditTimesheet(BuildContext context) {
@@ -237,9 +259,11 @@ class ApprovalCard extends StatelessWidget {
 
   void _onDeleteTimesheet(BuildContext context) {
     final approvalsBloc = context.read<ApprovalsBloc>();
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => DeleteTimesheetDialog(
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => DeleteTimesheetBottomSheet(
         requestId: data.id,
         onDelete: () {
           approvalsBloc.add(

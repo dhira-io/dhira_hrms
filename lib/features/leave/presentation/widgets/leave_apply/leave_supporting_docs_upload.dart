@@ -79,7 +79,7 @@ class LeaveSupportingDocsUpload extends StatelessWidget {
                 ),
                       SizedBox(height: 4.h),
                 Text(
-                  "Max size is 5MB (pdf, png, jpg)",
+                  l10n.fileSizeLimit,
                   style: AppTextStyle.bodySmall.copyWith(
                     color: AppColors.of(
                       context,

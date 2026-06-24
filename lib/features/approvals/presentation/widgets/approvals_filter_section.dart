@@ -17,6 +17,7 @@ class ApprovalsFilterSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<ApprovalsBloc, ApprovalsState>(
       builder: (context, state) {
@@ -45,10 +46,10 @@ class ApprovalsFilterSection extends StatelessWidget {
             vertical: AppConstants.p12,
           ),
           decoration: BoxDecoration(
-            color: AppColors.of(context).background,
+            color: colors.background,
             border: Border(
               bottom: BorderSide(
-                color: AppColors.of(context).primary.withValues(alpha: 0.1),
+                color: colors.primary.withValues(alpha: 0.1),
               ),
             ),
           ),
@@ -59,10 +60,10 @@ class ApprovalsFilterSection extends StatelessWidget {
               Container(
                 height: 36.h,
                 decoration: BoxDecoration(
-                  color: AppColors.of(context).surfaceContainerLowest,
+                  color: colors.surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(AppConstants.r8),
                   border: Border.all(
-                    color: AppColors.of(context).tableBorder,
+                    color: colors.tableBorder,
                   ),
                 ),
                 child: TextField(
@@ -75,11 +76,11 @@ class ApprovalsFilterSection extends StatelessWidget {
                   decoration: InputDecoration(
                     hintText: l10n.searchByDateName,
                     hintStyle: AppTextStyle.bodyMedium.copyWith(
-                      color: AppColors.of(context).onSurfaceVariant,
+                      color: colors.onSurfaceVariant,
                     ),
                     prefixIcon: Icon(
                       Icons.search,
-                      color: AppColors.of(context).onSurfaceVariant,
+                      color: colors.onSurfaceVariant,
                       size: 20.sp,
                     ),
                     border: InputBorder.none,
@@ -101,7 +102,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                         Text(
                           l10n.typeLabel,
                           style: AppTextStyle.labelSmall.copyWith(
-                            color: AppColors.of(context).username,
+                            color: colors.username,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -110,10 +111,10 @@ class ApprovalsFilterSection extends StatelessWidget {
                           height: 36.h,
                           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
                           decoration: BoxDecoration(
-                            color: AppColors.of(context).surfaceContainerLowest,
+                            color: colors.surfaceContainerLowest,
                             borderRadius: BorderRadius.circular(AppConstants.r8),
                             border: Border.all(
-                              color: AppColors.of(context).outline,
+                              color: colors.outline,
                             ),
                           ),
                           child: DropdownButtonHideUnderline(
@@ -127,7 +128,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                                   child: Text(
                                     _getTypeLabel(type, context),
                                     style: AppTextStyle.bodySmall.copyWith(
-                                      color: AppColors.of(context).onSurface,
+                                      color: colors.onSurface,
                                     ),
                                   ),
                                 );
@@ -156,7 +157,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                         Text(
                           l10n.statusLabel,
                           style: AppTextStyle.labelSmall.copyWith(
-                            color: AppColors.of(context).username,
+                            color: colors.username,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -165,10 +166,10 @@ class ApprovalsFilterSection extends StatelessWidget {
                           height: 36.h,
                           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
                           decoration: BoxDecoration(
-                            color: AppColors.of(context).surfaceContainerLowest,
+                            color: colors.surfaceContainerLowest,
                             borderRadius: BorderRadius.circular(AppConstants.r8),
                             border: Border.all(
-                              color: AppColors.of(context).outline,
+                              color: colors.outline,
                             ),
                           ),
                           child: DropdownButtonHideUnderline(
@@ -182,7 +183,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                                   child: Text(
                                     status,
                                     style: AppTextStyle.bodySmall.copyWith(
-                                      color: AppColors.of(context).onSurface,
+                                      color: colors.onSurface,
                                     ),
                                   ),
                                 );
@@ -231,7 +232,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                                         ApprovalsEvent.selectAllToggled(value ?? false),
                                       );
                                 },
-                                activeColor: AppColors.of(context).primary,
+                                activeColor: colors.primary,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
                                 ),
@@ -241,7 +242,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                             Text(
                               l10n.selectAll,
                               style: AppTextStyle.labelLarge.copyWith(
-                                color: AppColors.of(context).primary,
+                                color: colors.primary,
                               ),
                             ),
                           ],

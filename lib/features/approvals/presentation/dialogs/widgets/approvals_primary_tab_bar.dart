@@ -16,6 +16,7 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return BlocBuilder<ApprovalsBloc, ApprovalsState>(
@@ -35,7 +36,7 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
           child: Container(
             height: 44.h,
             decoration: BoxDecoration(
-              color: AppColors.of(context).surfaceContainer, // From design spec
+              color: colors.surfaceContainer, // From design spec
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Row(
@@ -96,13 +97,14 @@ class _ApprovalTabWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.all(4.w),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.of(context).white
+              ? colors.white
               : Colors.transparent,
           borderRadius: BorderRadius.circular(AppConstants.r10),
           boxShadow: isSelected
@@ -124,10 +126,10 @@ class _ApprovalTabWidget extends StatelessWidget {
               style: isSelected
                   ? AppTextStyle.labelLarge.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.of(context).onSurface,
+                      color: colors.onSurface,
                     )
                   : AppTextStyle.labelLarge.copyWith(
-                      color: AppColors.of(context).onSurfaceVariant,
+                      color: colors.onSurfaceVariant,
                     ),
             ),
             if (badgeCount > 0) ...[
@@ -135,15 +137,14 @@ class _ApprovalTabWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: AppColors.of(context).error,
+                  color: colors.error,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   badgeCount < 10 ? '0$badgeCount' : '$badgeCount',
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.of(context).white,
+                    color: colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 10,
                   ),
                 ),
               ),

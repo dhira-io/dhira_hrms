@@ -12,12 +12,13 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: AppConstants.p16),
       child: Container(
         padding: const EdgeInsets.all(AppConstants.p16),
         decoration: BoxDecoration(
-          color: AppColors.of(context).surfaceContainerLow,
+          color: colors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r12),
         ),
         child: Column(
@@ -41,7 +42,7 @@ class CommentItem extends StatelessWidget {
                     pattern: 'dd-MM-yyyy',
                   ),
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.of(context).onSurfaceVariant,
+                    color: colors.onSurfaceVariant,
                   ),
                 ),
               ],

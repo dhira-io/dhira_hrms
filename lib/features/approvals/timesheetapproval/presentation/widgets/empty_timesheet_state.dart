@@ -9,6 +9,7 @@ class EmptyTimesheetState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppConstants.p60),
@@ -18,13 +19,13 @@ class EmptyTimesheetState extends StatelessWidget {
             Icon(
               Icons.description_outlined,
               size: AppConstants.iconXLarge,
-              color: AppColors.of(context).slate300,
+              color: colors.slate300,
             ),
             const SizedBox(height: AppConstants.p16),
             Text(
               l10n.noTimesheetEntriesFound,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.of(context).slate500,
+                color: colors.slate500,
               ),
             ),
           ],

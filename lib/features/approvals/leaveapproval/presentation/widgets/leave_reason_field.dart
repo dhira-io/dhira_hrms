@@ -17,6 +17,7 @@ class LeaveReasonField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -28,31 +29,27 @@ class LeaveReasonField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: l10n.provideReasonHint,
             hintStyle: AppTextStyle.bodyMedium.copyWith(
-              color: AppColors.of(context).outline.withValues(alpha: 0.5),
+              color: colors.outline.withValues(alpha: 0.5),
             ),
             filled: true,
-            fillColor: AppColors.of(context).surfaceContainerLow,
+            fillColor: colors.surfaceContainerLow,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
               borderSide: BorderSide(
-                color: AppColors.of(
-                  context,
-                ).outlineVariant.withValues(alpha: 0.5),
+                color: colors.outlineVariant.withValues(alpha: 0.5),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
               borderSide: BorderSide(
-                color: AppColors.of(
-                  context,
-                ).outlineVariant.withValues(alpha: 0.5),
+                color: colors.outlineVariant.withValues(alpha: 0.5),
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppConstants.r12),
-              borderSide: BorderSide(color: AppColors.of(context).primary),
+              borderSide: BorderSide(color: colors.primary),
             ),
-            errorStyle: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).error),
+            errorStyle: AppTextStyle.bodySmall.copyWith(color: colors.error),
           ),
           validator: (val) => val == null || val.isEmpty ? l10n.required : null,
           autovalidateMode: AutovalidateMode.onUserInteraction,

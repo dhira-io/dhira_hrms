@@ -9,12 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../dialogs/widgets/edit_timesheet/edit_timesheet_form.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import '../dialogs/widgets/edit_timesheet/edit_timesheet_error_view.dart';
+import '../dialogs/widgets/edit_timesheet/edit_timesheet_header.dart';
 
 class EditTimesheetBottomSheet extends StatelessWidget {
   const EditTimesheetBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return BlocBuilder<ApprovalsBloc, ApprovalsState>(
@@ -24,18 +26,24 @@ class EditTimesheetBottomSheet extends StatelessWidget {
             if (s.data.isTimesheetLoading) {
               return Container(
                 decoration: BoxDecoration(
-                  color: AppColors.of(context).surfaceContainerLowest,
+                  color: colors.surfaceContainerLowest,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(4, (index) => Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: ShimmerLoading(width: double.infinity, height: 40),
-                    )),
-                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    EditTimesheetHeader(onClose: () => Navigator.pop(context)),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(4, (index) => Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: ShimmerLoading(width: double.infinity, height: 40),
+                        )),
+                      ),
+                    ),
+                  ],
                 ),
               );
             }
@@ -51,7 +59,7 @@ class EditTimesheetBottomSheet extends StatelessWidget {
 
             return Container(
               decoration: BoxDecoration(
-                color: AppColors.of(context).surfaceContainerLowest,
+                color: colors.surfaceContainerLowest,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
               ),
               child: Container(

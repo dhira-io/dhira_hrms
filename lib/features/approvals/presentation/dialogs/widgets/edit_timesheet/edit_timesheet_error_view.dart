@@ -16,12 +16,13 @@ class EditTimesheetErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
       padding:       EdgeInsets.all(40.w),
       decoration: BoxDecoration(
-        color: AppColors.of(context).white,
+        color: colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       child: Column(
@@ -30,7 +31,7 @@ class EditTimesheetErrorView extends StatelessWidget {
           Icon(
             Icons.error_outline,
             size: 48,
-            color: AppColors.of(context).error,
+            color: colors.error,
           ),
                 SizedBox(height: 16.h),
           Text(
@@ -43,14 +44,14 @@ class EditTimesheetErrorView extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onClose,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.of(context).primary,
+                backgroundColor: colors.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.r),
                 ),
               ),
               child: Text(
                 l10n.close,
-                style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).white),
+                style: AppTextStyle.bodyMedium.copyWith(color: colors.white),
               ),
             ),
           ),

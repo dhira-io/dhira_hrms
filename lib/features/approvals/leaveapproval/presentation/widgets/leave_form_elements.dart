@@ -11,12 +11,13 @@ class LeaveLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Padding(
-      padding:       EdgeInsets.only(left: 4.w, bottom: 6.h),
+      padding: EdgeInsets.only(left: 4.w, bottom: 6.h),
       child: Text(
         label,
         style: AppTextStyle.labelMedium.copyWith(
-          color: AppColors.of(context).onSurfaceVariant,
+          color: colors.onSurfaceVariant,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -38,6 +39,7 @@ class LeaveDatePickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return InkWell(
       onTap: isReadOnly ? null : onTap,
       borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -48,11 +50,11 @@ class LeaveDatePickerField extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: isReadOnly
-              ? AppColors.of(context).surfaceContainerLow.withValues(alpha: 0.5)
-              : AppColors.of(context).surfaceContainerLow,
+              ? colors.surfaceContainerLow.withValues(alpha: 0.5)
+              : colors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r12),
           border: Border.all(
-            color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+            color: colors.outlineVariant.withValues(alpha: 0.5),
           ),
         ),
         child: Row(
@@ -62,16 +64,16 @@ class LeaveDatePickerField extends StatelessWidget {
               text,
               style: AppTextStyle.bodyMedium.copyWith(
                 color: isReadOnly
-                    ? AppColors.of(context).outline
-                    : AppColors.of(context).onSurface,
+                    ? colors.outline
+                    : colors.onSurface,
               ),
             ),
             Icon(
               Icons.calendar_today_rounded,
               color: isReadOnly
-                  ? AppColors.of(context).outline.withValues(alpha: 0.5)
-                  : AppColors.of(context).primary,
-              size: 18,
+                  ? colors.outline.withValues(alpha: 0.5)
+                  : colors.primary,
+              size: 18.w,
             ),
           ],
         ),

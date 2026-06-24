@@ -20,6 +20,7 @@ class ActionConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     String title = l10n.reject;
@@ -52,8 +53,8 @@ class ActionConfirmationDialog extends StatelessWidget {
       cancelText: l10n.no,
       onConfirm: onConfirm,
       confirmButtonColor: action == ApprovalActions.approve
-          ? AppColors.of(context).success
-          : AppColors.of(context).error,
+          ? colors.success
+          : colors.error,
     );
   }
 }

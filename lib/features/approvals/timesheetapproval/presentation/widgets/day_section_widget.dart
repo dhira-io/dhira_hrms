@@ -345,9 +345,9 @@ class DaySectionWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: TextField(
         controller: controller,
-        style: AppTextStyle.bodySmall.copyWith(
-          fontSize: AppConstants.fs11.sp,
-          color: AppColors.of(context).textPrimary,
+        style: AppTextStyle.bodyMediumOne.copyWith(
+          color: AppColors.of(context).tertiary,
+          fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           isDense: true,

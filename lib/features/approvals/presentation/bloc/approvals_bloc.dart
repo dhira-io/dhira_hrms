@@ -5,7 +5,6 @@ import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/subm
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/entities/approval_type.dart';
 import '../../domain/entities/approval_request_entity.dart';
 import '../../domain/usecases/get_approvals_access_usecase.dart';
 import '../../domain/usecases/get_approvals_summary_usecase.dart';

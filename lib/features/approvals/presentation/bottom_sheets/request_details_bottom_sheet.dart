@@ -1,8 +1,8 @@
+import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
-import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
@@ -16,8 +16,9 @@ import 'package:dhira_hrms/core/constants/api_constants.dart';
 import 'package:dhira_hrms/features/approvals/data/constants/approvals_api_constants.dart';
 import 'package:dhira_hrms/core/utils/string_utils.dart';
 import 'package:dhira_hrms/features/approvals/presentation/widgets/approval_card/mini_status_badge.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/withdraw_leave_bottom_sheet.dart';
 import 'package:dhira_hrms/features/approvals/presentation/dialogs/action_confirmation_dialog.dart';
-import 'package:dhira_hrms/features/approvals/presentation/dialogs/delete_timesheet_dialog.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/delete_timesheet_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RequestDetailsBottomSheet extends StatefulWidget {
@@ -169,7 +170,7 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                           ),
                         ),
                         Text(
-                          '${DateTimeUtils.formatToDMYShort(c.creation)}',
+                          DateTimeUtils.formatToDMYShort(c.creation),
                           style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).onSurfaceVariant),
                         ),
                       ],
@@ -680,9 +681,11 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (widget.data.type == ApprovalType.timesheet) {
-                                  showDialog(
+                                  showModalBottomSheet(
                                     context: context,
-                                    builder: (ctx) => DeleteTimesheetDialog(
+                                    backgroundColor: Colors.transparent,
+                                    isScrollControlled: true,
+                                    builder: (ctx) => DeleteTimesheetBottomSheet(
                                       requestId: widget.data.id,
                                       onDelete: () {
                                         context.read<ApprovalsBloc>().add(
@@ -693,10 +696,11 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                                     ),
                                   );
                                 } else {
-                                  showDialog(
+                                  showModalBottomSheet(
                                     context: context,
-                                    builder: (ctx) => ActionConfirmationDialog(
-                                      action: ApprovalActions.cancel,
+                                    backgroundColor: Colors.transparent,
+                                    isScrollControlled: true,
+                                    builder: (ctx) => WithdrawLeaveBottomSheet(
                                       data: widget.data,
                                       onConfirm: () {
                                         _onAction(context, ApprovalActions.cancel);

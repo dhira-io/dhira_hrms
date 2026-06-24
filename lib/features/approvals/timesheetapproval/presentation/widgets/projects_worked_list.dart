@@ -15,13 +15,14 @@ class ProjectsWorkedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.of(context).slate500,
+            color: colors.slate500,
             fontSize: 12.sp,
           ),
         ),
@@ -38,9 +39,9 @@ class ProjectsWorkedList extends StatelessWidget {
                     vertical: 6.h,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).surfaceContainerLowest,
+                    color: colors.surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(20.r),
-                    border: Border.all(color: AppColors.of(context).slate200),
+                    border: Border.all(color: colors.slate200),
                   ),
                   child: Text(
                     p ?? "—",

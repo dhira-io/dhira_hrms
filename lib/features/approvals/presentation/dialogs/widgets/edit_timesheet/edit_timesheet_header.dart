@@ -1,5 +1,4 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,7 @@ class EditTimesheetHeader extends StatelessWidget {
               children: [
                 Text(
                   l10n.requestDetails,
-                  style: AppTextStyle.h3.copyWith(fontSize: 18.sp),
+                  style: AppTextStyle.headingSmall,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(

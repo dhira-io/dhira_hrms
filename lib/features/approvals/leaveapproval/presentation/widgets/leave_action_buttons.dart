@@ -1,6 +1,4 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
-import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/presentation/bloc/leave_approval_state.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';

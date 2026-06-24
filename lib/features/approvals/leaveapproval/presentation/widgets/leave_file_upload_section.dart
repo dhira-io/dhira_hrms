@@ -23,19 +23,18 @@ class LeaveFileUploadSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Column(
       children: [
         CustomPaint(
           painter: DashedBorderPainter(
-            color: AppColors.of(context).outlineVariant,
+            color: colors.outlineVariant,
           ),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(AppConstants.p24),
             decoration: BoxDecoration(
-              color: AppColors.of(
-                context,
-              ).surfaceContainerLowest.withValues(alpha: 0.5),
+              color: colors.surfaceContainerLowest.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Column(
@@ -43,7 +42,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(AppConstants.p12),
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).primaryFixed,
+                    color: colors.primaryFixed,
                     shape: BoxShape.circle,
                   ),
                   child: state.isUploading
@@ -52,7 +51,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                           height: AppConstants.iconMedium,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            color: AppColors.of(context).primary,
+                            color: colors.primary,
                           ),
                         )
                       : Icon(
@@ -60,8 +59,8 @@ class LeaveFileUploadSection extends StatelessWidget {
                               ? Icons.check_circle_outline
                               : Icons.cloud_upload_outlined,
                           color: state.uploadedFileUrl != null
-                              ? AppColors.of(context).success
-                              : AppColors.of(context).primary,
+                              ? colors.success
+                              : colors.primary,
                           size: AppConstants.iconMedium,
                         ),
                 ),
@@ -70,20 +69,17 @@ class LeaveFileUploadSection extends StatelessWidget {
                   selectedFileName ?? l10n.dragAndDrop,
                   style: AppTextStyle.bodySmall.copyWith(
                     color: state.uploadedFileUrl != null
-                        ? AppColors.of(context).success
-                        : AppColors.of(context).onSurfaceVariant,
+                        ? colors.success
+                        : colors.onSurfaceVariant,
                     fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
                 ),
                       SizedBox(height: 4.h),
                 Text(
-                  "Max size is 5MB (pdf, png, jpg)",
+                  l10n.fileSizeLimit,
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.of(
-                      context,
-                    ).onSurfaceVariant.withValues(alpha: 0.6),
-                    fontSize: 10.sp,
+                    color: colors.onSurfaceVariant.withValues(alpha: 0.6),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -92,8 +88,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                   Text(
                     state.uploadError!,
                     style: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.of(context).error,
-                      fontSize: 10.sp,
+                      color: colors.error,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -103,12 +98,10 @@ class LeaveFileUploadSection extends StatelessWidget {
                   onPressed: state.isUploading ? null : onPickFile,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
-                    foregroundColor: AppColors.of(context).primary,
+                    foregroundColor: colors.primary,
                     elevation: 0,
                     side: BorderSide(
-                      color: AppColors.of(
-                        context,
-                      ).primary.withValues(alpha: 0.2),
+                      color: colors.primary.withValues(alpha: 0.2),
                     ),
                     shape: const StadiumBorder(),
                   ),
@@ -116,9 +109,8 @@ class LeaveFileUploadSection extends StatelessWidget {
                     state.uploadedFileUrl != null
                         ? l10n.changeFile
                         : l10n.browseFiles,
-                    style: AppTextStyle.button.copyWith(
-                      fontSize: 12.sp,
-                      color: AppColors.of(context).primary,
+                    style: AppTextStyle.labelMedium.copyWith(
+                      color: colors.primary,
                     ),
                   ),
                 ),
@@ -130,9 +122,7 @@ class LeaveFileUploadSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(AppConstants.p16),
           decoration: BoxDecoration(
-            color: AppColors.of(
-              context,
-            ).tertiaryContainer.withValues(alpha: 0.1),
+            color: colors.tertiaryContainer.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(AppConstants.r12),
           ),
           child: Row(
@@ -140,7 +130,7 @@ class LeaveFileUploadSection extends StatelessWidget {
             children: [
               Icon(
                 Icons.warning_amber_rounded,
-                color: AppColors.of(context).tertiaryContainer,
+                color: colors.tertiaryContainer,
                 size: AppConstants.iconXSmall,
               ),
               const SizedBox(width: AppConstants.p12),
@@ -148,7 +138,7 @@ class LeaveFileUploadSection extends StatelessWidget {
                 child: Text(
                   l10n.medicalWarning,
                   style: AppTextStyle.bodySmall.copyWith(
-                    color: AppColors.of(context).tertiary,
+                    color: colors.tertiary,
                     height: 1.5.h,
                   ),
                 ),

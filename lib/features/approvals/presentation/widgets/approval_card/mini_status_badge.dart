@@ -12,34 +12,35 @@ class MiniStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final String normStatus = status.toLowerCase();
 
-    Color bgColor = AppColors.of(context).surfaceContainerLow;
-    Color textColor = AppColors.of(context).onSurfaceVariant;
-    Color borderColor = AppColors.of(context).onSurfaceVariant;
+    Color bgColor = colors.surfaceContainerLow;
+    Color textColor = colors.onSurfaceVariant;
+    Color borderColor = colors.onSurfaceVariant;
     String displayStatus = status;
 
     if (normStatus == ApprovalStatus.approved.toLowerCase()) {
-      bgColor = AppColors.of(context).approvedBg;
-      textColor = AppColors.of(context).approvedText;
+      bgColor = colors.approvedBg;
+      textColor = colors.approvedText;
       borderColor = textColor;
       displayStatus = l10n.approved;
     } else if (normStatus == ApprovalStatus.rejected.toLowerCase()) {
-      bgColor = AppColors.of(context).rejectedBg;
-      textColor = AppColors.of(context).rejectedText;
+      bgColor = colors.rejectedBg;
+      textColor = colors.rejectedText;
       borderColor = textColor;
       displayStatus = l10n.rejected;
     } else if (normStatus == ApprovalStatus.cancelled.toLowerCase()) {
-      bgColor = AppColors.of(context).rejectedBg;
-      textColor = AppColors.of(context).rejectedText;
+      bgColor = colors.rejectedBg;
+      textColor = colors.rejectedText;
       borderColor = textColor;
       displayStatus = l10n.cancelledLabel;
     } else if (normStatus.contains(ApprovalsApiConstants.statusPending) ||
         normStatus == ApprovalsApiConstants.statusOpen) {
-      bgColor = AppColors.of(context).pendingStatusBg;
-      textColor = AppColors.of(context).punchBreak;
-      borderColor = AppColors.of(context).punchBreak.withValues(alpha: 0.5);
+      bgColor = colors.pendingStatusBg;
+      textColor = colors.punchBreak;
+      borderColor = colors.punchBreak.withValues(alpha: 0.5);
       if (normStatus == ApprovalStatus.pending.toLowerCase() ||
           normStatus == ApprovalsApiConstants.statusOpen) {
         displayStatus = l10n.pending;

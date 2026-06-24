@@ -26,6 +26,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Row(
       children: [
         Expanded(
@@ -49,10 +50,10 @@ class LeaveHalfDayDetails extends StatelessWidget {
               LeaveLabel(label: l10n.daySegment),
               DropdownButtonHideUnderline(
                 child: DropdownButtonFormField<String>(
-                  value: daySegment,
-                  dropdownColor: AppColors.of(context).surfaceContainerHighest,
+                  initialValue: daySegment,
+                  dropdownColor: colors.surfaceContainerHighest,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.of(context).onSurface,
+                    color: colors.onSurface,
                   ),
                   items: [l10n.firstHalf, l10n.secondHalf].map((segment) {
                     return DropdownMenuItem(
@@ -60,7 +61,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
                       child: Text(
                         segment,
                         style: AppTextStyle.bodyMedium.copyWith(
-                          color: AppColors.of(context).onSurface,
+                          color: colors.onSurface,
                         ),
                       ),
                     );
@@ -69,8 +70,7 @@ class LeaveHalfDayDetails extends StatelessWidget {
                   isExpanded: true,
                   decoration: InputDecoration(
                     filled: true,
-
-                    fillColor: AppColors.of(context).surfaceContainerHighest,
+                    fillColor: colors.surfaceContainerHighest,
 
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: AppConstants.p16,
@@ -103,14 +103,14 @@ class LeaveHalfDayDetails extends StatelessWidget {
                     ),
 
                     errorStyle: AppTextStyle.bodySmall.copyWith(
-                      color: AppColors.of(context).error,
+                      color: colors.error,
                     ),
                   ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
 
                   icon: Icon(
                     Icons.arrow_drop_down,
-                    color: AppColors.of(context).outline,
+                    color: colors.outline,
                   ),
                   validator: (val) => val == null ? l10n.required : null,
                 ),

@@ -18,6 +18,7 @@ class TimesheetEditFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(
@@ -27,15 +28,15 @@ class TimesheetEditFooter extends StatelessWidget {
         AppConstants.p24,
       ),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surfaceContainerLowest,
-        border: Border(top: BorderSide(color: AppColors.of(context).border)),
+        color: colors.surfaceContainerLowest,
+        border: Border(top: BorderSide(color: colors.border)),
       ),
       child: Row(
         children: [
           Text(
             l10n.selectedRows(selectedCount),
             style: AppTextStyle.bodySmall.copyWith(
-              color: AppColors.of(context).onSurfaceVariant,
+              color: colors.onSurfaceVariant,
             ),
           ),
           const Spacer(),
@@ -46,16 +47,16 @@ class TimesheetEditFooter extends StatelessWidget {
                 horizontal: AppConstants.p24,
                 vertical: AppConstants.p12,
               ),
-              side: BorderSide(color: AppColors.of(context).border),
+              side: BorderSide(color: colors.border),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppConstants.r20),
               ),
-              backgroundColor: AppColors.of(context).surfaceContainerLow,
+              backgroundColor: colors.surfaceContainerLow,
             ),
             child: Text(
               l10n.cancel,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.of(context).onSurface,
+                color: colors.onSurface,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -68,8 +69,8 @@ class TimesheetEditFooter extends StatelessWidget {
                 horizontal: AppConstants.p24,
                 vertical: AppConstants.p12,
               ),
-              backgroundColor: AppColors.of(context).primary,
-              foregroundColor: AppColors.of(context).white,
+              backgroundColor: colors.primary,
+              foregroundColor: colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppConstants.r20),
               ),
@@ -79,7 +80,7 @@ class TimesheetEditFooter extends StatelessWidget {
               l10n.update,
               style: AppTextStyle.bodyMedium.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.of(context).white,
+                color: colors.white,
               ),
             ),
           ),

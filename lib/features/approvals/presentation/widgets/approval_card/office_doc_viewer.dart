@@ -22,6 +22,7 @@ class _OfficeDocViewerState extends State<OfficeDocViewer> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     if (_hasError) {
@@ -31,7 +32,7 @@ class _OfficeDocViewerState extends State<OfficeDocViewer> {
           children: [
             Icon(
               Icons.error_outline,
-              color: AppColors.of(context).error,
+              color: colors.error,
               size: 48,
             ),
             SizedBox(height: 16.h),
@@ -78,7 +79,7 @@ class _OfficeDocViewerState extends State<OfficeDocViewer> {
         ),
         if (_isLoading)
           Container(
-            color: AppColors.of(context).white,
+            color: colors.white,
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
