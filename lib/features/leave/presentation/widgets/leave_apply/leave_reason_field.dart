@@ -25,7 +25,7 @@ class LeaveReasonField extends StatelessWidget {
           color: colors.outline.withValues(alpha: 0.5),
         ),
         filled: true,
-        fillColor: colors.white,
+        fillColor: colors.surface,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.r12),
           borderSide: BorderSide(color: colors.outlineVariant, width: 1.0),

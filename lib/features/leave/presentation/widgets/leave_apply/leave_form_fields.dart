@@ -218,7 +218,7 @@ class LeaveFormFields extends StatelessWidget {
                           bloc.add(LeaveEvent.daySegmentChanged(val)),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: AppColors.of(context).white,
+                        fillColor: AppColors.of(context).surface,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: AppConstants.p16,
                           vertical: AppConstants.p18,

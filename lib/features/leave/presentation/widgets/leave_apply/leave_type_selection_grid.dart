@@ -124,7 +124,7 @@ class _LeaveTypeSelectionGridState extends State<LeaveTypeSelectionGrid> {
                       horizontal: AppConstants.p16.w,
                       vertical: AppConstants.p12.h),
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).white,
+                    color: AppColors.of(context).surface,
                     borderRadius: BorderRadius.circular(AppConstants.r8),
                     border: Border.all(
                       color: AppColors.of(context).outlineVariant,
@@ -208,7 +208,7 @@ class _LeaveTypeGridItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.of(context).primary.withValues(alpha: 0.05)
-              : AppColors.of(context).white,
+              : AppColors.of(context).surface,
           borderRadius: BorderRadius.circular(AppConstants.r8),
           border: Border.all(
             color: isSelected
