@@ -142,8 +142,6 @@ class NotificationIcon extends StatelessWidget {
     final colors = AppColors.of(context);
     final type = notification.type;
 
-
-    final title = notification.title.toLowerCase();
     final rawType = notification.rawType?.toLowerCase();
 
     IconData iconData;
@@ -151,14 +149,12 @@ class NotificationIcon extends StatelessWidget {
     Color iconColor;
 
     if (rawType == NotificationTypeKeys.attendanceRegularization ||
-        rawType == NotificationTypeKeys.attendance ||
-        title.contains('attendance regularization')) {
+        rawType == NotificationTypeKeys.attendance) {
       iconData = Icons.checklist;
       bgColor = colors.infoBg;
       iconColor = colors.info;
     } else if (rawType == NotificationTypeKeys.leave ||
-        rawType == NotificationTypeKeys.leaveApplication ||
-        title.contains('leave application')) {
+        rawType == NotificationTypeKeys.leaveApplication) {
       iconData = Icons.event;
       bgColor = colors.infoBg;
       iconColor = colors.info;
