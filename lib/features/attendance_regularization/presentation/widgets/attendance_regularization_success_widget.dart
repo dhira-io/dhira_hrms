@@ -48,9 +48,7 @@ class AttendanceRegularizationSuccessWidget extends StatelessWidget {
           // Title
           Text(
             l10n.requestSubmitted,
-            style: AppTextStyle.h3.copyWith(
-              color: themeColors.textPrimary,
-            ),
+            style: AppTextStyle.h3.copyWith(color: themeColors.textPrimary),
           ),
           SizedBox(height: 8.h),
 
@@ -79,7 +77,7 @@ class AttendanceRegularizationSuccessWidget extends StatelessWidget {
                       variant: ButtonVariant.outlined,
                       padding: EdgeInsets.symmetric(vertical: 7.h),
                       borderRadius: 6.r,
-                      fontweight: FontWeight.w100,
+                      fontWeight: FontWeight.w100,
                       textColor: themeColors.textPrimary,
                     ),
                   ),
@@ -93,7 +91,7 @@ class AttendanceRegularizationSuccessWidget extends StatelessWidget {
                       onPressed: onBackToHome,
                       padding: EdgeInsets.symmetric(vertical: 7.h),
                       borderRadius: 6.r,
-                      fontweight: FontWeight.w100,
+                      fontWeight: FontWeight.w100,
                     ),
                   ),
                 ),

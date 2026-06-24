@@ -28,17 +28,11 @@ class AttendanceRegularizationBottomActions extends StatelessWidget {
     final isSubmitting = state.isSubmitting;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 16.w,
-        vertical: 8.h,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: colors.surfaceContainerLowest,
         border: Border(
-          top: BorderSide(
-            color: colors.slate200,
-            width: 1.w,
-          ),
+          top: BorderSide(color: colors.slate200, width: 1.w),
         ),
       ),
       child: SafeArea(
@@ -61,10 +55,7 @@ class _Step1Actions extends StatelessWidget {
   final bool canContinue;
   final VoidCallback onNext;
 
-  const _Step1Actions({
-    required this.canContinue,
-    required this.onNext,
-  });
+  const _Step1Actions({required this.canContinue, required this.onNext});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +67,7 @@ class _Step1Actions extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 16.w),
       borderRadius: 6.r,
-      fontweight: FontWeight.w100,
+      fontWeight: FontWeight.w100,
     );
   }
 }
@@ -107,7 +98,7 @@ class _Step2Actions extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 16.w),
           borderRadius: 6.r,
-          fontweight: FontWeight.w100,
+          fontWeight: FontWeight.w100,
           textColor: colors.textPrimary,
         ),
         SizedBox(height: 6.h),
@@ -118,7 +109,7 @@ class _Step2Actions extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 16.w),
           borderRadius: 6.r,
-          fontweight: FontWeight.w100,
+          fontWeight: FontWeight.w100,
         ),
       ],
     );

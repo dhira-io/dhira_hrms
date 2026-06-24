@@ -19,7 +19,7 @@ class CommonButton extends StatelessWidget {
     this.padding,
     this.borderRadius,
     this.backgroundColor,
-    this.fontweight,
+    this.fontWeight,
     this.textColor,
     this.foregroundColor,
   });
@@ -34,7 +34,7 @@ class CommonButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
   final Color? backgroundColor;
-  final FontWeight? fontweight;
+  final FontWeight? fontWeight;
   final Color? textColor;
   final Color? foregroundColor;
 
@@ -79,7 +79,7 @@ class CommonButton extends StatelessWidget {
                 text,
                 style: AppTextStyle.button.copyWith(
                   color: _getTextColor(colors, isButtonDisabled),
-                  fontWeight: fontweight ?? FontWeight.w700,
+                  fontWeight: fontWeight ?? FontWeight.w700,
                 ),
               ),
             ],

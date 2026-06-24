@@ -35,6 +35,11 @@ class AppTextStyle {
   static final TextStyle h1Bold = h1.copyWith(fontWeight: FontWeight.bold);
   static final TextStyle h2Bold = h2.copyWith(fontWeight: FontWeight.bold);
   static final TextStyle h3Bold = h3.copyWith(fontWeight: FontWeight.bold);
+  static TextStyle get h2Black => TextStyle(
+    fontFamily: headingFont,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w900,
+  );
 
   //Display
   static TextStyle get displayLarge =>
@@ -103,6 +108,50 @@ class AppTextStyle {
       GoogleFonts.inter(fontSize: 9.sp, fontWeight: FontWeight.w400);
   static TextStyle get labelSmallTwo =>
       GoogleFonts.inter(fontSize: 8.sp, fontWeight: FontWeight.w400);
+
+  // Attendance Regularization Styles
+  static TextStyle get bodyMediumOneMedium =>
+      GoogleFonts.inter(fontSize: 11.sp, fontWeight: FontWeight.w500);
+  static TextStyle get bodyMediumOneSemibold =>
+      GoogleFonts.inter(fontSize: 11.sp, fontWeight: FontWeight.w600);
+  static TextStyle get bodyMediumOneBold =>
+      GoogleFonts.inter(fontSize: 11.sp, fontWeight: FontWeight.w700);
+  static TextStyle get bodyMediumBold =>
+      GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w700);
+  static TextStyle get bodyMediumSemibold =>
+      GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w600);
+  static TextStyle get bodySmallBold =>
+      GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w700);
+  static TextStyle get bodySmallSemibold =>
+      GoogleFonts.inter(fontSize: 10.sp, fontWeight: FontWeight.w600);
+  static TextStyle get bodySmallOneSemibold =>
+      GoogleFonts.inter(fontSize: 9.sp, fontWeight: FontWeight.w600);
+  static TextStyle get bodySmallOneBold =>
+      GoogleFonts.inter(fontSize: 9.sp, fontWeight: FontWeight.w700);
+  static TextStyle get labelSmallTwoMedium => GoogleFonts.inter(
+    fontSize: 8.sp,
+    fontWeight: FontWeight.w500,
+    height: 1.2,
+  );
+  static TextStyle get labelLargeMedium =>
+      GoogleFonts.inter(fontSize: 13.sp, fontWeight: FontWeight.w500);
+  static TextStyle get labelLargeBold =>
+      GoogleFonts.inter(fontSize: 13.sp, fontWeight: FontWeight.w700);
+  static TextStyle get bodyMediumWithHeight => GoogleFonts.inter(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    height: 1.4,
+  );
+  static TextStyle get labelSmallWithHeight => GoogleFonts.inter(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w500,
+    height: 1.3,
+  );
+  static TextStyle get labelMediumWithHeight => GoogleFonts.inter(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    height: 1.5,
+  );
 
   static TextStyle get button => GoogleFonts.inter(
     fontSize: 14.sp,
