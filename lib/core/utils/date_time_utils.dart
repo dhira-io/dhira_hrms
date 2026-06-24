@@ -45,6 +45,7 @@ class DateTimeUtils {
   static const String dateFormatAbbrMonthDay = 'MMM dd';
   static const String dateFormatDayMonthKey = 'EEEE MMM d, yyyy';
   static const String dateFormatMonthOnly = 'MMMM';
+  static const String dateFormatDayNameMonth = 'dd EEEE, MMMM';
 
   /// Formats date to 'yyyy-MM-dd' (e.g., 2023-10-25)
   static String formatToYMD(DateTime date) {
@@ -215,6 +216,10 @@ class DateTimeUtils {
 
   /// Returns the full day name (e.g., "Monday", "Friday").
   static String getDayName(DateTime date) => DateFormat('EEEE').format(date);
+
+  /// Formats date to 'd MMM · yyyy' (e.g., 5 May · 2026)
+  static String formatWithDotSeparator(DateTime date) =>
+      DateFormat('d MMM · yyyy').format(date);
 
   /// Returns mixed-case month abbreviation (e.g., "Jan", "Feb")
   static String formatToMonthAbbr(DateTime date, [String? locale]) {
@@ -522,5 +527,38 @@ class DateTimeUtils {
       }
     }
     return parts.join(' ');
+  }
+
+  /// Returns the ISO 8601 week number for a given date.
+  static int getWeekOfYear(DateTime date) {
+    final dayUtc = DateTime.utc(date.year, date.month, date.day);
+    final weekday = dayUtc.weekday;
+    final thursday = dayUtc.add(Duration(days: 4 - weekday));
+    final firstDayOfYear = DateTime.utc(thursday.year, 1, 1);
+    final difference = thursday.difference(firstDayOfYear);
+    return (difference.inDays / 7).floor() + 1;
+  }
+
+  /// Formats the timesheet week range (e.g. "Jun 1 – 7" or "Jun 29 – Jul 5")
+  static String formatTimesheetWeekRange(DateTime date) {
+    final monday = getStartOfWeek(date);
+    final sunday = monday.add(const Duration(days: 6));
+
+    if (monday.month == sunday.month) {
+      final monthStr = DateFormat('MMM').format(monday);
+      return "$monthStr ${monday.day} – ${sunday.day}";
+    } else {
+      final mondayMonthStr = DateFormat('MMM').format(monday);
+      final sundayMonthStr = DateFormat('MMM').format(sunday);
+      return "$mondayMonthStr ${monday.day} – $sundayMonthStr ${sunday.day}";
+    }
+  }
+
+  /// Checks if a string is in a standard ISO 8601 format (YYYY-MM-DDTHH:mm:ss...)
+  static bool isISOFormat(String input) {
+    if (input.isEmpty) return false;
+    // Basic check for T delimiter or standard format
+    return input.contains('T') ||
+        RegExp(r'^\d{4}-\d{2}-\d{2}T').hasMatch(input);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:dhira_hrms/features/notifications/data/constants/notification_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -76,7 +77,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
       appBar: CommonAppBar(
-        title: l10n.notifications,
+        title: l10n.notification, // Singular as per image
+        centerTitle: false,
         backgroundColor: AppColors.of(context).background,
         onBack: () {
           if (context.canPop()) {
@@ -110,13 +112,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
               return TextButton(
                 onPressed: () => context.read<NotificationBloc>().add(
-                  const NotificationEvent.markAllRead(),
-                ),
+                      const NotificationEvent.markAllRead(),
+                    ),
                 child: Text(
                   l10n.markAllAsRead,
                   style: AppTextStyle.labelMedium.copyWith(
                     color: AppColors.of(context).primaryContainer,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
+                    fontSize: AppConstants.fs14.sp,
                   ),
                 ),
               );
@@ -126,37 +129,40 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ],
       ),
       body: SafeArea(
-        child: BlocBuilder<NotificationBloc, NotificationState>(
-          builder: (context, state) {
-            return state.when(
-              initial: () => const NotificationsLoadingWidget(),
-              loading: () => const NotificationsLoadingWidget(),
-              loaded: (
-                notifications,
-                groupedNotifications,
-                sortedGroupKeys,
-                hasMore,
-                currentPage,
-                isFetchingMore,
-                isRefreshing,
-                isMarkingAllRead,
-              ) {
-                return _buildNotificationList(
-                  l10n: l10n,
-                  notifications: notifications,
-                  sortedGroups: sortedGroupKeys,
-                  groups: groupedNotifications,
-                  hasMore: hasMore,
-                );
-              },
-              error: (message) => NotificationsErrorWidget(
-                message: message,
-                onRetry: () => context.read<NotificationBloc>().add(
-                  const NotificationEvent.load(isRefresh: false),
+        child: Container(
+          color: AppColors.of(context).background,
+          child: BlocBuilder<NotificationBloc, NotificationState>(
+            builder: (context, state) {
+              return state.when(
+                initial: () => const NotificationsLoadingWidget(),
+                loading: () => const NotificationsLoadingWidget(),
+                loaded: (
+                  notifications,
+                  groupedNotifications,
+                  sortedGroupKeys,
+                  hasMore,
+                  currentPage,
+                  isFetchingMore,
+                  isRefreshing,
+                  isMarkingAllRead,
+                ) {
+                  return _buildNotificationList(
+                    l10n: l10n,
+                    notifications: notifications,
+                    sortedGroups: sortedGroupKeys,
+                    groups: groupedNotifications,
+                    hasMore: hasMore,
+                  );
+                },
+                error: (message) => NotificationsErrorWidget(
+                  message: message,
+                  onRetry: () => context.read<NotificationBloc>().add(
+                        const NotificationEvent.load(isRefresh: false),
+                      ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -187,12 +193,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       },
       child: ListView.builder(
         controller: _scrollController,
-        padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
+        padding: EdgeInsets.zero,
         itemCount: sortedGroups.length + (hasMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index == sortedGroups.length) {
             return const Padding(
-              padding: EdgeInsets.all(AppConstants.p16),
+              padding: EdgeInsets.symmetric(vertical: AppConstants.p16),
               child: Center(child: NotificationItemShimmer()),
             );
           }

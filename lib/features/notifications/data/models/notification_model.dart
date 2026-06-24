@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../constants/notification_constants.dart';
 
@@ -35,7 +36,7 @@ abstract class NotificationModel with _$NotificationModel {
       id: json['name']?.toString() ?? '',
       title:
           (json['subject'] ?? json['title'] ?? json['message'])?.toString() ??
-          'No Subject',
+          '',
       description:
           (json['email_content'] ??
                   json['content'] ??
@@ -57,19 +58,9 @@ abstract class NotificationModel with _$NotificationModel {
 
   NotificationEntity toEntity() {
     // Handle Frappe's time format (usually UTC) and convert to local
-    DateTime parsedTime;
-    try {
-      if (time.contains(' ')) {
-        // Handle "YYYY-MM-DD HH:mm:ss" format by converting to ISO
-        parsedTime = DateTime.parse(
-          "${time.replaceFirst(' ', 'T')}Z",
-        ).toLocal();
-      } else {
-        parsedTime = DateTime.tryParse(time)?.toLocal() ?? DateTime.now();
-      }
-    } catch (_) {
-      parsedTime = DateTime.now();
-    }
+    final DateTime? parsedTime = DateTimeUtils.isISOFormat(time)
+        ? DateTime.parse(time)
+        : DateTime.tryParse(time.replaceFirst(' ', 'T'));
 
     return NotificationEntity(
       id: id,
