@@ -63,7 +63,6 @@ class TimesheetTaskCard extends StatelessWidget {
                     Text(
                       task.project,
                       style: AppTextStyle.labelLargeOne.copyWith(
-                        fontWeight: FontWeight.w500,
                         color: AppColors.of(context).textPrimary,
                       ),
                     ),
