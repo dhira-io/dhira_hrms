@@ -556,13 +556,13 @@ class AttendanceRegularizationRouteToHRCard extends StatelessWidget {
                 children: [
                   Text(
                     l10n.routeToHRDepartment,
-                    style: AppTextStyle.bodyMediumBold.copyWith(
+                    style: AppTextStyle.labelLarge.copyWith(
                       color: themeColors.textPrimary,
                     ),
                   ),
                   Text(
                     l10n.routeToHRDepartmentSub,
-                    style: AppTextStyle.bodySmall.copyWith(
+                    style: AppTextStyle.bodyMediumOne.copyWith(
                       color: themeColors.slate500Confirmation,
                     ),
                   ),
