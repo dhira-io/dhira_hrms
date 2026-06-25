@@ -38,8 +38,9 @@ class SettingsItemWidget extends StatelessWidget {
                   width: 40.w,
                   height: 40.h,
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).surfaceContainerHigh,
-                    shape: BoxShape.circle,
+                    color: iconColor?.withValues(alpha: 0.15) ??
+                        AppColors.of(context).surfaceContainerHigh,
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Icon(
                     icon,

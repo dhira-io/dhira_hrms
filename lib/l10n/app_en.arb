@@ -38,6 +38,8 @@
   "leave": "Leave",
   "team": "Team",
   "settings": "Settings",
+  "appearanceSettings": "Appearance Settings",
+  "availableLanguages": "Available Languages",
   "department": "Department",
   "location": "Location",
   "priority": "Priority",
@@ -2340,7 +2342,7 @@
     "hours": "hours",
     "supportingDocOptional": "Supporting Document (Optional)",
     "noSubject": "No Subject",
-    "newNotification": "New Notification"
+    "newNotification": "New Notification",
+    "appearanceSettings": "Appearance Settings",
+    "availableLanguages": "Available Languages"
 }
-
-
