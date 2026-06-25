@@ -19,28 +19,31 @@ class SettingsGroupWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(
-            left: 4.w,
-            bottom: 12.h,
+          padding:       EdgeInsets.only(
+            left: 8.0.w,
+            right: 8.0.w,
+            bottom: 12.0.h,
           ),
           child: Text(
             title.toUpperCase(),
-            style: AppTextStyle.labelMedium.copyWith(
+            style: AppTextStyle.labelSmall.copyWith(
               color: AppColors.of(context).primary,
               fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-              fontSize: 12.sp,
+              letterSpacing: 1.2,
             ),
           ),
         ),
         Container(
           decoration: BoxDecoration(
             color: AppColors.of(context).surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(
-              color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
-              width: 1,
-            ),
+            borderRadius: BorderRadius.circular(12.r),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.of(context).onSurface.withValues(alpha: 0.02),
+                blurRadius: 32,
+                offset: const Offset(0, 12),
+              ),
+            ],
           ),
           clipBehavior: Clip.antiAlias,
           child: Column(children: items),
