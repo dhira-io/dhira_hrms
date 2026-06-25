@@ -31,19 +31,16 @@ class _CommonWebViewScreenState extends State<CommonWebViewScreen> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
-            if (!mounted) return;
             setState(() {
               _progress = progress / 100;
             });
           },
           onPageStarted: (String url) {
-            if (!mounted) return;
             setState(() {
               _isLoading = true;
             });
           },
           onPageFinished: (String url) {
-            if (!mounted) return;
             setState(() {
               _isLoading = false;
             });
@@ -61,7 +58,7 @@ class _CommonWebViewScreenState extends State<CommonWebViewScreen> {
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
       appBar: AppBar(
-        backgroundColor: AppColors.of(context).surfaceContainerLowest,
+        backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(

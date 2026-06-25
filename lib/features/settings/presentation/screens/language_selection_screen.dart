@@ -43,58 +43,29 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: AppColors.of(context).background,
-      appBar: AppBar(
-        backgroundColor: AppColors.of(context).surfaceContainerLowest,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.chevron_left,
-            color: AppColors.of(context).onSurface,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          l10n.language,
-          style: TextStyle(
-            color: AppColors.of(context).onSurface,
-            fontWeight: FontWeight.bold,
-            fontSize: 18.sp,
-          ),
-        ),
-        centerTitle: false,
-        titleSpacing: 0,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+      backgroundColor: AppColors.of(context).surfaceContainerLow,
+      appBar: CommonAppBar(title: l10n.language),
+      body: Padding(
+        padding:       EdgeInsets.all(24.0.w),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Search Bar
             Container(
               decoration: BoxDecoration(
-                color: AppColors.of(context).surfaceContainerLowest,
+                color: AppColors.of(context).surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(
-                  color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
-                  width: 1,
-                ),
               ),
               child: TextField(
                 controller: _searchController,
                 onChanged: (val) => setState(() => _searchQuery = val),
                 decoration: InputDecoration(
                   hintText: l10n.searchLanguage,
-                  hintStyle: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.of(context).outline,
-                  ),
                   prefixIcon: Icon(
                     Icons.search,
-                    color: AppColors.of(context).outline,
+                    color: AppColors.of(context).onSurfaceVariant,
                   ),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
+                  contentPadding:       EdgeInsets.symmetric(
                     horizontal: 16.w,
                     vertical: 12.h,
                   ),
@@ -102,109 +73,71 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 style: AppTextStyle.bodyMedium,
               ),
             ),
-            SizedBox(height: 24.h),
-            
-            Padding(
-              padding: EdgeInsets.only(left: 4.w, bottom: 12.h),
-              child: Text(
-                l10n.availableLanguages.toUpperCase(),
-                style: AppTextStyle.labelMedium.copyWith(
-                  color: AppColors.of(context).onSurfaceVariant,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                  fontSize: 12.sp,
-                ),
-              ),
-            ),
-
+                  SizedBox(height: 24.h),
             // Language List
             Container(
               decoration: BoxDecoration(
                 color: AppColors.of(context).surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(16.r),
-                border: Border.all(
-                  color: AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
-                  width: 1,
-                ),
+                borderRadius: BorderRadius.circular(12.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.of(
+                      context,
+                    ).onSurface.withValues(alpha: 0.06),
+                    blurRadius: 32,
+                    offset: const Offset(0, 12),
+                  ),
+                ],
               ),
-              child: Column(
-                children: List.generate(filteredLanguages.length, (index) {
-                  final lang = filteredLanguages[index];
-                  final isSelected = currentLocale.languageCode == lang['code'];
-                  final showDivider = index < filteredLanguages.length - 1;
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.r),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: filteredLanguages.length,
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1.h,
+                    indent: 24,
+                    endIndent: 24,
+                    color: AppColors.of(context).surfaceContainerHighest,
+                  ),
+                  itemBuilder: (context, index) {
+                    final lang = filteredLanguages[index];
+                    final isSelected =
+                        currentLocale.languageCode == lang['code'];
 
-                  String subtitle = '';
-                  if (lang['code'] == 'en') {
-                    subtitle = 'English • United States';
-                  } else if (lang['code'] == 'hi') {
-                    subtitle = 'Hindi • India';
-                  }
-
-                  return Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          localeCubit.changeLanguage(lang['code']!);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 16.h,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      lang['name']!,
-                                      style: AppTextStyle.bodyMedium.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.of(context).onSurface,
-                                      ),
-                                    ),
-                                    if (subtitle.isNotEmpty)
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 4.h),
-                                        child: Text(
-                                          subtitle,
-                                          style: AppTextStyle.bodySmall.copyWith(
-                                            color: AppColors.of(context).outline,
-                                            fontSize: 11.sp,
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
+                    return InkWell(
+                      onTap: () {
+                        localeCubit.changeLanguage(lang['code']!);
+                      },
+                      child: Padding(
+                        padding:       EdgeInsets.symmetric(
+                          horizontal: 24.w,
+                          vertical: 16.h,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              lang['name']!,
+                              style: AppTextStyle.bodyMedium.copyWith(
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
+                                color: AppColors.of(context).onSurface,
                               ),
-                              Container(
-                                width: 22.w,
-                                height: 22.h,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: isSelected
-                                        ? const Color(0xFF8B5CF6)
-                                        : AppColors.of(context).outlineVariant,
-                                    width: isSelected ? 6.w : 2.w,
-                                  ),
-                                ),
+                            ),
+                            if (isSelected)
+                              Icon(
+                                Icons.check,
+                                color: AppColors.of(context).primary,
+                                size: 20,
                               ),
-                            ],
-                          ),
+                          ],
                         ),
                       ),
-                      if (showDivider)
-                        Divider(
-                          height: 1.h,
-                          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.1),
-                          indent: 16.w,
-                          endIndent: 16.w,
-                        ),
-                    ],
-                  );
-                }),
+                    );
+                  },
+                ),
               ),
             ),
           ],

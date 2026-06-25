@@ -38,8 +38,6 @@
   "leave": "छुट्टी",
   "team": "टीम",
   "settings": "सेटिंग्स",
-  "appearanceSettings": "दिखावट सेटिंग्स",
-  "availableLanguages": "उपलब्ध भाषाएं",
   "department": "विभाग",
   "location": "स्थान",
   "priority": "प्राथमिकता",
@@ -2176,7 +2174,7 @@
     "hours": "घंटे",
     "supportingDocOptional": "सहायक दस्तावेज़ (वैकल्पिक)",
     "noSubject": "कोई विषय नहीं",
-    "newNotification": "नई अधिसूचना",
-    "appearanceSettings": "दिखावट सेटिंग्स",
-    "availableLanguages": "उपलब्ध भाषाएं"
+    "newNotification": "नई अधिसूचना"
 }
+
+
