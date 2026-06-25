@@ -90,9 +90,9 @@ class AppTextStyle {
 
   // Labels
   static TextStyle get labelLargeOne =>
-      GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w600);
+      GoogleFonts.inter(fontSize: 14.sp, fontWeight: FontWeight.w500);
   static TextStyle get labelLarge =>
-      GoogleFonts.inter(fontSize: 13.sp, fontWeight: FontWeight.w600);
+      GoogleFonts.inter(fontSize: 13.sp, fontWeight: FontWeight.w500);
   static TextStyle get labelMedium =>
       GoogleFonts.inter(fontSize: 12.sp, fontWeight: FontWeight.w500);
   static TextStyle get labelMediumOne =>

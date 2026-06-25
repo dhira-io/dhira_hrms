@@ -59,14 +59,16 @@ class ApprovalsFilterSection extends StatelessWidget {
               // Search Bar
               Container(
                 height: 36.h,
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   color: colors.surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(AppConstants.r8),
                   border: Border.all(
-                    color: colors.tableBorder,
+                    color: colors.outline,
                   ),
                 ),
                 child: TextField(
+                  textAlignVertical: TextAlignVertical.center,
                   onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
                   onChanged: (value) {
                     context.read<ApprovalsBloc>().add(
@@ -74,19 +76,33 @@ class ApprovalsFilterSection extends StatelessWidget {
                         );
                   },
                   decoration: InputDecoration(
+                    filled: false,
                     hintText: l10n.searchByDateName,
                     hintStyle: AppTextStyle.bodyMedium.copyWith(
                       color: colors.onSurfaceVariant,
                     ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: colors.onSurfaceVariant,
-                      size: 20.sp,
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.only(left: 8.w, right: 6.w),
+                      child: Icon(
+                        Icons.search,
+                        color: colors.onSurfaceVariant,
+                        size: 20.w,
+                      ),
+                    ),
+                    prefixIconConstraints: BoxConstraints(
+                      minWidth: 34.w,
+                      maxHeight: 36.h,
                     ),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: AppConstants.p12,
-                      vertical: 8.h,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
+                    isDense: true,
+                    contentPadding: EdgeInsets.only(
+                      right: AppConstants.p12,
+                      top: 8.h,
+                      bottom: 8.h,
                     ),
                   ),
                 ),
@@ -101,7 +117,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                       children: [
                         Text(
                           l10n.typeLabel,
-                          style: AppTextStyle.labelSmall.copyWith(
+                          style: AppTextStyle.labelLarge.copyWith(
                             color: colors.username,
                             fontWeight: FontWeight.bold,
                           ),
@@ -127,7 +143,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                                   value: type,
                                   child: Text(
                                     _getTypeLabel(type, context),
-                                    style: AppTextStyle.bodySmall.copyWith(
+                                    style: AppTextStyle.labelLarge.copyWith(
                                       color: colors.onSurface,
                                     ),
                                   ),
@@ -156,7 +172,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                       children: [
                         Text(
                           l10n.statusLabel,
-                          style: AppTextStyle.labelSmall.copyWith(
+                          style: AppTextStyle.labelLarge.copyWith(
                             color: colors.username,
                             fontWeight: FontWeight.bold,
                           ),
@@ -182,7 +198,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                                   value: status,
                                   child: Text(
                                     status,
-                                    style: AppTextStyle.bodySmall.copyWith(
+                                    style: AppTextStyle.labelLarge.copyWith(
                                       color: colors.onSurface,
                                     ),
                                   ),
