@@ -4,6 +4,7 @@ import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 
 class CalendarViewWidget extends StatelessWidget {
   final DateTime focusedMonth;
@@ -223,6 +224,10 @@ class _CalendarGridCard extends StatelessWidget {
               );
             },
           ),
+          SizedBox(height: 16.h),
+          Divider(color: AppColors.of(context).outlineVariant, height: 1.h),
+          SizedBox(height: 12.h),
+          const _HorizontalLegendsRow(),
         ],
       ),
     );
@@ -249,7 +254,7 @@ class _CalendarDayCell extends StatelessWidget {
     // Style configurations based on status
     Color backgroundColor = AppColors.of(context).surface;
     Color textColor = AppColors.of(context).onSurface;
-    Color borderColor = Colors.transparent;
+    Color borderColor = AppColors.of(context).outlineVariant;
     Color? dotColor;
 
     if (status != null) {
@@ -278,6 +283,7 @@ class _CalendarDayCell extends StatelessWidget {
         backgroundColor = AppColors.of(context).weekendBg;
         textColor = AppColors.of(context).weekendText;
         borderColor = AppColors.of(context).weekendText;
+        dotColor = AppColors.of(context).weekendText;
       } else if (s == 'half day' || s == 'half-day') {
         backgroundColor = AppColors.of(context).halfDayBg;
         textColor = AppColors.of(context).halfDayText;
@@ -287,6 +293,8 @@ class _CalendarDayCell extends StatelessWidget {
     } else if (DateTimeUtils.isWeekend(day)) {
       backgroundColor = AppColors.of(context).weekendBg;
       textColor = AppColors.of(context).weekendText;
+      borderColor = AppColors.of(context).weekendText;
+      dotColor = AppColors.of(context).weekendText;
     }
 
     if (isToday) {
@@ -301,7 +309,7 @@ class _CalendarDayCell extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppConstants.r8),
           border: isSelected 
               ? Border.all(color: AppColors.of(context).primary, width: 2.w)
-              : (borderColor != Colors.transparent ? Border.all(color: borderColor, width: 1.w) : null),
+              : Border.all(color: borderColor, width: 1.w),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -328,6 +336,67 @@ class _CalendarDayCell extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _HorizontalLegendsRow extends StatelessWidget {
+  const _HorizontalLegendsRow();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final themeColors = AppColors.of(context);
+
+    return Wrap(
+      spacing: 10.w,
+      runSpacing: 8.h,
+      alignment: WrapAlignment.center,
+      children: [
+        _LegendItem(color: themeColors.presentText, label: l10n.present),
+        _LegendItem(color: themeColors.leaveText, label: l10n.leave),
+        _LegendItem(color: themeColors.absentText, label: l10n.absent),
+        _LegendItem(color: themeColors.halfDayText, label: l10n.halfDay),
+        _LegendItem(color: themeColors.weekendText, label: l10n.weekend),
+        _LegendItem(color: themeColors.holidayText, label: l10n.holiday),
+      ],
+    );
+  }
+}
+
+class _LegendItem extends StatelessWidget {
+  final Color color;
+  final String label;
+
+  const _LegendItem({
+    required this.color,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 8.w,
+          height: 8.w,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        SizedBox(width: 6.w),
+        Text(
+          label,
+          style: AppTextStyle.bodySmall.copyWith(
+            color: AppColors.of(context).onSurfaceVariant,
+            fontWeight: FontWeight.w500,
+            fontSize: 12.sp,
+          ),
+        ),
+      ],
     );
   }
 }

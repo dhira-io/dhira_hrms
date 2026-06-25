@@ -13,6 +13,7 @@ class CalendarSummaryEntity with _$CalendarSummaryEntity {
     required int totalWorkingDays,
     required double attendancePercentage,
     required List<CalendarHolidayDetailEntity> holidayDetails,
+    double? totalWorkingHours,
   }) = _CalendarSummaryEntity;
 }
 

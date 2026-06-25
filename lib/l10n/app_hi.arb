@@ -2131,7 +2131,8 @@
     "newNotification": "नई अधिसूचना",
     "calendarSubtitle": "अपना कैलेंडर, छुट्टी की शेष राशि, इतिहास और सारांश देखें।",
     "monthlySummary": "मासिक सारांश",
-    "totalHoursLabel": "कुल घंटे"
+    "totalHoursLabel": "कुल घंटे",
+    "weeklyOff": "साप्ताहिक अवकाश"
 }
 
 

@@ -17,6 +17,7 @@ class CalendarSummaryModel with _$CalendarSummaryModel {
     @JsonKey(name: 'total_working_days') required int totalWorkingDays,
     @JsonKey(name: 'attendance_percentage') required double attendancePercentage,
     @JsonKey(name: 'holiday_details') required List<CalendarHolidayDetailModel> holidayDetails,
+    @JsonKey(name: 'total_working_hours') double? totalWorkingHours,
   }) = _CalendarSummaryModel;
 
   const CalendarSummaryModel._();
@@ -34,6 +35,7 @@ class CalendarSummaryModel with _$CalendarSummaryModel {
       totalWorkingDays: totalWorkingDays,
       attendancePercentage: attendancePercentage,
       holidayDetails: holidayDetails.map((e) => e.toEntity()).toList(),
+      totalWorkingHours: totalWorkingHours,
     );
   }
 }

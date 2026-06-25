@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
+import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_bloc.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_event.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_state.dart';
-import 'calendar_header_widget.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'calendar_view_widget.dart';
-import 'calendar_legend_widget.dart';
 import 'calendar_summary_widget.dart';
 import 'calendar_skeleton_widget.dart';
 import 'calendar_error_widget.dart';
@@ -18,12 +19,23 @@ class CalendarBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
+      appBar: CommonAppBar(
+        title: l10n.calendar,
+        subtitle: l10n.calendarSubtitle,
+        onBack: () {
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          } else {
+            context.read<BottomNavCubit>().changeIndex(BottomNavCubit.homeIndex);
+          }
+        },
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            const CalendarHeaderWidget(),
             Expanded(
               child: BlocBuilder<CalendarBloc, CalendarState>(
                 builder: (context, state) {
@@ -65,8 +77,6 @@ class CalendarBodyWidget extends StatelessWidget {
                                     );
                                   },
                                 ),
-                                SizedBox(height: 16.h),
-                                const CalendarLegendWidget(),
                                 SizedBox(height: 16.h),
                                 CalendarSummaryWidget(summary: summary),
                               ],

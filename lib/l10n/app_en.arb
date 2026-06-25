@@ -75,7 +75,7 @@
   "selectedRows": "{count} row(s) selected",
   "leavesRejected": "Leaves Rejected",
   "daysLabel": "Days",
-  "halfDay": "Half Day",
+  "halfDay": "Half day",
   "halfDayDate": "Half Day Date",
   "fromDate": "From Date",
   "toDate": "To Date",
@@ -2297,7 +2297,8 @@
     "newNotification": "New Notification",
     "calendarSubtitle": "See your calendar, leave balance, history, and summary.",
     "monthlySummary": "Monthly Summary",
-    "totalHoursLabel": "Total Hours"
+    "totalHoursLabel": "Total Hours",
+    "weeklyOff": "Weekly Off"
 }
 
 

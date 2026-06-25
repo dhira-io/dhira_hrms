@@ -12,8 +12,8 @@ class AppColors {
   static const Color username = Color(0xFF111827);
 
   // Neutral Palette
-  static const Color background = Color(0xFFF8F9FA);
-  static const Color surface = Color(0xFFF8F9FA);
+  static const Color background = Color(0xFFF1F5F9);
+  static const Color surface = Color(0xFFFFFFFF);
   static const Color onSurface = Color(0xFF191C1D);
   static const Color surfaceContainerLowest = Color(0xFFFFFFFF);
   static const Color surfaceContainerLow = Color(0xFFF3F4F5);
@@ -168,15 +168,15 @@ class AppColors {
 
   // Attendance Status Colors
   static const Color presentText = Color(0xFF00A63E);
-  static const Color presentBg = Color(0xFFDCFCE7);
-  static const Color holidayText = Color(0xFF9810FA);
-  static const Color holidayBg = Color(0xFFF3E8FF);
-  static const Color leaveText = Color(0xFF0084D1);
-  static const Color leaveBg = Color(0xFFDFF2FE);
+  static const Color presentBg = Color(0xFFF0FDF4);
+  static const Color holidayText = Color(0xFF8E51FF);
+  static const Color holidayBg = Color(0xFFEDE9FE);
+  static const Color leaveText = Color(0xFF51A2FF);
+  static const Color leaveBg = Color(0xFFEFF6FF);
   static const Color absentText = Color(0xFFE7000B);
   static const Color absentBg = Color(0xFFFFE2E2);
-  static const Color weekendText = Color(0xFF4A5565);
-  static const Color weekendBg = Color(0xFFF4F4F5);
+  static const Color weekendText = Color(0xFFA1A1A1);
+  static const Color weekendBg = Color(0xFFF5F5F5);
   static const Color slateBg = Color(0xFFF1F5F9);
   static const Color slateBorder = Color(0xFFCAD5E2);
   static const Color slateText = Color(0xFF64748B);
@@ -200,8 +200,8 @@ class AppColors {
   static const Color monthSummaryHolidayText = Color(0xFF6B21A8);
 
   // Legend Item Colors
-  static const Color halfDayText = Color(0xFF9A3412);
-  static const Color halfDayBg = Color(0xFFFFF7ED);
+  static const Color halfDayText = Color(0xFFEFB100);
+  static const Color halfDayBg = Color(0xFFFEFCE8);
 
   // Leave Status Colors
   static const Color approvedBg = Color(0xFFDCFCE7);

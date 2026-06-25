@@ -25,7 +25,7 @@ class _CalendarSummaryWidgetState extends State<CalendarSummaryWidget> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
-    final totalHours = widget.summary.presentDays * 9.5;
+    final totalHours = widget.summary.totalWorkingHours ?? (widget.summary.presentDays * 9.5);
     final totalHoursStr = totalHours % 1 == 0 
         ? '${totalHours.toInt()}h' 
         : '${totalHours.toStringAsFixed(1)}h';
