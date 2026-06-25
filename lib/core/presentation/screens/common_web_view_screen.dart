@@ -62,7 +62,7 @@ class _CommonWebViewScreenState extends State<CommonWebViewScreen> {
       backgroundColor: AppColors.of(context).background,
       appBar: AppBar(
         backgroundColor: AppColors.of(context).surfaceContainerLowest,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.of(context).transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(

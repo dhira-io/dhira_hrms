@@ -185,7 +185,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     color: isSelected
-                                        ? const Color(0xFF8B5CF6)
+                                        ? AppColors.of(context).brandPurple
                                         : AppColors.of(context).outlineVariant,
                                     width: isSelected ? 6.w : 2.w,
                                   ),

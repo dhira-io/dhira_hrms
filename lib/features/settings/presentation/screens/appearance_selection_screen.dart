@@ -123,47 +123,47 @@ class _ThemeCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
             color: isSelected
-                ? const Color(0xFF3B82F6).withValues(alpha: 0.5)
+                ? AppColors.of(context).primaryContainer.withValues(alpha: 0.5)
                 : AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
             width: isSelected ? 1.5 : 1,
           ),
           boxShadow: isSelected 
             ? [
                 BoxShadow(
-                  color: const Color(0xFF3B82F6).withValues(alpha: 0.05),
+                  color: AppColors.of(context).primaryContainer.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 )
               ]
             : null,
         ),
-        child: Row(
-          children: [
-            // Preview Image
-            SizedBox(
-              width: 80.w,
-              height: 60.h,
-              child: preview,
-            ),
-            SizedBox(width: 16.w),
-            // Icon
-            Container(
-              width: 32.w,
-              height: 32.h,
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? const Color(0xFF3B82F6).withValues(alpha: 0.1)
-                    : AppColors.of(context).surfaceContainerHigh.withValues(alpha: 0.5),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                color: isSelected
-                    ? const Color(0xFF3B82F6)
-                    : AppColors.of(context).outline,
-                size: 16,
-              ),
-            ),
+            child: Row(
+              children: [
+                // Preview Image
+                SizedBox(
+                  width: 80.w,
+                  height: 60.h,
+                  child: preview,
+                ),
+                SizedBox(width: 16.w),
+                // Icon
+                Container(
+                  width: 32.w,
+                  height: 32.h,
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AppColors.of(context).primaryContainer.withValues(alpha: 0.1)
+                        : AppColors.of(context).surfaceContainerHigh.withValues(alpha: 0.5),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    icon,
+                    color: isSelected
+                        ? AppColors.of(context).primaryContainer
+                        : AppColors.of(context).outline,
+                    size: 16,
+                  ),
+                ),
             SizedBox(width: 12.w),
             // Text Content
             Expanded(
@@ -196,7 +196,7 @@ class _ThemeCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: isSelected
-                      ? const Color(0xFF8B5CF6)
+                      ? AppColors.of(context).brandPurple
                       : AppColors.of(context).outlineVariant,
                   width: isSelected ? 6.w : 2.w,
                 ),
@@ -252,9 +252,9 @@ class _ThemePreview extends StatelessWidget {
 
   Widget _buildPreviewContent(BuildContext context, bool dark) {
     final bgColor = dark ? const Color(0xFF2C2E30) : const Color(0xFFF1F3F5);
-    final cardColor = dark ? const Color(0xFF1E1F21) : Colors.white;
+    final cardColor = dark ? const Color(0xFF1E1F21) : AppColors.of(context).surfaceContainerLowest;
     final itemColor = dark
-        ? Colors.white.withValues(alpha: 0.1)
+        ? AppColors.of(context).white.withValues(alpha: 0.1)
         : AppColors.of(context).surfaceContainerHighest;
     final accentItemColor = dark
         ? AppColors.of(context).primary.withValues(alpha: 0.4)
@@ -290,7 +290,7 @@ class _ThemePreview extends StatelessWidget {
                 boxShadow: [
                   if (!dark)
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
+                      color: AppColors.of(context).black.withValues(alpha: 0.05),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),

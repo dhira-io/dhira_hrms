@@ -64,7 +64,7 @@ class SettingsBody extends StatelessWidget {
                   SettingsItemWidget(
                     icon: Icons.palette_outlined,
                     title: l10n.appearance,
-                    iconColor: const Color(0xFF8B5CF6),
+                    iconColor: AppColors.of(context).brandPurple,
                     value: context.watch<ThemeCubit>().state == ThemeMode.light
                         ? l10n.lightMode
                         : context.watch<ThemeCubit>().state == ThemeMode.dark
@@ -112,7 +112,7 @@ class SettingsBody extends StatelessWidget {
                   SettingsItemWidget(
                     icon: Icons.help_outline,
                     title: l10n.helpCenter,
-                    iconColor: const Color(0xFF8B5CF6),
+                    iconColor: AppColors.of(context).brandPurple,
                     onTap: () {
                       context.push(
                         AppRouter.commonWebViewPath,
