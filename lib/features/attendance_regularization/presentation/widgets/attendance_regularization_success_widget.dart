@@ -56,7 +56,7 @@ class AttendanceRegularizationSuccessWidget extends StatelessWidget {
           Text(
             l10n.regularizationSuccessDesc,
             textAlign: TextAlign.center,
-            style: AppTextStyle.bodyMediumWithHeight.copyWith(
+            style: AppTextStyle.bodyMedium.copyWith(
               color: themeColors.textSecondary,
             ),
           ),

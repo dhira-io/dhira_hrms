@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
+import '../../data/constants/attendance_regularization_api_constants.dart';
 import '../bloc/attendance_regularization_state.dart';
 
 class AttendanceRegularizationBottomActions extends StatelessWidget {
@@ -22,21 +23,21 @@ class AttendanceRegularizationBottomActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentStep = state.currentStep;
-    if (currentStep == 2) return const SizedBox.shrink();
+    if (currentStep == AttendanceRegularizationSteps.confirmation) return const SizedBox.shrink();
 
     final colors = AppColors.of(context);
     final isSubmitting = state.isSubmitting;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: EdgeInsets.fromLTRB(16.w, 5.h, 16.w, 5.h),
       decoration: BoxDecoration(
         color: colors.surfaceContainerLowest,
         border: Border(
-          top: BorderSide(color: colors.slate200, width: 1.w),
+          top: BorderSide(color: colors.tableBorder),
         ),
       ),
       child: SafeArea(
-        child: currentStep == 0
+        child: currentStep == AttendanceRegularizationSteps.enterDetails
             ? _Step1Actions(
                 canContinue: state.formData.canContinue,
                 onNext: onNext,
@@ -61,13 +62,15 @@ class _Step1Actions extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return CommonButton(
-      text: l10n.nextText,
-      onPressed: canContinue ? onNext : null,
+    return SizedBox(
+      height: 38.h,
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 16.w),
-      borderRadius: 6.r,
-      fontWeight: FontWeight.w500,
+      child: CommonButton(
+        text: l10n.nextText,
+        onPressed: canContinue ? onNext : null,
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+      ),
     );
   }
 }
@@ -91,25 +94,29 @@ class _Step2Actions extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CommonButton(
-          text: l10n.editDetails,
-          onPressed: isSubmitting ? null : onPrevious,
-          variant: ButtonVariant.outlined,
+        SizedBox(
+          height: 38.h,
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 16.w),
-          borderRadius: 6.r,
-          fontWeight: FontWeight.w500,
-          textColor: colors.textPrimary,
+          child: CommonButton(
+            text: l10n.editDetails,
+            onPressed: isSubmitting ? null : onPrevious,
+            variant: ButtonVariant.outlined,
+            width: double.infinity,
+            textColor: colors.textPrimary,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+          ),
         ),
         SizedBox(height: 6.h),
-        CommonButton(
-          text: l10n.submitRequest,
-          onPressed: isSubmitting ? null : onSubmit,
-          isLoading: isSubmitting,
+        SizedBox(
+          height: 38.h,
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 16.w),
-          borderRadius: 6.r,
-          fontWeight: FontWeight.w500,
+          child: CommonButton(
+            text: l10n.submitRequest,
+            onPressed: isSubmitting ? null : onSubmit,
+            isLoading: isSubmitting,
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+          ),
         ),
       ],
     );

@@ -59,7 +59,7 @@ class AttendanceRegularizationReviewWidget extends StatelessWidget {
           children: [
             Text(
               formData.reason,
-              style: AppTextStyle.bodyMediumWithHeight.copyWith(
+              style: AppTextStyle.bodyMedium.copyWith(
                 color: themeColors.textPrimary,
               ),
             ),
@@ -157,8 +157,9 @@ class AttendanceRegularizationReviewCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppTextStyle.labelLargeBold.copyWith(
+            style: AppTextStyle.headingSmallThree.copyWith(
               color: themeColors.textPrimary,
+              fontWeight: FontWeight.w700,
             ),
           ),
           SizedBox(height: 6.h),

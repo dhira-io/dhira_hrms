@@ -299,15 +299,16 @@ class AttendanceRegularizationFormLabel extends StatelessWidget {
     return RichText(
       text: TextSpan(
         text: label,
-        style: AppTextStyle.bodyMediumSemibold.copyWith(
+        style: AppTextStyle.titleSmallOne.copyWith(
           color: themeColors.textPrimary,
         ),
         children: isRequired
             ? [
                 TextSpan(
                   text: ' *',
-                  style: AppTextStyle.bodyMediumBold.copyWith(
+                  style: AppTextStyle.headingSmallThree.copyWith(
                     color: themeColors.error,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ]
@@ -352,7 +353,7 @@ class AttendanceRegularizationReasonTypeButton extends StatelessWidget {
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: AppTextStyle.bodyMediumSemibold.copyWith(
+          style: AppTextStyle.titleSmallOne.copyWith(
             color: isSelected ? themeColors.primary : themeColors.textPrimary,
           ),
         ),
@@ -605,8 +606,8 @@ class AttendanceRegularizationAttachmentSection extends StatelessWidget {
       children: [
         Text(
           l10n.supportingDocOptional,
-          style: AppTextStyle.bodySmallSemibold.copyWith(
-            color: themeColors.textSecondary,
+          style: AppTextStyle.titleSmallOne.copyWith(
+            color: themeColors.textPrimary,
           ),
         ),
         SizedBox(height: 4.h),

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
+import 'package:dhira_hrms/features/attendance_regularization/data/constants/attendance_regularization_api_constants.dart';
 import 'package:dhira_hrms/features/attendance_regularization/presentation/bloc/attendance_regularization_bloc.dart';
 import 'package:dhira_hrms/features/attendance_regularization/presentation/bloc/attendance_regularization_state.dart';
 
@@ -69,8 +70,8 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
                   _StepItem(
                     stepNum: 1,
                     title: l10n.step1EnterDetails,
-                    isActive: currentStep == 0,
-                    isCompleted: currentStep > 0,
+                    isActive: currentStep == AttendanceRegularizationSteps.enterDetails,
+                    isCompleted: currentStep > AttendanceRegularizationSteps.enterDetails,
                     primaryColor: primaryColor,
                     textColor: textColor,
                     mutedColor: mutedColor,
@@ -78,8 +79,8 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
                   _StepItem(
                     stepNum: 2,
                     title: l10n.step2ReviewDetails,
-                    isActive: currentStep == 1,
-                    isCompleted: currentStep > 1,
+                    isActive: currentStep == AttendanceRegularizationSteps.reviewDetails,
+                    isCompleted: currentStep > AttendanceRegularizationSteps.reviewDetails,
                     primaryColor: primaryColor,
                     textColor: textColor,
                     mutedColor: mutedColor,
@@ -87,7 +88,7 @@ class AttendanceRegularizationStepperWidget extends StatelessWidget {
                   _StepItem(
                     stepNum: 3,
                     title: l10n.step3Confirmation,
-                    isActive: currentStep == 2,
+                    isActive: currentStep == AttendanceRegularizationSteps.confirmation,
                     isCompleted: false, // Step 3 is final active
                     primaryColor: primaryColor,
                     textColor: textColor,
@@ -216,7 +217,7 @@ class _StepItem extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: AppTextStyle.bodySmallSemibold.copyWith(
+            style: AppTextStyle.labelSmall.copyWith(
               color: isActive || isCompleted ? textColor : mutedColor,
             ),
           ),

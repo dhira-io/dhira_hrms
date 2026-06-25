@@ -19,3 +19,9 @@ class AttendanceRegularizationRequestTypeConstants {
   static const String networkIssue = 'network_issue';
   static const String onFieldDuty = 'on_field_duty';
 }
+
+class AttendanceRegularizationSteps {
+  static const int enterDetails = 0;
+  static const int reviewDetails = 1;
+  static const int confirmation = 2;
+}

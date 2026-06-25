@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../data/constants/attendance_regularization_api_constants.dart';
 import '../bloc/attendance_regularization_state.dart';
 import 'attendance_regularization_form_widget.dart';
 import 'attendance_regularization_review_widget.dart';
@@ -23,7 +24,7 @@ class AttendanceRegularizationContentState extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentStep = state.currentStep;
 
-    if (currentStep == 2) {
+    if (currentStep == AttendanceRegularizationSteps.confirmation) {
       return AttendanceRegularizationSuccessWidget(
         onMyRequests: onMyRequestsPressed,
         onBackToHome: onBackToHomePressed,
@@ -33,7 +34,7 @@ class AttendanceRegularizationContentState extends StatelessWidget {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       padding: EdgeInsets.fromLTRB(16.w, 6.h, 16.w, 18.h),
-      child: currentStep == 1
+      child: currentStep == AttendanceRegularizationSteps.reviewDetails
           ? AttendanceRegularizationReviewWidget(
               formData: state.formData,
               managerName: state.managerName,

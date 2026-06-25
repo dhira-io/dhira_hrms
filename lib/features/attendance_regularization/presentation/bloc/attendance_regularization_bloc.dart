@@ -11,6 +11,7 @@ import 'package:dhira_hrms/features/attendance_regularization/domain/usecases/up
 import 'package:dhira_hrms/features/attendance_regularization/domain/usecases/get_regularization_punch_summary_usecase.dart';
 import 'attendance_regularization_event.dart';
 import 'attendance_regularization_state.dart';
+import 'package:dhira_hrms/features/attendance_regularization/data/constants/attendance_regularization_api_constants.dart';
 
 class AttendanceRegularizationBloc
     extends Bloc<AttendanceRegularizationEvent, AttendanceRegularizationState> {
@@ -316,7 +317,7 @@ class AttendanceRegularizationBloc
     emit(
       state.copyWith(
         status: AttendanceRegularizationStatus.initial,
-        currentStep: 1,
+        currentStep: AttendanceRegularizationSteps.reviewDetails,
         errorMessage: null,
         validationError: null,
       ),
@@ -330,7 +331,7 @@ class AttendanceRegularizationBloc
     emit(
       state.copyWith(
         status: AttendanceRegularizationStatus.initial,
-        currentStep: 0,
+        currentStep: AttendanceRegularizationSteps.enterDetails,
         errorMessage: null,
         validationError: null,
       ),
@@ -382,7 +383,7 @@ class AttendanceRegularizationBloc
         state.copyWith(
           status: AttendanceRegularizationStatus.success,
           successKind: AttendanceRegularizationSuccessKind.submission,
-          currentStep: 2,
+          currentStep: AttendanceRegularizationSteps.confirmation,
           loadingKind: null,
         ),
       ),
