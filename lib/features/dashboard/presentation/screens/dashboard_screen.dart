@@ -1,4 +1,4 @@
-import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_screen.dart';
+import 'package:dhira_hrms/features/calendar/presentation/screens/calendar_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_event.dart';
 import 'package:dhira_hrms/features/dashboard/presentation/bloc/dashboard_cubit.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +93,7 @@ class _DashboardViewState extends State<DashboardView> {
               index: state,
               children: [
                 const HomeScreen(),
-                const AttendanceScreen(),
+                const CalendarScreen(),
                 const ApprovalsScreen(),
                 const SettingsScreen(),
               ],

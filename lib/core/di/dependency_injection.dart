@@ -1,4 +1,10 @@
 import 'package:dhira_hrms/features/approvals/domain/usecases/get_pending_requests_usecase.dart';
+import 'package:dhira_hrms/features/calendar/data/datasources/calendar_remote_datasource.dart';
+import 'package:dhira_hrms/features/calendar/data/repositories/calendar_repository_impl.dart';
+import 'package:dhira_hrms/features/calendar/domain/repositories/i_calendar_repository.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_calendar_events_usecase.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_calendar_summary_usecase.dart';
+import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_bloc.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_punch_summary_usecase.dart';
@@ -1252,5 +1258,34 @@ class DependencyInjection {
       fenix: true,
     );
     // PolicyPdfCubit is instantiated manually in the bottom sheet, so it's not registered here.
+
+    // Calendar Feature
+    Get.lazyPut<ICalendarRemoteDataSource>(
+      () => CalendarRemoteDataSourceImpl(dioClient: Get.find()),
+      fenix: true,
+    );
+    Get.lazyPut<ICalendarRepository>(
+      () => CalendarRepositoryImpl(
+        remoteDataSource: Get.find(),
+        networkInfo: Get.find(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetCalendarMonthEventsUseCase>(
+      () => GetCalendarMonthEventsUseCase(Get.find()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCalendarSummaryUseCase>(
+      () => GetCalendarSummaryUseCase(Get.find()),
+      fenix: true,
+    );
+    Get.lazyPut<CalendarBloc>(
+      () => CalendarBloc(
+        getCalendarEventsUseCase: Get.find<GetCalendarMonthEventsUseCase>(),
+        getCalendarSummaryUseCase: Get.find<GetCalendarSummaryUseCase>(),
+        localStorageService: Get.find(),
+      ),
+      fenix: true,
+    );
   }
 }

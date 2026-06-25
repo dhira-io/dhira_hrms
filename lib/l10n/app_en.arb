@@ -2294,7 +2294,10 @@
     "pushNotificationPreferenceSuccess": "Mobile Notification Preferences updated successfully",
     "emailAlertsPreferenceSuccess": "Email Alerts Preferences updated successfully",
     "noSubject": "No Subject",
-    "newNotification": "New Notification"
+    "newNotification": "New Notification",
+    "calendarSubtitle": "See your calendar, leave balance, history, and summary.",
+    "monthlySummary": "Monthly Summary",
+    "totalHoursLabel": "Total Hours"
 }
 
 

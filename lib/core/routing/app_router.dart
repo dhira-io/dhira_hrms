@@ -32,6 +32,7 @@ import 'package:dhira_hrms/features/leave/domain/entities/leave_entity.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/profile_screen.dart';
 import 'package:dhira_hrms/features/profile/presentation/screens/change_password_screen.dart';
 import 'package:dhira_hrms/features/attendance/presentation/screens/attendance_regularization_screen.dart';
+import 'package:dhira_hrms/features/calendar/presentation/screens/calendar_screen.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_bloc.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/screens/compensatory_leave_screen.dart';
 import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
@@ -84,6 +85,7 @@ class AppRouter {
   static const String attendanceRegularizationPath =
       '/attendance-regularization';
   static const String compensatoryLeavePath = '/compensatory-leave';
+  static const String calendarPath = '/calendar';
 
   static const String performanceGoalSetupPath = '/performance-goal-setup';
   static const String performanceSelfAssessmentPath =
@@ -527,7 +529,10 @@ class AppRouter {
           child: const CompensatoryLeaveScreen(),
         ),
       ),
-
+      GoRoute(
+        path: calendarPath,
+        builder: (context, state) => const CalendarScreen(),
+      ),
       GoRoute(
         path: performanceGoalSetupPath,
         builder: (context, state) => BlocProvider.value(

@@ -2128,7 +2128,10 @@
     "pushNotificationPreferenceSuccess": "मोबाइल नोटिफिकेशन प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
     "emailAlertsPreferenceSuccess": "ईमेल अलर्ट प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
     "noSubject": "कोई विषय नहीं",
-    "newNotification": "नई अधिसूचना"
+    "newNotification": "नई अधिसूचना",
+    "calendarSubtitle": "अपना कैलेंडर, छुट्टी की शेष राशि, इतिहास और सारांश देखें।",
+    "monthlySummary": "मासिक सारांश",
+    "totalHoursLabel": "कुल घंटे"
 }
 
 
