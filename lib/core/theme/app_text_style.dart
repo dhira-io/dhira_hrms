@@ -35,11 +35,6 @@ class AppTextStyle {
   static final TextStyle h1Bold = h1.copyWith(fontWeight: FontWeight.bold);
   static final TextStyle h2Bold = h2.copyWith(fontWeight: FontWeight.bold);
   static final TextStyle h3Bold = h3.copyWith(fontWeight: FontWeight.bold);
-  static TextStyle get h2Black => TextStyle(
-    fontFamily: headingFont,
-    fontSize: 18.sp,
-    fontWeight: FontWeight.w900,
-  );
 
   //Display
   static TextStyle get displayLarge =>
