@@ -195,13 +195,12 @@ class AttendanceRegularizationFormWidget extends StatelessWidget {
               maxLength: 200,
               style: AppTextStyle.titleSmallOne.copyWith(
                 color: themeColors.textPrimary,
-                fontWeight: FontWeight.w600,
               ),
               decoration: InputDecoration(
                 filled: false,
                 fillColor: Colors.transparent,
                 hintText: l10n.reasonRegularizationHint,
-                hintStyle: AppTextStyle.titleSmallOne.copyWith(
+                hintStyle: AppTextStyle.labelMedium.copyWith(
                   color: themeColors.slate500Confirmation,
                 ),
                 border: InputBorder.none,
