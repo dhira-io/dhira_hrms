@@ -517,6 +517,7 @@ class AttendanceRegularizationRouteToHRCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final themeColors = AppColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return InkWell(
       onTap: () {
@@ -529,7 +530,7 @@ class AttendanceRegularizationRouteToHRCard extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
         decoration: BoxDecoration(
-          color: themeColors.blue50,
+          color: isDark ? themeColors.infoBg : themeColors.blue50,
           borderRadius: BorderRadius.circular(4.r),
           border: Border.all(color: themeColors.tableBorder, width: 1.w),
         ),
@@ -545,7 +546,7 @@ class AttendanceRegularizationRouteToHRCard extends StatelessWidget {
                 border: Border.all(color: themeColors.primary, width: 1.w),
               ),
               child: routeToHR
-                  ? Icon(Icons.check, size: 8.r, color: themeColors.white)
+                  ? Icon(Icons.check, size: 8.r, color: AppColors.white)
                   : null,
             ),
             SizedBox(width: 8.w),
@@ -563,7 +564,9 @@ class AttendanceRegularizationRouteToHRCard extends StatelessWidget {
                   Text(
                     l10n.routeToHRDepartmentSub,
                     style: AppTextStyle.bodyMediumOne.copyWith(
-                      color: themeColors.slate500Confirmation,
+                      color: isDark
+                          ? themeColors.textSecondary
+                          : themeColors.slate500Confirmation,
                     ),
                   ),
                 ],
