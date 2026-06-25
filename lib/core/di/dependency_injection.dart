@@ -8,7 +8,6 @@ import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_bloc.dar
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_punch_summary_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/submit_regularization_use_case.dart';
 import 'package:dhira_hrms/features/performance/data/datasources/performance_remote_datasource.dart';
 import 'package:dhira_hrms/features/performance/data/repositories/performance_repository_impl.dart';
 import 'package:dhira_hrms/features/performance/domain/repositories/i_performance_repository.dart';
@@ -102,7 +101,15 @@ import '../../features/attendance/domain/usecases/end_break_usecase.dart';
 import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart'
     as attendance_leave;
 import '../../features/attendance/presentation/bloc/attendance_bloc.dart';
-import '../../features/attendance/domain/usecases/upload_file_use_case.dart';
+
+// Redesigned Attendance Regularization Feature Imports
+import '../../features/attendance_regularization/data/datasources/attendance_regularization_remote_datasource.dart';
+import '../../features/attendance_regularization/data/repositories/attendance_regularization_repository_impl.dart';
+import '../../features/attendance_regularization/domain/repositories/i_attendance_regularization_repository.dart';
+import '../../features/attendance_regularization/domain/usecases/submit_attendance_regularization_usecase.dart';
+import '../../features/attendance_regularization/domain/usecases/upload_attendance_regularization_file_usecase.dart';
+import '../../features/attendance_regularization/domain/usecases/get_regularization_punch_summary_usecase.dart';
+import '../../features/attendance_regularization/presentation/bloc/attendance_regularization_bloc.dart';
 
 // Leave
 import '../../features/leave/domain/repositories/leave_repository.dart';
@@ -413,13 +420,34 @@ class DependencyInjection {
       () => GetHolidayListLeavePolicyUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
-    Get.lazyPut<SubmitRegularizationUseCase>(
-      () => SubmitRegularizationUseCase(Get.find<IAttendanceRepository>()),
+
+    // Redesigned Attendance Regularization Feature
+    Get.lazyPut<IAttendanceRegularizationRemoteDataSource>(
+      () => AttendanceRegularizationRemoteDataSourceImpl(dioClient: Get.find()),
       fenix: true,
     );
-    Get.lazyPut<AttendanceRegularizationUploadFileUseCase>(
-      () => AttendanceRegularizationUploadFileUseCase(
-        Get.find<IAttendanceRepository>(),
+    Get.lazyPut<IAttendanceRegularizationRepository>(
+      () => AttendanceRegularizationRepositoryImpl(
+        remoteDataSource: Get.find<IAttendanceRegularizationRemoteDataSource>(),
+        networkInfo: Get.find<NetworkInfo>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<SubmitAttendanceRegularizationUseCase>(
+      () => SubmitAttendanceRegularizationUseCase(
+        Get.find<IAttendanceRegularizationRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<UploadAttendanceRegularizationFileUseCase>(
+      () => UploadAttendanceRegularizationFileUseCase(
+        Get.find<IAttendanceRegularizationRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetRegularizationPunchSummaryUseCase>(
+      () => GetRegularizationPunchSummaryUseCase(
+        Get.find<IAttendanceRegularizationRepository>(),
       ),
       fenix: true,
     );
@@ -1072,6 +1100,15 @@ class DependencyInjection {
     Get.lazyPut<TaskBloc>(
       () => TaskBloc(getTasksUseCase: Get.find<GetTasksUseCase>()),
       fenix: true,
+    );
+    Get.create<AttendanceRegularizationBloc>(
+      () => AttendanceRegularizationBloc(
+        submitRegularizationUseCase: Get.find<SubmitAttendanceRegularizationUseCase>(),
+        uploadFileUseCase: Get.find<UploadAttendanceRegularizationFileUseCase>(),
+        getAttendancePunchSummaryUseCase: Get.find<GetRegularizationPunchSummaryUseCase>(),
+        localStorageService: Get.find<LocalStorageService>(),
+        imageCompressService: Get.find<ImageCompressService>(),
+      ),
     );
     Get.lazyPut<PerformanceBloc>(
       () => PerformanceBloc(
