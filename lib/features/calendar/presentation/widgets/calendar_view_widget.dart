@@ -60,21 +60,24 @@ class _MonthSelectorHeader extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: 50.h,
-      padding: EdgeInsets.symmetric(horizontal: AppConstants.p10, vertical: 8.h),
+      height: 40.h,
+      padding: EdgeInsets.symmetric(
+        horizontal: AppConstants.p10,
+        vertical: 8.h,
+      ),
       decoration: BoxDecoration(
         color: AppColors.of(context).surface,
         borderRadius: BorderRadius.circular(AppConstants.r32),
-        border: Border.all(
-          color: AppColors.of(context).outlineVariant,
-        ),
+        border: Border.all(color: AppColors.of(context).outlineVariant),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
             onTap: () {
-              onMonthChanged(DateTime(focusedMonth.year, focusedMonth.month - 1));
+              onMonthChanged(
+                DateTime(focusedMonth.year, focusedMonth.month - 1),
+              );
             },
             child: Container(
               width: 32.w,
@@ -82,9 +85,7 @@ class _MonthSelectorHeader extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.of(context).surfaceContainerHigh,
-                border: Border.all(
-                  color: AppColors.of(context).outlineVariant,
-                ),
+                border: Border.all(color: AppColors.of(context).outlineVariant),
               ),
               child: Icon(
                 Icons.chevron_left,
@@ -102,7 +103,9 @@ class _MonthSelectorHeader extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              onMonthChanged(DateTime(focusedMonth.year, focusedMonth.month + 1));
+              onMonthChanged(
+                DateTime(focusedMonth.year, focusedMonth.month + 1),
+              );
             },
             child: Container(
               width: 32.w,
@@ -110,9 +113,7 @@ class _MonthSelectorHeader extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.of(context).surfaceContainerHigh,
-                border: Border.all(
-                  color: AppColors.of(context).outlineVariant,
-                ),
+                border: Border.all(color: AppColors.of(context).outlineVariant),
               ),
               child: Icon(
                 Icons.chevron_right,
@@ -156,7 +157,7 @@ class _CalendarGridCard extends StatelessWidget {
     // Days calculation
     final firstDay = DateTime(focusedMonth.year, focusedMonth.month, 1);
     final lastDay = DateTime(focusedMonth.year, focusedMonth.month + 1, 0);
-    
+
     // Offset relative to Sunday (SUN = 0, MON = 1...)
     final int startOffset = firstDay.weekday % 7;
     final int totalDays = lastDay.day;
@@ -168,31 +169,27 @@ class _CalendarGridCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.of(context).surface,
         borderRadius: BorderRadius.circular(AppConstants.r16),
-        border: Border.all(
-          color: AppColors.of(context).outlineVariant,
-        ),
+        border: Border.all(color: AppColors.of(context).outlineVariant),
       ),
       child: Column(
         children: [
           // Weekdays Row
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: weekdays.map((dayName) {
-                return SizedBox(
-                  width: 36.w,
+          Row(
+            children: [
+              for (int i = 0; i < weekdays.length; i++) ...[
+                Expanded(
                   child: Text(
-                    dayName,
+                    weekdays[i],
                     textAlign: TextAlign.center,
                     style: AppTextStyle.labelSmall.copyWith(
-                      color: AppColors.of(context).onSurfaceVariant,
+                      color: const Color(0xFF62748E),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+                if (i < weekdays.length - 1) const SizedBox(width: 13),
+              ],
+            ],
           ),
           SizedBox(height: 10.h),
           // Calendar Days Grid
@@ -209,12 +206,18 @@ class _CalendarGridCard extends StatelessWidget {
               if (index < startOffset) {
                 return const SizedBox.shrink();
               }
-              
+
               final dayNumber = index - startOffset + 1;
-              final currentDay = DateTime(focusedMonth.year, focusedMonth.month, dayNumber);
+              final currentDay = DateTime(
+                focusedMonth.year,
+                focusedMonth.month,
+                dayNumber,
+              );
               final dateKey = DateTimeUtils.formatToYMD(currentDay);
               final status = events[dateKey];
-              final isSelected = selectedDay != null && DateTimeUtils.isSameDay(currentDay, selectedDay!);
+              final isSelected =
+                  selectedDay != null &&
+                  DateTimeUtils.isSameDay(currentDay, selectedDay!);
 
               return _CalendarDayCell(
                 day: currentDay,
@@ -250,10 +253,9 @@ class _CalendarDayCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isToday = DateTimeUtils.isToday(day);
-    
+
     // Style configurations based on status
     Color backgroundColor = AppColors.of(context).surface;
-    Color textColor = AppColors.of(context).onSurface;
     Color borderColor = AppColors.of(context).outlineVariant;
     Color? dotColor;
 
@@ -261,38 +263,31 @@ class _CalendarDayCell extends StatelessWidget {
       final s = status!.toLowerCase();
       if (s == 'present') {
         backgroundColor = AppColors.of(context).presentBg;
-        textColor = AppColors.of(context).presentText;
         borderColor = AppColors.of(context).presentText;
         dotColor = AppColors.of(context).presentText;
       } else if (s == 'absent') {
         backgroundColor = AppColors.of(context).absentBg;
-        textColor = AppColors.of(context).absentText;
         borderColor = AppColors.of(context).absentText;
         dotColor = AppColors.of(context).absentText;
       } else if (s == 'on leave' || s == 'leave') {
         backgroundColor = AppColors.of(context).leaveBg;
-        textColor = AppColors.of(context).leaveText;
         borderColor = AppColors.of(context).leaveText;
         dotColor = AppColors.of(context).leaveText;
       } else if (s == 'holiday') {
         backgroundColor = AppColors.of(context).holidayBg;
-        textColor = AppColors.of(context).holidayText;
         borderColor = AppColors.of(context).holidayText;
         dotColor = AppColors.of(context).holidayText;
       } else if (s == 'weekend' || s == 'weekly off') {
         backgroundColor = AppColors.of(context).weekendBg;
-        textColor = AppColors.of(context).weekendText;
         borderColor = AppColors.of(context).weekendText;
         dotColor = AppColors.of(context).weekendText;
       } else if (s == 'half day' || s == 'half-day') {
         backgroundColor = AppColors.of(context).halfDayBg;
-        textColor = AppColors.of(context).halfDayText;
         borderColor = AppColors.of(context).halfDayText;
         dotColor = AppColors.of(context).halfDayText;
       }
     } else if (DateTimeUtils.isWeekend(day)) {
       backgroundColor = AppColors.of(context).weekendBg;
-      textColor = AppColors.of(context).weekendText;
       borderColor = AppColors.of(context).weekendText;
       dotColor = AppColors.of(context).weekendText;
     }
@@ -307,7 +302,7 @@ class _CalendarDayCell extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(AppConstants.r8),
-          border: isSelected 
+          border: isSelected
               ? Border.all(color: AppColors.of(context).primary, width: 2.w)
               : Border.all(color: borderColor, width: 1.w),
         ),
@@ -317,8 +312,10 @@ class _CalendarDayCell extends StatelessWidget {
             Text(
               day.day.toString(),
               style: AppTextStyle.bodyMedium.copyWith(
-                color: textColor,
-                fontWeight: isToday || isSelected ? FontWeight.bold : FontWeight.w600,
+                color: const Color(0xFF020618),
+                fontWeight: isToday || isSelected
+                    ? FontWeight.bold
+                    : FontWeight.w600,
                 fontSize: 14.sp,
               ),
             ),
@@ -348,18 +345,21 @@ class _HorizontalLegendsRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final themeColors = AppColors.of(context);
 
-    return Wrap(
-      spacing: 10.w,
-      runSpacing: 8.h,
-      alignment: WrapAlignment.center,
-      children: [
-        _LegendItem(color: themeColors.presentText, label: l10n.present),
-        _LegendItem(color: themeColors.leaveText, label: l10n.leave),
-        _LegendItem(color: themeColors.absentText, label: l10n.absent),
-        _LegendItem(color: themeColors.halfDayText, label: l10n.halfDay),
-        _LegendItem(color: themeColors.weekendText, label: l10n.weekend),
-        _LegendItem(color: themeColors.holidayText, label: l10n.holiday),
-      ],
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Wrap(
+        spacing: 10.w,
+        runSpacing: 8.h,
+        alignment: WrapAlignment.start,
+        children: [
+          _LegendItem(color: themeColors.presentText, label: l10n.present),
+          _LegendItem(color: themeColors.leaveText, label: l10n.leave),
+          _LegendItem(color: themeColors.absentText, label: l10n.absent),
+          _LegendItem(color: themeColors.halfDayText, label: l10n.halfDay),
+          _LegendItem(color: themeColors.weekendText, label: l10n.weekend),
+          _LegendItem(color: themeColors.holidayText, label: l10n.holiday),
+        ],
+      ),
     );
   }
 }
@@ -368,10 +368,7 @@ class _LegendItem extends StatelessWidget {
   final Color color;
   final String label;
 
-  const _LegendItem({
-    required this.color,
-    required this.label,
-  });
+  const _LegendItem({required this.color, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -382,16 +379,13 @@ class _LegendItem extends StatelessWidget {
         Container(
           width: 8.w,
           height: 8.w,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         SizedBox(width: 6.w),
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.of(context).onSurfaceVariant,
+            color: const Color(0xFF314158),
             fontWeight: FontWeight.w500,
             fontSize: 12.sp,
           ),

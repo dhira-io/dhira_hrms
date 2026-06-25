@@ -9,6 +9,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final VoidCallback? onBack;
   final Color? backgroundColor;
+  final bool showBackButton;
 
   const CommonAppBar({
     super.key,
@@ -17,7 +18,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.onBack,
     this.backgroundColor,
-    this.centerTitle=false
+    this.centerTitle = false,
+    this.showBackButton = true,
   });
 
   @override
@@ -30,14 +32,17 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: subtitle == null,
       scrolledUnderElevation: 0,
-      leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back_ios_new,
-          color: colors.textPrimary,
-          size: 24,
-        ),
-        onPressed: onBack ?? () => Navigator.pop(context),
-      ),
+      automaticallyImplyLeading: showBackButton,
+      leading: showBackButton
+          ? IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                color: colors.textPrimary,
+                size: 24,
+              ),
+              onPressed: onBack ?? () => Navigator.pop(context),
+            )
+          : null,
       title: subtitle != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,

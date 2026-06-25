@@ -94,12 +94,12 @@ class _CalendarSummaryWidgetState extends State<CalendarSummaryWidget> {
                     value: widget.summary.presentDays % 1 == 0
                         ? widget.summary.presentDays.toInt().toString()
                         : widget.summary.presentDays.toString(),
-                    valueColor: AppColors.of(context).presentText,
+                    valueColor: const Color(0xFF00C951),
                   ),
                   _SummaryColumn(
                     label: l10n.totalHoursLabel,
                     value: totalHoursStr,
-                    valueColor: AppColors.of(context).primary,
+                    valueColor: const Color(0xFF155DFC),
                   ),
                 ],
               ),

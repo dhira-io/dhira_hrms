@@ -1283,7 +1283,10 @@ class DependencyInjection {
       () => CalendarBloc(
         getCalendarEventsUseCase: Get.find<GetCalendarMonthEventsUseCase>(),
         getCalendarSummaryUseCase: Get.find<GetCalendarSummaryUseCase>(),
+        getTeamLeavesUseCase: Get.find(),
         localStorageService: Get.find(),
+        getAttendancePunchSummaryUseCase: Get.find<GetAttendancePunchSummaryUseCase>(),
+        getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
       ),
       fenix: true,
     );
