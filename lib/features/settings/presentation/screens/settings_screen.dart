@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -56,28 +57,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ],
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
-        // appBar: AppBar(
-        //   backgroundColor: AppColors.of(context).slate50.withValues(alpha: 0.8),
-        //   surfaceTintColor: Colors.transparent,
-        //   elevation: 0,
-        //   automaticallyImplyLeading: false,
-        //   title: Text(
-        //     l10n.settings,
-        //     style: TextStyle(
-        //       color: AppColors.of(context).onSurface,
-        //       fontWeight: FontWeight.bold,
-        //       fontSize: 18.sp,
-        //     ),
-        //   ),
-        //   centerTitle: true,
-        //   bottom: PreferredSize(
-        //     preferredSize: const Size.fromHeight(1),
-        //     child: Container(
-        //       color: AppColors.of(context).slate200.withValues(alpha: 0.5),
-        //       height: 1.h,
-        //     ),
-        //   ),
-        // ),
+        appBar: AppBar(
+          backgroundColor: AppColors.of(context).surfaceContainerLowest,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left,
+              color: AppColors.of(context).onSurface,
+            ),
+            onPressed: () => context.pop(),
+          ),
+          title: Text(
+            l10n.settings,
+            style: TextStyle(
+              color: AppColors.of(context).onSurface,
+              fontWeight: FontWeight.bold,
+              fontSize: 18.sp,
+            ),
+          ),
+          centerTitle: false,
+          titleSpacing: 0,
+        ),
         body: const SettingsBody(),
       ),
     );

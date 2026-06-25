@@ -37,6 +37,8 @@
   "leave": "छुट्टी",
   "team": "टीम",
   "settings": "सेटिंग्स",
+  "appearanceSettings": "दिखावट सेटिंग्स",
+  "availableLanguages": "उपलब्ध भाषाएं",
   "department": "विभाग",
   "location": "स्थान",
   "priority": "प्राथमिकता",
@@ -2128,7 +2130,7 @@
     "pushNotificationPreferenceSuccess": "मोबाइल नोटिफिकेशन प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
     "emailAlertsPreferenceSuccess": "ईमेल अलर्ट प्राथमिकताएं सफलतापूर्वक अपडेट की गईं",
     "noSubject": "कोई विषय नहीं",
-    "newNotification": "नई अधिसूचना"
+    "newNotification": "नई अधिसूचना",
+    "appearanceSettings": "दिखावट सेटिंग्स",
+    "availableLanguages": "उपलब्ध भाषाएं"
 }
-
-
