@@ -11,6 +11,7 @@ import '../../../auth/presentation/bloc/auth_state.dart';
 import '../bloc/settings_cubit.dart';
 import '../bloc/settings_state.dart';
 import '../widgets/settings_body.dart';
+import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -66,7 +67,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Icons.chevron_left,
               color: AppColors.of(context).onSurface,
             ),
-            onPressed: () => context.pop(),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.read<BottomNavCubit>().changeIndex(0);
+              }
+            },
           ),
           title: Text(
             l10n.settings,
