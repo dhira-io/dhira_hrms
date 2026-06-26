@@ -31,16 +31,19 @@ class _CommonWebViewScreenState extends State<CommonWebViewScreen> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
+            if (!mounted) return;
             setState(() {
               _progress = progress / 100;
             });
           },
           onPageStarted: (String url) {
+            if (!mounted) return;
             setState(() {
               _isLoading = true;
             });
           },
           onPageFinished: (String url) {
+            if (!mounted) return;
             setState(() {
               _isLoading = false;
             });

@@ -19,7 +19,7 @@ class AppColors {
   static const Color surfaceContainerLow = Color(0xFFF3F4F5);
   static const Color onSurfaceVariant = Color(0xFF434656);
   static const Color textPrimary = Color(0xff191C1D);
-  static const Color textSecondary = Color(0xff4B5563);
+  static const Color textSecondary = Color(0xff020617);
   static const Color border = Color(0xffE5E7EB);
   static const Color bordergrey = Color(0xffE9E9E9);
   static const Color tableBorder = Color(0xFFCAD5E2);
@@ -70,6 +70,7 @@ class AppColors {
   static const Color black = Colors.black;
   static const Color transparent = Colors.transparent;
   static const Color placeholdergrey = Color(0xff9E9E9E);
+  static const Color greenSuccess = Color(0xFF00A63E);
   static const Color confirmationRedBg = Color(0xFFFEF2F2);
 
   // Status Palettes (Tailwind-like)
@@ -127,6 +128,8 @@ class AppColors {
   static const Color _darkWelcomeSubtitle = Color(0xFF8899AA);
 
   // Additional Utils
+  // static const Color slateBorder = Color(0xff90A1B9);
+  static const Color blue50 = Color(0xFFEFF6FF);
   static const Color slate50 = Color(0xFFF8FAFC);
   static const Color slate100 = Color(0xFFF1F5F9);
   static const Color slate200 = Color(0xFFE2E8F0);
@@ -144,6 +147,7 @@ class AppColors {
   static const Color lightGrey = Color(0xFFEEEEEE);
   static const Color charcoal = Color(0xFF101828);
   static const Color slateGrey = Color(0xFF475467);
+  static const Color slate550 = Color(0xFF62748E);
 
   // Timesheet HTML Colors
   static const Color colorBlue50 = Color(0xFFEFF6FF);
@@ -190,6 +194,7 @@ class AppColors {
   static const Color slateText = Color(0xFF64748B);
   static const Color blueIcon = Color(0xFF3B82F6);
   static const Color darkSlate = Color(0xFF1E293B);
+  static const Color stepperColor = Color(0xFFA1A1A1);
 
   // New Calendar Colors
   static const Color calendarDefaultBg = Color(0xFFF8FAFC);
@@ -413,6 +418,7 @@ class AppColorsResolved {
   final Color onPrimaryFixedVariant;
   final Color success;
   final Color successDark;
+  final Color greenSuccess;
   final Color error;
   final Color errorDark;
   final Color warning;
@@ -452,12 +458,15 @@ class AppColorsResolved {
   final Color profileBadgeBorder;
   final Color profileBadgeBg;
   final Color updateCardBorder;
+  final Color slateBorder;
+  final Color blue50;
   final Color slate50;
   final Color slate100;
   final Color slate200;
   final Color slate300;
   final Color slate400;
   final Color slate500;
+  final Color slate550;
   final Color slate500Confirmation;
   final Color slate600;
   final Color slate700;
@@ -482,10 +491,11 @@ class AppColorsResolved {
   final Color weekendText;
   final Color weekendBg;
   final Color slateBg;
-  final Color slateBorder;
+  // final Color slateBorder;
   final Color slateText;
   final Color blueIcon;
   final Color darkSlate;
+  final Color stepperColor;
   final Color calendarDefaultBg;
   final Color calendarDefaultText;
   final Color calendarTodayBorder;
@@ -600,6 +610,7 @@ class AppColorsResolved {
     required this.onPrimaryFixedVariant,
     required this.success,
     required this.successDark,
+    required this.greenSuccess,
     required this.error,
     required this.errorDark,
     required this.warning,
@@ -639,12 +650,15 @@ class AppColorsResolved {
     required this.profileBadgeBorder,
     required this.profileBadgeBg,
     required this.updateCardBorder,
+    required this.slateBorder,
+    required this.blue50,
     required this.slate50,
     required this.slate100,
     required this.slate200,
     required this.slate300,
     required this.slate400,
     required this.slate500,
+    required this.slate550,
     required this.slate500Confirmation,
     required this.slate600,
     required this.slate700,
@@ -669,7 +683,7 @@ class AppColorsResolved {
     required this.weekendText,
     required this.weekendBg,
     required this.slateBg,
-    required this.slateBorder,
+    //    required this.slateBorder,
     required this.slateText,
     required this.blueIcon,
     required this.darkSlate,
@@ -738,6 +752,7 @@ class AppColorsResolved {
     required this.colorGreen50,
     required this.colorOrange50,
     required this.colorNeutral100,
+    required this.stepperColor,
   });
 
   factory AppColorsResolved.light() => const AppColorsResolved._(
@@ -783,6 +798,7 @@ class AppColorsResolved {
     onPrimaryFixedVariant: AppColors.onPrimaryFixedVariant,
     success: AppColors.success,
     successDark: AppColors.successDark,
+    greenSuccess: AppColors.greenSuccess,
     error: AppColors.error,
     errorDark: AppColors.errorDark,
     warning: AppColors.warning,
@@ -822,12 +838,15 @@ class AppColorsResolved {
     profileBadgeBorder: AppColors.profileBadgeBorder,
     profileBadgeBg: AppColors.profileBadgeBg,
     updateCardBorder: AppColors.updateCardBorder,
+    slateBorder: AppColors.slateBorder,
+    blue50: AppColors.blue50,
     slate50: AppColors.slate50,
     slate100: AppColors.slate100,
     slate200: AppColors.slate200,
     slate300: AppColors.slate300,
     slate400: AppColors.slate400,
     slate500: AppColors.slate500,
+    slate550: AppColors.slate550,
     slate500Confirmation: AppColors.slate500Confirmation,
     slate600: AppColors.slate600,
     slate700: AppColors.slate700,
@@ -852,10 +871,11 @@ class AppColorsResolved {
     weekendText: AppColors.weekendText,
     weekendBg: AppColors.weekendBg,
     slateBg: AppColors.slateBg,
-    slateBorder: AppColors.slateBorder,
+    //    slateBorder: AppColors.slateBorder,
     slateText: AppColors.slateText,
     blueIcon: AppColors.blueIcon,
     darkSlate: AppColors.darkSlate,
+    stepperColor: AppColors.stepperColor,
     calendarDefaultBg: AppColors.calendarDefaultBg,
     calendarDefaultText: AppColors.calendarDefaultText,
     calendarTodayBorder: AppColors.calendarTodayBorder,
@@ -966,6 +986,7 @@ class AppColorsResolved {
     onPrimaryFixedVariant: AppColors.onPrimaryFixedVariant,
     success: AppColors.success,
     successDark: AppColors.successDark,
+    greenSuccess: AppColors.greenSuccess,
     error: AppColors.error,
     errorDark: AppColors.errorDark,
     warning: AppColors.warning,
@@ -979,6 +1000,9 @@ class AppColorsResolved {
     black: AppColors.black,
     transparent: AppColors.transparent,
     placeholdergrey: AppColors.placeholdergrey,
+    // info: AppColors.info,
+    // infoBg: AppColors.infoBg,
+    stepperColor: AppColors.stepperColor,
     info: AppColors._darkInfo,
     infoBg: AppColors._darkInfoBg,
     infoBorder: AppColors.infoBorder,
@@ -1005,12 +1029,15 @@ class AppColorsResolved {
     profileBadgeBorder: AppColors._darkBorder,
     profileBadgeBg: AppColors.profileBadgeBg,
     updateCardBorder: AppColors._darkBorder,
+    slateBorder: AppColors.slateBorder,
+    blue50: AppColors.blue50,
     slate50: AppColors._darkSlate50,
     slate100: AppColors._darkSlate100,
     slate200: AppColors._darkSlate200,
     slate300: AppColors.slate300,
     slate400: AppColors.slate400,
-    slate500: AppColors.slate400,
+    slate500: AppColors.slate500,
+    slate550: AppColors.slate550,
     slate500Confirmation: AppColors.slate500Confirmation,
     slate600: AppColors.slate200,
     slate700: AppColors.slate300,
@@ -1035,7 +1062,7 @@ class AppColorsResolved {
     weekendText: AppColors.weekendText,
     weekendBg: AppColors._darkWeekendBg,
     slateBg: AppColors._darkSlateBg,
-    slateBorder: AppColors._darkSlateBorder,
+    //   slateBorder: AppColors._darkSlateBorder,
     slateText: AppColors._darkSlateText,
     blueIcon: AppColors.blueIcon,
     darkSlate: AppColors.slate100,

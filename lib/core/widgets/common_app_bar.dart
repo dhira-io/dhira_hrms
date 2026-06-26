@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_style.dart';
 
@@ -54,7 +55,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 Text(
                   subtitle!,
-                  style: AppTextStyle.bodySmall.copyWith(
+                  style: AppTextStyle.bodyMediumOne.copyWith(
                     color: AppColors.of(context).textPrimary,
                     fontWeight: FontWeight.w400,
                   ),
@@ -74,5 +75,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0.0));
+  Size get preferredSize => Size.fromHeight(
+    subtitle != null && subtitle!.isNotEmpty ? 58.h : kToolbarHeight,
+  );
 }

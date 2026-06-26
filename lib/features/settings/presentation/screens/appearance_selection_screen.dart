@@ -18,61 +18,65 @@ class AppearanceSelectionScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      appBar: CommonAppBar(title: l10n.settings),
+      appBar: AppBar(
+        backgroundColor: AppColors.of(context).surfaceContainerLowest,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: AppColors.of(context).onSurface,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          l10n.appearanceSettings,
+            style: TextStyle(
+              color: AppColors.of(context).onSurface,
+              fontWeight: FontWeight.bold,
+              fontSize: 18.sp,
+            ),
+        ),
+        centerTitle: false,
+        titleSpacing: 0,
+      ),
       body: SingleChildScrollView(
-        padding:       EdgeInsets.symmetric(
-          horizontal: 24.0.w,
-          vertical: 32.0.h,
+        padding: EdgeInsets.symmetric(
+          horizontal: 16.w,
+          vertical: 24.h,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header Section
-            Text(
-              l10n.appearance,
-              style: AppTextStyle.h1.copyWith(
-                fontSize: 40.sp,
-                fontWeight: FontWeight.w800,
-                letterSpacing: -1,
-              ),
-            ),
-                  SizedBox(height: 12.h),
-            Text(
-              l10n.appearanceDesc,
-              style: AppTextStyle.bodyLarge.copyWith(
-                color: AppColors.of(context).onSurfaceVariant,
-                height: 1.6.h,
-              ),
-            ),
-                  SizedBox(height: 48.h),
+            // Appearance Options Cards
 
-            // Theme Selection Grid (Using Wrap for responsiveness)
-            Wrap(
-              spacing: 24,
-              runSpacing: 24,
+            // Appearance Options Cards
+            Column(
               children: [
                 _ThemeCard(
                   title: l10n.lightMode,
-                  subtitle: l10n.lightModeDesc,
-                  icon: Icons.light_mode,
+                  subtitle: 'Clean and bright',
+                  icon: Icons.light_mode_outlined,
                   mode: ThemeMode.light,
                   isSelected: currentTheme == ThemeMode.light,
                   onTap: () => themeCubit.changeTheme(ThemeMode.light),
                   preview: const _ThemePreview(isDark: false),
                 ),
+                SizedBox(height: 16.h),
                 _ThemeCard(
                   title: l10n.darkMode,
-                  subtitle: l10n.darkModeDesc,
-                  icon: Icons.dark_mode,
+                  subtitle: 'Easy to see',
+                  icon: Icons.dark_mode_outlined,
                   mode: ThemeMode.dark,
                   isSelected: currentTheme == ThemeMode.dark,
                   onTap: () => themeCubit.changeTheme(ThemeMode.dark),
                   preview: const _ThemePreview(isDark: true),
                 ),
+                SizedBox(height: 16.h),
                 _ThemeCard(
                   title: l10n.systemDefault,
-                  subtitle: l10n.systemDesc,
-                  icon: Icons.settings_suggest,
+                  subtitle: 'Matches OS setting',
+                  icon: Icons.auto_awesome_outlined,
                   mode: ThemeMode.system,
                   isSelected: currentTheme == ThemeMode.system,
                   onTap: () => themeCubit.changeTheme(ThemeMode.system),
@@ -80,7 +84,7 @@ class AppearanceSelectionScreen extends StatelessWidget {
                 ),
               ],
             ),
-                  SizedBox(height: 48.h),
+            SizedBox(height: 32.h),
           ],
         ),
       ),
@@ -109,121 +113,98 @@ class _ThemeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width =
-            (constraints.maxWidth -
-                (MediaQuery.of(context).size.width > 768 ? 48 : 0)) /
-            (MediaQuery.of(context).size.width > 768 ? 3 : 1);
-
-        return InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(20.r),
-          child: Container(
-            width: width > 200 ? width : double.infinity,
-            padding:       EdgeInsets.all(24.w),
-            decoration: BoxDecoration(
-              color: AppColors.of(context).surfaceContainerLowest,
-              borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(
-                color: isSelected
-                    ? AppColors.of(context).primary
-                    : AppColors.of(
-                        context,
-                      ).outlineVariant.withValues(alpha: 0.3),
-                width: isSelected ? 2 : 1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.of(
-                    context,
-                  ).onSurface.withValues(alpha: 0.06),
-                  blurRadius: 32,
-                  offset: const Offset(0, 12),
-                ),
-              ],
-            ),
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        preview,
-                        if (isSelected)
-                          Positioned(
-                            top: 8.h,
-                            right: 8.w,
-                            child: Container(
-                              padding:       EdgeInsets.all(4.w),
-                              decoration: BoxDecoration(
-                                color: AppColors.of(context).primary,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                                size: 14,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                          SizedBox(height: 20.h),
-                    Row(
-                      children: [
-                        Container(
-                          width: 40.w,
-                          height: 40.h,
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? AppColors.of(
-                                    context,
-                                  ).primaryFixed.withValues(alpha: 0.3)
-                                : AppColors.of(context).surfaceContainerHigh,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            icon,
-                            color: isSelected
-                                ? AppColors.of(context).primary
-                                : AppColors.of(context).onSurfaceVariant,
-                            size: 20,
-                          ),
-                        ),
-                              SizedBox(width: 12.w),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                title,
-                                style: AppTextStyle.h3.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.sp,
-                                ),
-                              ),
-                              Text(
-                                subtitle,
-                                style: AppTextStyle.bodySmall.copyWith(
-                                  color: AppColors.of(context).onSurfaceVariant,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16.r),
+      child: Container(
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: AppColors.of(context).surfaceContainerLowest,
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(
+            color: isSelected
+                ? const Color(0xFF3B82F6).withValues(alpha: 0.5)
+                : AppColors.of(context).outlineVariant.withValues(alpha: 0.3),
+            width: isSelected ? 1.5 : 1,
           ),
-        );
-      },
+          boxShadow: isSelected 
+            ? [
+                BoxShadow(
+                  color: const Color(0xFF3B82F6).withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                )
+              ]
+            : null,
+        ),
+        child: Row(
+          children: [
+            // Preview Image
+            SizedBox(
+              width: 80.w,
+              height: 60.h,
+              child: preview,
+            ),
+            SizedBox(width: 16.w),
+            // Icon
+            Container(
+              width: 32.w,
+              height: 32.h,
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? const Color(0xFF3B82F6).withValues(alpha: 0.1)
+                    : AppColors.of(context).surfaceContainerHigh.withValues(alpha: 0.5),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: isSelected
+                    ? const Color(0xFF3B82F6)
+                    : AppColors.of(context).outline,
+                size: 16,
+              ),
+            ),
+            SizedBox(width: 12.w),
+            // Text Content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
+                      color: AppColors.of(context).onSurface,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: AppTextStyle.bodySmall.copyWith(
+                      color: AppColors.of(context).outline,
+                      fontSize: 11.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Radio Button
+            Container(
+              width: 20.w,
+              height: 20.h,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isSelected
+                      ? const Color(0xFF8B5CF6)
+                      : AppColors.of(context).outlineVariant,
+                  width: isSelected ? 6.w : 2.w,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

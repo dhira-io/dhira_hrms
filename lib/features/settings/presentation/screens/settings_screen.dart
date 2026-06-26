@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -10,7 +11,7 @@ import '../../../auth/presentation/bloc/auth_state.dart';
 import '../bloc/settings_cubit.dart';
 import '../bloc/settings_state.dart';
 import '../widgets/settings_body.dart';
-import '../../../../core/widgets/common_app_bar.dart';
+import '../../../dashboard/presentation/bloc/bottom_nav_cubit.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -57,8 +58,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ],
       child: Scaffold(
         backgroundColor: AppColors.of(context).background,
-        appBar: CommonAppBar(
-          title: l10n.settings,
+        appBar: AppBar(
+          backgroundColor: AppColors.of(context).surfaceContainerLowest,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left,
+              color: AppColors.of(context).onSurface,
+            ),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.read<BottomNavCubit>().changeIndex(0);
+              }
+            },
+          ),
+          title: Text(
+            l10n.settings,
+            style: TextStyle(
+              color: AppColors.of(context).onSurface,
+              fontWeight: FontWeight.bold,
+              fontSize: 18.sp,
+            ),
+          ),
+          centerTitle: false,
+          titleSpacing: 0,
         ),
         body: const SettingsBody(),
       ),
