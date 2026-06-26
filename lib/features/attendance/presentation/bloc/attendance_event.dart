@@ -10,10 +10,6 @@ abstract class AttendanceEvent with _$AttendanceEvent {
   const factory AttendanceEvent.punchInRequested() = PunchInRequested;
   const factory AttendanceEvent.punchOutRequested() = PunchOutRequested;
   const factory AttendanceEvent.checkStatusRequested() = CheckStatusRequested;
-  const factory AttendanceEvent.calendarEventsRequested({
-    required String fromDate,
-    required String toDate,
-  }) = CalendarEventsRequested;
   const factory AttendanceEvent.pageChangedRequested({required DateTime date}) =
       PageChangedRequested;
   const factory AttendanceEvent.takeBreakRequested() = TakeBreakRequested;

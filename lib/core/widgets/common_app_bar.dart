@@ -28,6 +28,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     final colors = AppColors.of(context);
 
     return AppBar(
+      toolbarHeight: preferredSize.height,
       backgroundColor:
           backgroundColor ?? colors.surfaceContainerLowest,
       elevation: 0,

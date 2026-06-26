@@ -20,7 +20,6 @@ abstract class AttendanceState with _$AttendanceState {
   // We only need to define the factory constructors.
 
   const factory AttendanceState.initial({
-    Map<String, String>? calendarEvents,
     String? userName,
     String? profileImage,
     AttendanceMonthSummaryEntity? monthSummary,
@@ -30,7 +29,6 @@ abstract class AttendanceState with _$AttendanceState {
     HolidayListLeavePolicyEntity? holidayListLeavePolicy,
   }) = _Initial;
   const factory AttendanceState.loading({
-    Map<String, String>? calendarEvents,
     AttendanceActionType? actionType,
     String? userName,
     String? profileImage,
@@ -43,7 +41,6 @@ abstract class AttendanceState with _$AttendanceState {
   const factory AttendanceState.loaded({
     required AttendanceStatusEntity status,
     required List<AttendanceLogEntity> logs,
-    Map<String, String>? calendarEvents,
     String? userName,
     String? profileImage,
     AttendanceMonthSummaryEntity? monthSummary,
@@ -54,7 +51,6 @@ abstract class AttendanceState with _$AttendanceState {
   }) = _Loaded;
   const factory AttendanceState.error(
     String message, {
-    Map<String, String>? calendarEvents,
     String? userName,
     String? profileImage,
     AttendanceMonthSummaryEntity? monthSummary,

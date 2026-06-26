@@ -6,7 +6,6 @@ import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_mo
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecases/get_calendar_events_usecase.dart';
 import '../../domain/usecases/get_checkin_status_usecase.dart';
 import '../../domain/usecases/punch_in_usecase.dart';
 import '../../domain/usecases/punch_out_usecase.dart';
@@ -23,7 +22,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final PunchInUseCase punchInUseCase;
   final PunchOutUseCase punchOutUseCase;
   final GetCheckinStatusUseCase getCheckinStatusUseCase;
-  final GetCalendarEventsUseCase getCalendarEventsUseCase;
   final StartBreakUseCase startBreakUseCase;
   final EndBreakUseCase endBreakUseCase;
   final GetAttendanceMonthSummaryUseCase getAttendanceMonthSummaryUseCase;
@@ -37,7 +35,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     required this.punchInUseCase,
     required this.punchOutUseCase,
     required this.getCheckinStatusUseCase,
-    required this.getCalendarEventsUseCase,
     required this.startBreakUseCase,
     required this.endBreakUseCase,
     required this.getAttendanceMonthSummaryUseCase,
@@ -51,10 +48,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     on<PunchInRequested>((event, emit) => _onPunchInRequested(emit));
     on<PunchOutRequested>((event, emit) => _onPunchOutRequested(emit));
     on<CheckStatusRequested>(_onCheckStatusRequested);
-    on<CalendarEventsRequested>(
-      (event, emit) =>
-          _onCalendarEventsRequested(event.fromDate, event.toDate, emit),
-    );
     on<PageChangedRequested>(
       (event, emit) => _onPageChangedRequested(event.date, emit),
     );
@@ -85,7 +78,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     // Explicitly emit loading state for fresh start
     emit(
       AttendanceState.loading(
-        calendarEvents: state.calendarEvents,
         actionType: AttendanceActionType.checkStatus,
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
@@ -102,6 +94,12 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       ),
     );
     add(const AttendanceEvent.teamLeavesRequested());
+    add(
+      AttendanceEvent.monthSummaryRequested(
+        month: DateTime.now().month,
+        year: DateTime.now().year,
+      ),
+    );
     await _loadAttendanceData(emit);
   }
 
@@ -115,7 +113,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     if (!hasStatus) {
       emit(
         AttendanceState.loading(
-          calendarEvents: state.calendarEvents,
           actionType: AttendanceActionType.checkStatus,
           monthSummary: state.monthSummary,
           leaveDetails: state.leaveDetails,
@@ -132,7 +129,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     if (empid == null) return;
     emit(
       AttendanceState.loading(
-        calendarEvents: state.calendarEvents,
         actionType: AttendanceActionType.punchIn,
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
@@ -146,7 +142,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         emit(
           AttendanceState.error(
             failure.message,
-            calendarEvents: state.calendarEvents,
             monthSummary: state.monthSummary,
             leaveDetails: state.leaveDetails,
             leaveHistory: state.leaveHistory,
@@ -174,7 +169,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     if (empid == null) return;
     emit(
       AttendanceState.loading(
-        calendarEvents: state.calendarEvents,
         actionType: AttendanceActionType.punchOut,
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
@@ -188,7 +182,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         emit(
           AttendanceState.error(
             failure.message,
-            calendarEvents: state.calendarEvents,
             monthSummary: state.monthSummary,
             leaveDetails: state.leaveDetails,
             leaveHistory: state.leaveHistory,
@@ -211,42 +204,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     );
   }
 
-  Future<void> _onCalendarEventsRequested(
-    String fromDate,
-    String toDate,
-    Emitter<AttendanceState> emit,
-  ) async {
-    final empid = await _getEmpId();
-    if (empid == null) return;
-    final currentState = state;
-
-    final result = await getCalendarEventsUseCase(
-      employee: empid,
-      fromDate: fromDate,
-      toDate: toDate,
-    );
-
-    result.fold(
-      (failure) {
-        emit(
-          AttendanceState.error(
-            failure.message,
-            calendarEvents: currentState.calendarEvents,
-            monthSummary: currentState.monthSummary,
-            leaveDetails: currentState.leaveDetails,
-            leaveHistory: currentState.leaveHistory,
-            teamLeaves: currentState.teamLeaves,
-            holidayListLeavePolicy: currentState.holidayListLeavePolicy,
-            userName: _userName,
-            profileImage: _profileImage,
-          ),
-        );
-      },
-      (events) {
-        emit(state.copyWith(calendarEvents: events));
-      },
-    );
-  }
 
   Future<void> _onMonthSummaryRequested(
     int month,
@@ -268,7 +225,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         emit(
           AttendanceState.error(
             failure.message,
-            calendarEvents: currentState.calendarEvents,
             monthSummary: currentState.monthSummary,
             leaveDetails: currentState.leaveDetails,
             leaveHistory: currentState.leaveHistory,
@@ -351,7 +307,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     if (empid == null) return;
     emit(
       AttendanceState.loading(
-        calendarEvents: state.calendarEvents,
         actionType: AttendanceActionType.takeBreak,
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
@@ -368,7 +323,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         emit(
           AttendanceState.error(
             failure.message,
-            calendarEvents: state.calendarEvents,
             monthSummary: state.monthSummary,
             leaveDetails: state.leaveDetails,
             leaveHistory: state.leaveHistory,
@@ -393,7 +347,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     if (empid == null) return;
     emit(
       AttendanceState.loading(
-        calendarEvents: state.calendarEvents,
         actionType: AttendanceActionType.endBreak,
         monthSummary: state.monthSummary,
         leaveDetails: state.leaveDetails,
@@ -410,7 +363,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         emit(
           AttendanceState.error(
             failure.message,
-            calendarEvents: state.calendarEvents,
             monthSummary: state.monthSummary,
             leaveDetails: state.leaveDetails,
             leaveHistory: state.leaveHistory,
@@ -459,15 +411,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     final empid = await _getEmpId();
     if (empid == null) return;
 
-    final fromDate = DateTime(date.year, date.month, 1);
-    final toDate = DateTime(date.year, date.month + 1, 0);
-
     final results = await Future.wait([
-      getCalendarEventsUseCase(
-        employee: empid,
-        fromDate: DateTimeUtils.formatToYMD(fromDate),
-        toDate: DateTimeUtils.formatToYMD(toDate),
-      ),
       getAttendanceMonthSummaryUseCase(
         employee: empid,
         month: date.month,
@@ -482,17 +426,12 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       ),
     ]);
 
-    final eventsResult = results[0] as Either<Failure, Map<String, String>>;
     final summaryResult =
-        results[1] as Either<Failure, AttendanceMonthSummaryEntity>;
-    final detailsResult = results[2] as Either<Failure, LeaveDetailsEntity>;
+        results[0] as Either<Failure, AttendanceMonthSummaryEntity>;
+    final detailsResult = results[1] as Either<Failure, LeaveDetailsEntity>;
 
     var newState = state;
 
-    eventsResult.fold(
-      (_) {},
-      (events) => newState = newState.copyWith(calendarEvents: events),
-    );
     summaryResult.fold(
       (_) {},
       (summary) => newState = newState.copyWith(monthSummary: summary),
@@ -519,7 +458,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       (failure) => emit(
         AttendanceState.error(
           failure.message,
-          calendarEvents: state.calendarEvents,
           monthSummary: state.monthSummary,
           leaveDetails: state.leaveDetails,
           leaveHistory: state.leaveHistory,
@@ -532,7 +470,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         AttendanceState.loaded(
           status: status.copyWith(message: messageOverride ?? status.message),
           logs: [],
-          calendarEvents: state.calendarEvents,
           monthSummary: state.monthSummary,
           leaveDetails: state.leaveDetails,
           leaveHistory: state.leaveHistory,
@@ -568,7 +505,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         emit(
           AttendanceState.error(
             failure.message,
-            calendarEvents: state.calendarEvents,
             monthSummary: state.monthSummary,
             leaveDetails: state.leaveDetails,
             leaveHistory: state.leaveHistory,

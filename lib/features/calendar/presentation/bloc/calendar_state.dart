@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:dhira_hrms/features/calendar/domain/entities/calendar_entity.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/team_leave_entity.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/attendance_punch_summary_entity.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/leave_history_entity.dart';
+import 'package:dhira_hrms/features/calendar/domain/entities/team_leave_entity.dart';
+import 'package:dhira_hrms/features/calendar/domain/entities/attendance_punch_summary_entity.dart';
+import 'package:dhira_hrms/features/calendar/domain/entities/leave_history_entity.dart';
 
 part 'calendar_state.freezed.dart';
 

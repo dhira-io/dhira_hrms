@@ -83,13 +83,15 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.of(context).background,
-      extendBody: true,
-      body: SafeArea(
-        child: BlocBuilder<BottomNavCubit, int>(
-          builder: (context, state) {
-            return IndexedStack(
+    final colors = AppColors.of(context);
+    return BlocBuilder<BottomNavCubit, int>(
+      builder: (context, state) {
+        final scaffoldBg = state == 1 ? colors.surfaceContainerLowest : colors.background;
+        return Scaffold(
+          backgroundColor: scaffoldBg,
+          extendBody: true,
+          body: SafeArea(
+            child: IndexedStack(
               index: state,
               children: [
                 const HomeScreen(),
@@ -97,11 +99,11 @@ class _DashboardViewState extends State<DashboardView> {
                 const ApprovalsScreen(),
                 const SettingsScreen(),
               ],
-            );
-          },
-        ),
-      ),
-      bottomNavigationBar: const CustomBottomNav(),
+            ),
+          ),
+          bottomNavigationBar: const CustomBottomNav(),
+        );
+      },
     );
   }
 }

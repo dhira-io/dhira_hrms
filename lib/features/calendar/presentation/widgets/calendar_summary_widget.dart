@@ -9,10 +9,7 @@ import 'package:dhira_hrms/features/calendar/domain/entities/calendar_entity.dar
 class CalendarSummaryWidget extends StatefulWidget {
   final CalendarSummaryEntity summary;
 
-  const CalendarSummaryWidget({
-    super.key,
-    required this.summary,
-  });
+  const CalendarSummaryWidget({super.key, required this.summary});
 
   @override
   State<CalendarSummaryWidget> createState() => _CalendarSummaryWidgetState();
@@ -24,10 +21,11 @@ class _CalendarSummaryWidgetState extends State<CalendarSummaryWidget> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
-    final totalHours = widget.summary.totalWorkingHours ?? (widget.summary.presentDays * 9.5);
-    final totalHoursStr = totalHours % 1 == 0 
-        ? '${totalHours.toInt()}h' 
+
+    final totalHours =
+        widget.summary.totalWorkingHours ?? (widget.summary.presentDays * 9.5);
+    final totalHoursStr = totalHours % 1 == 0
+        ? '${totalHours.toInt()}h'
         : '${totalHours.toStringAsFixed(1)}h';
 
     return Container(
@@ -35,9 +33,7 @@ class _CalendarSummaryWidgetState extends State<CalendarSummaryWidget> {
       decoration: BoxDecoration(
         color: AppColors.of(context).surface,
         borderRadius: BorderRadius.circular(AppConstants.r12),
-        border: Border.all(
-          color: AppColors.of(context).outlineVariant,
-        ),
+        border: Border.all(color: AppColors.of(context).tableBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,13 +55,16 @@ class _CalendarSummaryWidgetState extends State<CalendarSummaryWidget> {
                 children: [
                   Text(
                     l10n.monthlySummary,
-                    style: AppTextStyle.bodyMedium.copyWith(
+                    style: AppTextStyle.labelLarge.copyWith(
                       color: AppColors.of(context).onSurface,
+
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Icon(
-                    _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                    _isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
                     size: AppConstants.iconMedium,
                     color: AppColors.of(context).onSurfaceVariant,
                   ),
@@ -73,7 +72,7 @@ class _CalendarSummaryWidgetState extends State<CalendarSummaryWidget> {
               ),
             ),
           ),
-          
+
           if (_isExpanded) ...[
             Container(
               height: AppConstants.dividerHeight,
@@ -133,7 +132,8 @@ class _SummaryColumn extends StatelessWidget {
             textAlign: TextAlign.center,
             style: AppTextStyle.labelSmall.copyWith(
               color: AppColors.of(context).onSurfaceVariant,
-              fontWeight: FontWeight.w500,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
             ),
           ),
           SizedBox(height: 4.h),

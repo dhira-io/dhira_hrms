@@ -5,15 +5,7 @@ import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
-import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/api_constants.dart';
-import '../../../../core/utils/string_utils.dart';
 
-import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart';
-import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 import '../bloc/attendance_event.dart';
 import '../bloc/attendance_state.dart';
 import '../bloc/attendance_bloc.dart';
@@ -84,7 +76,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
             //     color: AppColors.of(context).textPrimary,
             //   ),
             // ),
-                  SizedBox(height: 10.h),
+            SizedBox(height: 10.h),
 
             // Action Chips
             Row(
@@ -123,7 +115,7 @@ class _AttendanceHeaderState extends State<AttendanceHeader> {
                                   }
                                 },
                         ),
-                              SizedBox(width: 12.w),
+                        SizedBox(width: 12.w),
                         _ActionChip(
                           icon: Icons.list_alt,
                           label: l10n.holidayList,
@@ -188,7 +180,7 @@ class _ActionChip extends StatelessWidget {
                 size: AppConstants.iconSmall,
                 color: AppColors.of(context).onSurfaceVariant,
               ),
-                    SizedBox(width: 8.w),
+              SizedBox(width: 8.w),
               Text(
                 label,
                 style: AppTextStyle.label.copyWith(

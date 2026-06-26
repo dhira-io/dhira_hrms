@@ -12,11 +12,6 @@ abstract class IAttendanceRemoteDataSource {
   Future<AttendanceStatusModel> punchIn(String empid);
   Future<AttendanceStatusModel> punchOut(String empid);
   Future<List<AttendanceLogModel>> getAttendanceLogs(String empid);
-  Future<Map<String, String>> getCalendarEvents({
-    required String employee,
-    required String fromDate,
-    required String toDate,
-  });
   Future<AttendanceStatusModel> startBreak(String empid);
   Future<AttendanceStatusModel> endBreak(String empid);
   Future<AttendanceMonthSummaryModel> getAttendanceMonthSummary({
@@ -122,25 +117,6 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
     );
     final List data = response.data['message']['data'] ?? [];
     return data.map((e) => AttendanceLogModel.fromJson(e)).toList();
-  }
-
-  @override
-  Future<Map<String, String>> getCalendarEvents({
-    required String employee,
-    required String fromDate,
-    required String toDate,
-  }) async {
-    final response = await dioClient.post(
-      AttendanceApiConstants.getCalendarEvents,
-      data: {"employee": employee, "from_date": fromDate, "to_date": toDate},
-    );
-    final Map<String, dynamic> data = response.data['message'] ?? {};
-    final Map<String, String> events = {};
-    data.forEach((key, value) {
-      events[key] = value.toString();
-    });
-
-    return events;
   }
 
   @override

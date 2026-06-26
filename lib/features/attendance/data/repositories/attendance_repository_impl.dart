@@ -53,21 +53,6 @@ class AttendanceRepositoryImpl implements IAttendanceRepository {
   }
 
   @override
-  Future<Either<Failure, Map<String, String>>> getCalendarEvents({
-    required String employee,
-    required String fromDate,
-    required String toDate,
-  }) async {
-    return networkInfo.executeSafely(() async {
-      return await remoteDataSource.getCalendarEvents(
-        employee: employee,
-        fromDate: fromDate,
-        toDate: toDate,
-      );
-    });
-  }
-
-  @override
   Future<Either<Failure, AttendanceStatusEntity>> startBreak(
     String empid,
   ) async {

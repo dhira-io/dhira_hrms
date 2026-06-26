@@ -2344,7 +2344,12 @@
     "calendarSubtitle": "See your calendar, leave balance, history, and summary.",
     "monthlySummary": "Monthly Summary",
     "totalHoursLabel": "Total Hours",
-    "weeklyOff": "Weekly Off"
+    "weeklyOff": "Weekly Off",
+    "holidayName": "Holiday Name",
+    "publicHolidayNoAttendance": "This is a public holiday. No attendance is required.",
+    "weekendNoAttendance": "This is weekend, no attendance required.",
+    "noAttendanceRecordFound": "No attendance record found for this day. Please regularize or Apply leave",
+    "applyLeaveBtn": "Apply Leave"
 }
 
 

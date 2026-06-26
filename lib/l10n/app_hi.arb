@@ -2178,7 +2178,12 @@
     "calendarSubtitle": "अपना कैलेंडर, छुट्टी की शेष राशि, इतिहास और सारांश देखें।",
     "monthlySummary": "मासिक सारांश",
     "totalHoursLabel": "कुल घंटे",
-    "weeklyOff": "साप्ताहिक अवकाश"
+    "weeklyOff": "साप्ताहिक अवकाश",
+    "holidayName": "अवकाश का नाम",
+    "publicHolidayNoAttendance": "यह एक सार्वजनिक अवकाश है। कोई उपस्थिति आवश्यक नहीं है।",
+    "weekendNoAttendance": "यह सप्ताहांत है, कोई उपस्थिति आवश्यक नहीं है।",
+    "noAttendanceRecordFound": "इस दिन के लिए कोई उपस्थिति रिकॉर्ड नहीं मिला। कृपया नियमित करें या छुट्टी लागू करें",
+    "applyLeaveBtn": "छुट्टी लागू करें"
 }
 
 

@@ -6,16 +6,13 @@ import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/constants/api_constants.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/core/utils/string_utils.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/team_leave_entity.dart';
+import 'package:dhira_hrms/features/calendar/domain/entities/team_leave_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 
 class CalendarOnLeaveTodayWidget extends StatelessWidget {
   final List<TeamLeaveEntity>? teamLeaves;
 
-  const CalendarOnLeaveTodayWidget({
-    super.key,
-    required this.teamLeaves,
-  });
+  const CalendarOnLeaveTodayWidget({super.key, required this.teamLeaves});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +31,7 @@ class CalendarOnLeaveTodayWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: themeColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: themeColors.outlineVariant, width: 1.w),
+        border: Border.all(color: themeColors.tableBorder, width: 1.w),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,11 +42,10 @@ class CalendarOnLeaveTodayWidget extends StatelessWidget {
             children: [
               Text(
                 l10n.teamOnLeave,
-                style: AppTextStyle.bodyMedium.copyWith(
-                  color: Colors.black,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                  height: 20 / 14,
+                style: AppTextStyle.labelLarge.copyWith(
+                  color: AppColors.of(context).onSurface,
+
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(height: 4.h),
@@ -131,18 +127,18 @@ class _EmployeeLeaveCard extends StatelessWidget {
     final imageUrl = leave.image;
     final fullImageUrl = imageUrl != null && imageUrl.isNotEmpty
         ? (imageUrl.isAbsoluteUrl
-            ? imageUrl
-            : '${ApiConstants.baseUrl}${imageUrl.startsWith('/') ? imageUrl.substring(1) : imageUrl}')
+              ? imageUrl
+              : '${ApiConstants.baseUrl}${imageUrl.startsWith('/') ? imageUrl.substring(1) : imageUrl}')
         : null;
 
     return Container(
       width: double.infinity,
-      height: 60.h,
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+      height: 50.h,
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 1.h),
       decoration: BoxDecoration(
         color: themeColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: themeColors.outlineVariant, width: 1.w),
+        border: Border.all(color: themeColors.tableBorder, width: 1.w),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,11 +158,7 @@ class _EmployeeLeaveCard extends StatelessWidget {
                   : null,
             ),
             child: fullImageUrl == null
-                ? Icon(
-                    Icons.person,
-                    size: 20.r,
-                    color: themeColors.slate400,
-                  )
+                ? Icon(Icons.person, size: 20.r, color: themeColors.slate400)
                 : null,
           ),
           SizedBox(width: 12.w),
@@ -180,9 +172,8 @@ class _EmployeeLeaveCard extends StatelessWidget {
                   leave.employeeName,
                   style: AppTextStyle.bodyMedium.copyWith(
                     color: const Color(0xFF020618),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    height: 20 / 14,
+
+                    fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

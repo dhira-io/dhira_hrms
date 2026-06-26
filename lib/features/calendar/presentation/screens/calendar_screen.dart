@@ -5,9 +5,9 @@ import 'package:dhira_hrms/core/services/local_storage_service.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
 import 'package:dhira_hrms/features/calendar/domain/usecases/get_calendar_events_usecase.dart';
 import 'package:dhira_hrms/features/calendar/domain/usecases/get_calendar_summary_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_punch_summary_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_team_leaves_usecase.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_attendance_punch_summary_usecase.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_bloc.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_event.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_state.dart';
@@ -22,10 +22,10 @@ class CalendarScreen extends StatelessWidget {
       create: (context) => CalendarBloc(
         getCalendarEventsUseCase: Get.find<GetCalendarMonthEventsUseCase>(),
         getCalendarSummaryUseCase: Get.find<GetCalendarSummaryUseCase>(),
-        getTeamLeavesUseCase: Get.find<GetTeamLeavesUseCase>(),
+        getTeamLeavesUseCase: Get.find<GetCalendarTeamLeavesUseCase>(),
         localStorageService: Get.find<LocalStorageService>(),
-        getAttendancePunchSummaryUseCase: Get.find<GetAttendancePunchSummaryUseCase>(),
-        getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
+        getAttendancePunchSummaryUseCase: Get.find<GetCalendarPunchSummaryUseCase>(),
+        getLeaveHistoryUseCase: Get.find<GetCalendarLeaveHistoryUseCase>(),
       ),
       child: const CalendarScreenContent(),
     );

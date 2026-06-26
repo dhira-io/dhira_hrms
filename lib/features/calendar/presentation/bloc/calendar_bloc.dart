@@ -6,22 +6,22 @@ import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/calendar/domain/entities/calendar_entity.dart';
 import 'package:dhira_hrms/features/calendar/domain/usecases/get_calendar_events_usecase.dart';
 import 'package:dhira_hrms/features/calendar/domain/usecases/get_calendar_summary_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/team_leave_entity.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/get_team_leaves_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_punch_summary_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/usecases/get_leave_history_usecase.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/attendance_punch_summary_entity.dart';
-import 'package:dhira_hrms/features/attendance/domain/entities/leave_history_entity.dart';
+import 'package:dhira_hrms/features/calendar/domain/entities/team_leave_entity.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_team_leaves_usecase.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_attendance_punch_summary_usecase.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_leave_history_usecase.dart';
+import 'package:dhira_hrms/features/calendar/domain/entities/attendance_punch_summary_entity.dart';
+import 'package:dhira_hrms/features/calendar/domain/entities/leave_history_entity.dart';
 import 'calendar_event.dart';
 import 'calendar_state.dart';
 
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   final GetCalendarMonthEventsUseCase getCalendarEventsUseCase;
   final GetCalendarSummaryUseCase getCalendarSummaryUseCase;
-  final GetTeamLeavesUseCase getTeamLeavesUseCase;
+  final GetCalendarTeamLeavesUseCase getTeamLeavesUseCase;
   final LocalStorageService localStorageService;
-  final GetAttendancePunchSummaryUseCase getAttendancePunchSummaryUseCase;
-  final GetLeaveHistoryUseCase getLeaveHistoryUseCase;
+  final GetCalendarPunchSummaryUseCase getAttendancePunchSummaryUseCase;
+  final GetCalendarLeaveHistoryUseCase getLeaveHistoryUseCase;
 
   CalendarBloc({
     required this.getCalendarEventsUseCase,
@@ -160,7 +160,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       )),
       existingLeaves != null
           ? Future.value(right<Failure, List<TeamLeaveEntity>>(existingLeaves))
-          : getTeamLeavesUseCase(GetTeamLeavesParams(
+          : getTeamLeavesUseCase(GetCalendarTeamLeavesParams(
               employee: empid,
               fromDate: todayStr,
               toDate: todayStr,

@@ -4,6 +4,9 @@ import 'package:dhira_hrms/features/calendar/data/repositories/calendar_reposito
 import 'package:dhira_hrms/features/calendar/domain/repositories/i_calendar_repository.dart';
 import 'package:dhira_hrms/features/calendar/domain/usecases/get_calendar_events_usecase.dart';
 import 'package:dhira_hrms/features/calendar/domain/usecases/get_calendar_summary_usecase.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_team_leaves_usecase.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_attendance_punch_summary_usecase.dart';
+import 'package:dhira_hrms/features/calendar/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_bloc.dart';
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:dhira_hrms/features/attendance/domain/usecases/get_attendance_month_summary_usecase.dart';
@@ -95,7 +98,6 @@ import '../../features/attendance/data/repositories/attendance_repository_impl.d
 import '../../features/attendance/domain/usecases/punch_in_usecase.dart';
 import '../../features/attendance/domain/usecases/punch_out_usecase.dart';
 import '../../features/attendance/domain/usecases/get_checkin_status_usecase.dart';
-import '../../features/attendance/domain/usecases/get_calendar_events_usecase.dart';
 import '../../features/attendance/domain/usecases/start_break_usecase.dart';
 import '../../features/attendance/domain/usecases/end_break_usecase.dart';
 import '../../features/attendance/domain/usecases/get_leave_details_usecase.dart'
@@ -380,10 +382,6 @@ class DependencyInjection {
     );
     Get.lazyPut<GetCheckinStatusUseCase>(
       () => GetCheckinStatusUseCase(Get.find<IAttendanceRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<GetCalendarEventsUseCase>(
-      () => GetCalendarEventsUseCase(Get.find<IAttendanceRepository>()),
       fenix: true,
     );
     Get.lazyPut<StartBreakUseCase>(
@@ -1008,7 +1006,6 @@ class DependencyInjection {
         punchInUseCase: Get.find<PunchInUseCase>(),
         punchOutUseCase: Get.find<PunchOutUseCase>(),
         getCheckinStatusUseCase: Get.find<GetCheckinStatusUseCase>(),
-        getCalendarEventsUseCase: Get.find<GetCalendarEventsUseCase>(),
         startBreakUseCase: Get.find<StartBreakUseCase>(),
         endBreakUseCase: Get.find<EndBreakUseCase>(),
         getAttendanceMonthSummaryUseCase:
@@ -1316,14 +1313,26 @@ class DependencyInjection {
       () => GetCalendarSummaryUseCase(Get.find()),
       fenix: true,
     );
+    Get.lazyPut<GetCalendarTeamLeavesUseCase>(
+      () => GetCalendarTeamLeavesUseCase(Get.find<ICalendarRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCalendarPunchSummaryUseCase>(
+      () => GetCalendarPunchSummaryUseCase(Get.find<ICalendarRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCalendarLeaveHistoryUseCase>(
+      () => GetCalendarLeaveHistoryUseCase(Get.find<ICalendarRepository>()),
+      fenix: true,
+    );
     Get.lazyPut<CalendarBloc>(
       () => CalendarBloc(
         getCalendarEventsUseCase: Get.find<GetCalendarMonthEventsUseCase>(),
         getCalendarSummaryUseCase: Get.find<GetCalendarSummaryUseCase>(),
-        getTeamLeavesUseCase: Get.find(),
+        getTeamLeavesUseCase: Get.find<GetCalendarTeamLeavesUseCase>(),
         localStorageService: Get.find(),
-        getAttendancePunchSummaryUseCase: Get.find<GetAttendancePunchSummaryUseCase>(),
-        getLeaveHistoryUseCase: Get.find<GetLeaveHistoryUseCase>(),
+        getAttendancePunchSummaryUseCase: Get.find<GetCalendarPunchSummaryUseCase>(),
+        getLeaveHistoryUseCase: Get.find<GetCalendarLeaveHistoryUseCase>(),
       ),
       fenix: true,
     );

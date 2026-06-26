@@ -108,11 +108,10 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
     final l10n = AppLocalizations.of(context)!;
 
     // Sync with existing state if already loaded
-    bloc.state.maybeWhen(
-      loaded: (status, logs, calendarEvents, _, __, _, _, _, _, _) {
-        _handleStatusLoaded(status, l10n);
+    bloc.state.mapOrNull(
+      loaded: (loadedState) {
+        _handleStatusLoaded(loadedState.status, l10n);
       },
-      orElse: () {},
     );
 
     bloc.add(const AttendanceEvent.checkStatusRequested());
@@ -160,17 +159,16 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
       listenWhen: (previous, current) =>
           current.mapOrNull(loaded: (_) => true, error: (_) => true) == true,
       listener: (context, state) {
-        state.maybeWhen(
-          loaded: (status, logs, calendarEvents, _, __, _, _, _, _, _) {
-            _handleStatusLoaded(status, l10n);
-            if (status.message != null && status.message!.isNotEmpty) {
-              ToastUtils.showSuccess(status.message!);
+        state.mapOrNull(
+          loaded: (loadedState) {
+            _handleStatusLoaded(loadedState.status, l10n);
+            if (loadedState.status.message != null && loadedState.status.message!.isNotEmpty) {
+              ToastUtils.showSuccess(loadedState.status.message!);
             }
           },
-          error: (message, events, _, __, _, _, _, _, _) {
-            ToastUtils.showError(message);
+          error: (errorState) {
+            ToastUtils.showError(errorState.message);
           },
-          orElse: () {},
         );
       },
       builder: (context, state) {

@@ -51,9 +51,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               listenWhen: (previous, current) =>
                   current.mapOrNull(error: (_) => true) == true,
               listener: (context, state) {
-                state.whenOrNull(
-                  error: (message, events, _, _, _, _, _, _, _) =>
-                      ToastUtils.showError(message),
+                state.mapOrNull(
+                  error: (errorState) => ToastUtils.showError(errorState.message),
                 );
               },
             ),

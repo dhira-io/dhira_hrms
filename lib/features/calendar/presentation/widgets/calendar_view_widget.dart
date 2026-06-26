@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
@@ -60,7 +61,7 @@ class _MonthSelectorHeader extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: 40.h,
+      height: 45.h,
       padding: EdgeInsets.symmetric(
         horizontal: AppConstants.p10,
         vertical: 8.h,
@@ -84,19 +85,25 @@ class _MonthSelectorHeader extends StatelessWidget {
               height: 32.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.of(context).surfaceContainerHigh,
-                border: Border.all(color: AppColors.of(context).outlineVariant),
+                color: const Color(0xFFFAFAFA),
+                border: Border.all(color: const Color(0xFFE5E5E5)),
               ),
-              child: Icon(
-                Icons.chevron_left,
-                size: AppConstants.iconSmall,
-                color: AppColors.of(context).onSurface,
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/svg/chevron_left.svg',
+                  width: 14.w,
+                  height: 14.w,
+                  colorFilter: ColorFilter.mode(
+                    AppColors.of(context).onSurface,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),
           Text(
             monthLabel,
-            style: AppTextStyle.bodyMedium.copyWith(
+            style: AppTextStyle.headingSmallTwoBold.copyWith(
               color: AppColors.of(context).onSurface,
               fontWeight: FontWeight.bold,
             ),
@@ -112,13 +119,19 @@ class _MonthSelectorHeader extends StatelessWidget {
               height: 32.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.of(context).surfaceContainerHigh,
-                border: Border.all(color: AppColors.of(context).outlineVariant),
+                color: const Color(0xFFFAFAFA),
+                border: Border.all(color: const Color(0xFFE5E5E5)),
               ),
-              child: Icon(
-                Icons.chevron_right,
-                size: AppConstants.iconSmall,
-                color: AppColors.of(context).onSurface,
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/svg/chevron_right.svg',
+                  width: 14.w,
+                  height: 14.w,
+                  colorFilter: ColorFilter.mode(
+                    AppColors.of(context).onSurface,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),
@@ -181,8 +194,9 @@ class _CalendarGridCard extends StatelessWidget {
                   child: Text(
                     weekdays[i],
                     textAlign: TextAlign.center,
-                    style: AppTextStyle.labelSmall.copyWith(
+                    style: AppTextStyle.labelMediumOne.copyWith(
                       color: const Color(0xFF62748E),
+
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -255,41 +269,44 @@ class _CalendarDayCell extends StatelessWidget {
     final isToday = DateTimeUtils.isToday(day);
 
     // Style configurations based on status
-    Color backgroundColor = AppColors.of(context).surface;
-    Color borderColor = AppColors.of(context).outlineVariant;
+    Color backgroundColor = const Color(0xFFFFFFFF);
+    Color borderColor = const Color(0xFFE5E5E5);
     Color? dotColor;
+    bool hasStatus = false;
 
-    if (status != null) {
+    if (status != null && status!.isNotEmpty) {
       final s = status!.toLowerCase();
       if (s == 'present') {
         backgroundColor = AppColors.of(context).presentBg;
         borderColor = AppColors.of(context).presentText;
         dotColor = AppColors.of(context).presentText;
+        hasStatus = true;
       } else if (s == 'absent') {
         backgroundColor = AppColors.of(context).absentBg;
         borderColor = AppColors.of(context).absentText;
         dotColor = AppColors.of(context).absentText;
+        hasStatus = true;
       } else if (s == 'on leave' || s == 'leave') {
         backgroundColor = AppColors.of(context).leaveBg;
         borderColor = AppColors.of(context).leaveText;
         dotColor = AppColors.of(context).leaveText;
+        hasStatus = true;
       } else if (s == 'holiday') {
         backgroundColor = AppColors.of(context).holidayBg;
         borderColor = AppColors.of(context).holidayText;
         dotColor = AppColors.of(context).holidayText;
+        hasStatus = true;
       } else if (s == 'weekend' || s == 'weekly off') {
         backgroundColor = AppColors.of(context).weekendBg;
         borderColor = AppColors.of(context).weekendText;
         dotColor = AppColors.of(context).weekendText;
+        hasStatus = true;
       } else if (s == 'half day' || s == 'half-day') {
         backgroundColor = AppColors.of(context).halfDayBg;
         borderColor = AppColors.of(context).halfDayText;
         dotColor = AppColors.of(context).halfDayText;
+        hasStatus = true;
       }
-    } else if (DateTimeUtils.isWeekend(day)) {
-      backgroundColor = AppColors.of(context).weekendBg;
-      borderColor = AppColors.of(context).weekendText;
-      dotColor = AppColors.of(context).weekendText;
     }
 
     if (isToday) {
@@ -298,39 +315,41 @@ class _CalendarDayCell extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(AppConstants.r8),
-          border: isSelected
-              ? Border.all(color: AppColors.of(context).primary, width: 2.w)
-              : Border.all(color: borderColor, width: 1.w),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              day.day.toString(),
-              style: AppTextStyle.bodyMedium.copyWith(
-                color: const Color(0xFF020618),
-                fontWeight: isToday || isSelected
-                    ? FontWeight.bold
-                    : FontWeight.w600,
-                fontSize: 14.sp,
-              ),
-            ),
-            if (dotColor != null) ...[
-              const SizedBox(height: 2),
-              Container(
-                width: 6.w,
-                height: 6.w,
-                decoration: BoxDecoration(
-                  color: dotColor,
-                  shape: BoxShape.circle,
+      child: Center(
+        child: Container(
+          width: 35.h,
+          height: 35.h,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(AppConstants.r8),
+            border: Border.all(color: borderColor, width: 1.w),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                day.day.toString(),
+                style: AppTextStyle.bodyMedium.copyWith(
+                  color: hasStatus ? const Color(0xFF020618) : const Color(0xFF62748E),
+                  fontWeight: isToday
+                      ? FontWeight.bold
+                      : FontWeight.w600,
+                  fontSize: 12.sp,
                 ),
               ),
+              if (dotColor != null) ...[
+                const SizedBox(height: 2),
+                Container(
+                  width: 5.w,
+                  height: 5.w,
+                  decoration: BoxDecoration(
+                    color: dotColor,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -345,19 +364,56 @@ class _HorizontalLegendsRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final themeColors = AppColors.of(context);
 
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Wrap(
-        spacing: 10.w,
-        runSpacing: 8.h,
-        alignment: WrapAlignment.start,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 4.w),
+      child: Table(
+        columnWidths: const {
+          0: FlexColumnWidth(),
+          1: FlexColumnWidth(),
+          2: FlexColumnWidth(),
+          3: FlexColumnWidth(),
+        },
         children: [
-          _LegendItem(color: themeColors.presentText, label: l10n.present),
-          _LegendItem(color: themeColors.leaveText, label: l10n.leave),
-          _LegendItem(color: themeColors.absentText, label: l10n.absent),
-          _LegendItem(color: themeColors.halfDayText, label: l10n.halfDay),
-          _LegendItem(color: themeColors.weekendText, label: l10n.weekend),
-          _LegendItem(color: themeColors.holidayText, label: l10n.holiday),
+          TableRow(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 8.h),
+                child: _LegendItem(
+                  color: themeColors.presentText,
+                  label: l10n.present,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 8.h),
+                child: _LegendItem(
+                  color: themeColors.leaveText,
+                  label: l10n.leave,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 8.h),
+                child: _LegendItem(
+                  color: themeColors.absentText,
+                  label: l10n.absent,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 8.h),
+                child: _LegendItem(
+                  color: themeColors.halfDayText,
+                  label: l10n.halfDay,
+                ),
+              ),
+            ],
+          ),
+          TableRow(
+            children: [
+              _LegendItem(color: themeColors.weekendText, label: l10n.weekend),
+              _LegendItem(color: themeColors.holidayText, label: l10n.holiday),
+              const SizedBox.shrink(),
+              const SizedBox.shrink(),
+            ],
+          ),
         ],
       ),
     );
@@ -384,10 +440,9 @@ class _LegendItem extends StatelessWidget {
         SizedBox(width: 6.w),
         Text(
           label,
-          style: AppTextStyle.bodySmall.copyWith(
+          style: AppTextStyle.bodyMediumOne.copyWith(
             color: const Color(0xFF314158),
-            fontWeight: FontWeight.w500,
-            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
