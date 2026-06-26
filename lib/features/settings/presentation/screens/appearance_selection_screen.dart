@@ -31,10 +31,8 @@ class AppearanceSelectionScreen extends StatelessWidget {
         ),
         title: Text(
           l10n.appearanceSettings,
-            style: TextStyle(
+            style: AppTextStyle.titleLarge.copyWith(
               color: AppColors.of(context).onSurface,
-              fontWeight: FontWeight.bold,
-              fontSize: 18.sp,
             ),
         ),
         centerTitle: false,
@@ -48,7 +46,14 @@ class AppearanceSelectionScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Appearance Options Cards
+            // Header Section
+            Text(
+              l10n.appearance,
+              style: AppTextStyle.headingLarge.copyWith(
+                color: AppColors.of(context).onSurface,
+              ),
+            ),
+            SizedBox(height: 24.h),
 
             // Appearance Options Cards
             Column(
@@ -172,9 +177,7 @@ class _ThemeCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyle.bodyMedium.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.sp,
+                    style: AppTextStyle.titleMedium.copyWith(
                       color: AppColors.of(context).onSurface,
                     ),
                   ),
@@ -182,7 +185,6 @@ class _ThemeCard extends StatelessWidget {
                     subtitle,
                     style: AppTextStyle.bodySmall.copyWith(
                       color: AppColors.of(context).outline,
-                      fontSize: 11.sp,
                     ),
                   ),
                 ],

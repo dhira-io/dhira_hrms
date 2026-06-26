@@ -57,10 +57,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         ),
         title: Text(
           l10n.language,
-          style: TextStyle(
+          style: AppTextStyle.titleLarge.copyWith(
             color: AppColors.of(context).onSurface,
-            fontWeight: FontWeight.bold,
-            fontSize: 18.sp,
           ),
         ),
         centerTitle: false,
@@ -112,7 +110,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   color: AppColors.of(context).onSurfaceVariant,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
-                  fontSize: 12.sp,
                 ),
               ),
             ),
@@ -171,7 +168,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                           subtitle,
                                           style: AppTextStyle.bodySmall.copyWith(
                                             color: AppColors.of(context).outline,
-                                            fontSize: 11.sp,
                                           ),
                                         ),
                                       ),
