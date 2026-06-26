@@ -145,9 +145,9 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
     Emitter<LeaveState> emit,
   ) async {
     if (!isRefresh) {
-      emit(state.copyWith(isInitialLoading: true, balanceError: null));
+      emit(state.copyWith(isInitialLoading: true, balanceError: null, typesLoadFailed: false));
     } else {
-      emit(state.copyWith(isLoading: true, balanceError: null));
+      emit(state.copyWith(isLoading: true, balanceError: null, typesLoadFailed: false));
     }
     final result = await getLeaveTypesUseCase();
     result.fold(
@@ -156,6 +156,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
           isInitialLoading: false,
           errorMessage: failure.message,
           success: false,
+          typesLoadFailed: true,
         ),
       ),
       (types) => emit(
@@ -163,6 +164,7 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
           isInitialLoading: false,
           leaveTypes: types,
           success: false,
+          typesLoadFailed: false,
         ),
       ),
     );

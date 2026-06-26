@@ -4,7 +4,8 @@ import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:dhira_hrms/features/approvals/timesheetapproval/domain/entities/timesheet_approval_entity.dart';
-import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/projects_worked_list.dart';
+import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/timesheet_status_badge.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 
 class TimesheetSummaryCard extends StatelessWidget {
   final TimesheetApprovalEntity timesheet;
@@ -13,59 +14,56 @@ class TimesheetSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final weekText = DateTimeUtils.getWeekNumber(timesheet.fromDate, l10n);
+    final dateRangeText = DateTimeUtils.formatWeekRangeStr(timesheet.fromDate, timesheet.toDate);
 
     return Container(
-      padding:       EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surfaceContainerLowest,
+        color: colors.blue500,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.of(context).slate200),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                flex: 2,
-                child: SummaryItem(
-                  label: l10n.weekRangeLabel,
-                  value: "${timesheet.fromDate} - ${timesheet.toDate}",
+              Text(
+                weekText,
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: colors.white.withValues(alpha: 0.8),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Expanded(
-                child: SummaryItem(
-                  label: l10n.expectedHours,
-                  value: "${timesheet.expectedHoursTotal.toInt()}h",
-                ),
-              ),
-              Expanded(
-                child: SummaryItem(
-                  label: l10n.actualTime,
-                  value: "${timesheet.totalSpentHours.toInt()}h",
-                ),
-              ),
+              const TimesheetStatusBadge(status: 'pending'),
             ],
           ),
-                SizedBox(height: 16.h),
+          Text(
+            dateRangeText,
+            style: AppTextStyle.titleMedium.copyWith(
+              color: colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 8.h),
           Row(
             children: [
               Expanded(
-                child: SummaryItem(
-                  label: l10n.approver,
-                  value: timesheet.approverName ?? "—",
-                  isBadge: true,
+                child: _buildInfoCard(
+                  context,
+                  l10n.expectedHours,
+                  "${timesheet.expectedHoursTotal.toInt()}h",
                 ),
               ),
+              SizedBox(width: 12.w),
               Expanded(
-                child: ProjectsWorkedList(
-                  label: l10n.projectsLabel,
-                  projects:
-                      timesheet.projectAssignments
-                          ?.map((a) => a.project)
-                          .toList() ??
-                      [],
+                child: _buildInfoCard(
+                  context,
+                  l10n.actualTime,
+                  "${timesheet.totalSpentHours.toInt()}h",
                 ),
               ),
             ],
@@ -74,61 +72,34 @@ class TimesheetSummaryCard extends StatelessWidget {
       ),
     );
   }
-}
 
-class SummaryItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool isBadge;
-
-  const SummaryItem({
-    super.key,
-    required this.label,
-    required this.value,
-    this.isBadge = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.of(context).slate500,
-            fontSize: 12.sp,
+  Widget _buildInfoCard(BuildContext context, String label, String value) {
+    final colors = AppColors.of(context);
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+      decoration: BoxDecoration(
+        color: colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: AppTextStyle.labelMedium.copyWith(
+              color: colors.onSecondaryContainer,
+            ),
           ),
-        ),
-              SizedBox(height: 8.h),
-        if (isBadge)
-          Container(
-            padding:       EdgeInsets.symmetric(
-              horizontal: 12.w,
-              vertical: 6.h,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.of(context).surfaceContainerLowest,
-              borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(color: AppColors.of(context).slate200),
-            ),
-            child: Text(
-              value,
-              style: AppTextStyle.bodySmall.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 13.sp,
-              ),
-            ),
-          )
-        else
+          SizedBox(height: 2.h),
           Text(
             value,
-            style: AppTextStyle.bodyMedium.copyWith(
+            style: AppTextStyle.titleMedium.copyWith(
+              color: colors.textPrimary,
               fontWeight: FontWeight.bold,
-              fontSize: 15.sp,
             ),
           ),
-      ],
+        ],
+      ),
     );
   }
 }

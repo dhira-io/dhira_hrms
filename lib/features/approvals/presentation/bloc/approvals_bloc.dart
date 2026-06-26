@@ -1,10 +1,10 @@
+import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'dart:async';
 import 'dart:developer' as dev;
 import 'package:dhira_hrms/features/approvals/leaveapproval/domain/usecases/submit_leave_workflow_action_usecase.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/entities/approval_type.dart';
 import '../../domain/entities/approval_request_entity.dart';
 import '../../domain/usecases/get_approvals_access_usecase.dart';
 import '../../domain/usecases/get_approvals_summary_usecase.dart';
@@ -23,6 +23,7 @@ import '../../timesheetapproval/domain/usecases/delete_approval_timesheet_usecas
 import 'approvals_event.dart';
 import 'approvals_state.dart';
 import 'approvals_success_data.dart';
+import '../../data/constants/approvals_api_constants.dart';
 
 class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
   final GetApprovalsAccessUseCase getApprovalsAccessUseCase;
@@ -45,6 +46,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
   ApprovalCategory? _pendingCategory;
   ApprovalType? _pendingType;
 
+  ApprovalsSuccessData get data => state.data!;
+
   ApprovalsBloc({
     required this.getApprovalsAccessUseCase,
     required this.getApprovalsSummaryUseCase,
@@ -60,7 +63,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     required this.getProjectsUseCase,
     required this.getEmployeesUseCase,
     required this.deleteTimesheetUseCase,
-  }) : super(const ApprovalsState.initial()) {
+  }) : super(const ApprovalsState(status: ApprovalsStatus.initial)) {
     on<Started>(_onStarted);
     on<RefreshRequested>(_onRefreshRequested);
     on<LoadMoreRequested>(_onLoadMoreRequested);
@@ -73,88 +76,129 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     on<UpdateTimesheetRequested>(_onUpdateTimesheetRequested);
     on<SyncTimesheetRequested>(_onSyncTimesheetRequested);
     on<DeleteTimesheetRequested>(_onDeleteTimesheetRequested);
+    on<SearchQueryChanged>(
+      _onSearchQueryChanged,
+      transformer: _debounce(const Duration(milliseconds: 300)),
+    );
+    on<StatusFilterChanged>(_onStatusFilterChanged);
+    on<RequestSelectionToggled>(_onRequestSelectionToggled);
+    on<SelectAllToggled>(_onSelectAllToggled);
+    on<BulkWorkflowActionSubmitted>(_onBulkWorkflowActionSubmitted);
     on<ClearMessages>(_onClearMessages);
   }
 
   Future<void> _onStarted(Started event, Emitter<ApprovalsState> emit) async {
-    emit(const ApprovalsState.loading());
+    emit(const ApprovalsState(status: ApprovalsStatus.loading));
 
-    final accessResult = await getApprovalsAccessUseCase();
+    final results = await Future.wait([
+      getApprovalsAccessUseCase() as Future<dynamic>,
+      getApprovalsSummaryUseCase() as Future<dynamic>,
+      getEmployeesUseCase() as Future<dynamic>,
+    ]);
 
-    await accessResult.fold(
-      (failure) async => emit(ApprovalsState.failure(failure.message)),
-      (access) async {
-        final summaryResult = await getApprovalsSummaryUseCase();
+    final accessResult = results[0];
+    final summaryResult = results[1];
+    final employeesResult = results[2];
 
-        await summaryResult.fold(
-          (failure) async => emit(ApprovalsState.failure(failure.message)),
-          (summary) async {
-            // Fetch employees for image fallback
-            final employeesResult = await getEmployeesUseCase();
-            final employees = employeesResult.getOrElse(
-              () => <Map<String, dynamic>>[],
-            );
+    String? errorMessage;
+    dynamic access;
+    dynamic summary;
 
-            // If user is not an approver (can_access: false), default to
-            // their own Raised requests so the list is never empty on first load.
-            final defaultCategory =
-                _pendingCategory ??
-                event.initialCategory ??
-                (access.canAccess
-                    ? ApprovalCategory.team
-                    : ApprovalCategory.raised);
+    accessResult.fold(
+      (f) => errorMessage = f.message,
+      (a) => access = a,
+    );
+    if (errorMessage != null) {
+      emit(ApprovalsState(status: ApprovalsStatus.failure, errorMessage: errorMessage!));
+      return;
+    }
 
-            final defaultType =
-                _pendingType ?? event.initialType ?? ApprovalType.leave;
+    summaryResult.fold(
+      (f) => errorMessage = f.message,
+      (s) => summary = s,
+    );
+    if (errorMessage != null) {
+      emit(ApprovalsState(status: ApprovalsStatus.failure, errorMessage: errorMessage!));
+      return;
+    }
 
-            // Clear the pending values
-            _pendingCategory = null;
-            _pendingType = null;
+    final employees = employeesResult.getOrElse(() => <Map<String, dynamic>>[]);
 
-            // Initial emit with empty list and loading flag
-            emit(
-              ApprovalsState.success(
-                ApprovalsSuccessData(
-                  access: access,
-                  summary: summary,
-                  category: defaultCategory,
-                  isListLoading: true,
-                  requests: [],
-                  employees: employees,
-                  targetCategory: defaultCategory,
-                  type: defaultType,
-                  targetType: defaultType,
-                ),
-              ),
-            );
+    // If user is not an approver (can_access: false), default to
+    // their own Raised requests so the list is never empty on first load.
+    final defaultCategory =
+        _pendingCategory ??
+        event.initialCategory ??
+        (access.canAccess
+            ? ApprovalCategory.team
+            : ApprovalCategory.raised);
 
-            final requestsResult = await getPendingRequestsUseCase(
-              defaultType,
-              defaultCategory,
+    final defaultType =
+        _pendingType ?? event.initialType ?? ApprovalType.leave;
+
+    // Clear the pending values
+    _pendingCategory = null;
+    _pendingType = null;
+
+    // Initial emit with empty list and loading flag
+    emit(
+      ApprovalsState(status: ApprovalsStatus.success, data: 
+        ApprovalsSuccessData(
+          access: access,
+          summary: summary,
+          category: defaultCategory,
+          isListLoading: true,
+          requests: [],
+          employees: employees,
+          targetCategory: defaultCategory,
+          type: defaultType,
+          targetType: defaultType,
+        ),
+      ),
+    );
+
+    final requestsResult = await getPendingRequestsUseCase(
+      defaultType,
+      defaultCategory,
+      page: 1,
+    );
+
+    requestsResult.fold(
+      (failure) {
+        emit(
+          ApprovalsState(status: ApprovalsStatus.success, data: 
+            ApprovalsSuccessData(
+              access: access,
+              summary: summary,
+              category: defaultCategory,
+              isListLoading: false,
+              requests: [],
+              employees: employees,
+              targetCategory: defaultCategory,
+              type: defaultType,
+              targetType: defaultType,
+              hasMore: false,
+            ),
+          ),
+        );
+      },
+      (models) {
+        emit(
+          ApprovalsState(status: ApprovalsStatus.success, data: 
+            ApprovalsSuccessData(
+              access: access,
+              summary: summary,
+              category: defaultCategory,
+              isListLoading: false,
+              requests: models,
+              employees: employees,
+              targetCategory: defaultCategory,
+              type: defaultType,
+              targetType: defaultType,
               page: 1,
-            );
-
-            requestsResult.fold(
-              (failure) => emit(ApprovalsState.failure(failure.message)),
-              (requests) => emit(
-                ApprovalsState.success(
-                  ApprovalsSuccessData(
-                    access: access,
-                    summary: summary,
-                    category: defaultCategory,
-                    requests: _sortRequests(requests),
-                    employees: employees,
-                    isListLoading: false,
-                    targetCategory: defaultCategory,
-                    type: defaultType,
-                    targetType: defaultType,
-                    page: 1,
-                    hasMore: requests.length >= 10,
-                  ),
-                ),
-              ),
-            );
-          },
+              hasMore: models.length >= 10,
+            ),
+          ),
         );
       },
     );
@@ -165,7 +209,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     Emitter<ApprovalsState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! Success) {
+    if (currentState.status != ApprovalsStatus.success || currentState.data == null) {
       event.completer?.complete();
       return;
     }
@@ -175,8 +219,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       final results = await Future.wait([
         getApprovalsSummaryUseCase(),
         getPendingRequestsUseCase(
-          currentState.data.type,
-          currentState.data.category,
+          data.type,
+          data.category,
           page: 1,
         ),
       ]);
@@ -185,20 +229,20 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       final requestsResult = results[1] as dynamic;
 
       final newSummary = summaryResult.fold(
-        (failure) => (state as Success).data.summary,
+        (failure) => data.summary,
         (summary) => summary,
       );
 
       final newRequests = requestsResult.fold(
-        (failure) => (state as Success).data.requests,
+        (failure) => data.requests,
         (requests) => requests,
       );
 
-      if (state is Success) {
-        final latestSuccessState = state as Success;
+      if (state.status == ApprovalsStatus.success && state.data != null) {
+        final latestSuccessState = state;
         emit(
-          ApprovalsState.success(
-            latestSuccessState.data.copyWith(
+          ApprovalsState(status: ApprovalsStatus.success, data: 
+            latestSuccessState.data!.copyWith(
               summary: newSummary,
               requests: _sortRequests(newRequests),
               isListLoading: false, // Ensure shimmer is off
@@ -208,7 +252,7 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
                             .getOrElse(() => <ApprovalRequestEntity>[])
                             .length >=
                         10
-                  : latestSuccessState.data.hasMore,
+                  : data.hasMore,
               successMessage: null,
               errorMessage: requestsResult.isLeft()
                   ? requestsResult.fold((f) => f.message, (_) => null)
@@ -224,13 +268,13 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         name: 'ApprovalsBloc',
       );
 
-      if (state is Success) {
-        final latestSuccessState = state as Success;
+      if (state.status == ApprovalsStatus.success && state.data != null) {
+        final latestSuccessState = state;
         emit(
-          ApprovalsState.success(
-            latestSuccessState.data.copyWith(
+          ApprovalsState(status: ApprovalsStatus.success, data: 
+            latestSuccessState.data!.copyWith(
               isListLoading: false,
-              errorMessage: 'FAILED_TO_REFRESH_PREFIX:$e',
+              errorMessage: '${ApprovalsApiConstants.msgFailedToRefreshPrefix}$e',
             ),
           ),
         );
@@ -244,34 +288,32 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     LoadMoreRequested event,
     Emitter<ApprovalsState> emit,
   ) async {
-    if (state is! Success) return;
-    final initialSuccessState = state as Success;
+    if (state.status != ApprovalsStatus.success || state.data == null) return;
 
-    if (initialSuccessState.data.isLoadMoreLoading ||
-        !initialSuccessState.data.hasMore) {
+    if (data.isLoadMoreLoading || !data.hasMore) {
       return;
     }
 
     emit(
-      ApprovalsState.success(
-        initialSuccessState.data.copyWith(isLoadMoreLoading: true),
+      ApprovalsState(status: ApprovalsStatus.success, data: 
+        data.copyWith(isLoadMoreLoading: true),
       ),
     );
 
-    final nextPage = initialSuccessState.data.page + 1;
+    final nextPage = data.page + 1;
     final requestsResult = await getPendingRequestsUseCase(
-      initialSuccessState.data.type,
-      initialSuccessState.data.category,
+      data.type,
+      data.category,
       page: nextPage,
     );
 
     requestsResult.fold(
       (failure) {
-        if (state is Success) {
-          final latestSuccessState = state as Success;
+        if (state.status == ApprovalsStatus.success && state.data != null) {
+          final latestSuccessState = state;
           emit(
-            ApprovalsState.success(
-              latestSuccessState.data.copyWith(
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              latestSuccessState.data!.copyWith(
                 isLoadMoreLoading: false,
                 errorMessage: failure.message,
               ),
@@ -280,15 +322,14 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         }
       },
       (newRequests) {
-        if (state is Success) {
-          final latestSuccessState = state as Success;
+        if (state.status == ApprovalsStatus.success && state.data != null) {
           final combinedRequests = [
-            ...latestSuccessState.data.requests,
+            ...data.requests,
             ...newRequests,
           ];
           emit(
-            ApprovalsState.success(
-              latestSuccessState.data.copyWith(
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              data.copyWith(
                 requests: _sortRequests(combinedRequests),
                 isLoadMoreLoading: false,
                 page: nextPage,
@@ -305,18 +346,16 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     CategoryChanged event,
     Emitter<ApprovalsState> emit,
   ) async {
-    if (state is! Success) {
+    if (state.status != ApprovalsStatus.success || state.data == null) {
       _pendingCategory = event.category;
       _pendingType = event.type;
       return;
     }
 
-    final initialSuccessState = state as Success;
-
     // 1. Show shimmer by clearing list and setting loading true
     emit(
-      ApprovalsState.success(
-        initialSuccessState.data.copyWith(
+      ApprovalsState(status: ApprovalsStatus.success, data: 
+        data.copyWith(
           category: event.category,
           type: event.type,
           isListLoading: true,
@@ -337,13 +376,13 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     );
 
     requestsResult.fold(
-      (failure) => emit(ApprovalsState.failure(failure.message)),
+      (failure) => emit(ApprovalsState(status: ApprovalsStatus.failure, errorMessage: failure.message)),
       (requests) {
-        if (state is Success) {
-          final latestSuccessState = state as Success;
+        if (state.status == ApprovalsStatus.success && state.data != null) {
+          final latestSuccessState = state;
           emit(
-            ApprovalsState.success(
-              latestSuccessState.data.copyWith(
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              latestSuccessState.data!.copyWith(
                 category: event.category,
                 type: event.type,
                 requests: _sortRequests(requests),
@@ -366,18 +405,18 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     RefreshSummary event,
     Emitter<ApprovalsState> emit,
   ) async {
-    if (state is! Success) return;
+    if (state.status != ApprovalsStatus.success || state.data == null) return;
 
     final summaryResult = await getApprovalsSummaryUseCase();
 
     summaryResult.fold(
       (_) => null, // Ignore background errors to keep UI stable
       (newSummary) {
-        if (state is Success) {
-          final latestSuccessState = state as Success;
+        if (state.status == ApprovalsStatus.success && state.data != null) {
+          final latestSuccessState = state;
           emit(
-            ApprovalsState.success(
-              latestSuccessState.data.copyWith(
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              latestSuccessState.data!.copyWith(
                 summary: newSummary,
                 successMessage: null,
                 errorMessage: null,
@@ -393,15 +432,14 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     WorkflowActionSubmitted event,
     Emitter<ApprovalsState> emit,
   ) async {
-    if (state is! Success) return;
-    final initialSuccessState = state as Success;
+    if (state.status != ApprovalsStatus.success || state.data == null) return;
 
     // 1. Mark item as processing
     emit(
-      ApprovalsState.success(
-        initialSuccessState.data.copyWith(
+      ApprovalsState(status: ApprovalsStatus.success, data: 
+        data.copyWith(
           processingIds: {
-            ...initialSuccessState.data.processingIds,
+            ...data.processingIds,
             event.requestId,
           },
         ),
@@ -435,12 +473,12 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
 
     await result.fold(
       (failure) async {
-        if (state is Success) {
-          final latestSuccessState = state as Success;
+        if (state.status == ApprovalsStatus.success && state.data != null) {
+          final latestSuccessState = state;
           emit(
-            ApprovalsState.success(
-              latestSuccessState.data.copyWith(
-                processingIds: Set.from(latestSuccessState.data.processingIds)
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              latestSuccessState.data!.copyWith(
+                processingIds: Set.from(latestSuccessState.data!.processingIds)
                   ..remove(event.requestId),
                 errorMessage: failure.message,
                 successMessage: null,
@@ -450,21 +488,19 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         }
       },
       (successMessage) async {
-        if (state is Success) {
-          final latestSuccessState = state as Success;
-
+        if (state.status == ApprovalsStatus.success && state.data != null) {
           // Action success!
           // 2. Locally update the list (remove processed item)
-          final updatedRequests = latestSuccessState.data.requests
+          final updatedRequests = data.requests
               .where((r) => r.id != event.requestId)
               .toList();
 
           // 3. Remove from processing and update list
           emit(
-            ApprovalsState.success(
-              latestSuccessState.data.copyWith(
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              data.copyWith(
                 requests: updatedRequests,
-                processingIds: Set.from(latestSuccessState.data.processingIds)
+                processingIds: Set.from(data.processingIds)
                   ..remove(event.requestId),
                 successMessage: successMessage,
                 errorMessage: null,
@@ -476,11 +512,11 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         // 4. Refresh the summary in the background
         final summaryResult = await getApprovalsSummaryUseCase();
         summaryResult.fold((_) => null, (newSummary) {
-          if (state is Success) {
-            final latestSuccessState = state as Success;
+          if (state.status == ApprovalsStatus.success && state.data != null) {
+            final latestSuccessState = state;
             emit(
-              ApprovalsState.success(
-                latestSuccessState.data.copyWith(
+              ApprovalsState(status: ApprovalsStatus.success, data: 
+                latestSuccessState.data!.copyWith(
                   summary: newSummary,
                   successMessage: null,
                   errorMessage: null,
@@ -497,8 +533,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     CommentSubmitted event,
     Emitter<ApprovalsState> emit,
   ) async {
-    await state.maybeMap(
-      success: (currentState) async {
+    if (state.status == ApprovalsStatus.success && state.data != null) {
+      final data = state.data!;
         final result = await addCommentUseCase(
           event.type.doctype,
           event.requestId,
@@ -506,12 +542,25 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         );
 
         result.fold(
-          (failure) => null, // TODO: Show error toast
-          (_) => null, // TODO: Show success toast
+          (failure) {
+            emit(ApprovalsState(status: ApprovalsStatus.success, data: 
+              data.copyWith(
+                errorMessage: failure.message,
+                successMessage: null,
+              ),
+            ));
+          },
+          (_) {
+            emit(ApprovalsState(status: ApprovalsStatus.success, data: 
+              data.copyWith(
+                successMessage: 'Comment added successfully',
+                errorMessage: null,
+              ),
+            ));
+            add(ApprovalsEvent.commentsRequested(doctype: event.type.doctype, requestId: event.requestId));
+          },
         );
-      },
-      orElse: () {},
-    );
+    }
   }
 
   Future<void> _onCommentsRequested(
@@ -519,11 +568,12 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     Emitter<ApprovalsState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! Success) return;
+    final data = currentState.data;
+    if (currentState.status != ApprovalsStatus.success || data == null) return;
 
     emit(
-      ApprovalsState.success(
-        currentState.data.copyWith(isCommentsLoading: true, comments: []),
+      ApprovalsState(status: ApprovalsStatus.success, data: 
+        data.copyWith(isCommentsLoading: true, comments: []),
       ),
     );
 
@@ -531,13 +581,16 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
 
     result.fold(
       (failure) => emit(
-        ApprovalsState.success(
-          currentState.data.copyWith(isCommentsLoading: false),
+        ApprovalsState(status: ApprovalsStatus.success, data: 
+          data.copyWith(
+            isCommentsLoading: false,
+            errorMessage: failure.message,
+          ),
         ),
       ),
       (comments) => emit(
-        ApprovalsState.success(
-          currentState.data.copyWith(
+        ApprovalsState(status: ApprovalsStatus.success, data: 
+          data.copyWith(
             isCommentsLoading: false,
             comments: comments,
           ),
@@ -551,11 +604,12 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     Emitter<ApprovalsState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! Success) return;
+    final data = currentState.data;
+    if (currentState.status != ApprovalsStatus.success || data == null) return;
 
     emit(
-      ApprovalsState.success(
-        currentState.data.copyWith(
+      ApprovalsState(status: ApprovalsStatus.success, data: 
+        data.copyWith(
           isTimesheetLoading: true,
           successMessage: null,
           errorMessage: null,
@@ -575,8 +629,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
 
     timesheetResult.fold(
       (failure) => emit(
-        ApprovalsState.success(
-          currentState.data.copyWith(
+        ApprovalsState(status: ApprovalsStatus.success, data: 
+          data.copyWith(
             isTimesheetLoading: false,
             errorMessage: failure.message,
           ),
@@ -589,8 +643,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         );
 
         emit(
-          ApprovalsState.success(
-            currentState.data.copyWith(
+          ApprovalsState(status: ApprovalsStatus.success, data: 
+            data.copyWith(
               isTimesheetLoading: false,
               editingTimesheet: timesheet,
               projects: projects,
@@ -607,12 +661,14 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     Emitter<ApprovalsState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! Success) return;
+    final data = currentState.data;
+    if (currentState.status != ApprovalsStatus.success || data == null) return;
 
     emit(
-      ApprovalsState.success(
-        currentState.data.copyWith(
-          isTimesheetLoading: true,
+      ApprovalsState(status: ApprovalsStatus.success, data: 
+        data.copyWith(
+          processingIds: Set.from(data.processingIds)
+            ..add(event.timesheet.name),
           successMessage: null,
           errorMessage: null,
         ),
@@ -650,9 +706,10 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
 
     result.fold(
       (failure) => emit(
-        ApprovalsState.success(
-          currentState.data.copyWith(
-            isTimesheetLoading: false,
+        ApprovalsState(status: ApprovalsStatus.success, data: 
+          data.copyWith(
+            processingIds: Set.from(data.processingIds)
+              ..remove(event.timesheet.name),
             errorMessage: failure.message,
           ),
         ),
@@ -666,20 +723,22 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ),
           );
           emit(
-            ApprovalsState.success(
-              currentState.data.copyWith(
-                isTimesheetLoading: false,
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              data.copyWith(
+                processingIds: Set.from(data.processingIds)
+                  ..remove(event.timesheet.name),
                 editingTimesheet: null,
-                successMessage: 'Timesheet updated successfully',
+                successMessage: ApprovalsApiConstants.msgTimesheetUpdated,
               ),
             ),
           );
         } else {
           emit(
-            ApprovalsState.success(
-              currentState.data.copyWith(
-                isTimesheetLoading: false,
-                errorMessage: 'Failed to update timesheet',
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              data.copyWith(
+                processingIds: Set.from(data.processingIds)
+                  ..remove(event.timesheet.name),
+                errorMessage: ApprovalsApiConstants.msgTimesheetUpdateFailed,
               ),
             ),
           );
@@ -693,11 +752,12 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     Emitter<ApprovalsState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! Success) return;
+    final data = currentState.data;
+    if (currentState.status != ApprovalsStatus.success || data == null) return;
 
     emit(
-      ApprovalsState.success(
-        currentState.data.copyWith(
+      ApprovalsState(status: ApprovalsStatus.success, data: 
+        data.copyWith(
           isTimesheetLoading: true,
           successMessage: null,
           errorMessage: null,
@@ -709,8 +769,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
 
     result.fold(
       (failure) => emit(
-        ApprovalsState.success(
-          currentState.data.copyWith(
+        ApprovalsState(status: ApprovalsStatus.success, data: 
+          data.copyWith(
             isTimesheetLoading: false,
             errorMessage: failure.message,
           ),
@@ -725,20 +785,20 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
             ),
           );
           emit(
-            ApprovalsState.success(
-              currentState.data.copyWith(
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              data.copyWith(
                 isTimesheetLoading: false,
                 editingTimesheet: null,
-                successMessage: 'Timesheet updated successfully',
+                successMessage: ApprovalsApiConstants.msgTimesheetUpdated,
               ),
             ),
           );
         } else {
           emit(
-            ApprovalsState.success(
-              currentState.data.copyWith(
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              data.copyWith(
                 isTimesheetLoading: false,
-                errorMessage: 'Failed to update timesheet',
+                errorMessage: ApprovalsApiConstants.msgTimesheetUpdateFailed,
               ),
             ),
           );
@@ -752,13 +812,14 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     Emitter<ApprovalsState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! Success) return;
+    final data = currentState.data;
+    if (currentState.status != ApprovalsStatus.success || data == null) return;
 
     // 1. Mark item as processing
     emit(
-      ApprovalsState.success(
-        currentState.data.copyWith(
-          processingIds: {...currentState.data.processingIds, event.requestId},
+      ApprovalsState(status: ApprovalsStatus.success, data: 
+        data.copyWith(
+          processingIds: {...data.processingIds, event.requestId},
           successMessage: null,
           errorMessage: null,
         ),
@@ -769,9 +830,9 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
 
     result.fold(
       (failure) => emit(
-        ApprovalsState.success(
-          currentState.data.copyWith(
-            processingIds: Set.from(currentState.data.processingIds)
+        ApprovalsState(status: ApprovalsStatus.success, data: 
+          data.copyWith(
+            processingIds: Set.from(data.processingIds)
               ..remove(event.requestId),
             errorMessage: failure.message,
           ),
@@ -780,18 +841,18 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       (success) async {
         if (success) {
           // 2. Locally update the list (remove processed item)
-          final updatedRequests = currentState.data.requests
+          final updatedRequests = data.requests
               .where((r) => r.id != event.requestId)
               .toList();
 
           // 3. Remove from processing and update list
           emit(
-            ApprovalsState.success(
-              currentState.data.copyWith(
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              data.copyWith(
                 requests: updatedRequests,
-                processingIds: Set.from(currentState.data.processingIds)
+                processingIds: Set.from(data.processingIds)
                   ..remove(event.requestId),
-                successMessage: 'Timesheet deleted successfully',
+                successMessage: ApprovalsApiConstants.msgTimesheetDeleted,
                 errorMessage: null,
               ),
             ),
@@ -801,11 +862,11 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           add(const ApprovalsEvent.refreshSummary());
         } else {
           emit(
-            ApprovalsState.success(
-              currentState.data.copyWith(
-                processingIds: Set.from(currentState.data.processingIds)
+            ApprovalsState(status: ApprovalsStatus.success, data: 
+              data.copyWith(
+                processingIds: Set.from(data.processingIds)
                   ..remove(event.requestId),
-                errorMessage: 'Failed to delete timesheet',
+                errorMessage: ApprovalsApiConstants.msgTimesheetDeleteFailed,
               ),
             ),
           );
@@ -820,10 +881,10 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     return List<ApprovalRequestEntity>.from(requests)..sort((a, b) {
       int getPriority(String status) {
         final s = status.toLowerCase();
-        if (s == 'pending' || s == 'open') return 1;
-        if (s.contains('pending')) return 2;
-        if (s == 'rejected') return 3;
-        if (s == 'approved') return 4;
+        if (s == ApprovalStatus.pending.toLowerCase() || s == 'open') return 1;
+        if (s.contains(ApprovalStatus.pending.toLowerCase())) return 2;
+        if (s == ApprovalStatus.rejected.toLowerCase()) return 3;
+        if (s == ApprovalStatus.approved.toLowerCase()) return 4;
         return 5;
       }
 
@@ -831,17 +892,181 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     });
   }
 
-  FutureOr<void> _onClearMessages(
+  EventTransformer<Event> _debounce<Event>(Duration duration) {
+    return (events, mapper) {
+      Timer? timer;
+      StreamController<Event>? controller;
+      StreamSubscription<Event>? subscription;
+
+      controller = StreamController<Event>(
+        onListen: () {
+          subscription = events.listen(
+            (data) {
+              timer?.cancel();
+              timer = Timer(duration, () {
+                if (controller != null && !controller.isClosed) {
+                  controller.add(data);
+                }
+              });
+            },
+            onError: (err) {
+              if (controller != null && !controller.isClosed) {
+                controller.addError(err);
+              }
+            },
+            onDone: () {
+              timer?.cancel();
+              if (controller != null && !controller.isClosed) {
+                controller.close();
+              }
+            },
+          );
+        },
+        onCancel: () {
+          timer?.cancel();
+          subscription?.cancel();
+        },
+      );
+
+      return controller.stream.asyncExpand(mapper);
+    };
+  }
+
+  Future<void> _onClearMessages(
     ClearMessages event,
     Emitter<ApprovalsState> emit,
-  ) {
-    if (state is Success) {
-      final currentState = state as Success;
+  ) async {
+    if (state.status == ApprovalsStatus.success && state.data != null) {
+      final successState = state;
       emit(
-        ApprovalsState.success(
-          currentState.data.copyWith(successMessage: null, errorMessage: null),
+        ApprovalsState(status: ApprovalsStatus.success, data: 
+          successState.data!.copyWith(
+            successMessage: null,
+            errorMessage: null,
+          ),
         ),
       );
     }
+  }
+
+  void _onSearchQueryChanged(SearchQueryChanged event, Emitter<ApprovalsState> emit) {
+    if (state.status == ApprovalsStatus.success && state.data != null) {
+      final s = state;
+      emit(ApprovalsState(status: ApprovalsStatus.success, data: s.data!.copyWith(searchQuery: event.query)));
+    }
+  }
+
+  void _onStatusFilterChanged(StatusFilterChanged event, Emitter<ApprovalsState> emit) {
+    if (state.status == ApprovalsStatus.success && state.data != null) {
+      final s = state;
+      // Clear selections when status changes to avoid invalid states
+      emit(ApprovalsState(status: ApprovalsStatus.success, data: s.data!.copyWith(
+        statusFilter: event.status,
+        selectedRequestIds: {},
+      )));
+    }
+  }
+
+  void _onRequestSelectionToggled(RequestSelectionToggled event, Emitter<ApprovalsState> emit) {
+    if (state.status == ApprovalsStatus.success && state.data != null) {
+      final s = state;
+      final newSelection = Set<String>.from(s.data!.selectedRequestIds);
+      if (event.selected) {
+        newSelection.add(event.id);
+      } else {
+        newSelection.remove(event.id);
+      }
+      emit(ApprovalsState(status: ApprovalsStatus.success, data: s.data!.copyWith(selectedRequestIds: newSelection)));
+    }
+  }
+
+  void _onSelectAllToggled(SelectAllToggled event, Emitter<ApprovalsState> emit) {
+    if (state.status == ApprovalsStatus.success && state.data != null) {
+      final s = state;
+      if (event.selected) {
+        final allIds = s.data!.filteredRequests.map((e) => e.id).toSet();
+        emit(ApprovalsState(status: ApprovalsStatus.success, data: s.data!.copyWith(selectedRequestIds: allIds)));
+      } else {
+        emit(ApprovalsState(status: ApprovalsStatus.success, data: s.data!.copyWith(selectedRequestIds: {})));
+      }
+    }
+  }
+
+  Future<void> _onBulkWorkflowActionSubmitted(
+    BulkWorkflowActionSubmitted event,
+    Emitter<ApprovalsState> emit,
+  ) async {
+    if (state.status != ApprovalsStatus.success || state.data == null) return;
+    final successState = state;
+
+    emit(ApprovalsState(status: ApprovalsStatus.success, data: successState.data!.copyWith(isBulkActionLoading: true)));
+
+    List<Future<void>> futures = [];
+    bool hasError = false;
+
+    for (final requestId in event.requestIds) {
+      futures.add(() async {
+        try {
+          switch (event.type) {
+            case ApprovalType.leave:
+              final res = await submitLeaveWorkflowActionUseCase(requestId, event.action);
+              if (res.isLeft()) hasError = true;
+              break;
+            case ApprovalType.attendance:
+              final res = await submitAttendanceWorkflowActionUseCase(requestId, event.action);
+              if (res.isLeft()) hasError = true;
+              break;
+            case ApprovalType.timesheet:
+              final res = await submitTimesheetWorkflowActionUseCase(requestId, event.action);
+              if (res.isLeft()) hasError = true;
+              break;
+            case ApprovalType.compOff:
+              final res = await submitCompOffWorkflowActionUseCase(requestId, event.action);
+              if (res.isLeft()) hasError = true;
+              break;
+          }
+        } catch (e) {
+          hasError = true;
+        }
+      }());
+    }
+
+    await Future.wait(futures);
+
+    // Refresh after bulk action
+    final requestsResult = await getPendingRequestsUseCase(
+      event.type,
+      event.category,
+      page: 1,
+    );
+
+    final summaryResult = await getApprovalsSummaryUseCase();
+    final newSummary = summaryResult.fold(
+      (failure) => successState.data!.summary,
+      (summary) => summary,
+    );
+
+    requestsResult.fold(
+      (failure) {
+        emit(ApprovalsState(status: ApprovalsStatus.success, data: 
+          successState.data!.copyWith(
+            isBulkActionLoading: false,
+            errorMessage: failure.message,
+            summary: newSummary,
+          ),
+        ));
+      },
+      (requests) {
+        emit(ApprovalsState(status: ApprovalsStatus.success, data: 
+          successState.data!.copyWith(
+            isBulkActionLoading: false,
+            requests: _sortRequests(requests),
+            summary: newSummary,
+            selectedRequestIds: {}, // Clear selection on success
+            successMessage: hasError ? ApprovalsApiConstants.msgBulkActionPartialError : ApprovalsApiConstants.msgBulkActionSuccess,
+          ),
+        ));
+      },
+    );
   }
 }

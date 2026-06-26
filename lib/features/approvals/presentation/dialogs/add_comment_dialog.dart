@@ -61,10 +61,11 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return AlertDialog(
-      backgroundColor: AppColors.of(context).surfaceContainerLowest,
+      backgroundColor: colors.surfaceContainerLowest,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.r16),
       ),
@@ -78,7 +79,7 @@ class _AddCommentDialogState extends State<AddCommentDialog> {
           Text(
             l10n.commentVisibleToEmployee,
             style: AppTextStyle.bodySmall.copyWith(
-              color: AppColors.of(context).onSurfaceVariant,
+              color: colors.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: AppConstants.p16),

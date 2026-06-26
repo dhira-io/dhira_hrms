@@ -1,4 +1,7 @@
 class AppConstants {
+  static const String noneValue = 'None';
+  static const String naValue = 'N/A';
+  static const String view = 'View';
   static const List<String> nationalities = [
     'Afghan',
     'Albanian',
@@ -211,6 +214,7 @@ class AppConstants {
   static const double p22 = 22.0;
   static const double p24 = 24.0;
   static const double p32 = 32.0;
+  static const double p36 = 36.0;
   static const double p40 = 40.0;
   static const double p48 = 48.0;
   static const double p56 = 56.0;
@@ -493,6 +497,7 @@ class TimesheetApiKeys {
 }
 
 class ApprovalStatus {
+  static const String allRequests = 'All Requests';
   static const String pending = 'Pending';
   static const String approved = 'Approved';
   static const String rejected = 'Rejected';
@@ -505,10 +510,45 @@ class ApprovalActions {
   static const String cancel = 'Cancel';
 }
 
+class RequestDetailKeys {
+  static const String justification = 'justification';
+  static const String remarks = 'remarks';
+  static const String reason = 'reason';
+  static const String attachment = 'attachment';
+  static const String attachments = 'attachments';
+  static const String comments = 'comments';
+  static const String submittedDate = 'Submitted Date';
+  static const String leaveType = 'Leave Type';
+  static const String totalHours = 'Total Hours';
+  static const String projects = 'Projects';
+  static const String expectedHours = 'Expected Hours';
+  static const String actualHours = 'Actual Hours';
+  static const String days = 'Duration';
+  static const String fromDate = 'From Date';
+  static const String toDate = 'To Date';
+  static const String date = 'Date';
+  static const String week = 'Week';
+  static const String workDate = 'Work Date';
+  static const String compOffDate = 'Comp-off Date';
+  static const String reasonCapitalized = 'Reason';
+  static const String commentsCapitalized = 'Comments';
+  static const String workedDate = 'Worked Date';
+  static const String hours = 'Hours';
+}
+
 class ProjectStatus {
   static const String active = 'Active';
   static const String inactive = 'Inactive';
   static const List<String> values = [active, inactive];
+}
+
+class HalfDaySegments {
+  static const String first = 'first';
+  static const String morning = 'morning';
+  static const String firstShort = '1st';
+  static const String second = 'second';
+  static const String afternoon = 'afternoon';
+  static const String secondShort = '2nd';
 }
 
 class Gender {

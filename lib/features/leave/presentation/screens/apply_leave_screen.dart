@@ -131,7 +131,7 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
           child: Scaffold(
             backgroundColor: colors.surface,
             appBar: CommonAppBar(
-              title: widget.leave != null ? l10n.editLeave : l10n.applyLeave,
+              title: widget.leave != null ? l10n.editLeaveRequest : l10n.applyLeave,
               subtitle: l10n.applyLeaveSubtitle,
               onBack: () {
                 if (state.currentStep == 1) {

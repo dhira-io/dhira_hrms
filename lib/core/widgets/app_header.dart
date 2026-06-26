@@ -15,7 +15,6 @@ import 'package:dhira_hrms/features/profile/presentation/bloc/profile_event.dart
 import 'package:get/get.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/notifications/presentation/widgets/notification_bell.dart';
-import 'package:dhira_hrms/core/utils/string_utils.dart';
 
 class AppHeader extends StatefulWidget {
   final bool showName;

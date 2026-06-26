@@ -1,17 +1,17 @@
-import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:flutter/material.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
-import 'package:dhira_hrms/core/widgets/common_alert_dialog.dart';
+import 'package:dhira_hrms/core/widgets/common_confirmation_bottom_sheet.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
-import 'package:flutter/material.dart';
 
-class ActionConfirmationDialog extends StatelessWidget {
+class ActionConfirmationBottomSheet extends StatelessWidget {
   final String action;
   final ApprovalRequestEntity data;
   final VoidCallback onConfirm;
 
-  const ActionConfirmationDialog({
+  const ActionConfirmationBottomSheet({
     super.key,
     required this.action,
     required this.data,
@@ -20,9 +20,10 @@ class ActionConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    String title = l10n.reject;
+    String title = l10n.confirmationReject;
     if (action == ApprovalActions.approve) title = l10n.approve;
     if (action == ApprovalActions.cancel) title = l10n.withdraw;
 
@@ -45,15 +46,30 @@ class ActionConfirmationDialog extends StatelessWidget {
       }
     }
 
-    return CommonAlertDialog(
+    final isApprove = action == ApprovalActions.approve;
+
+    return CommonConfirmationBottomSheet(
       title: title,
-      content: content,
-      confirmText: l10n.yes,
-      cancelText: l10n.no,
-      onConfirm: onConfirm,
-      confirmButtonColor: action == ApprovalActions.approve
-          ? AppColors.of(context).success
-          : AppColors.of(context).error,
+      subtitle: content,
+      icon: Icon(
+        isApprove ? Icons.check_circle_outline : Icons.cancel_outlined,
+        color: isApprove ? colors.success : colors.colorRed600,
+      ),
+      iconBackgroundColor: isApprove 
+          ? colors.success.withValues(alpha: 0.1) 
+          : colors.colorRed50,
+      confirmButtonColor: isApprove ? colors.success : null,
+      confirmAction: ConfirmationAction(
+        label: l10n.yes,
+        onTap: () {
+          Navigator.pop(context);
+          onConfirm();
+        },
+      ),
+      cancelAction: ConfirmationAction(
+        label: l10n.no,
+        onTap: () => Navigator.pop(context),
+      ),
     );
   }
 }

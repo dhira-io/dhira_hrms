@@ -17,22 +17,23 @@ class SmallActionBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return InkWell(
       onTap: onTap,
       child: Container(
         padding:       EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
         decoration: BoxDecoration(
-          color: AppColors.of(context).surfaceContainerLow,
+          color: colors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(4.r),
         ),
         child: Row(
           children: [
-            Icon(icon, size: 14, color: AppColors.of(context).textSecondary),
+            Icon(icon, size: 14, color: colors.textSecondary),
                   SizedBox(width: 4.w),
             Text(
               label,
               style: AppTextStyle.labelSmall.copyWith(
-                color: AppColors.of(context).textSecondary,
+                color: colors.textSecondary,
               ),
             ),
           ],

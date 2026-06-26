@@ -12,6 +12,7 @@ class TimesheetStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final isPending =
         status.toLowerCase() == TimesheetStatus.pending.toLowerCase();
@@ -32,24 +33,28 @@ class TimesheetStatusBadge extends StatelessWidget {
     }
 
     return Container(
-      padding:       EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: isPending
-            ? AppColors.of(context).pendingStatusBg
-            : isRejected
-            ? AppColors.of(context).rejectedBg
-            : AppColors.of(context).approvedBg,
-        borderRadius: BorderRadius.circular(4.r),
+        color: colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: isPending
+              ? colors.orange300
+              : isRejected
+                  ? colors.error
+                  : colors.green300,
+          width: 1,
+        ),
       ),
       child: Text(
         displayStatus,
         style: AppTextStyle.bodySmall.copyWith(
           fontWeight: FontWeight.bold,
           color: isPending
-              ? AppColors.of(context).pendingStatusText
+              ? colors.orange500
               : isRejected
-              ? AppColors.of(context).rejectedText
-              : AppColors.of(context).approvedText,
+                  ? colors.error
+                  : colors.green600,
         ),
       ),
     );

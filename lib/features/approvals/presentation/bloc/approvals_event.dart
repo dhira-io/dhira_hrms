@@ -63,5 +63,23 @@ class ApprovalsEvent with _$ApprovalsEvent {
     required String requestId,
   }) = DeleteTimesheetRequested;
 
+  const factory ApprovalsEvent.searchQueryChanged(String query) = SearchQueryChanged;
+
+  const factory ApprovalsEvent.statusFilterChanged(String status) = StatusFilterChanged;
+
+  const factory ApprovalsEvent.requestSelectionToggled({
+    required String id,
+    required bool selected,
+  }) = RequestSelectionToggled;
+
+  const factory ApprovalsEvent.selectAllToggled(bool selected) = SelectAllToggled;
+
+  const factory ApprovalsEvent.bulkWorkflowActionSubmitted({
+    required List<String> requestIds,
+    required String action,
+    required ApprovalType type,
+    required ApprovalCategory category,
+  }) = BulkWorkflowActionSubmitted;
+
   const factory ApprovalsEvent.clearMessages() = ClearMessages;
 }

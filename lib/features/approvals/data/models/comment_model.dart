@@ -31,7 +31,7 @@ class CommentModel {
   CommentEntity toEntity() {
     return CommentEntity(
       name: name,
-      content: content.replaceAll(RegExp(r'<[^>]*>'), ''), // Strip HTML tags
+      content: content.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), ''), // Strip HTML tags and entities
       commentType: commentType,
       owner: owner,
       creation: creation,

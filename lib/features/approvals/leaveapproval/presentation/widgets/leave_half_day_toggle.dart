@@ -18,13 +18,14 @@ class LeaveHalfDayToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       padding: const EdgeInsets.all(AppConstants.p16),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surfaceContainerLow,
+        color: colors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppConstants.r12),
         border: Border.all(
-          color: AppColors.of(context).outlineVariant.withValues(alpha: 0.5),
+          color: colors.outlineVariant.withValues(alpha: 0.5),
         ),
       ),
       child: Row(
@@ -34,7 +35,7 @@ class LeaveHalfDayToggle extends StatelessWidget {
             children: [
               Icon(
                 Icons.wb_sunny_outlined,
-                color: AppColors.of(context).onSurfaceVariant,
+                color: colors.onSurfaceVariant,
               ),
               const SizedBox(width: AppConstants.p12),
               Text(
@@ -50,12 +51,10 @@ class LeaveHalfDayToggle extends StatelessWidget {
             child: Switch(
               value: isHalfDay,
               onChanged: onChanged,
-              activeThumbColor: Colors.white,
-              activeTrackColor: AppColors.of(context).primary,
-              inactiveThumbColor: Colors.white,
-              inactiveTrackColor: AppColors.of(
-                context,
-              ).outlineVariant.withValues(alpha: 0.3),
+              activeThumbColor: colors.white,
+              activeTrackColor: colors.primary,
+              inactiveThumbColor: colors.white,
+              inactiveTrackColor: colors.outlineVariant.withValues(alpha: 0.3),
             ),
           ),
         ],

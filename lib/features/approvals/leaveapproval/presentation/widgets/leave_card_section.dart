@@ -11,15 +11,16 @@ class LeaveCardSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p20),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surfaceContainerLowest,
+        color: colors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppConstants.r20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.of(context).black.withValues(alpha: 0.03),
+            color: colors.black.withValues(alpha: 0.03),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -32,7 +33,7 @@ class LeaveCardSection extends StatelessWidget {
             title,
             style: AppTextStyle.labelLarge.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.of(context).onSurface,
+              color: colors.onSurface,
             ),
           ),
           const SizedBox(height: AppConstants.p20),

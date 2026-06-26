@@ -251,9 +251,7 @@ class DaySectionWidget extends StatelessWidget {
                         DataCell(
                           Text(
                             _getEmployeeName(a.raisedBy, employees),
-                            style: AppTextStyle.bodySmall.copyWith(
-                              fontSize: AppConstants.fs11.sp,
-                            ),
+                            style: AppTextStyle.bodySmall,
                           ),
                         ),
                       ],
@@ -291,7 +289,7 @@ class DaySectionWidget extends StatelessWidget {
       width: 140.w,
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: DropdownButtonFormField<String>(
-        value: selectedProject,
+        initialValue: selectedProject,
         isExpanded: true,
         dropdownColor: AppColors.of(context).surfaceContainerHighest,
         style: AppTextStyle.bodySmall.copyWith(
@@ -345,9 +343,9 @@ class DaySectionWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: TextField(
         controller: controller,
-        style: AppTextStyle.bodySmall.copyWith(
-          fontSize: AppConstants.fs11.sp,
-          color: AppColors.of(context).textPrimary,
+        style: AppTextStyle.bodyMediumOne.copyWith(
+          color: AppColors.of(context).tertiary,
+          fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           isDense: true,

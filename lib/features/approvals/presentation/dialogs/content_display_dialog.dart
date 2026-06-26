@@ -15,8 +15,9 @@ class ContentDisplayDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return AlertDialog(
-      backgroundColor: AppColors.of(context).surfaceContainerLowest,
+      backgroundColor: colors.surfaceContainerLowest,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -26,7 +27,7 @@ class ContentDisplayDialog extends StatelessWidget {
               title,
               style: AppTextStyle.headlineSmall.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.of(context).textPrimary,
+                color: colors.textPrimary,
               ),
               overflow: TextOverflow.ellipsis,
             ),
@@ -34,7 +35,7 @@ class ContentDisplayDialog extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.cancel_outlined,
-              color: AppColors.of(context).textSecondary,
+              color: colors.textSecondary,
             ),
             onPressed: () => Navigator.pop(context),
           ),
@@ -43,7 +44,7 @@ class ContentDisplayDialog extends StatelessWidget {
       content: Text(
         content,
         style: AppTextStyle.bodyMedium.copyWith(
-          color: AppColors.of(context).textPrimary,
+          color: colors.textPrimary,
         ),
       ),
     );

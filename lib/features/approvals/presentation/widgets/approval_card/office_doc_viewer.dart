@@ -1,8 +1,10 @@
+import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 
 class OfficeDocViewer extends StatefulWidget {
   final String viewerUrl;
@@ -20,6 +22,7 @@ class _OfficeDocViewerState extends State<OfficeDocViewer> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     if (_hasError) {
@@ -29,17 +32,19 @@ class _OfficeDocViewerState extends State<OfficeDocViewer> {
           children: [
             Icon(
               Icons.error_outline,
-              color: AppColors.of(context).error,
+              color: colors.error,
               size: 48,
             ),
-                  SizedBox(height: 16.h),
+            SizedBox(height: 16.h),
             Text(
               l10n.somethingWentWrong,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: AppTextStyle.bodyMedium.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-                  SizedBox(height: 8.h),
+            SizedBox(height: 8.h),
             Text(l10n.useBrowserToViewFile),
-                  SizedBox(height: 16.h),
+            SizedBox(height: 16.h),
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -48,7 +53,7 @@ class _OfficeDocViewerState extends State<OfficeDocViewer> {
                 });
                 _webViewController?.reload();
               },
-              child: const Text('Reload'),
+              child: Text(l10n.reload),
             ),
           ],
         ),
@@ -74,13 +79,19 @@ class _OfficeDocViewerState extends State<OfficeDocViewer> {
         ),
         if (_isLoading)
           Container(
-            color: AppColors.of(context).white,
+            color: colors.white,
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const CircularProgressIndicator(),
-                        SizedBox(height: 16.h),
+                  Center(
+                    child: ShimmerLoading(
+                      width: 50.w,
+                      height: 50.h,
+                      borderRadius: 25,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
                   Text(l10n.loadingDocument),
                 ],
               ),

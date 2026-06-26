@@ -1,4 +1,4 @@
-import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:flutter/material.dart';
@@ -8,39 +8,52 @@ class TimesheetSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Padding(
-      padding: const EdgeInsets.all(AppConstants.p20),
+      padding: EdgeInsets.all(16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-                ShimmerLoading(height: 60.h, width: double.infinity),
-                SizedBox(height: AppConstants.p24),
-                ShimmerLoading(height: 120.h, width: double.infinity),
-                SizedBox(height: AppConstants.p24),
-          Row(
-            children:       [
-              Expanded(
-                child: ShimmerLoading(height: 40.h, width: 100.w),
-              ),
-              SizedBox(width: AppConstants.p12),
-              Expanded(
-                child: ShimmerLoading(height: 40.h, width: 100.w),
-              ),
-              SizedBox(width: AppConstants.p12),
-              Expanded(
-                child: ShimmerLoading(height: 40.h, width: 100.w),
-              ),
-            ],
+          // Summary Card Shimmer
+          ShimmerLoading(
+            width: double.infinity,
+            height: 100.h,
+            borderRadius: 16.r,
           ),
-          const SizedBox(height: AppConstants.p24),
+          SizedBox(height: 16.h),
+          // Day Section Shimmers
           Expanded(
             child: ListView.builder(
-              itemCount: 3,
-              itemBuilder: (_, __) => Padding(
-                padding: const EdgeInsets.only(bottom: AppConstants.p16),
-                child:       ShimmerLoading(
-                  height: 80.h,
-                  width: double.infinity,
+              itemCount: 4,
+              itemBuilder: (context, index) => Container(
+                margin: EdgeInsets.only(bottom: 8.h),
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  border: Border.all(color: colors.slateBorder),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Row(
+                  children: [
+                    ShimmerLoading(
+                      width: 40.w,
+                      height: 40.h,
+                      borderRadius: 8.r,
+                    ),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ShimmerLoading(width: 120.w, height: 16.h),
+                          SizedBox(height: 8.h),
+                          ShimmerLoading(width: 80.w, height: 12.h),
+                        ],
+                      ),
+                    ),
+                    ShimmerLoading(width: 50.w, height: 16.h),
+                    SizedBox(width: 16.w),
+                    ShimmerLoading(width: 24.w, height: 24.h, borderRadius: 12.r),
+                  ],
                 ),
               ),
             ),

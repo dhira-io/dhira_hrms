@@ -12,29 +12,35 @@ class MiniStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final String normStatus = status.toLowerCase();
 
-    Color bgColor = AppColors.of(context).surfaceContainerLow;
-    Color textColor = AppColors.of(context).onSurfaceVariant;
+    Color bgColor = colors.surfaceContainerLow;
+    Color textColor = colors.onSurfaceVariant;
+    Color borderColor = colors.onSurfaceVariant;
     String displayStatus = status;
 
     if (normStatus == ApprovalStatus.approved.toLowerCase()) {
-      bgColor = AppColors.of(context).approvedBg;
-      textColor = AppColors.of(context).approvedText;
+      bgColor = colors.approvedBg;
+      textColor = AppColors.colorGreen600;
+      borderColor = AppColors.colorGreen300;
       displayStatus = l10n.approved;
     } else if (normStatus == ApprovalStatus.rejected.toLowerCase()) {
-      bgColor = AppColors.of(context).rejectedBg;
-      textColor = AppColors.of(context).rejectedText;
+      bgColor = colors.rejectedBg;
+      textColor = colors.rejectedText;
+      borderColor = textColor;
       displayStatus = l10n.rejected;
     } else if (normStatus == ApprovalStatus.cancelled.toLowerCase()) {
-      bgColor = AppColors.of(context).rejectedBg;
-      textColor = AppColors.of(context).rejectedText;
+      bgColor = colors.rejectedBg;
+      textColor = colors.rejectedText;
+      borderColor = textColor;
       displayStatus = l10n.cancelledLabel;
     } else if (normStatus.contains(ApprovalsApiConstants.statusPending) ||
         normStatus == ApprovalsApiConstants.statusOpen) {
-      bgColor = AppColors.of(context).pendingStatusBg;
-      textColor = AppColors.of(context).pendingStatusText;
+      bgColor = colors.pendingStatusBg;
+      textColor = colors.punchBreak;
+      borderColor = colors.punchBreak.withValues(alpha: 0.5);
       if (normStatus == ApprovalStatus.pending.toLowerCase() ||
           normStatus == ApprovalsApiConstants.statusOpen) {
         displayStatus = l10n.pending;
@@ -49,11 +55,14 @@ class MiniStatusBadge extends StatelessWidget {
         vertical: AppConstants.p4,
       ),
       decoration: BoxDecoration(
-        color: bgColor,
+        color: Colors.transparent,
+        border: Border.all(color: borderColor, width: 1),
         borderRadius: BorderRadius.circular(AppConstants.r12),
       ),
       child: Text(
         displayStatus,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: AppTextStyle.labelSmall.copyWith(
           color: textColor,
           fontWeight: FontWeight.bold,

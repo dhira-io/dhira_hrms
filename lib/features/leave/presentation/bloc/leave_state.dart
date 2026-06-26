@@ -51,5 +51,6 @@ abstract class LeaveState with _$LeaveState {
     @Default(0) int currentStep,
     @Default(false) bool addEmergencyContact,
     @Default('') String emergencyContactNumber,
+    @Default(false) bool typesLoadFailed,
   }) = _LeaveState;
 }

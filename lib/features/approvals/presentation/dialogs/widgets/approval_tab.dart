@@ -12,6 +12,7 @@ class ApprovalTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Tab(
       height: 40.h,
       child: Container(
@@ -21,13 +22,13 @@ class ApprovalTab extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.of(context).primaryFixed
-              : AppColors.of(context).surfaceContainerLow,
+              ? colors.primaryFixed
+              : colors.surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppConstants.r24),
           border: Border.all(
             color: isSelected
-                ? AppColors.of(context).primary
-                : AppColors.of(context).border,
+                ? colors.primary
+                : colors.border,
             width: 1.w,
           ),
         ),
@@ -35,8 +36,8 @@ class ApprovalTab extends StatelessWidget {
           label,
           style: AppTextStyle.labelMedium.copyWith(
             color: isSelected
-                ? AppColors.of(context).primary
-                : AppColors.of(context).onSurfaceVariant,
+                ? colors.primary
+                : colors.onSurfaceVariant,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
           ),
         ),

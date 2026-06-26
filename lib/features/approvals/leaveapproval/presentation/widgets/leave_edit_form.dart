@@ -55,7 +55,6 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
   DateTime? _halfDayDate;
   String? _daySegment;
   String? _selectedFileName;
-  bool _showOverlapDetails = false;
   bool _hideOverlapAfterSubmit = false;
   int _uploadCount = 0;
 
@@ -409,7 +408,7 @@ class _LeaveEditFormState extends State<LeaveEditForm> {
                         child: Text(
                           l10n.sickLeaveDateInvalid,
                           style: AppTextStyle.bodySmall.copyWith(
-                            color: Colors.red,
+                            color: AppColors.of(context).error,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

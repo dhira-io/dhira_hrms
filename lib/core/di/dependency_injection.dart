@@ -681,70 +681,6 @@ class DependencyInjection {
       fenix: true,
     );
 
-    // Approvals Feature
-    Get.lazyPut<ApprovalsRemoteDataSource>(
-      () => ApprovalsRemoteDataSourceImpl(
-        Get.find<DioClient>(),
-        Get.find<LocalStorageService>(),
-        Get.find<LeaveApprovalRemoteDataSource>(),
-        Get.find<TimesheetApprovalRemoteDataSource>(),
-      ),
-      fenix: true,
-    );
-    Get.lazyPut<IApprovalsRepository>(
-      () => ApprovalsRepositoryImpl(
-        Get.find<ApprovalsRemoteDataSource>(),
-        Get.find<NetworkInfo>(),
-        Get.find<ILeaveApprovalRepository>(),
-        Get.find<ITimesheetApprovalRepository>(),
-      ),
-      fenix: true,
-    );
-    Get.lazyPut<GetApprovalsAccessUseCase>(
-      () => GetApprovalsAccessUseCase(Get.find<IApprovalsRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<GetApprovalsSummaryUseCase>(
-      () => GetApprovalsSummaryUseCase(Get.find<IApprovalsRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<AddCommentUseCase>(
-      () => AddCommentUseCase(Get.find<IApprovalsRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<SubmitLeaveWorkflowActionUseCase>(
-      () => SubmitLeaveWorkflowActionUseCase(
-        Get.find<ILeaveApprovalRepository>(),
-      ),
-      fenix: true,
-    );
-    Get.lazyPut<SubmitAttendanceWorkflowActionUseCase>(
-      () => SubmitAttendanceWorkflowActionUseCase(
-        Get.find<IApprovalsRepository>(),
-      ),
-      fenix: true,
-    );
-    Get.lazyPut<SubmitTimesheetWorkflowActionUseCase>(
-      () => SubmitTimesheetWorkflowActionUseCase(
-        Get.find<IApprovalsRepository>(),
-      ),
-      fenix: true,
-    );
-    Get.lazyPut<SubmitCompOffWorkflowActionUseCase>(
-      () =>
-          SubmitCompOffWorkflowActionUseCase(Get.find<IApprovalsRepository>()),
-      fenix: true,
-    );
-    // NEW: Register the missing Pending Requests UseCase
-    Get.lazyPut<GetPendingRequestsUseCase>(
-      () => GetPendingRequestsUseCase(Get.find<IApprovalsRepository>()),
-      fenix: true,
-    );
-    Get.lazyPut<GetCommentsUseCase>(
-      () => GetCommentsUseCase(Get.find<IApprovalsRepository>()),
-      fenix: true,
-    );
-
     // Leave Approval Sub-feature
     Get.lazyPut<LeaveApprovalRemoteDataSource>(
       () => LeaveApprovalRemoteDataSourceImpl(
@@ -964,6 +900,71 @@ class DependencyInjection {
       () => DeleteApprovalTimesheetUseCase(
         Get.find<ITimesheetApprovalRepository>(),
       ),
+      fenix: true,
+    );
+
+
+    // Approvals Feature
+    Get.lazyPut<ApprovalsRemoteDataSource>(
+      () => ApprovalsRemoteDataSourceImpl(
+        Get.find<DioClient>(),
+        Get.find<LocalStorageService>(),
+        Get.find<LeaveApprovalRemoteDataSource>(),
+        Get.find<TimesheetApprovalRemoteDataSource>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<IApprovalsRepository>(
+      () => ApprovalsRepositoryImpl(
+        Get.find<ApprovalsRemoteDataSource>(),
+        Get.find<NetworkInfo>(),
+        Get.find<ILeaveApprovalRepository>(),
+        Get.find<ITimesheetApprovalRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<GetApprovalsAccessUseCase>(
+      () => GetApprovalsAccessUseCase(Get.find<IApprovalsRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetApprovalsSummaryUseCase>(
+      () => GetApprovalsSummaryUseCase(Get.find<IApprovalsRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<AddCommentUseCase>(
+      () => AddCommentUseCase(Get.find<IApprovalsRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<SubmitLeaveWorkflowActionUseCase>(
+      () => SubmitLeaveWorkflowActionUseCase(
+        Get.find<ILeaveApprovalRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<SubmitAttendanceWorkflowActionUseCase>(
+      () => SubmitAttendanceWorkflowActionUseCase(
+        Get.find<IApprovalsRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<SubmitTimesheetWorkflowActionUseCase>(
+      () => SubmitTimesheetWorkflowActionUseCase(
+        Get.find<IApprovalsRepository>(),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut<SubmitCompOffWorkflowActionUseCase>(
+      () =>
+          SubmitCompOffWorkflowActionUseCase(Get.find<IApprovalsRepository>()),
+      fenix: true,
+    );
+    // NEW: Register the missing Pending Requests UseCase
+    Get.lazyPut<GetPendingRequestsUseCase>(
+      () => GetPendingRequestsUseCase(Get.find<IApprovalsRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<GetCommentsUseCase>(
+      () => GetCommentsUseCase(Get.find<IApprovalsRepository>()),
       fenix: true,
     );
 

@@ -13,15 +13,16 @@ class ConflictingLeavesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
       padding: const EdgeInsets.all(AppConstants.p12),
       decoration: BoxDecoration(
-        color: AppColors.of(context).errorContainer.withValues(alpha: 0.3),
+        color: colors.errorContainer.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(AppConstants.r12),
         border: Border.all(
-          color: AppColors.of(context).error.withValues(alpha: 0.1),
+          color: colors.error.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -31,36 +32,36 @@ class ConflictingLeavesSection extends StatelessWidget {
             children: [
               Icon(
                 Icons.warning_amber_rounded,
-                color: AppColors.of(context).error,
-                size: 16,
+                color: colors.error,
+                size: 16.w,
               ),
-                    SizedBox(width: 8.w),
+              SizedBox(width: 8.w),
               Text(
                 l10n.conflictingLeaves,
                 style: AppTextStyle.labelMedium.copyWith(
-                  color: AppColors.of(context).error,
+                  color: colors.error,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-                SizedBox(height: 8.h),
+           SizedBox(height: 8.h),
           ...conflictingLeaves.map(
             (leave) => Padding(
-              padding:       EdgeInsets.only(bottom: 4.h),
+              padding: EdgeInsets.only(bottom: 4.h),
               child: Row(
                 children: [
                   Icon(
                     Icons.circle,
-                    size: 4,
-                    color: AppColors.of(context).error,
+                    size: 4.w,
+                    color: colors.error,
                   ),
-                        SizedBox(width: 8.w),
+                  SizedBox(width: 8.w),
                   Expanded(
                     child: Text(
                       "${leave.employeeName}: ${leave.leaveType} (${leave.fromDate} ${l10n.to} ${leave.toDate})",
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.of(context).onSurfaceVariant,
+                        color: colors.onSurfaceVariant,
                       ),
                     ),
                   ),

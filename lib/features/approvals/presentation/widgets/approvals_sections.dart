@@ -18,10 +18,7 @@ class ApprovalsPrimaryTabsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
-      selector: (state) => state.maybeMap(
-        success: (s) => s.data.access.canAccess,
-        orElse: () => false,
-      ),
+      selector: (state) => (state.status == ApprovalsStatus.success && state.data != null) ? (() { final s = state; return s.data!.access.canAccess; })() : false,
       builder: (context, canAccess) {
         if (!canAccess) return const SizedBox.shrink();
         return const Padding(
@@ -39,18 +36,21 @@ class ApprovalsSubTabsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocSelector<ApprovalsBloc, ApprovalsState, _SubTabState>(
-      selector: (state) => state.maybeMap(
-        success: (s) => _SubTabState(
-          summary: s.data.summary,
-          isRaised: s.data.category == ApprovalCategory.raised,
-          currentType: s.data.type,
-        ),
-        orElse: () => const _SubTabState(
+      selector: (state) {
+        if (state.status == ApprovalsStatus.success && state.data != null) {
+          final sData = state.data!;
+          return _SubTabState(
+            summary: sData.summary,
+            isRaised: sData.category == ApprovalCategory.raised,
+            currentType: sData.type,
+          );
+        }
+        return const _SubTabState(
           summary: null,
           isRaised: false,
           currentType: ApprovalType.leave,
-        ),
-      ),
+        );
+      },
       builder: (context, subTabState) {
         if (subTabState.summary == null) return const SizedBox.shrink();
         final l10n = AppLocalizations.of(context)!;

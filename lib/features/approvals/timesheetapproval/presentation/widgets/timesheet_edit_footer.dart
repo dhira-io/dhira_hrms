@@ -8,16 +8,19 @@ class TimesheetEditFooter extends StatelessWidget {
   final int selectedCount;
   final VoidCallback onCancel;
   final VoidCallback onUpdate;
+  final bool isLoading;
 
   const TimesheetEditFooter({
     super.key,
     required this.selectedCount,
     required this.onCancel,
     required this.onUpdate,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(
@@ -27,15 +30,15 @@ class TimesheetEditFooter extends StatelessWidget {
         AppConstants.p24,
       ),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surfaceContainerLowest,
-        border: Border(top: BorderSide(color: AppColors.of(context).border)),
+        color: colors.surfaceContainerLowest,
+        border: Border(top: BorderSide(color: colors.border)),
       ),
       child: Row(
         children: [
           Text(
             l10n.selectedRows(selectedCount),
             style: AppTextStyle.bodySmall.copyWith(
-              color: AppColors.of(context).onSurfaceVariant,
+              color: colors.onSurfaceVariant,
             ),
           ),
           const Spacer(),
@@ -46,42 +49,51 @@ class TimesheetEditFooter extends StatelessWidget {
                 horizontal: AppConstants.p24,
                 vertical: AppConstants.p12,
               ),
-              side: BorderSide(color: AppColors.of(context).border),
+              side: BorderSide(color: colors.border),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppConstants.r20),
               ),
-              backgroundColor: AppColors.of(context).surfaceContainerLow,
+              backgroundColor: colors.surfaceContainerLow,
             ),
             child: Text(
               l10n.cancel,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.of(context).onSurface,
+                color: colors.onSurface,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
           const SizedBox(width: AppConstants.p12),
           ElevatedButton(
-            onPressed: onUpdate,
+            onPressed: isLoading ? null : onUpdate,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppConstants.p24,
                 vertical: AppConstants.p12,
               ),
-              backgroundColor: AppColors.of(context).primary,
-              foregroundColor: AppColors.of(context).white,
+              backgroundColor: colors.primary,
+              foregroundColor: colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppConstants.r20),
               ),
               elevation: 0,
             ),
-            child: Text(
-              l10n.update,
-              style: AppTextStyle.bodyMedium.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.of(context).white,
-              ),
-            ),
+            child: isLoading
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(colors.white),
+                    ),
+                  )
+                : Text(
+                    l10n.update,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colors.white,
+                    ),
+                  ),
           ),
         ],
       ),

@@ -25,6 +25,7 @@ class LeaveTypeDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final filteredLeaveTypes = state.leaveTypes.where((type) {
       final typeName = type.name.toLowerCase();
       final userGender = gender.toLowerCase();
@@ -46,9 +47,9 @@ class LeaveTypeDropdown extends StatelessWidget {
         DropdownButtonHideUnderline(
           child: DropdownButtonFormField<String>(
             value: currentLeaveType,
-            dropdownColor: AppColors.of(context).surfaceContainerHighest,
+            dropdownColor: colors.surfaceContainerHighest,
             style: AppTextStyle.bodyMedium.copyWith(
-              color: AppColors.of(context).onSurface,
+              color: colors.onSurface,
             ),
             items: filteredLeaveTypes.map((type) {
               return DropdownMenuItem(
@@ -56,7 +57,7 @@ class LeaveTypeDropdown extends StatelessWidget {
                 child: Text(
                   type.name,
                   style: AppTextStyle.bodyMedium.copyWith(
-                    color: AppColors.of(context).onSurface,
+                    color: colors.onSurface,
                   ),
                 ),
               );
@@ -64,7 +65,7 @@ class LeaveTypeDropdown extends StatelessWidget {
             onChanged: onChanged,
             decoration: InputDecoration(
               filled: true,
-              fillColor: AppColors.of(context).surfaceContainerHighest,
+              fillColor: colors.surfaceContainerHighest,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: AppConstants.p16,
                 vertical: AppConstants.p18,
@@ -89,12 +90,12 @@ class LeaveTypeDropdown extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppConstants.r12),
                 borderSide: BorderSide.none,
               ),
-              errorStyle: AppTextStyle.bodySmall.copyWith(color: Colors.red),
+              errorStyle: AppTextStyle.bodySmall.copyWith(color: colors.error),
             ),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             icon: Icon(
               Icons.arrow_drop_down,
-              color: AppColors.of(context).outline,
+              color: colors.outline,
             ),
             validator: (val) => val == null ? l10n.required : null,
           ),

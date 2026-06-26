@@ -10,7 +10,7 @@ import '../../../domain/entities/approval_request_entity.dart';
 import '../../../data/models/comment_model.dart';
 import 'package:dhira_hrms/features/leave/data/constants/leave_api_constants.dart';
 import 'package:dio/dio.dart';
-import 'dart:io';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'dart:convert';
 import '../../../../../core/error/exceptions.dart';
 import 'package:dhira_hrms/core/constants/leave_constants.dart';
@@ -160,7 +160,7 @@ class LeaveApprovalRemoteDataSourceImpl
       data: {
         "leave_application_names": '["$leaveApplicationName"]',
         "action": action,
-        "description": action == "Cancel" ? "withdraw" : action,
+        "description": action == ApprovalActions.cancel ? "withdraw" : action,
       },
     );
     if (response.data == null) {

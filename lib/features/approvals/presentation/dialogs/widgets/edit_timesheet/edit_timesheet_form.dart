@@ -1,20 +1,20 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
-import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
-import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
 import 'package:dhira_hrms/features/approvals/timesheetapproval/domain/entities/timesheet_approval_entity.dart';
-import 'package:dhira_hrms/features/approvals/timesheetapproval/presentation/widgets/timesheet_filter_box.dart';
 import 'package:dhira_hrms/features/timesheet/domain/entities/project_entity.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import '../../../../../../core/constants/app_constants.dart';
+import '../../../../timesheetapproval/domain/usecases/sync_timesheet_week_wise_usecase.dart';
+import '../../../../../timesheet/domain/usecases/delete_timesheet_entry_usecase.dart';
 import '../../../../timesheetapproval/presentation/widgets/timesheet_summary_card.dart';
+import 'package:dhira_hrms/core/utils/toast_utils.dart';
+import 'package:dhira_hrms/core/utils/date_time_utils.dart';
+import 'package:dhira_hrms/features/approvals/data/constants/approvals_api_constants.dart';
 import 'edit_timesheet_header.dart';
-import 'edit_timesheet_breakdown_header.dart';
 import 'edit_timesheet_day_section.dart';
-import 'edit_timesheet_footer.dart';
 
 class EditTimesheetForm extends StatefulWidget {
   final TimesheetApprovalEntity timesheet;
@@ -42,7 +42,6 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
   String? _filterProject;
   String? _filterStatus;
 
-  bool _isAllExpanded = true;
   final Set<String> _expandedDates = {};
 
   List<ProjectAssignmentApprovalEntity>? _localAssignments;
@@ -102,34 +101,6 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
     });
   }
 
-  void _onUpdate() {
-    if (_localAssignments == null) return;
-
-    final updatedAssignments = _localAssignments!.map((a) {
-      final key = a.name ?? a.hashCode.toString();
-      return a.copyWith(
-        hoursDetails: _taskControllers[key]?.text,
-        description: _descriptionControllers[key]?.text,
-        expectedHours:
-            double.tryParse(_expectedControllers[key]?.text ?? "") ??
-            a.expectedHours,
-        spentHours:
-            double.tryParse(_actualControllers[key]?.text ?? "") ??
-            a.spentHours,
-        project: _selectedProjects[key] ?? a.project,
-        taskData: _taskControllers[key]?.text,
-      );
-    }).toList();
-
-    context.read<ApprovalsBloc>().add(
-      ApprovalsEvent.syncTimesheetRequested(
-        timesheet: widget.timesheet,
-        assignments: updatedAssignments,
-      ),
-    );
-    Navigator.pop(context);
-  }
-
   List<ProjectAssignmentApprovalEntity> _getFilteredAssignments() {
     if (_localAssignments == null) return [];
     return _localAssignments!.where((a) {
@@ -151,9 +122,11 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
     return emp['employee_name'] ?? employeeId;
   }
 
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = AppColors.of(context);
     final filteredAssignments = _getFilteredAssignments();
     final Map<String, List<ProjectAssignmentApprovalEntity>> grouped = {};
     for (final a in filteredAssignments) {
@@ -162,6 +135,9 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
       }
     }
     final sortedDates = grouped.keys.toList()..sort();
+    final dateRange = (widget.timesheet.fromDate != null && widget.timesheet.toDate != null)
+        ? DateTimeUtils.formatDateRange(widget.timesheet.fromDate!, widget.timesheet.toDate!)
+        : '';
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -171,35 +147,25 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                EditTimesheetHeader(onClose: () => Navigator.pop(context)),
+                EditTimesheetHeader(onClose: () => Navigator.pop(context), dateRange: dateRange),
+                Divider(height: 1, thickness: 1, color: colors.slate400),
+                SizedBox(height: 8.h),
                 Padding(
-                  padding:       EdgeInsets.symmetric(horizontal: 20.w),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TimesheetSummaryCard(timesheet: widget.timesheet),
-                            SizedBox(height: 20.h),
-                      EditTimesheetBreakdownHeader(
-                        onExpandAll: () {
-                          setState(() {
-                            _isAllExpanded = true;
-                            for (final a in _localAssignments ?? []) {
-                              if (a.date != null) _expandedDates.add(a.date!);
-                            }
-                          });
-                        },
-                        onCollapseAll: () {
-                          setState(() {
-                            _isAllExpanded = false;
-                            _expandedDates.clear();
-                          });
-                        },
+                      SizedBox(height: 24.h),
+                      Text(
+                        l10n.dailyLog,
+                        style: AppTextStyle.bodyLarge.copyWith(
+                          color: colors.textSecondary,
+                        ),
                       ),
-                            SizedBox(height: 16.h),
-                      _buildFilters(l10n),
-                            SizedBox(height: 16.h),
+                      SizedBox(height: 16.h),
                       if (sortedDates.isEmpty)
-                        _buildEmptyState(l10n)
+                        _EmptyState(l10n: l10n)
                       else
                         ...sortedDates.map(
                           (date) => EditTimesheetDaySection(
@@ -224,8 +190,106 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
                                 setState(() => _selectedProjects[key] = val),
                             onRemove: _removeAssignment,
                             getEmployeeName: _getEmployeeName,
+                            onTaskSave: (key, proj, task, exp, act, desc) async {
+                              if (_localAssignments == null) return;
+                              
+                              final dateKey = DateTimeUtils.formatDateString(date);
+                              final weekRange = '${DateTimeUtils.formatDateString(widget.timesheet.fromDate)} - ${DateTimeUtils.formatDateString(widget.timesheet.toDate)}';
+                              
+                              final existingA = _localAssignments!.firstWhere(
+                                (a) => (a.name ?? a.hashCode.toString()) == key,
+                              );
+                              
+                              final payload = {
+                                TimesheetApiKeys.changes: {
+                                  weekRange: {
+                                    dateKey: [
+                                      {
+                                        TimesheetApiKeys.name: existingA.name,
+                                        TimesheetApiKeys.date: existingA.date,
+                                        TimesheetApiKeys.project: proj,
+                                        TimesheetApiKeys.taskData: task,
+                                        TimesheetApiKeys.description: desc,
+                                        TimesheetApiKeys.expectedHours: double.tryParse(exp) ?? 0,
+                                        TimesheetApiKeys.spentHours: double.tryParse(act) ?? 0,
+                                        TimesheetApiKeys.status: existingA.status ?? TimesheetStatus.pending,
+                                      }
+                                    ]
+                                  }
+                                }
+                              };
+                              
+                              final usecase = Get.find<SyncTimesheetWeekWiseUseCase>();
+                              final result = await usecase.call(payload);
+                              
+                              return result.fold(
+                                (l) {
+                                  ToastUtils.showError(l.message);
+                                  throw Exception(l.message);
+                                },
+                                (r) {
+                                  if (r) {
+                                    setState(() {
+                                      _selectedProjects[key] = proj;
+                                      _taskControllers[key]?.text = task;
+                                      _expectedControllers[key]?.text = exp;
+                                      _actualControllers[key]?.text = act;
+                                      _descriptionControllers[key]?.text = desc;
+                                      final index = _localAssignments!.indexOf(existingA);
+                                      if (index != -1) {
+                                        _localAssignments![index] = existingA.copyWith(
+                                          project: proj,
+                                          taskData: task,
+                                          description: desc,
+                                          expectedHours: double.tryParse(exp) ?? 0,
+                                          spentHours: double.tryParse(act) ?? 0,
+                                        );
+                                      }
+                                    });
+                                    ToastUtils.showSuccess(ApprovalsApiConstants.msgTimesheetUpdated);
+                                  } else {
+                                    ToastUtils.showError(ApprovalsApiConstants.msgTimesheetUpdateFailed);
+                                    throw Exception(ApprovalsApiConstants.msgTimesheetUpdateFailed);
+                                  }
+                                }
+                              );
+                            },
+                            onTaskDelete: (key) async {
+                              if (_localAssignments == null) return;
+                              
+                              final existingA = _localAssignments!.firstWhere(
+                                (a) => (a.name ?? a.hashCode.toString()) == key,
+                              );
+                              
+                              final usecase = Get.find<DeleteTimesheetEntryUseCase>();
+                              final result = await usecase.call(
+                                DeleteTimesheetEntryParams(
+                                  name: existingA.name ?? "",
+                                  parent: widget.timesheet.name,
+                                  date: existingA.date ?? "",
+                                ),
+                              );
+                              
+                              result.fold(
+                                (failure) {
+                                  ToastUtils.showError(failure.message);
+                                },
+                                (success) {
+                                  setState(() {
+                                    _localAssignments!.remove(existingA);
+                                    _taskControllers.remove(key);
+                                    _descriptionControllers.remove(key);
+                                    _expectedControllers.remove(key);
+                                    _actualControllers.remove(key);
+                                    _selectedProjects.remove(key);
+                                  });
+                                  ToastUtils.showSuccess(l10n.taskDeletedSuccess);
+                                },
+                              );
+                            },
                           ),
                         ),
+                      SizedBox(height: 8.h), // Bottom padding
                     ],
                   ),
                 ),
@@ -233,69 +297,34 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
             ),
           ),
         ),
-        EditTimesheetFooter(
-          selectedCount:
-              0, // Logic for row selection can be added here if needed
-          totalCount: _localAssignments?.length ?? 0,
-          onUpdate: _onUpdate,
-          onCancel: () => Navigator.pop(context),
-        ),
       ],
     );
   }
+}
 
-  Widget _buildFilters(AppLocalizations l10n) {
-    return Row(
-      children: [
-        Expanded(
-          child: TimesheetFilterBox(
-            label: l10n.allProjects,
-            current: _filterProject,
-            options: widget.projects.map((p) => p.name).toList(),
-            onSelect: (val) => setState(
-              () => _filterProject = val == TimesheetFilterBox.allValue
-                  ? null
-                  : val,
-            ),
-          ),
-        ),
-              SizedBox(width: 8.w),
-        Expanded(
-          child: TimesheetFilterBox(
-            label: l10n.allStatus,
-            current: _filterStatus,
-            optionsWithLabels: {
-              TimesheetStatus.pending: l10n.pending,
-              TimesheetStatus.approved: l10n.approved,
-              TimesheetStatus.rejected: l10n.rejected,
-            },
-            onSelect: (val) => setState(
-              () => _filterStatus = val == TimesheetFilterBox.allValue
-                  ? null
-                  : val,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+class _EmptyState extends StatelessWidget {
+  final AppLocalizations l10n;
 
-  Widget _buildEmptyState(AppLocalizations l10n) {
+  const _EmptyState({required this.l10n});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Padding(
-      padding:       EdgeInsets.symmetric(vertical: 40.h),
+      padding: EdgeInsets.symmetric(vertical: 40.h),
       child: Center(
         child: Column(
           children: [
             Icon(
               Icons.info_outline,
-              size: 48,
-              color: AppColors.of(context).textSecondary,
+              size: 48.w,
+              color: colors.textSecondary,
             ),
-                  SizedBox(height: 16.h),
+            SizedBox(height: 16.h),
             Text(
               l10n.noTimesheetEntriesFound,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.of(context).textSecondary,
+                color: colors.textSecondary,
               ),
             ),
           ],
