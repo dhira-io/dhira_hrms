@@ -1325,7 +1325,7 @@ class DependencyInjection {
       () => GetCalendarLeaveHistoryUseCase(Get.find<ICalendarRepository>()),
       fenix: true,
     );
-    Get.lazyPut<CalendarBloc>(
+    Get.create<CalendarBloc>(
       () => CalendarBloc(
         getCalendarEventsUseCase: Get.find<GetCalendarMonthEventsUseCase>(),
         getCalendarSummaryUseCase: Get.find<GetCalendarSummaryUseCase>(),
@@ -1334,7 +1334,6 @@ class DependencyInjection {
         getAttendancePunchSummaryUseCase: Get.find<GetCalendarPunchSummaryUseCase>(),
         getLeaveHistoryUseCase: Get.find<GetCalendarLeaveHistoryUseCase>(),
       ),
-      fenix: true,
     );
   }
 }

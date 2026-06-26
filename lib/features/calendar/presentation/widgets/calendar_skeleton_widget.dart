@@ -16,19 +16,7 @@ class CalendarSkeletonWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header Shimmer
-            ShimmerLoading(
-              width: 150.w,
-              height: 24.h,
-              borderRadius: AppConstants.r8,
-            ),
-            SizedBox(height: 8.h),
-            ShimmerLoading(
-              width: 280.w,
-              height: 16.h,
-              borderRadius: AppConstants.r4,
-            ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 14.h),
 
             // Month navigation Shimmer
             Center(
@@ -46,9 +34,7 @@ class CalendarSkeletonWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.of(context).surface,
                 borderRadius: BorderRadius.circular(AppConstants.r16),
-                border: Border.all(
-                  color: AppColors.of(context).outlineVariant,
-                ),
+                border: Border.all(color: AppColors.of(context).outlineVariant),
               ),
               child: Column(
                 children: [
@@ -90,25 +76,16 @@ class CalendarSkeletonWidget extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
 
-            // Legends Shimmer
-            Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
-              children: List.generate(
-                5,
-                (index) => ShimmerLoading(
-                  width: 80.w,
-                  height: 20.h,
-                  borderRadius: AppConstants.r16,
-                ),
-              ),
-            ),
-            SizedBox(height: 24.h),
-
             // Monthly Summary Card Shimmer
             ShimmerLoading(
               width: double.infinity,
-              height: 120.h,
+              height: 60.h,
+              borderRadius: AppConstants.r12,
+            ),
+            SizedBox(height: 20.h),
+            ShimmerLoading(
+              width: double.infinity,
+              height: 60.h,
               borderRadius: AppConstants.r12,
             ),
           ],

@@ -28,8 +28,14 @@ import '../utils/leave_form_utils.dart';
 class ApplyLeaveScreen extends StatefulWidget {
   final String employeeId;
   final LeaveEntity? leave;
+  final DateTime? preselectedDate;
 
-  const ApplyLeaveScreen({super.key, required this.employeeId, this.leave});
+  const ApplyLeaveScreen({
+    super.key,
+    required this.employeeId,
+    this.leave,
+    this.preselectedDate,
+  });
 
   @override
   State<ApplyLeaveScreen> createState() => _ApplyLeaveScreenState();
@@ -85,6 +91,21 @@ class _ApplyLeaveScreenState extends State<ApplyLeaveScreen> {
             isNewForm: widget.leave == null,
           ),
         );
+
+        if (widget.preselectedDate != null) {
+          _leaveBloc.add(
+            LeaveEvent.dateSelected(
+              isFrom: true,
+              date: widget.preselectedDate!,
+            ),
+          );
+          _leaveBloc.add(
+            LeaveEvent.dateSelected(
+              isFrom: false,
+              date: widget.preselectedDate!,
+            ),
+          );
+        }
       }
     });
   }

@@ -21,7 +21,11 @@ class DetailsBottomActions extends StatelessWidget {
         GestureDetector(
           onTap: () {
             Navigator.pop(context);
-            context.push(AppRouter.attendanceRegularizationPath);
+            final selectedDay = context.read<CalendarBloc>().state.selectedDay;
+            context.push(
+              AppRouter.attendanceRegularizationPath,
+              extra: {'preselectedDate': selectedDay},
+            );
           },
           child: Container(
             height: 36.h,
@@ -52,10 +56,15 @@ class DetailsBottomActions extends StatelessWidget {
         GestureDetector(
           onTap: () {
             Navigator.pop(context);
-            final empId = context.read<CalendarBloc>().state.employeeId ?? '';
+            final state = context.read<CalendarBloc>().state;
+            final empId = state.employeeId ?? '';
+            final selectedDay = state.selectedDay;
             context.push(
               AppRouter.applyLeavePath,
-              extra: {AppRouter.argEmployeeId: empId},
+              extra: {
+                AppRouter.argEmployeeId: empId,
+                'preselectedDate': selectedDay,
+              },
             );
           },
           child: Container(

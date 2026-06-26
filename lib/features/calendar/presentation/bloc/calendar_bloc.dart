@@ -132,7 +132,6 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       existingLeaves = state.teamLeaves;
       existingLeaveHistory = state.leaveHistory;
       emit(state.copyWith(
-        status: CalendarStatus.loading,
         focusedMonth: month,
         events: const {},
         summary: const CalendarSummaryEntity(

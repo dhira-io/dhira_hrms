@@ -36,6 +36,7 @@ import 'package:dhira_hrms/features/calendar/presentation/screens/calendar_scree
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_bloc.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/screens/compensatory_leave_screen.dart';
 import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:dhira_hrms/features/attendance_regularization/presentation/screens/attendance_regularization_screen.dart';
 
 import 'package:dhira_hrms/features/performance/presentation/screens/self_assessment_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/goal_setup_page.dart';
@@ -460,9 +461,14 @@ class AppRouter {
           final extra = state.extra as Map<String, dynamic>?;
           final employeeId = extra?[argEmployeeId] as String? ?? '';
           final leave = extra?[argLeave] as LeaveEntity?;
+          final preselectedDate = extra?['preselectedDate'] as DateTime?;
           return BlocProvider.value(
             value: Get.find<LeaveBloc>(),
-            child: ApplyLeaveScreen(employeeId: employeeId, leave: leave),
+            child: ApplyLeaveScreen(
+              employeeId: employeeId,
+              leave: leave,
+              preselectedDate: preselectedDate,
+            ),
           );
         },
       ),
@@ -503,18 +509,28 @@ class AppRouter {
           );
         },
       ),
-      // GoRoute(
-      //   path: attendanceRegularizationPath,
-      //   builder: (context, state) => BlocProvider(
-      //     create: (context) => Get.find<AttendanceRegularizationBloc>()
-      //       ..add(const AttendanceRegularizationEvent.regularizationStarted()),
-      //     child: AttendanceRegularizationScreen(
-      //       onMyRequestsPressed: () {
-      //         navigateToRaisedRequests(ApprovalType.attendance);
-      //       },
-      //     ),
-      //   ),
-      // ),
+      GoRoute(
+        path: attendanceRegularizationPath,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final preselectedDate = extra?['preselectedDate'] as DateTime?;
+          return BlocProvider(
+            create: (context) {
+              final bloc = Get.find<AttendanceRegularizationBloc>();
+              bloc.add(const AttendanceRegularizationEvent.regularizationStarted());
+              if (preselectedDate != null) {
+                bloc.add(AttendanceRegularizationEvent.dateChanged(preselectedDate));
+              }
+              return bloc;
+            },
+            child: AttendanceRegularizationScreen(
+              onMyRequestsPressed: () {
+                navigateToRaisedRequests(ApprovalType.attendance);
+              },
+            ),
+          );
+        },
+      ),
       GoRoute(
         path: compensatoryLeavePath,
         builder: (context, state) => BlocProvider(

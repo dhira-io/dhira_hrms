@@ -229,11 +229,13 @@ class _StatusBadge extends StatelessWidget {
       borderColor = colors.presentText;
       dotColor = colors.presentText;
       labelText = l10n.present;
-    } else if (status == AttendanceStatus.halfDay || status == AttendanceStatus.halfDayAlt) {
+    } else if (status == AttendanceStatus.halfDay ||
+        status == AttendanceStatus.halfDayAlt) {
       borderColor = colors.halfDayText;
       dotColor = colors.halfDayText;
       labelText = l10n.halfDay;
-    } else if (status == AttendanceStatus.leave || status == AttendanceStatus.onLeave) {
+    } else if (status == AttendanceStatus.leave ||
+        status == AttendanceStatus.onLeave) {
       borderColor = colors.leaveText;
       dotColor = colors.leaveText;
       labelText = l10n.leave;
@@ -241,7 +243,8 @@ class _StatusBadge extends StatelessWidget {
       borderColor = colors.holidayText;
       dotColor = colors.holidayText;
       labelText = l10n.holiday;
-    } else if (status == AttendanceStatus.weekend || status == AttendanceStatus.weeklyOff) {
+    } else if (status == AttendanceStatus.weekend ||
+        status == AttendanceStatus.weeklyOff) {
       borderColor = colors.weekendText;
       dotColor = colors.weekendText;
       labelText = l10n.weekend;
@@ -303,7 +306,9 @@ class _ContentArea extends StatelessWidget {
   }
 
   String _formatOnlyTime(String? timeStr) {
-    if (timeStr == null || timeStr.isEmpty || timeStr == AppConstants.timePlaceholder) {
+    if (timeStr == null ||
+        timeStr.isEmpty ||
+        timeStr == AppConstants.timePlaceholder) {
       return AppConstants.timePlaceholder;
     }
     try {
@@ -358,7 +363,8 @@ class _ContentArea extends StatelessWidget {
           _InfoRowData(label: l10n.totalHoursLabel, value: totalHours),
         ],
       );
-    } else if (status == AttendanceStatus.halfDay || status == AttendanceStatus.halfDayAlt) {
+    } else if (status == AttendanceStatus.halfDay ||
+        status == AttendanceStatus.halfDayAlt) {
       final checkIn = _formatOnlyTime(summary?.firstIn);
       final checkOut = _formatOnlyTime(summary?.lastOut);
       final totalHours = summary != null
@@ -374,12 +380,15 @@ class _ContentArea extends StatelessWidget {
       );
 
       showActionButtons = true;
-    } else if (status == AttendanceStatus.leave || status == AttendanceStatus.onLeave) {
+    } else if (status == AttendanceStatus.leave ||
+        status == AttendanceStatus.onLeave) {
       final leaveType = leaveDetails?.leaveType ?? l10n.sick;
       final double days = leaveDetails?.totalLeaveDays ?? 1.0;
       final duration = days == 1.0
           ? l10n.oneDay
-          : l10n.multipleDays(days % 1 == 0 ? days.toInt().toString() : days.toString());
+          : l10n.multipleDays(
+              days % 1 == 0 ? days.toInt().toString() : days.toString(),
+            );
 
       detailContent = _InfoRows(
         rows: [
@@ -419,7 +428,7 @@ class _ContentArea extends StatelessWidget {
                 SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
-                     l10n.publicHolidayNoAttendance,
+                    l10n.publicHolidayNoAttendance,
                     style: AppTextStyle.labelMedium.copyWith(
                       color: colors.holidayText,
                     ),
@@ -430,7 +439,8 @@ class _ContentArea extends StatelessWidget {
           ),
         ],
       );
-    } else if (status == AttendanceStatus.weekend || status == AttendanceStatus.weeklyOff) {
+    } else if (status == AttendanceStatus.weekend ||
+        status == AttendanceStatus.weeklyOff) {
       detailContent = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -488,7 +498,7 @@ class _ContentArea extends StatelessWidget {
                 Expanded(
                   child: Text(
                     l10n.noAttendanceRecordFound,
-                    style: AppTextStyle.labelMedium.copyWith(
+                    style: AppTextStyle.labelMediumOne.copyWith(
                       color: colors.absentText,
                     ),
                   ),
@@ -584,14 +594,15 @@ class _InfoRows extends StatelessWidget {
             children: [
               Text(
                 row.label,
-                style: AppTextStyle.labelMedium.copyWith(
-                  color: colors.onSurfaceVariant,
+                style: AppTextStyle.labelLarge.copyWith(
+                  color: colors.slate500Confirmation,
                 ),
               ),
               Text(
                 row.value,
-                style: AppTextStyle.labelMedium.copyWith(
-                  color: colors.textSecondary,
+                style: AppTextStyle.labelLarge.copyWith(
+                  color: colors.slate950,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
