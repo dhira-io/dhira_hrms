@@ -18,6 +18,7 @@ class CommonConfirmationBottomSheet extends StatelessWidget {
   final ConfirmationAction confirmAction;
   final ConfirmationAction cancelAction;
   final Color? iconBackgroundColor;
+  final Color? confirmButtonColor;
 
   const CommonConfirmationBottomSheet({
     super.key,
@@ -27,13 +28,15 @@ class CommonConfirmationBottomSheet extends StatelessWidget {
     required this.confirmAction,
     required this.cancelAction,
     this.iconBackgroundColor,
+    this.confirmButtonColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.of(context).white,
+        color: colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
         boxShadow: [
           BoxShadow(
@@ -56,9 +59,7 @@ class CommonConfirmationBottomSheet extends StatelessWidget {
                 width: 36.w,
                 height: 4.h,
                 decoration: BoxDecoration(
-                  color: AppColors.of(
-                    context,
-                  ).outlineVariant.withValues(alpha: 0.4),
+                  color: colors.outlineVariant.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(5.r),
                 ),
               ),
@@ -71,9 +72,7 @@ class CommonConfirmationBottomSheet extends StatelessWidget {
                   decoration: BoxDecoration(
                     color:
                         iconBackgroundColor ??
-                        AppColors.of(
-                          context,
-                        ).errorContainer.withValues(alpha: 0.1),
+                        colors.errorContainer.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Center(child: icon),
@@ -82,10 +81,9 @@ class CommonConfirmationBottomSheet extends StatelessWidget {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: AppTextStyle.h2.copyWith(
-                    fontSize: 14.sp,
+                  style: AppTextStyle.titleMedium.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.of(context).slate900,
+                    color: colors.slate900,
                   ),
                 ),
               ],
@@ -96,9 +94,8 @@ class CommonConfirmationBottomSheet extends StatelessWidget {
                 subtitle!,
                 textAlign: TextAlign.center,
                 style: AppTextStyle.bodyMedium.copyWith(
-                  fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.of(context).slate500Confirmation,
+                  color: colors.slate500Confirmation,
                   height: 1.4,
                 ),
               ),
@@ -126,7 +123,7 @@ class CommonConfirmationBottomSheet extends StatelessWidget {
                   child: CommonButton(
                     text: confirmAction.label,
                     variant: ButtonVariant.primary,
-                    backgroundColor: AppColors.of(context).absentText,
+                    backgroundColor: confirmButtonColor ?? AppColors.of(context).absentText,
                     foregroundColor: AppColors.of(context).slate50,
                     borderRadius: 8.r,
                     padding: EdgeInsets.symmetric(vertical: 10.h),

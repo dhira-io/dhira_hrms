@@ -137,7 +137,6 @@ class ApprovalCardHeader extends StatelessWidget {
                             displayName.isNotEmpty ? displayName.getInitials : "",
                             style: AppTextStyle.titleMedium.copyWith(
                               color: colors.onPrimary,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -149,7 +148,6 @@ class ApprovalCardHeader extends StatelessWidget {
                       displayName.isNotEmpty ? displayName.getInitials : "",
                       style: AppTextStyle.titleMedium.copyWith(
                         color: colors.onPrimary,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -162,9 +160,8 @@ class ApprovalCardHeader extends StatelessWidget {
             children: [
               Text(
                 displayName,
-                style: AppTextStyle.labelLarge.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: colors.onSurface,
+                style: AppTextStyle.titleSmall.copyWith(
+                  color: colors.slate950,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -172,8 +169,8 @@ class ApprovalCardHeader extends StatelessWidget {
               if (displayRole.isNotEmpty)
                 Text(
                   displayRole,
-                  style: AppTextStyle.bodySmall.copyWith(
-                    color: colors.onSurfaceVariant,
+                  style: AppTextStyle.labelMedium.copyWith(
+                    color: colors.slate550,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

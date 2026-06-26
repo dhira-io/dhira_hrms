@@ -85,82 +85,115 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
   Future<void> _onStarted(Started event, Emitter<ApprovalsState> emit) async {
     emit(const ApprovalsState.loading());
 
-    final accessResult = await getApprovalsAccessUseCase();
+    final results = await Future.wait([
+      getApprovalsAccessUseCase() as Future<dynamic>,
+      getApprovalsSummaryUseCase() as Future<dynamic>,
+      getEmployeesUseCase() as Future<dynamic>,
+    ]);
 
-    await accessResult.fold(
-      (failure) async => emit(ApprovalsState.failure(failure.message)),
-      (access) async {
-        final summaryResult = await getApprovalsSummaryUseCase();
+    final accessResult = results[0];
+    final summaryResult = results[1];
+    final employeesResult = results[2];
 
-        await summaryResult.fold(
-          (failure) async => emit(ApprovalsState.failure(failure.message)),
-          (summary) async {
-            // Fetch employees for image fallback
-            final employeesResult = await getEmployeesUseCase();
-            final employees = employeesResult.getOrElse(
-              () => <Map<String, dynamic>>[],
-            );
+    String? errorMessage;
+    dynamic access;
+    dynamic summary;
 
-            // If user is not an approver (can_access: false), default to
-            // their own Raised requests so the list is never empty on first load.
-            final defaultCategory =
-                _pendingCategory ??
-                event.initialCategory ??
-                (access.canAccess
-                    ? ApprovalCategory.team
-                    : ApprovalCategory.raised);
+    accessResult.fold(
+      (f) => errorMessage = f.message,
+      (a) => access = a,
+    );
+    if (errorMessage != null) {
+      emit(ApprovalsState.failure(errorMessage!));
+      return;
+    }
 
-            final defaultType =
-                _pendingType ?? event.initialType ?? ApprovalType.leave;
+    summaryResult.fold(
+      (f) => errorMessage = f.message,
+      (s) => summary = s,
+    );
+    if (errorMessage != null) {
+      emit(ApprovalsState.failure(errorMessage!));
+      return;
+    }
 
-            // Clear the pending values
-            _pendingCategory = null;
-            _pendingType = null;
+    final employees = employeesResult.getOrElse(() => <Map<String, dynamic>>[]);
 
-            // Initial emit with empty list and loading flag
-            emit(
-              ApprovalsState.success(
-                ApprovalsSuccessData(
-                  access: access,
-                  summary: summary,
-                  category: defaultCategory,
-                  isListLoading: true,
-                  requests: [],
-                  employees: employees,
-                  targetCategory: defaultCategory,
-                  type: defaultType,
-                  targetType: defaultType,
-                ),
-              ),
-            );
+    // If user is not an approver (can_access: false), default to
+    // their own Raised requests so the list is never empty on first load.
+    final defaultCategory =
+        _pendingCategory ??
+        event.initialCategory ??
+        (access.canAccess
+            ? ApprovalCategory.team
+            : ApprovalCategory.raised);
 
-            final requestsResult = await getPendingRequestsUseCase(
-              defaultType,
-              defaultCategory,
+    final defaultType =
+        _pendingType ?? event.initialType ?? ApprovalType.leave;
+
+    // Clear the pending values
+    _pendingCategory = null;
+    _pendingType = null;
+
+    // Initial emit with empty list and loading flag
+    emit(
+      ApprovalsState.success(
+        ApprovalsSuccessData(
+          access: access,
+          summary: summary,
+          category: defaultCategory,
+          isListLoading: true,
+          requests: [],
+          employees: employees,
+          targetCategory: defaultCategory,
+          type: defaultType,
+          targetType: defaultType,
+        ),
+      ),
+    );
+
+    final requestsResult = await getPendingRequestsUseCase(
+      defaultType,
+      defaultCategory,
+      page: 1,
+    );
+
+    requestsResult.fold(
+      (failure) {
+        emit(
+          ApprovalsState.success(
+            ApprovalsSuccessData(
+              access: access,
+              summary: summary,
+              category: defaultCategory,
+              isListLoading: false,
+              requests: [],
+              employees: employees,
+              targetCategory: defaultCategory,
+              type: defaultType,
+              targetType: defaultType,
+              hasMore: false,
+            ),
+          ),
+        );
+      },
+      (models) {
+        emit(
+          ApprovalsState.success(
+            ApprovalsSuccessData(
+              access: access,
+              summary: summary,
+              category: defaultCategory,
+              isListLoading: false,
+              requests: models,
+              employees: employees,
+              targetCategory: defaultCategory,
+              type: defaultType,
+              targetType: defaultType,
               page: 1,
-            );
-
-            requestsResult.fold(
-              (failure) => emit(ApprovalsState.failure(failure.message)),
-              (requests) => emit(
-                ApprovalsState.success(
-                  ApprovalsSuccessData(
-                    access: access,
-                    summary: summary,
-                    category: defaultCategory,
-                    requests: _sortRequests(requests),
-                    employees: employees,
-                    isListLoading: false,
-                    targetCategory: defaultCategory,
-                    type: defaultType,
-                    targetType: defaultType,
-                    page: 1,
-                    hasMore: requests.length >= 10,
-                  ),
-                ),
-              ),
-            );
-          },
+              hasMore: models.length >= 10,
+            ),
+          ),
         );
       },
     );
@@ -512,8 +545,23 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
         );
 
         result.fold(
-          (failure) => null, // TODO: Show error toast
-          (_) => null, // TODO: Show success toast
+          (failure) {
+            emit(ApprovalsState.success(
+              currentState.data.copyWith(
+                errorMessage: failure.message,
+                successMessage: null,
+              ),
+            ));
+          },
+          (_) {
+            emit(ApprovalsState.success(
+              currentState.data.copyWith(
+                successMessage: 'Comment added successfully',
+                errorMessage: null,
+              ),
+            ));
+            add(ApprovalsEvent.commentsRequested(doctype: event.type.doctype, requestId: event.requestId));
+          },
         );
       },
       orElse: () {},
@@ -538,7 +586,10 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     result.fold(
       (failure) => emit(
         ApprovalsState.success(
-          currentState.data.copyWith(isCommentsLoading: false),
+          currentState.data.copyWith(
+            isCommentsLoading: false,
+            errorMessage: failure.message,
+          ),
         ),
       ),
       (comments) => emit(
@@ -618,7 +669,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
     emit(
       ApprovalsState.success(
         currentState.data.copyWith(
-          isTimesheetLoading: true,
+          processingIds: Set.from(currentState.data.processingIds)
+            ..add(event.timesheet.name ?? ''),
           successMessage: null,
           errorMessage: null,
         ),
@@ -658,7 +710,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
       (failure) => emit(
         ApprovalsState.success(
           currentState.data.copyWith(
-            isTimesheetLoading: false,
+            processingIds: Set.from(currentState.data.processingIds)
+              ..remove(event.timesheet.name ?? ''),
             errorMessage: failure.message,
           ),
         ),
@@ -674,7 +727,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           emit(
             ApprovalsState.success(
               currentState.data.copyWith(
-                isTimesheetLoading: false,
+                processingIds: Set.from(currentState.data.processingIds)
+                  ..remove(event.timesheet.name ?? ''),
                 editingTimesheet: null,
                 successMessage: ApprovalsApiConstants.msgTimesheetUpdated,
               ),
@@ -684,7 +738,8 @@ class ApprovalsBloc extends Bloc<ApprovalsEvent, ApprovalsState> {
           emit(
             ApprovalsState.success(
               currentState.data.copyWith(
-                isTimesheetLoading: false,
+                processingIds: Set.from(currentState.data.processingIds)
+                  ..remove(event.timesheet.name ?? ''),
                 errorMessage: ApprovalsApiConstants.msgTimesheetUpdateFailed,
               ),
             ),

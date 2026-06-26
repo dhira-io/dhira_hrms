@@ -43,7 +43,7 @@ class ApprovalsFilterSection extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(
             horizontal: AppConstants.p16,
-            vertical: AppConstants.p12,
+            vertical: AppConstants.p8,
           ),
           decoration: BoxDecoration(
             color: colors.background,
@@ -58,13 +58,13 @@ class ApprovalsFilterSection extends StatelessWidget {
             children: [
               // Search Bar
               Container(
-                height: 36.h,
+                height: 32.h,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   color: colors.surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(AppConstants.r8),
                   border: Border.all(
-                    color: colors.outline,
+                    color: colors.outlineVariant,
                   ),
                 ),
                 child: TextField(
@@ -79,13 +79,13 @@ class ApprovalsFilterSection extends StatelessWidget {
                     filled: false,
                     hintText: l10n.searchByDateName,
                     hintStyle: AppTextStyle.bodyMedium.copyWith(
-                      color: colors.onSurfaceVariant,
+                      color: colors.onSecondaryContainer,
                     ),
                     prefixIcon: Padding(
                       padding: EdgeInsets.only(left: 8.w, right: 6.w),
                       child: Icon(
                         Icons.search,
-                        color: colors.onSurfaceVariant,
+                        color: colors.outlineVariant,
                         size: 20.w,
                       ),
                     ),
@@ -119,18 +119,17 @@ class ApprovalsFilterSection extends StatelessWidget {
                           l10n.typeLabel,
                           style: AppTextStyle.labelLarge.copyWith(
                             color: colors.username,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: AppConstants.p4),
                         Container(
-                          height: 36.h,
+                          height: 32.h,
                           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
                           decoration: BoxDecoration(
                             color: colors.surfaceContainerLowest,
                             borderRadius: BorderRadius.circular(AppConstants.r8),
                             border: Border.all(
-                              color: colors.outline,
+                              color: colors.outlineVariant,
                             ),
                           ),
                           child: DropdownButtonHideUnderline(
@@ -174,18 +173,17 @@ class ApprovalsFilterSection extends StatelessWidget {
                           l10n.statusLabel,
                           style: AppTextStyle.labelLarge.copyWith(
                             color: colors.username,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: AppConstants.p4),
                         Container(
-                          height: 36.h,
+                          height: 32.h,
                           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p12),
                           decoration: BoxDecoration(
                             color: colors.surfaceContainerLowest,
                             borderRadius: BorderRadius.circular(AppConstants.r8),
                             border: Border.all(
-                              color: colors.outline,
+                              color: colors.outlineVariant,
                             ),
                           ),
                           child: DropdownButtonHideUnderline(
@@ -219,54 +217,7 @@ class ApprovalsFilterSection extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: AppConstants.p12),
-              // Select All Row (Only visible if status is Pending and is Team Approvals)
-              if (isTeam && successData.statusFilter.toLowerCase().contains(ApprovalsApiConstants.statusPending))
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        final isAllSelected = successData.filteredRequests.isNotEmpty &&
-                            successData.selectedRequestIds.length == successData.filteredRequests.length;
-                        context.read<ApprovalsBloc>().add(
-                              ApprovalsEvent.selectAllToggled(!isAllSelected),
-                            );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: Checkbox(
-                                value: successData.filteredRequests.isNotEmpty &&
-                                    successData.selectedRequestIds.length == successData.filteredRequests.length,
-                                onChanged: (value) {
-                                  context.read<ApprovalsBloc>().add(
-                                        ApprovalsEvent.selectAllToggled(value ?? false),
-                                      );
-                                },
-                                activeColor: colors.primary,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: AppConstants.p8),
-                            Text(
-                              l10n.selectAll,
-                              style: AppTextStyle.labelLarge.copyWith(
-                                color: colors.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+
             ],
           ),
         );

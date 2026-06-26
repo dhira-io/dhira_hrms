@@ -27,6 +27,7 @@ class RaisedApprovalCardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final titleInfo = _getTitleInfo(context);
+    final colors = AppColors.of(context);
     
     final String normStatus = data.status.toLowerCase();
     final bool isProcessed = [
@@ -55,7 +56,7 @@ class RaisedApprovalCardView extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildIcon(context),
+            RaisedApprovalIcon(type: data.type),
             const SizedBox(width: AppConstants.p16),
             Expanded(
               child: Column(
@@ -68,7 +69,9 @@ class RaisedApprovalCardView extends StatelessWidget {
                       Expanded(
                         child: Text(
                           titleInfo.title,
-                          style: AppTextStyle.labelSmall.copyWith(fontWeight: FontWeight.bold),
+                          style: AppTextStyle.titleSmall.copyWith(
+                            color: colors.slate950,
+                          ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -81,20 +84,27 @@ class RaisedApprovalCardView extends StatelessWidget {
                   if (titleInfo.dates.isNotEmpty)
                     Text(
                       titleInfo.dates,
-                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant),
+                      style: AppTextStyle.labelLarge.copyWith(
+                        color: colors.gray400,
+                        fontWeight: FontWeight.w600
+                      ),
                     ),
                   if (titleInfo.appliedOn.isNotEmpty) ...[
                     const SizedBox(height: AppConstants.p4),
                     Text(
                       titleInfo.appliedOn,
-                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant),
+                      style: AppTextStyle.labelMedium.copyWith(
+                        color: colors.gray400,
+                      ),
                     ),
                   ],
                   if (titleInfo.duration.isNotEmpty) ...[
                     const SizedBox(height: AppConstants.p4),
                     Text(
                       titleInfo.duration,
-                      style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).primary), // Blue color
+                      style: AppTextStyle.bodyMedium.copyWith(
+                        color: colors.slate500Confirmation,
+                      ),
                     ),
                   ],
                   if (titleInfo.rejectionReason.isNotEmpty) ...[
@@ -102,12 +112,12 @@ class RaisedApprovalCardView extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(AppConstants.p8),
                       decoration: BoxDecoration(
-                        color: AppColors.of(context).error.withValues(alpha: 0.1),
+                        color: colors.error.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(AppConstants.p8),
                       ),
                       child: Text(
                         '${l10n.rejected}: ${titleInfo.rejectionReason}',
-                        style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).error),
+                        style: AppTextStyle.bodySmall.copyWith(color: colors.error),
                       ),
                     ),
                   ],
@@ -115,9 +125,9 @@ class RaisedApprovalCardView extends StatelessWidget {
                     SizedBox(height: 4.h),
                     Row(
                       children: [
-                        Icon(Icons.attach_file, size: 16, color: AppColors.of(context).onSurfaceVariant),
+                        Icon(Icons.attach_file, size: 16, color: colors.onSurfaceVariant),
                         SizedBox(width: 4.w),
-                        Text(l10n.attachment, style: AppTextStyle.bodySmall.copyWith(color: AppColors.of(context).onSurfaceVariant)),
+                        Text(l10n.attachment, style: AppTextStyle.bodySmall.copyWith(color: colors.onSurfaceVariant)),
                       ],
                     ),
                   ],
@@ -138,12 +148,12 @@ class RaisedApprovalCardView extends StatelessWidget {
                 else ...[
                   InkWell(
                     onTap: onEdit,
-                    child: Icon(Icons.edit, size: 20, color: AppColors.of(context).primary),
+                    child: Icon(Icons.edit, size: 20, color: colors.primary),
                   ),
                   const SizedBox(width: AppConstants.p16),
                   InkWell(
                     onTap: onDelete,
-                    child: Icon(Icons.delete_outline, size: 20, color: AppColors.of(context).error),
+                    child: Icon(Icons.delete_outline, size: 20, color: colors.error),
                   ),
                 ]
               ],
@@ -153,36 +163,6 @@ class RaisedApprovalCardView extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon(BuildContext context) {
-    IconData iconData;
-    Color color;
-
-    if (data.type == ApprovalType.leave) {
-      iconData = Icons.description_outlined;
-      color = AppColors.of(context).success;
-    } else if (data.type == ApprovalType.attendance) {
-      iconData = Icons.access_time;
-      color = AppColors.of(context).attendanceicon;
-    } else if (data.type == ApprovalType.timesheet) {
-      iconData = Icons.calendar_today; // Matches image better than calendar_month
-      color = AppColors.of(context).timesheeticon;
-    } else if (data.type == ApprovalType.compOff) {
-      iconData = Icons.local_cafe_outlined;
-      color = AppColors.of(context).compofficon;
-    } else {
-      iconData = Icons.event_available;
-      color = AppColors.of(context).warning;
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Icon(iconData, color: color, size: 24),
-    );
-  }
 
   _TitleInfo _getTitleInfo(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -193,7 +173,7 @@ class RaisedApprovalCardView extends StatelessWidget {
     String rejectionReason = "";
 
     if (data.status.toLowerCase() == ApprovalStatus.rejected.toLowerCase()) {
-      rejectionReason = data.displayDetails['Reason'] ?? data.displayDetails['Comments'] ?? '';
+      rejectionReason = data.displayDetails[RequestDetailKeys.reasonCapitalized] ?? data.displayDetails[RequestDetailKeys.commentsCapitalized] ?? '';
     }
 
     if (data.type == ApprovalType.leave) {
@@ -228,18 +208,18 @@ class RaisedApprovalCardView extends StatelessWidget {
         duration = "${l10n.duration}: ${dVal.value} ${dVal.key}";
       }
     } else if (data.type == ApprovalType.attendance) {
-      title = data.displayDetails['Reason'] ?? l10n.attendanceRegularization;
-      dates = data.displayDetails['Date'] ?? '';
+      title = data.displayDetails[RequestDetailKeys.reasonCapitalized] ?? l10n.attendanceRegularization;
+      dates = data.displayDetails[RequestDetailKeys.date] ?? '';
     } else if (data.type == ApprovalType.timesheet) {
       title = l10n.timesheet;
-      dates = data.displayDetails['Week'] ?? data.displayDetails['Date'] ?? '';
+      dates = data.displayDetails[RequestDetailKeys.week] ?? data.displayDetails[RequestDetailKeys.date] ?? '';
     } else if (data.type == ApprovalType.compOff) {
       title = l10n.comOff;
-      dates = data.displayDetails['Work Date'] ?? data.displayDetails['Comp-off Date'] ?? data.displayDetails['Date'] ?? '';
+      dates = data.displayDetails[RequestDetailKeys.workDate] ?? data.displayDetails[RequestDetailKeys.compOffDate] ?? data.displayDetails[RequestDetailKeys.date] ?? '';
     }
 
     // Try to extract submitted date (Applied on)
-    final submitted = data.displayDetails['Submitted Date'];
+    final submitted = data.displayDetails[RequestDetailKeys.submittedDate];
     if (submitted != null && submitted.isNotEmpty) {
       appliedOn = "${l10n.applied} on - $submitted";
     }
@@ -255,4 +235,43 @@ class _TitleInfo {
   final String duration;
   final String rejectionReason;
   _TitleInfo({required this.title, required this.dates, required this.appliedOn, required this.duration, required this.rejectionReason});
+}
+
+class RaisedApprovalIcon extends StatelessWidget {
+  final ApprovalType type;
+
+  const RaisedApprovalIcon({super.key, required this.type});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    IconData iconData;
+    Color color;
+
+    if (type == ApprovalType.leave) {
+      iconData = Icons.description_outlined;
+      color = colors.success;
+    } else if (type == ApprovalType.attendance) {
+      iconData = Icons.access_time;
+      color = colors.attendanceicon;
+    } else if (type == ApprovalType.timesheet) {
+      iconData = Icons.calendar_today_outlined;
+      color = colors.primaryContainer;
+    } else if (type == ApprovalType.compOff) {
+      iconData = Icons.local_cafe_outlined;
+      color = colors.compofficon;
+    } else {
+      iconData = Icons.event_available;
+      color = colors.warning;
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(iconData, color: color, size: 24),
+    );
+  }
 }

@@ -166,7 +166,9 @@ class AppColors {
   static const Color colorEmerald500 = Color(0xFF008236);
   static const Color colorRed500 = Color(0xFFFB2C36);
   static const Color colorRed300 = Color(0xFFFF6467);
+  static const Color colorRed400 = Color(0xFFFF6467);
   static const Color colorRed600 = Color(0xFFE7000B);
+  static const Color colorRed50 = Color(0xFFFEF2F2);
   static const Color purpleHoliday = Color(0xFF9810FA);
   static const Color blueAttendance = Color(0xFF3B82F6);
 
@@ -468,6 +470,11 @@ class AppColorsResolved {
   final Color gray400;
   final Color darkGradientEnd;
   final Color lightGrey;
+  final Color blue500;
+  final Color orange300;
+  final Color orange500;
+  final Color green300;
+  final Color green600;
   final Color charcoal;
   final Color slateGrey;
   final Color purpleHoliday;
@@ -558,6 +565,10 @@ class AppColorsResolved {
   final Color colorGreen50;
   final Color colorOrange50;
   final Color colorNeutral100;
+
+  final Color colorRed50;
+  final Color colorRed400;
+  final Color colorRed600;
 
   const AppColorsResolved._({
     required this.primary,
@@ -660,6 +671,11 @@ class AppColorsResolved {
     required this.gray400,
     required this.darkGradientEnd,
     required this.lightGrey,
+    required this.blue500,
+    required this.orange300,
+    required this.orange500,
+    required this.green300,
+    required this.green600,
     required this.charcoal,
     required this.slateGrey,
     required this.purpleHoliday,
@@ -744,6 +760,9 @@ class AppColorsResolved {
     required this.colorGreen50,
     required this.colorOrange50,
     required this.colorNeutral100,
+    required this.colorRed50,
+    required this.colorRed400,
+    required this.colorRed600,
     required this.stepperColor,
   });
 
@@ -848,6 +867,11 @@ class AppColorsResolved {
     gray400: AppColors.gray400,
     darkGradientEnd: AppColors.darkGradientEnd,
     lightGrey: AppColors.lightGrey,
+    blue500: AppColors.colorBlue500,
+    orange300: AppColors.colorOrange300,
+    orange500: AppColors.colorOrange500,
+    green300: AppColors.colorGreen300,
+    green600: AppColors.colorGreen600,
     charcoal: AppColors.charcoal,
     slateGrey: AppColors.slateGrey,
     purpleHoliday: AppColors.purpleHoliday,
@@ -933,6 +957,9 @@ class AppColorsResolved {
     colorGreen50: AppColors.colorGreen50,
     colorOrange50: AppColors.colorOrange50,
     colorNeutral100: AppColors.colorNeutral100,
+    colorRed50: AppColors.colorRed50,
+    colorRed400: AppColors.colorRed400,
+    colorRed600: AppColors.colorRed600,
   );
 
   factory AppColorsResolved.dark() => const AppColorsResolved._(
@@ -1039,6 +1066,11 @@ class AppColorsResolved {
     gray400: AppColors.gray400,
     darkGradientEnd: AppColors.darkGradientEnd,
     lightGrey: AppColors.lightGrey,
+    blue500: AppColors.colorBlue500,
+    orange300: AppColors.colorOrange300,
+    orange500: AppColors.colorOrange500,
+    green300: AppColors.colorGreen300,
+    green600: AppColors.colorGreen600,
     charcoal: AppColors._darkTextPrimary,
     slateGrey: AppColors._darkTextSecondary,
     purpleHoliday: AppColors.purpleHoliday,
@@ -1123,5 +1155,8 @@ class AppColorsResolved {
     colorGreen50: AppColors._darkColorGreen50,
     colorOrange50: AppColors._darkColorOrange50,
     colorNeutral100: AppColors._darkColorNeutral100,
+    colorRed50: AppColors.colorRed50,
+    colorRed400: AppColors.colorRed400,
+    colorRed600: AppColors.colorRed600,
   );
 }

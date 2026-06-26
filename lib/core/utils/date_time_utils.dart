@@ -49,6 +49,48 @@ class DateTimeUtils {
   static const String patternAbbrMonthDay = 'MMM d';
   static const String patternAbbrMonthDayYear = 'MMM d, yyyy';
   static const String dateFormatDayNameMonth = 'dd EEEE, MMMM';
+  static const String dateWithDayMonth = 'EEEE, MMM dd';
+
+  static String formatWeekRangeStr(String? start, String? end) {
+    if (start == null || end == null) return "$start – $end";
+    try {
+      final s = DateTime.parse(start);
+      final e = DateTime.parse(end);
+      final sMonth = DateFormat('MMM').format(s);
+      final eMonth = DateFormat('MMM').format(e);
+      final startDay = s.day.toString().padLeft(2, '0');
+      final endDay = e.day.toString().padLeft(2, '0');
+      return "$sMonth $startDay - $eMonth $endDay, ${e.year}";
+    } catch (_) {
+      return "$start – $end";
+    }
+  }
+
+  static String formatWeekRangeString(String weekName) {
+    if (weekName.contains('to')) {
+      final parts = weekName.split('to').map((e) => e.trim()).toList();
+      if (parts.length == 2) {
+        try {
+          final fDate = DateTime.parse(parts[0]);
+          final tDate = DateTime.parse(parts[1]);
+          return "${fDate.format('MMM d, yyyy')} to ${tDate.format('MMM d, yyyy')}";
+        } catch (_) {}
+      }
+    }
+    return weekName;
+  }
+
+  static String getWeekNumber(String? fromDateStr, AppLocalizations l10n) {
+    if (fromDateStr == null) return l10n.week.toUpperCase();
+    try {
+      final date = DateTime.parse(fromDateStr);
+      final dayOfYear = int.parse(date.difference(DateTime(date.year, 1, 1)).inDays.toString());
+      final weekNumber = ((dayOfYear - date.weekday + 10) / 7).floor();
+      return l10n.weekLabel(weekNumber).toUpperCase();
+    } catch (e) {
+      return l10n.week.toUpperCase();
+    }
+  }
 
   /// Formats date to 'yyyy-MM-dd' (e.g., 2023-10-25)
   static String formatToYMD(DateTime date) {

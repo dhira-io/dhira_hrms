@@ -40,14 +40,46 @@ class ApprovalCardActions extends StatelessWidget {
     ].contains(normStatus);
 
     if (data.category == ApprovalCategory.raised) {
-      return _buildRaisedActions(context, isProcessed);
+      return _RaisedActions(
+        data: data,
+        isProcessed: isProcessed,
+        onEditLeave: onEditLeave,
+        onWithdrawLeave: onWithdrawLeave,
+        onDeleteTimesheet: onDeleteTimesheet,
+        onEditTimesheet: onEditTimesheet,
+      );
     }
 
-    return _buildTeamActions(context, isProcessed);
+    return _TeamActions(
+      data: data,
+      isProcessed: isProcessed,
+      onAction: onAction,
+      onAddComment: onAddComment,
+    );
   }
+}
 
-  Widget _buildRaisedActions(BuildContext context, bool isProcessed) {
+class _RaisedActions extends StatelessWidget {
+  final ApprovalRequestEntity data;
+  final bool isProcessed;
+  final VoidCallback onEditLeave;
+  final VoidCallback onWithdrawLeave;
+  final VoidCallback onDeleteTimesheet;
+  final VoidCallback onEditTimesheet;
+
+  const _RaisedActions({
+    required this.data,
+    required this.isProcessed,
+    required this.onEditLeave,
+    required this.onWithdrawLeave,
+    required this.onDeleteTimesheet,
+    required this.onEditTimesheet,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = AppColors.of(context);
     bool showEditWithdraw = false;
 
     if (data.type == ApprovalType.leave && data.fromDate != null) {
@@ -87,8 +119,8 @@ class ApprovalCardActions extends StatelessWidget {
                 child: _ActionButton(
                   label: l10n.edit,
                   icon: Icons.edit_outlined,
-                  textColor: AppColors.of(context).primary,
-                  borderColor: AppColors.of(context).primary.withValues(alpha: 0.5),
+                  textColor: colors.primary,
+                  borderColor: colors.primary.withValues(alpha: 0.5),
                   backgroundColor: Colors.transparent,
                   onPressed: onEditLeave,
                 ),
@@ -98,8 +130,8 @@ class ApprovalCardActions extends StatelessWidget {
                 child: _ActionButton(
                   label: l10n.withdraw,
                   icon: Icons.undo,
-                  textColor: AppColors.of(context).error,
-                  borderColor: AppColors.of(context).error.withValues(alpha: 0.5),
+                  textColor: colors.error,
+                  borderColor: colors.error.withValues(alpha: 0.5),
                   backgroundColor: Colors.transparent,
                   onPressed: onWithdrawLeave,
                 ),
@@ -109,8 +141,8 @@ class ApprovalCardActions extends StatelessWidget {
                 child: _ActionButton(
                   label: l10n.delete,
                   icon: Icons.delete_outline,
-                  textColor: AppColors.of(context).error,
-                  borderColor: AppColors.of(context).error.withValues(alpha: 0.5),
+                  textColor: colors.error,
+                  borderColor: colors.error.withValues(alpha: 0.5),
                   backgroundColor: Colors.transparent,
                   onPressed: onDeleteTimesheet,
                 ),
@@ -120,8 +152,8 @@ class ApprovalCardActions extends StatelessWidget {
                 child: _ActionButton(
                   label: l10n.edit,
                   icon: Icons.edit_outlined,
-                  textColor: AppColors.of(context).primary,
-                  borderColor: AppColors.of(context).primary.withValues(alpha: 0.5),
+                  textColor: colors.primary,
+                  borderColor: colors.primary.withValues(alpha: 0.5),
                   backgroundColor: Colors.transparent,
                   onPressed: onEditTimesheet,
                 ),
@@ -134,9 +166,25 @@ class ApprovalCardActions extends StatelessWidget {
       },
     );
   }
+}
 
-  Widget _buildTeamActions(BuildContext context, bool isProcessed) {
+class _TeamActions extends StatelessWidget {
+  final ApprovalRequestEntity data;
+  final bool isProcessed;
+  final Function(String) onAction;
+  final VoidCallback onAddComment;
+
+  const _TeamActions({
+    required this.data,
+    required this.isProcessed,
+    required this.onAction,
+    required this.onAddComment,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = AppColors.of(context);
     bool showApprove = true;
     bool showReject = true;
     bool isApproveEnabled = false;
@@ -190,9 +238,9 @@ class ApprovalCardActions extends StatelessWidget {
                   child: _ActionButton(
                     label: l10n.reject,
                     icon: Icons.cancel_outlined,
-                    textColor: AppColors.of(context).error,
-                    borderColor: AppColors.of(context).error.withValues(alpha: 0.5),
-                    backgroundColor: AppColors.rejectedBg,
+                    textColor: colors.colorRed600,
+                    borderColor: colors.colorRed400,
+                    backgroundColor: colors.colorRed50,
                     onPressed: isRejectEnabled
                         ? () => onAction(ApprovalActions.reject)
                         : null,
@@ -204,9 +252,9 @@ class ApprovalCardActions extends StatelessWidget {
                   child: _ActionButton(
                     label: l10n.approve,
                     icon: Icons.check_circle_outline,
-                    textColor: AppColors.of(context).success,
-                    borderColor: AppColors.of(context).success.withValues(alpha: 0.5),
-                    backgroundColor: AppColors.approvedBg,
+                    textColor: colors.slate50,
+                    borderColor: colors.greenSuccess,
+                    backgroundColor: colors.greenSuccess,
                     onPressed: isApproveEnabled
                         ? () => onAction(ApprovalActions.approve)
                         : null,
@@ -278,15 +326,16 @@ class _CommentIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.of(context).primaryFixed,
+        color: colors.primaryFixed,
         borderRadius: BorderRadius.circular(AppConstants.r8),
       ),
       child: IconButton(
         icon: Icon(
           Icons.chat_bubble,
-          color: AppColors.of(context).primary,
+          color: colors.primary,
           size: 20,
         ),
         onPressed: onPressed,

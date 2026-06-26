@@ -6,7 +6,7 @@ import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.
 import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/edit_timesheet_bottom_sheet.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/delete_timesheet_bottom_sheet.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/withdraw_leave_bottom_sheet.dart';
-import 'package:dhira_hrms/features/approvals/presentation/dialogs/action_confirmation_dialog.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/action_confirmation_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -219,9 +219,11 @@ class ApprovalCard extends StatelessWidget {
         ),
       );
     } else {
-      showDialog(
+      showModalBottomSheet(
         context: context,
-        builder: (context) => ActionConfirmationDialog(
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (context) => ActionConfirmationBottomSheet(
           action: action,
           data: data,
           onConfirm: () {

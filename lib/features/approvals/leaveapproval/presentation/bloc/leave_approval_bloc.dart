@@ -25,59 +25,40 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
     required this.uploadFileUseCase,
     required this.getLeaveStatisticsUseCase,
   }) : super(LeaveApprovalState.initial()) {
-    on<LeaveApprovalEvent>((event, emit) async {
-      await event.when(
-        updateRequested:
-            (
-              id,
-              empId,
-              empName,
-              type,
-              from,
-              to,
-              reason,
-              half,
-              halfDayDate,
-              halfDaySegment,
-              total,
-              state,
-              attachment,
-            ) async => _onUpdateRequested(
-              id,
-              empId,
-              empName,
-              type,
-              from,
-              to,
-              reason,
-              half,
-              halfDayDate,
-              halfDaySegment,
-              total,
-              state,
-              attachment,
-              emit,
-            ),
-        balanceRequested: (id, date, gender) async =>
-            _onBalanceRequested(id, date, gender, emit),
-        typesRequested: () async => _onTypesRequested(emit),
-        overlapLeavesRequested: (id, from, to) async =>
-            _onOverlapLeavesRequested(id, from, to, emit),
-        uploadFileRequested: (path, name) async =>
-            _onUploadFileRequested(path, name, emit),
-        statisticsRequested: (id, from, to) async =>
-            _onStatisticsRequested(id, from, to, emit),
-        clearUploadStatus: () async => emit(
+    on<UpdateRequested>((event, emit) async => _onUpdateRequested(
+          event.leaveId,
+          event.employeeId,
+          event.employeeName,
+          event.leaveType,
+          event.fromDate,
+          event.toDate,
+          event.reason,
+          event.halfDay,
+          event.halfDayDate,
+          event.halfDaySegment,
+          event.totalleavedays,
+          event.workflowState,
+          event.attachment,
+          emit,
+        ));
+    on<BalanceRequested>((event, emit) async =>
+        _onBalanceRequested(event.employeeId, event.todayDate, event.gender, emit));
+    on<TypesRequested>((event, emit) async => _onTypesRequested(emit));
+    on<OverlapLeavesRequested>((event, emit) async =>
+        _onOverlapLeavesRequested(event.employeeId, event.fromDate, event.toDate, emit));
+    on<UploadFileRequested>((event, emit) async =>
+        _onUploadFileRequested(event.filePath, event.fileName, emit));
+    on<StatisticsRequested>((event, emit) async =>
+        _onStatisticsRequested(event.employeeId, event.fromDate, event.toDate, emit));
+    on<ClearUploadStatus>((event, emit) async => emit(
           state.copyWith(
             uploadedFileUrl: null,
             uploadError: null,
             isUploading: false,
           ),
-        ),
-        formInitialized: (id, url) async =>
-            emit(state.copyWith(leaveId: id, uploadedFileUrl: url)),
-      );
-    });
+        ));
+    on<FormInitialized>((event, emit) async =>
+        emit(state.copyWith(leaveId: event.leaveId, uploadedFileUrl: event.fileUrl)));
   }
 
   Future<void> _onTypesRequested(Emitter<LeaveApprovalState> emit) async {
@@ -85,7 +66,7 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
     result.fold(
       (failure) =>
           emit(state.copyWith(errorMessage: failure.message, success: false)),
-      (types) => emit(state.copyWith(leaveTypes: types, success: false)),
+      (types) => emit(state.copyWith(leaveTypes: types, success: false, errorMessage: null)),
     );
   }
 
@@ -151,7 +132,7 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
     result.fold(
       (failure) =>
           emit(state.copyWith(errorMessage: failure.message, success: false)),
-      (balance) => emit(state.copyWith(balance: balance, success: false)),
+      (balance) => emit(state.copyWith(balance: balance, success: false, errorMessage: null)),
     );
   }
 
@@ -178,7 +159,7 @@ class LeaveApprovalBloc extends Bloc<LeaveApprovalEvent, LeaveApprovalState> {
         state.copyWith(loadingOverlap: false, errorMessage: failure.message),
       ),
       (leaves) =>
-          emit(state.copyWith(loadingOverlap: false, overlapLeaves: leaves)),
+          emit(state.copyWith(loadingOverlap: false, overlapLeaves: leaves, errorMessage: null)),
     );
   }
 

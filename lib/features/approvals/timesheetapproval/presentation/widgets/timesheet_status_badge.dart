@@ -33,24 +33,28 @@ class TimesheetStatusBadge extends StatelessWidget {
     }
 
     return Container(
-      padding:       EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: isPending
-            ? colors.pendingStatusBg
-            : isRejected
-            ? colors.rejectedBg
-            : colors.approvedBg,
-        borderRadius: BorderRadius.circular(4.r),
+        color: colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: isPending
+              ? colors.orange300
+              : isRejected
+                  ? colors.error
+                  : colors.green300,
+          width: 1,
+        ),
       ),
       child: Text(
         displayStatus,
         style: AppTextStyle.bodySmall.copyWith(
           fontWeight: FontWeight.bold,
           color: isPending
-              ? colors.pendingStatusText
+              ? colors.orange500
               : isRejected
-              ? colors.rejectedText
-              : colors.approvedText,
+                  ? colors.error
+                  : colors.green600,
         ),
       ),
     );

@@ -60,23 +60,6 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
     );
 
     _leaveApprovalBloc.add(const LeaveApprovalEvent.typesRequested());
-    _leaveApprovalBloc.add(
-      LeaveApprovalEvent.balanceRequested(
-        employeeId: _effectiveEmployeeId,
-        todayDate: DateTimeUtils.todayDate(),
-        gender: _gender,
-      ),
-    );
-
-    // Initial statistics for current month
-    final now = DateTime.now();
-    _leaveApprovalBloc.add(
-      LeaveApprovalEvent.statisticsRequested(
-        employeeId: _effectiveEmployeeId,
-        fromDate: now.firstDayOfMonth.format(),
-        toDate: now.lastDayOfMonth.format(),
-      ),
-    );
   }
 
   @override
@@ -99,6 +82,9 @@ class _LeaveEditScreenState extends State<LeaveEditScreen> {
           behavior: HitTestBehavior.opaque,
           child: SafeArea(
             child: BlocListener<LeaveApprovalBloc, LeaveApprovalState>(
+              listenWhen: (previous, current) =>
+                  previous.errorMessage != current.errorMessage ||
+                  previous.success != current.success,
               listener: (context, state) {
                 if (state.success) {
                   ToastUtils.showSuccess(l10n.leaveSubmitSuccess);

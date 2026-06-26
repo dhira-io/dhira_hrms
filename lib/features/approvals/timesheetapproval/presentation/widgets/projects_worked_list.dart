@@ -23,7 +23,6 @@ class ProjectsWorkedList extends StatelessWidget {
           label,
           style: AppTextStyle.bodySmall.copyWith(
             color: colors.slate500,
-            fontSize: 12.sp,
           ),
         ),
               SizedBox(height: 8.h),
@@ -47,7 +46,6 @@ class ProjectsWorkedList extends StatelessWidget {
                     p ?? "—",
                     style: AppTextStyle.bodySmall.copyWith(
                       fontWeight: FontWeight.bold,
-                      fontSize: 13.sp,
                     ),
                   ),
                 ),

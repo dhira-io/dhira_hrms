@@ -67,6 +67,7 @@ class ApprovalRequestEntity extends Equatable {
   final String? customHalfDetails;
   final String? fileUrl;
   final String? managerReview;
+  final DateTime? createdAt;
 
   const ApprovalRequestEntity({
     required this.id,
@@ -89,6 +90,7 @@ class ApprovalRequestEntity extends Equatable {
     this.customHalfDetails,
     this.fileUrl,
     this.managerReview,
+    this.createdAt,
   });
 
   @override
@@ -99,6 +101,7 @@ class ApprovalRequestEntity extends Equatable {
     category,
     type,
     availableActions,
+    displayDetails,
     isMainApprover,
     conflictingLeaves,
     fromDate,
@@ -109,5 +112,6 @@ class ApprovalRequestEntity extends Equatable {
     customHalfDetails,
     fileUrl,
     managerReview,
+    createdAt,
   ];
 }

@@ -8,12 +8,14 @@ class TimesheetEditFooter extends StatelessWidget {
   final int selectedCount;
   final VoidCallback onCancel;
   final VoidCallback onUpdate;
+  final bool isLoading;
 
   const TimesheetEditFooter({
     super.key,
     required this.selectedCount,
     required this.onCancel,
     required this.onUpdate,
+    this.isLoading = false,
   });
 
   @override
@@ -63,7 +65,7 @@ class TimesheetEditFooter extends StatelessWidget {
           ),
           const SizedBox(width: AppConstants.p12),
           ElevatedButton(
-            onPressed: onUpdate,
+            onPressed: isLoading ? null : onUpdate,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppConstants.p24,
@@ -76,13 +78,22 @@ class TimesheetEditFooter extends StatelessWidget {
               ),
               elevation: 0,
             ),
-            child: Text(
-              l10n.update,
-              style: AppTextStyle.bodyMedium.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colors.white,
-              ),
-            ),
+            child: isLoading
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(colors.white),
+                    ),
+                  )
+                : Text(
+                    l10n.update,
+                    style: AppTextStyle.bodyMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colors.white,
+                    ),
+                  ),
           ),
         ],
       ),

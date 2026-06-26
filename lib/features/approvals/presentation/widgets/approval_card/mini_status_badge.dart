@@ -23,8 +23,8 @@ class MiniStatusBadge extends StatelessWidget {
 
     if (normStatus == ApprovalStatus.approved.toLowerCase()) {
       bgColor = colors.approvedBg;
-      textColor = colors.approvedText;
-      borderColor = textColor;
+      textColor = AppColors.colorGreen600;
+      borderColor = AppColors.colorGreen300;
       displayStatus = l10n.approved;
     } else if (normStatus == ApprovalStatus.rejected.toLowerCase()) {
       bgColor = colors.rejectedBg;

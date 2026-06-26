@@ -36,7 +36,7 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
           child: Container(
             height: 44.h,
             decoration: BoxDecoration(
-              color: colors.surfaceContainer, // From design spec
+              color: colors.profileTabBg, // From design spec
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Row(

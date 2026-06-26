@@ -115,91 +115,57 @@ class ShimmerCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header Skeleton
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                    ShimmerLoading(height: AppConstants.p48, width: AppConstants.p48, borderRadius: 24),
-              const SizedBox(width: AppConstants.p12),
-                    Expanded(
+              // Avatar or Icon Shimmer
+              ShimmerLoading(height: AppConstants.p48, width: AppConstants.p48, borderRadius: 24),
+              const SizedBox(width: AppConstants.p16),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ShimmerLoading(height: 16.h, width: 140.w),
-                    SizedBox(height: 8.h),
-                    ShimmerLoading(height: 12.h, width: 100.w),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ShimmerLoading(height: 16.h, width: 140.w),
+                              SizedBox(height: 8.h),
+                              ShimmerLoading(height: 14.h, width: 100.w),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: AppConstants.p8),
+                        ShimmerLoading(height: 24.h, width: 70.w, borderRadius: 12),
+                      ],
+                    ),
+                    SizedBox(height: 12.h),
+                    ShimmerLoading(height: 12.h, width: 120.w),
                   ],
                 ),
               ),
-              const SizedBox(width: AppConstants.p8),
-                    ShimmerLoading(height: 24.h, width: 70.w, borderRadius: 12),
             ],
           ),
           const SizedBox(height: AppConstants.p16),
-
-          // Details Skeleton
-          Container(
-            padding: const EdgeInsets.all(AppConstants.p12),
-            decoration: BoxDecoration(
-              color: AppColors.of(context).surfaceContainerLow,
-              borderRadius: BorderRadius.circular(AppConstants.r12),
-            ),
-            child: Column(
-              children: [
-                const _ShimmerDetailRow(),
-                Divider(
-                  height: AppConstants.p16,
-                  color: AppColors.of(context).border,
-                ),
-                const _ShimmerDetailRow(),
-                Divider(
-                  height: AppConstants.p16,
-                  color: AppColors.of(context).border,
-                ),
-                const _ShimmerDetailRow(),
-              ],
-            ),
-          ),
-          const SizedBox(height: AppConstants.p16),
-
-          // Actions Skeleton
-                Row(
+          Divider(color: AppColors.of(context).outlineVariant, height: 1),
+          const SizedBox(height: AppConstants.p12),
+          Row(
             children: [
               Expanded(
-                child: ShimmerLoading(
-                  height: 44.h,
-                  width: double.infinity,
-                  borderRadius: 8,
-                ),
+                child: ShimmerLoading(height: 36.h, width: double.infinity, borderRadius: AppConstants.r8),
               ),
-              SizedBox(width: 12.w),
+              SizedBox(width: 16.w),
               Expanded(
-                child: ShimmerLoading(
-                  height: 44.h,
-                  width: double.infinity,
-                  borderRadius: 8,
-                ),
+                child: ShimmerLoading(height: 36.h, width: double.infinity, borderRadius: AppConstants.r8),
               ),
-              SizedBox(width: 12.w),
-              ShimmerLoading(height: 44.h, width: 44.w, borderRadius: 8),
             ],
           ),
         ],
       ),
-    );
-  }
-}
-
-class _ShimmerDetailRow extends StatelessWidget {
-  const _ShimmerDetailRow();
-
-  @override
-  Widget build(BuildContext context) {
-    return       Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ShimmerLoading(height: 12.h, width: 80.w),
-        ShimmerLoading(height: 14.h, width: 100.w),
-      ],
     );
   }
 }

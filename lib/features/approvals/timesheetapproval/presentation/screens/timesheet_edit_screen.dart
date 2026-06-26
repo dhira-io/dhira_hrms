@@ -1,4 +1,5 @@
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/features/approvals/data/constants/approvals_api_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
@@ -90,6 +91,9 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
           success: (data) {
             if (data.successMessage != null) {
               ToastUtils.showSuccess(data.successMessage!);
+              if (data.successMessage == ApprovalsApiConstants.msgTimesheetUpdated) {
+                Navigator.pop(context);
+              }
             }
             if (data.errorMessage != null) {
               ToastUtils.showError(data.errorMessage!);
@@ -284,10 +288,19 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
                             ],
                           ),
                         ),
-                        TimesheetEditFooter(
-                          selectedCount: _localAssignments?.length ?? 0,
-                          onCancel: () => Navigator.pop(context),
-                          onUpdate: () => _onUpdate(context, timesheet),
+                        BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
+                          selector: (state) => state.maybeMap(
+                            success: (s) => s.data.processingIds.contains(timesheet.name),
+                            orElse: () => false,
+                          ),
+                          builder: (context, isProcessing) {
+                            return TimesheetEditFooter(
+                              selectedCount: _localAssignments?.length ?? 0,
+                              onCancel: () => Navigator.pop(context),
+                              onUpdate: () => _onUpdate(context, timesheet),
+                              isLoading: isProcessing,
+                            );
+                          },
                         ),
                       ],
                     );
@@ -371,6 +384,5 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
         assignments: updatedAssignments,
       ),
     );
-    Navigator.pop(context);
   }
 }

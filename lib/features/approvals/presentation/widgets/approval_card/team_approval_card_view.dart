@@ -85,22 +85,24 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
             children: [
               Text(
                 titleInfo.title,
-                style: AppTextStyle.labelSmall.copyWith(fontWeight: FontWeight.bold),
+                style: AppTextStyle.titleSmall.copyWith(
+                  color: colors.slate950,
+                ),
               ),
               const SizedBox(height: AppConstants.p8),
               Text(
                 titleInfo.subtitle,
-                style: AppTextStyle.bodySmall.copyWith(
-                  color: colors.onSurfaceVariant,
+                style: AppTextStyle.labelMedium.copyWith(
+                  color: colors.slate500Confirmation,
                 ),
               ),
             ],
           ),
         ),
         if (!isProcessed && (showApprove || showReject)) ...[
-          const SizedBox(height: AppConstants.p16),
+          const SizedBox(height: AppConstants.p8),
           Divider(color: colors.outlineVariant, height: 1),
-          const SizedBox(height: AppConstants.p16),
+          const SizedBox(height: AppConstants.p8),
           Row(
             children: [
               if (showReject)
@@ -112,18 +114,20 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
                     } : null,
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      backgroundColor: AppColors.rejectedBg,
-                      side: BorderSide(color: colors.error.withValues(alpha: 0.5)),
+                      backgroundColor: isRejectEnabled ? colors.colorRed50 : Colors.transparent,
+                      side: BorderSide(
+                        color: isRejectEnabled ? colors.colorRed400 : colors.outlineVariant,
+                      ),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                     ),
                     child: widget.isProcessing && _lastAction == ApprovalActions.reject
-                        ? SizedBox(height: 20.h, width: 20.w, child: CircularProgressIndicator(strokeWidth: 2, color: colors.error))
+                        ? SizedBox(height: 20.h, width: 20.w, child: CircularProgressIndicator(strokeWidth: 2, color: colors.colorRed600))
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.cancel_outlined, color: colors.error, size: 20),
+                              Icon(Icons.cancel_outlined, color: isRejectEnabled ? colors.colorRed600 : colors.outlineVariant, size: 20),
                               SizedBox(width: 8.w),
-                              Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: colors.error)),
+                              Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: isRejectEnabled ? colors.colorRed600 : colors.outlineVariant)),
                             ],
                           ),
                   ),
@@ -138,20 +142,20 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
                     } : null,
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      backgroundColor: isApproveEnabled ? AppColors.approvedBg : Colors.transparent,
+                      backgroundColor: isApproveEnabled ? colors.greenSuccess : Colors.transparent,
                       side: BorderSide(
-                        color: isApproveEnabled ? colors.success.withValues(alpha: 0.5) : colors.outlineVariant,
+                        color: isApproveEnabled ? colors.greenSuccess : colors.outlineVariant,
                       ),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                     ),
                     child: widget.isProcessing && _lastAction == ApprovalActions.approve
-                        ? SizedBox(height: 18.h, width: 18.w, child: CircularProgressIndicator(strokeWidth: 2, color: colors.success))
+                        ? SizedBox(height: 18.h, width: 18.w, child: CircularProgressIndicator(strokeWidth: 2, color: colors.slate50))
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.check_circle_outline, color: isApproveEnabled ? colors.success : colors.outlineVariant, size: 20),
+                              Icon(Icons.check_circle_outline, color: isApproveEnabled ? colors.slate50 : colors.outlineVariant, size: 20),
                               SizedBox(width: 8.w),
-                              Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: isApproveEnabled ? colors.success : colors.outlineVariant)),
+                              Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: isApproveEnabled ? colors.slate50 : colors.outlineVariant)),
                             ],
                           ),
                   ),
@@ -206,22 +210,13 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
         }
       }
     } else if (widget.data.type == ApprovalType.attendance) {
-      final type = widget.data.displayDetails['Reason'] ?? l10n.attendanceRegularization;
-      final date = widget.data.displayDetails['Date'] ?? '';
+      final type = widget.data.displayDetails[RequestDetailKeys.reasonCapitalized] ?? l10n.attendanceRegularization;
+      final date = widget.data.displayDetails[RequestDetailKeys.date] ?? '';
       title = date.isNotEmpty ? "$type · $date" : type;
       subtitle = date;
     } else if (widget.data.type == ApprovalType.timesheet) {
-      String weekName = widget.data.displayDetails['Week'] ?? '';
-      if (weekName.contains('to')) {
-        final parts = weekName.split('to').map((e) => e.trim()).toList();
-        if (parts.length == 2) {
-          try {
-            final fDate = DateTime.parse(parts[0]);
-            final tDate = DateTime.parse(parts[1]);
-            weekName = "${fDate.format('MMM d, yyyy')} to ${tDate.format('MMM d, yyyy')}";
-          } catch (_) {}
-        }
-      }
+      String weekName = widget.data.displayDetails[RequestDetailKeys.week] ?? '';
+      weekName = DateTimeUtils.formatWeekRangeString(weekName);
       title = weekName.isNotEmpty ? "${l10n.timesheet}- $weekName" : l10n.timesheet;
       subtitle = "";
     } else if (widget.data.type == ApprovalType.compOff) {
@@ -232,7 +227,7 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
       final dayStr = daysText == '1' ? '1 day' : '$daysText days';
       title = "${l10n.compOffRequest} \u00b7 $dayStr";
       
-      final dateStr = widget.data.displayDetails['Work Date'] ?? widget.data.displayDetails['Worked Date'] ?? widget.data.displayDetails['Comp-off Date'] ?? widget.data.displayDetails['Date'] ?? '';
+      final dateStr = widget.data.displayDetails[RequestDetailKeys.workDate] ?? widget.data.displayDetails['Worked Date'] ?? widget.data.displayDetails[RequestDetailKeys.compOffDate] ?? widget.data.displayDetails[RequestDetailKeys.date] ?? '';
       subtitle = dateStr;
     }
 

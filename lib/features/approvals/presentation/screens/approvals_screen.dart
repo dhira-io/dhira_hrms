@@ -103,22 +103,86 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
       child: Stack(
         children: [
           Scaffold(
-            backgroundColor: colors.background,
+            backgroundColor: colors.profileTabBg,
         body: BlocBuilder<ApprovalsBloc, ApprovalsState>(
           builder: (context, state) {
             return Column(
               children: [
                 const AppHeader(),
                 state.maybeWhen(
-                  success: (data) => Column(
-                    children: [
-                      const ApprovalsPrimaryTabsSection(),
-                      Container(
-                        color: colors.background,
-                        child: const ApprovalsFilterSection(),
-                      ),
-                    ],
-                  ),
+                  success: (data) {
+                    final isTeam = data.category == ApprovalCategory.team;
+                    final showSelectAll = isTeam &&
+                        data.statusFilter
+                            .toLowerCase()
+                            .contains(ApprovalsApiConstants.statusPending);
+                    return Column(
+                      children: [
+                        const ApprovalsPrimaryTabsSection(),
+                        Container(
+                          color: colors.background,
+                          child: const ApprovalsFilterSection(),
+                        ),
+                        if (showSelectAll) ...[
+                          const SizedBox(height: AppConstants.p12),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: AppConstants.p16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    final isAllSelected = data.filteredRequests.isNotEmpty &&
+                                        data.selectedRequestIds.length == data.filteredRequests.length;
+                                    context.read<ApprovalsBloc>().add(
+                                          ApprovalsEvent.selectAllToggled(!isAllSelected),
+                                        );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 24,
+                                          height: 24,
+                                          child: Checkbox(
+                                            value: data.filteredRequests.isNotEmpty &&
+                                                data.selectedRequestIds.length == data.filteredRequests.length,
+                                            onChanged: (value) {
+                                              context.read<ApprovalsBloc>().add(
+                                                    ApprovalsEvent.selectAllToggled(value ?? false),
+                                                  );
+                                            },
+                                            activeColor: colors.primary,
+                                            side: BorderSide(
+                                              color: colors.primary,
+                                              width: 2.0,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: AppConstants.p8),
+                                        Text(
+                                          AppLocalizations.of(context)!.selectAll,
+                                          style: AppTextStyle.labelLarge.copyWith(
+                                            color: colors.primary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: AppConstants.p4),
+                        ],
+                      ],
+                    );
+                  },
                   orElse: () => const SizedBox.shrink(),
                 ),
                 Expanded(
@@ -233,43 +297,46 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                         const SizedBox(height: AppConstants.p16),
                         Row(
                           children: [
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: state.data.isBulkActionLoading
-                                    ? null
-                                    : () {
-                                        setState(() => _bulkLoadingAction = ApprovalActions.reject);
-                                        context.read<ApprovalsBloc>().add(
-                                              ApprovalsEvent.bulkWorkflowActionSubmitted(
-                                                requestIds: state.data.selectedRequestIds.toList(),
-                                                action: l10n.reject,
-                                                type: state.data.type,
-                                                category: state.data.category,
-                                              ),
-                                            );
-                                      },
-                                style: OutlinedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                  side: BorderSide(color: colors.error),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                            if (state.data.type != ApprovalType.timesheet) ...[
+                                Expanded(
+                                  child: OutlinedButton(
+                                    onPressed: state.data.isBulkActionLoading
+                                        ? null
+                                        : () {
+                                            setState(() => _bulkLoadingAction = ApprovalActions.reject);
+                                            context.read<ApprovalsBloc>().add(
+                                                  ApprovalsEvent.bulkWorkflowActionSubmitted(
+                                                    requestIds: state.data.selectedRequestIds.toList(),
+                                                    action: l10n.reject,
+                                                    type: state.data.type,
+                                                    category: state.data.category,
+                                                  ),
+                                                );
+                                          },
+                                    style: OutlinedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      backgroundColor: colors.colorRed50,
+                                      side: BorderSide(color: colors.colorRed400),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                                    ),
+                                    child: state.data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.reject
+                                        ? SizedBox(
+                                            height: 20.h,
+                                            width: 20.w,
+                                            child: CircularProgressIndicator(strokeWidth: 2, color: colors.colorRed600),
+                                          )
+                                        : Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.cancel_outlined, color: colors.colorRed600, size: 20),
+                                              SizedBox(width: 8.w),
+                                              Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: colors.colorRed600)),
+                                            ],
+                                          ),
+                                  ),
                                 ),
-                                child: state.data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.reject
-                                    ? SizedBox(
-                                        height: 20.h,
-                                        width: 20.w,
-                                        child: CircularProgressIndicator(strokeWidth: 2, color: colors.error),
-                                      )
-                                    : Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.cancel_outlined, color: colors.error, size: 20),
-                                          SizedBox(width: 8.w),
-                                          Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: colors.error)),
-                                        ],
-                                      ),
-                              ),
-                            ),
-                            const SizedBox(width: AppConstants.p16),
+                              const SizedBox(width: AppConstants.p16),
+                            ],
                             Expanded(
                               child: OutlinedButton(
                                 onPressed: state.data.isBulkActionLoading
@@ -287,21 +354,22 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                                       },
                                 style: OutlinedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(vertical: 12),
-                                  side: BorderSide(color: colors.success),
+                                  backgroundColor: colors.greenSuccess,
+                                  side: BorderSide(color: colors.greenSuccess),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                                 ),
                                 child: state.data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.approve
                                     ? SizedBox(
                                         height: 20.h,
                                         width: 20.w,
-                                        child: CircularProgressIndicator(strokeWidth: 2, color: colors.success),
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: colors.slate50),
                                       )
                                     : Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.check_circle_outline, color: colors.success, size: 20),
+                                          Icon(Icons.check_circle_outline, color: colors.slate50, size: 20),
                                           SizedBox(width: 8.w),
-                                          Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: colors.success)),
+                                          Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: colors.slate50)),
                                         ],
                                       ),
                               ),

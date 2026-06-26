@@ -85,7 +85,7 @@ class ApprovalsRepositoryImpl implements IApprovalsRepository {
         await remoteDataSource.addComment(
           referenceDoctype,
           referenceName,
-          '<div class="ql-editor read-mode"><p>$content</p></div>',
+          content,
         );
         return const Right(null);
       } catch (e) {

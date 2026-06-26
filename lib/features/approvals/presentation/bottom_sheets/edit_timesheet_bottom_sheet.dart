@@ -29,21 +29,60 @@ class EditTimesheetBottomSheet extends StatelessWidget {
                   color: colors.surfaceContainerLowest,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    EditTimesheetHeader(onClose: () => Navigator.pop(context)),
+                child: SafeArea(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                    EditTimesheetHeader(onClose: () => Navigator.pop(context), dateRange: ""),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16.w),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        children: List.generate(4, (index) => Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: ShimmerLoading(width: double.infinity, height: 40),
-                        )),
+                        children: [
+                          // Summary Card Shimmer
+                          ShimmerLoading(
+                            width: double.infinity,
+                            height: 100.h,
+                            borderRadius: 16.r,
+                          ),
+                          SizedBox(height: 16.h),
+                          // Day Section Shimmers
+                          ...List.generate(3, (index) => Container(
+                            margin: EdgeInsets.only(bottom: 8.h),
+                            padding: EdgeInsets.all(16.w),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: colors.slateBorder),
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Row(
+                              children: [
+                                ShimmerLoading(
+                                  width: 40.w,
+                                  height: 40.h,
+                                  borderRadius: 8.r,
+                                ),
+                                SizedBox(width: 12.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      ShimmerLoading(width: 120.w, height: 16.h),
+                                      SizedBox(height: 8.h),
+                                      ShimmerLoading(width: 80.w, height: 12.h),
+                                    ],
+                                  ),
+                                ),
+                                ShimmerLoading(width: 50.w, height: 16.h),
+                                SizedBox(width: 16.w),
+                                ShimmerLoading(width: 24.w, height: 24.h, borderRadius: 12.r),
+                              ],
+                            ),
+                          )),
+                        ],
                       ),
                     ),
                   ],
+                  ),
                 ),
               );
             }
@@ -69,10 +108,12 @@ class EditTimesheetBottomSheet extends StatelessWidget {
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.9,
                 ),
-                child: EditTimesheetForm(
-                  timesheet: timesheet,
-                  projects: s.data.projects,
-                  employees: s.data.employees,
+                child: SafeArea(
+                  child: EditTimesheetForm(
+                    timesheet: timesheet,
+                    projects: s.data.projects,
+                    employees: s.data.employees,
+                  ),
                 ),
               ),
             );

@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 
 class EditTimesheetHeader extends StatelessWidget {
   final VoidCallback onClose;
+  final String dateRange;
 
-  const EditTimesheetHeader({super.key, required this.onClose});
+  const EditTimesheetHeader({super.key, required this.onClose, required this.dateRange});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
+    
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
       child: Row(
@@ -22,12 +23,12 @@ class EditTimesheetHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.requestDetails,
-                  style: AppTextStyle.headingSmall,
+                  l10n.editWeeklyTimesheet,
+                  style: AppTextStyle.titleLarge.copyWith(fontWeight: FontWeight.bold),
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  l10n.timesheetRequestDetails,
+                  dateRange,
                   style: AppTextStyle.bodySmall.copyWith(
                     color: AppColors.of(context).textSecondary,
                   ),

@@ -20,37 +20,37 @@ abstract class LeaveApprovalEvent with _$LeaveApprovalEvent {
     double? totalleavedays,
     String? workflowState,
     String? attachment,
-  }) = _UpdateRequested;
+  }) = UpdateRequested;
 
-  const factory LeaveApprovalEvent.typesRequested() = _TypesRequested;
+  const factory LeaveApprovalEvent.typesRequested() = TypesRequested;
 
   const factory LeaveApprovalEvent.balanceRequested({
     required String employeeId,
     required String todayDate,
     required String gender,
-  }) = _BalanceRequested;
+  }) = BalanceRequested;
 
   const factory LeaveApprovalEvent.overlapLeavesRequested({
     required String employeeId,
     required String fromDate,
     required String toDate,
-  }) = _OverlapLeavesRequested;
+  }) = OverlapLeavesRequested;
 
   const factory LeaveApprovalEvent.uploadFileRequested({
     required String filePath,
     required String fileName,
-  }) = _UploadFileRequested;
+  }) = UploadFileRequested;
 
   const factory LeaveApprovalEvent.statisticsRequested({
     required String employeeId,
     required String fromDate,
     required String toDate,
-  }) = _StatisticsRequested;
+  }) = StatisticsRequested;
 
-  const factory LeaveApprovalEvent.clearUploadStatus() = _ClearUploadStatus;
+  const factory LeaveApprovalEvent.clearUploadStatus() = ClearUploadStatus;
 
   const factory LeaveApprovalEvent.formInitialized({
     required String? leaveId,
     required String? fileUrl,
-  }) = _FormInitialized;
+  }) = FormInitialized;
 }

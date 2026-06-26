@@ -30,6 +30,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
     String? customHalfDetails,
     String? fileUrl,
     String? managerReview,
+    DateTime? createdAt,
   }) = _ApprovalRequestModel;
 
   const ApprovalRequestModel._();
@@ -111,6 +112,9 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
           (json['custom_half_details'] ?? json['half_day_segment'])?.toString(),
       fileUrl: json['file_url'] ?? json['supporting_document'],
       managerReview: json['approvers_remarks'] ?? json['workflow_state_message'] ?? json['remarks'] ?? json['manager_comments'],
+      createdAt: (json['creation'] ?? json['posting_date']) != null 
+          ? DateTime.tryParse((json['creation'] ?? json['posting_date']).toString())
+          : null,
     );
   }
   // --- MAPPING LOGIC ---
@@ -125,12 +129,12 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['Leave Type'] = json['leave_type'] ?? "";
         details['From Date'] = DateTimeUtils.formatDateAbbr(json['from_date']);
         details['To Date'] = DateTimeUtils.formatDateAbbr(json['to_date']);
-        details['Days'] = DateTimeUtils.formatDays(json['days'] ?? json['total_leave_days']);
+        details['Duration'] = DateTimeUtils.formatDays(json['days'] ?? json['total_leave_days']);
         details['Reason'] = json['description'] ?? "N/A";
-        details['Attachments'] =
+        details['Attachment'] =
             (json['file_url'] != null && json['file_url'].toString().isNotEmpty)
             ? AppConstants.view
-            : AppConstants.noneValue;
+            : 'null';
         if (DateTimeUtils.isHalfDay(json['half_day'])) {
           details['Day Segment'] =
               json['custom_half_details'] ?? json['half_day_segment'] ?? "";
@@ -159,6 +163,18 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['Expected'] = json['expected_hours']?.toString() ?? "0";
         details['Actual'] = json['actual_hours']?.toString() ?? "0";
         details['Projects'] = (json['projects'] as List?)?.join(', ') ?? "N/A";
+        String? timesheetReason = json['note']?.toString() ?? json['reason']?.toString() ?? json['description']?.toString();
+        if (timesheetReason == null || timesheetReason.trim().isEmpty) {
+          if (json['rows'] != null && json['rows'] is List && (json['rows'] as List).isNotEmpty) {
+            final firstRow = (json['rows'] as List)[0];
+            if (firstRow is Map) {
+              timesheetReason = firstRow['description']?.toString() ?? firstRow['note']?.toString();
+            }
+          }
+        }
+        if (timesheetReason != null && timesheetReason.toString().trim().isNotEmpty) {
+          details['Reason'] = timesheetReason.toString().trim();
+        }
         break;
       case ApprovalType.compOff:
         details['Worked Date'] = DateTimeUtils.formatDateAbbr(
@@ -184,10 +200,14 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
         details['Leave Type'] = json['leave_type'] ?? "";
         details['From Date'] = DateTimeUtils.formatDateAbbr(json['from_date']);
         details['To Date'] = DateTimeUtils.formatDateAbbr(json['to_date']);
-        details['Days'] = DateTimeUtils.formatDays(json['days'] ?? json['total_leave_days']);
+        details['Duration'] = DateTimeUtils.formatDays(json['days'] ?? json['total_leave_days']);
         final postingDate = DateTimeUtils.formatDateAbbr(json['posting_date']);
         if (postingDate.isNotEmpty) details['Submitted Date'] = postingDate;
         details['Reason'] = json['description'] ?? "";
+        details['Attachment'] =
+            (json['file_url'] != null && json['file_url'].toString().isNotEmpty)
+            ? AppConstants.view
+            : 'null';
         if (DateTimeUtils.isHalfDay(json['half_day'])) {
           details['Day Segment'] =
               json['custom_half_details'] ?? json['half_day_segment'] ?? "";
@@ -214,6 +234,18 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
             "${DateTimeUtils.formatDateAbbr(json['from_date'])} - ${DateTimeUtils.formatDateAbbr(json['to_date'])}";
         details['Total Hours'] = "${json['total_spent_hours'] ?? 0} Hours";
         details['Projects'] = (json['projects'] as List?)?.join(', ') ?? "N/A";
+        String? timesheetReason = json['note']?.toString() ?? json['reason']?.toString() ?? json['description']?.toString();
+        if (timesheetReason == null || timesheetReason.trim().isEmpty) {
+          if (json['rows'] != null && json['rows'] is List && (json['rows'] as List).isNotEmpty) {
+            final firstRow = (json['rows'] as List)[0];
+            if (firstRow is Map) {
+              timesheetReason = firstRow['description']?.toString() ?? firstRow['note']?.toString();
+            }
+          }
+        }
+        if (timesheetReason != null && timesheetReason.toString().trim().isNotEmpty) {
+          details['Reason'] = timesheetReason.toString().trim();
+        }
         details['Submitted Date'] = DateTimeUtils.formatDateAbbr(json['creation']);
         break;
       case ApprovalType.compOff:
@@ -235,7 +267,9 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
       employeeName: employeeName,
       employeeRole: employeeRole ?? '',
       profileImage: (profileImage != null && profileImage!.isNotEmpty)
-          ? '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$profileImage'
+          ? (profileImage!.startsWith('http')
+              ? profileImage
+              : '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$profileImage')
           : null,
       status: status,
       category: category,
@@ -255,6 +289,7 @@ abstract class ApprovalRequestModel with _$ApprovalRequestModel {
                 : '${ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '')}$fileUrl')
           : null,
       managerReview: managerReview,
+      createdAt: createdAt,
       conflictingLeaves: conflictingLeavesJson.map((e) {
         String name = "Unknown";
         String? role;

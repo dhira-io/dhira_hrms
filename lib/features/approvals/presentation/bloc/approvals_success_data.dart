@@ -55,6 +55,16 @@ class ApprovalsSuccessData with _$ApprovalsSuccessData {
         final query = searchQuery.toLowerCase();
         matchesSearch = request.employeeName.toLowerCase().contains(query) ||
             request.id.toLowerCase().contains(query);
+            
+        // If not found in name or ID, check if it matches any visible details (like dates, leave types)
+        if (!matchesSearch) {
+          for (final value in request.displayDetails.values) {
+            if (value.toLowerCase().contains(query)) {
+              matchesSearch = true;
+              break;
+            }
+          }
+        }
       }
 
       return matchesStatus && matchesSearch;

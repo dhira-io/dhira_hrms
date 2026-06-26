@@ -522,9 +522,15 @@ class RequestDetailKeys {
   static const String projects = 'Projects';
   static const String expectedHours = 'Expected Hours';
   static const String actualHours = 'Actual Hours';
-  static const String days = 'Days';
+  static const String days = 'Duration';
   static const String fromDate = 'From Date';
   static const String toDate = 'To Date';
+  static const String date = 'Date';
+  static const String week = 'Week';
+  static const String workDate = 'Work Date';
+  static const String compOffDate = 'Comp-off Date';
+  static const String reasonCapitalized = 'Reason';
+  static const String commentsCapitalized = 'Comments';
 }
 
 class ProjectStatus {

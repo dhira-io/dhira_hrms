@@ -251,9 +251,7 @@ class DaySectionWidget extends StatelessWidget {
                         DataCell(
                           Text(
                             _getEmployeeName(a.raisedBy, employees),
-                            style: AppTextStyle.bodySmall.copyWith(
-                              fontSize: AppConstants.fs11.sp,
-                            ),
+                            style: AppTextStyle.bodySmall,
                           ),
                         ),
                       ],

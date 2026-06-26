@@ -17,9 +17,9 @@ import 'package:dhira_hrms/features/approvals/data/constants/approvals_api_const
 import 'package:dhira_hrms/core/utils/string_utils.dart';
 import 'package:dhira_hrms/features/approvals/presentation/widgets/approval_card/mini_status_badge.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/withdraw_leave_bottom_sheet.dart';
-import 'package:dhira_hrms/features/approvals/presentation/dialogs/action_confirmation_dialog.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/action_confirmation_bottom_sheet.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/delete_timesheet_bottom_sheet.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bottom_sheets/attachment_bottom_sheet.dart';
 
 class RequestDetailsBottomSheet extends StatefulWidget {
   final ApprovalRequestEntity data;
@@ -41,28 +41,32 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
   @override
   void initState() {
     super.initState();
-    if (widget.data.type == ApprovalType.timesheet) {
-      context.read<ApprovalsBloc>().add(
-        ApprovalsEvent.editTimesheetRequested(requestId: widget.data.id),
-      );
-      if (widget.data.category == ApprovalCategory.raised) {
-        context.read<ApprovalsBloc>().add(
-          ApprovalsEvent.commentsRequested(
-            requestId: widget.data.id,
-            doctype: ApprovalsApiConstants.doctypeEmployeeTimesheet,
-          ),
-        );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        if (widget.data.type == ApprovalType.timesheet) {
+          context.read<ApprovalsBloc>().add(
+            ApprovalsEvent.editTimesheetRequested(requestId: widget.data.id),
+          );
+          if (widget.data.category == ApprovalCategory.raised) {
+            context.read<ApprovalsBloc>().add(
+              ApprovalsEvent.commentsRequested(
+                requestId: widget.data.id,
+                doctype: ApprovalsApiConstants.doctypeEmployeeTimesheet,
+              ),
+            );
+          }
+        } else if (widget.data.type == ApprovalType.compOff) {
+          if (widget.data.category == ApprovalCategory.raised) {
+            context.read<ApprovalsBloc>().add(
+              ApprovalsEvent.commentsRequested(
+                requestId: widget.data.id,
+                doctype: ApprovalsApiConstants.doctypeCompensatoryLeave,
+              ),
+            );
+          }
+        }
       }
-    } else if (widget.data.type == ApprovalType.compOff) {
-      if (widget.data.category == ApprovalCategory.raised) {
-        context.read<ApprovalsBloc>().add(
-          ApprovalsEvent.commentsRequested(
-            requestId: widget.data.id,
-            doctype: ApprovalsApiConstants.doctypeCompensatoryLeave,
-          ),
-        );
-      }
-    }
+    });
   }
 
   @override
@@ -91,132 +95,6 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
           ),
         );
     Navigator.pop(context);
-  }
-
-  Widget _buildCommentsSection(BuildContext context, AppLocalizations l10n) {
-    if (!(widget.data.type == ApprovalType.timesheet || widget.data.type == ApprovalType.compOff) || widget.data.category != ApprovalCategory.raised) {
-      return const SizedBox.shrink();
-    }
-    
-    return BlocBuilder<ApprovalsBloc, ApprovalsState>(
-      builder: (context, state) {
-        if (state is Success) {
-          if (state.data.isCommentsLoading) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShimmerLoading(width: 120.w, height: 16.h),
-                  const SizedBox(height: AppConstants.p12),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(AppConstants.p12),
-                    decoration: BoxDecoration(
-                      color: AppColors.of(context).surface,
-                      border: Border.all(color: AppColors.of(context).outlineVariant),
-                      borderRadius: BorderRadius.circular(AppConstants.r8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ShimmerLoading(width: 150.w, height: 14.h),
-                        SizedBox(height: 8.h),
-                        ShimmerLoading(width: double.infinity, height: 14.h),
-                        SizedBox(height: 4.h),
-                        ShimmerLoading(width: 200.w, height: 14.h),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-          
-          final comments = state.data.comments;
-          if (comments.isEmpty) {
-            return const SizedBox.shrink();
-          }
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: AppConstants.p16),
-              Text(
-                l10n.commentsLabel,
-                style: AppTextStyle.titleSmall.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: AppConstants.p8),
-              ...comments.map((c) => Container(
-                margin: const EdgeInsets.only(bottom: AppConstants.p8),
-                padding: const EdgeInsets.all(AppConstants.p12),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.of(context).surface,
-                  border: Border.all(color: AppColors.of(context).outlineVariant),
-                  borderRadius: BorderRadius.circular(AppConstants.r8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            c.commentBy ?? c.owner,
-                            style: AppTextStyle.labelMedium.copyWith(fontWeight: FontWeight.bold),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Text(
-                          DateTimeUtils.formatToDMYShort(c.creation),
-                          style: AppTextStyle.labelSmall.copyWith(color: AppColors.of(context).onSurfaceVariant),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppConstants.p4),
-                    Text(
-                      c.content.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), ''),
-                      style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurface),
-                    ),
-                  ],
-                ),
-              )),
-            ],
-          );
-        }
-        return const SizedBox.shrink();
-      },
-    );
-  }
-
-  Widget _buildDetailRow(MapEntry<String, String> entry, BuildContext context) {
-    bool isAttachment = entry.key.toLowerCase().contains('attachment');
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            entry.key,
-            style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurfaceVariant),
-          ),
-          const SizedBox(width: AppConstants.p24),
-          Flexible(
-            child: Text(
-              entry.value,
-              textAlign: TextAlign.right,
-              style: AppTextStyle.bodyMedium.copyWith(
-                fontWeight: FontWeight.w500,
-                color: isAttachment ? AppColors.of(context).primary : AppColors.of(context).onSurface,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -277,8 +155,9 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
       showEditDelete = !isProcessed;
     }
 
-    return Container(
-      decoration: BoxDecoration(
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
         color: AppColors.of(context).background,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(AppConstants.r24)),
       ),
@@ -286,7 +165,7 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
         left: AppConstants.p24,
         right: AppConstants.p24,
         top: AppConstants.p24,
-        bottom: MediaQuery.of(context).viewInsets.bottom + AppConstants.p24,
+        bottom: MediaQuery.of(context).viewInsets.bottom + AppConstants.p8,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -305,6 +184,8 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
               )
             ],
           ),
+          const SizedBox(height: AppConstants.p8),
+          Divider(color: AppColors.of(context).outlineVariant, height: 1),
           const SizedBox(height: AppConstants.p16),
           Expanded(
             child: SingleChildScrollView(
@@ -451,20 +332,20 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                                 updatedDetails[RequestDetailKeys.expectedHours] = '${ts.expectedHoursTotal} ${l10n.hoursLabel}';
                                 updatedDetails[RequestDetailKeys.actualHours] = '${ts.totalSpentHours} ${l10n.hoursLabel}';
                                 
-                                final projectsSet = ts.projectAssignments
-                                    ?.map((a) => a.project ?? '')
+                                final projectsSet = (ts.projectAssignments ?? [])
+                                    .map((a) => a.project)
                                     .where((p) => p.isNotEmpty)
-                                    .toSet() ?? {};
+                                    .toSet();
                                 updatedDetails[RequestDetailKeys.projects] = projectsSet.isNotEmpty ? projectsSet.join(', ') : l10n.notAvailable;
                               }
 
                               return Column(
-                                children: updatedDetails.entries.map((entry) => _buildDetailRow(entry, context)).toList(),
+                                children: updatedDetails.entries.map((entry) => _DetailRow(entry: entry)).toList(),
                               );
                             },
                           )
                         else
-                          ...details.entries.map((entry) => _buildDetailRow(entry, context)),
+                          ...details.entries.map((entry) => _DetailRow(entry: entry)),
                       ],
                     ),
                   ),
@@ -492,6 +373,66 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                     ),
                   ],
 
+                  const SizedBox(height: AppConstants.p16),
+                  Text(
+                    l10n.attachment,
+                    style: AppTextStyle.titleSmall.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: AppConstants.p8),
+                  if (widget.data.fileUrl != null && widget.data.fileUrl!.isNotEmpty && widget.data.fileUrl != AppConstants.noneValue) 
+                    InkWell(
+                      onTap: () {
+                        final baseUrl = ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '');
+                        final fileUrl = widget.data.fileUrl!;
+                        final fullUrl = fileUrl.startsWith('http') ? fileUrl : '$baseUrl$fileUrl';
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => AttachmentBottomSheet(url: fullUrl),
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(AppConstants.r8),
+                      child: Container(
+                        padding: const EdgeInsets.all(AppConstants.p12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.of(context).outlineVariant),
+                          borderRadius: BorderRadius.circular(AppConstants.r8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.attach_file, color: AppColors.of(context).primary, size: 20),
+                            const SizedBox(width: AppConstants.p8),
+                            Expanded(
+                              child: Text(
+                                widget.data.fileUrl!.split('/').last,
+                                style: AppTextStyle.bodyMedium.copyWith(
+                                  color: AppColors.of(context).primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else 
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(AppConstants.p16),
+                      decoration: BoxDecoration(
+                        color: AppColors.of(context).surface,
+                        border: Border.all(color: AppColors.of(context).outlineVariant),
+                        borderRadius: BorderRadius.circular(AppConstants.r8),
+                      ),
+                      child: Text(
+                        l10n.noAttachment,
+                        style: AppTextStyle.bodyMedium.copyWith(color: AppColors.of(context).onSurfaceVariant),
+                      ),
+                    ),
+
                   if (widget.data.category == ApprovalCategory.team && !isProcessed) ...[
                     const SizedBox(height: AppConstants.p24),
                     Text(
@@ -514,52 +455,56 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                     const SizedBox(height: AppConstants.p24),
                     Row(
                       children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => ActionConfirmationDialog(
-                                  action: ApprovalActions.reject,
-                                  data: widget.data,
-                                  onConfirm: () {
-                                    _onAction(context, ApprovalActions.reject);
-                                  },
-                                ),
-                              );
-                            },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: AppColors.of(context).error.withValues(alpha: 0.1),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              side: BorderSide(color: AppColors.of(context).error.withValues(alpha: 0.5)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.cancel_outlined, color: AppColors.of(context).error, size: 20),
-                                const SizedBox(width: 8),
-                                Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).error)),
-                              ],
+                        if (widget.data.type != ApprovalType.timesheet) ...[
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: Colors.transparent,
+                                  isScrollControlled: true,
+                                  builder: (ctx) => ActionConfirmationBottomSheet(
+                                    action: ApprovalActions.reject,
+                                    data: widget.data,
+                                    onConfirm: () {
+                                      _onAction(context, ApprovalActions.reject);
+                                    },
+                                  ),
+                                );
+                              },
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: AppColors.of(context).colorRed50,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                side: BorderSide(color: AppColors.of(context).colorRed400),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.cancel_outlined, color: AppColors.of(context).colorRed600, size: 20),
+                                  const SizedBox(width: 8),
+                                  Text(l10n.reject, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).colorRed600)),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: AppConstants.p16),
+                          const SizedBox(width: AppConstants.p16),
+                        ],
                         Expanded(
                           child: OutlinedButton(
                             onPressed: () => _onAction(context, ApprovalActions.approve),
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: AppColors.of(context).success.withValues(alpha: 0.1),
+                              backgroundColor: AppColors.of(context).greenSuccess,
                               padding: const EdgeInsets.symmetric(vertical: 12),
-                              side: BorderSide(color: AppColors.of(context).success.withValues(alpha: 0.5)),
+                              side: BorderSide(color: AppColors.of(context).greenSuccess),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.check_circle_outline, color: AppColors.of(context).success, size: 20),
+                                Icon(Icons.check_circle_outline, color: AppColors.of(context).slate50, size: 20),
                                 const SizedBox(width: 8),
-                                Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).success)),
+                                Text(l10n.approve, style: AppTextStyle.labelLarge.copyWith(color: AppColors.of(context).slate50)),
                               ],
                             ),
                           ),
@@ -567,7 +512,7 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                       ],
                     ),
                   ],
-                  _buildCommentsSection(context, l10n),
+                  _CommentsSection(data: widget.data, l10n: l10n),
                   if (widget.data.category == ApprovalCategory.raised) ...[
                     if (widget.data.status.toLowerCase() == ApprovalStatus.rejected.toLowerCase() && widget.data.managerReview != null && widget.data.managerReview!.isNotEmpty) ...[
                       const SizedBox(height: AppConstants.p16),
@@ -612,50 +557,7 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                         ),
                       ),
                     ],
-                    if (widget.data.fileUrl != null && widget.data.fileUrl!.isNotEmpty && widget.data.fileUrl != AppConstants.noneValue) ...[
-                      const SizedBox(height: AppConstants.p16),
-                      Text(
-                        l10n.attachment,
-                        style: AppTextStyle.titleSmall.copyWith(fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: AppConstants.p8),
-                      InkWell(
-                        onTap: () async {
-                          final baseUrl = ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '');
-                          final fileUrl = widget.data.fileUrl!;
-                          final fullUrl = fileUrl.startsWith('http') ? fileUrl : '$baseUrl$fileUrl';
-                          final uri = Uri.parse(fullUrl);
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri, mode: LaunchMode.externalApplication);
-                          }
-                        },
-                        borderRadius: BorderRadius.circular(AppConstants.r8),
-                        child: Container(
-                          padding: const EdgeInsets.all(AppConstants.p12),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.of(context).primary),
-                            borderRadius: BorderRadius.circular(AppConstants.r8),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.attach_file, color: AppColors.of(context).primary, size: 20),
-                              const SizedBox(width: AppConstants.p8),
-                              Expanded(
-                                child: Text(
-                                  widget.data.fileUrl!.split('/').last,
-                                  style: AppTextStyle.bodyMedium.copyWith(
-                                    color: AppColors.of(context).primary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                    // Attachment section moved above
                     if (showEditDelete) ...[
                       const SizedBox(height: AppConstants.p24),
                       Row(
@@ -710,7 +612,7 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.of(context).error,
+                                backgroundColor: AppColors.of(context).absentText,
                                 foregroundColor: AppColors.of(context).onPrimary,
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
@@ -731,6 +633,154 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
           ),
         ],
       ),
+    ));
+  }
+}
+
+class _DetailRow extends StatelessWidget {
+  final MapEntry<String, String> entry;
+
+  const _DetailRow({required this.entry});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    bool isAttachment = entry.key.toLowerCase().contains('attachment');
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            entry.key,
+            style: AppTextStyle.bodyMedium.copyWith(color: colors.onSurfaceVariant),
+          ),
+          const SizedBox(width: AppConstants.p24),
+          Flexible(
+            child: Text(
+              entry.value,
+              textAlign: TextAlign.right,
+              style: AppTextStyle.bodyMedium.copyWith(
+                fontWeight: FontWeight.w600,
+                color: isAttachment ? colors.primary : colors.onSurface,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
+}
+  class _CommentsSection extends StatelessWidget {
+  final ApprovalRequestEntity data;
+  final AppLocalizations l10n;
+
+  const _CommentsSection({
+    required this.data,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    if (!(data.type == ApprovalType.timesheet || data.type == ApprovalType.compOff) || data.category != ApprovalCategory.raised) {
+      return const SizedBox.shrink();
+    }
+    
+    return BlocBuilder<ApprovalsBloc, ApprovalsState>(
+      builder: (context, state) {
+        if (state is Success) {
+          if (state.data.isCommentsLoading) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShimmerLoading(width: 120.w, height: 16.h),
+                  const SizedBox(height: AppConstants.p12),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(AppConstants.p12),
+                    decoration: BoxDecoration(
+                      color: colors.surface,
+                      border: Border.all(color: colors.outlineVariant),
+                      borderRadius: BorderRadius.circular(AppConstants.r8),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ShimmerLoading(width: 150.w, height: 14.h),
+                        SizedBox(height: 8.h),
+                        ShimmerLoading(width: double.infinity, height: 14.h),
+                        SizedBox(height: 4.h),
+                        ShimmerLoading(width: 200.w, height: 14.h),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          
+          final comments = state.data.comments;
+          if (comments.isEmpty) {
+            return const SizedBox.shrink();
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: AppConstants.p16),
+              Text(
+                l10n.commentsLabel,
+                style: AppTextStyle.titleSmall.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: AppConstants.p8),
+              ...comments.map((c) => Container(
+                margin: const EdgeInsets.only(bottom: AppConstants.p8),
+                padding: const EdgeInsets.all(AppConstants.p12),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: colors.surface,
+                  border: Border.all(color: colors.outlineVariant),
+                  borderRadius: BorderRadius.circular(AppConstants.r8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            c.commentBy ?? c.owner,
+                            style: AppTextStyle.labelMedium.copyWith(fontWeight: FontWeight.bold),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Text(
+                          DateTimeUtils.formatToDMYShort(c.creation),
+                          style: AppTextStyle.labelSmall.copyWith(color: colors.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppConstants.p4),
+                    Text(
+                      c.content.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), ''),
+                      style: AppTextStyle.bodyMedium.copyWith(color: colors.onSurface),
+                    ),
+                  ],
+                ),
+              )),
+            ],
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+
+
+
 }

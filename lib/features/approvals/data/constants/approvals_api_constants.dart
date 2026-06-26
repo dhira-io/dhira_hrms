@@ -68,6 +68,8 @@ class ApprovalsApiConstants {
         return l10n.fromDate;
       case 'To Date':
         return l10n.toDate;
+      case 'Duration':
+        return l10n.duration;
       case 'Days':
         return l10n.daysLabel;
       case 'Reason':
