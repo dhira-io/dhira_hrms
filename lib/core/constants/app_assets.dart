@@ -27,4 +27,6 @@ class AppAssets {
   static const String onboardingCompoff = 'assets/svg/onboarding_compoff.svg';
   static const String onboardingPayslip = 'assets/svg/onboarding_payslip.svg';
   static const String paperclipIcon = 'assets/svg/paperclip.svg';
+  static const String chevronLeft = 'assets/svg/chevron_left.svg';
+  static const String chevronRight = 'assets/svg/chevron_right.svg';
 }

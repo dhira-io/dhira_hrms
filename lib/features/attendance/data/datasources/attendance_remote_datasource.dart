@@ -22,7 +22,11 @@ abstract class IAttendanceRemoteDataSource {
   Future<AttendancePunchSummaryModel> getAttendancePunchSummary({
     required String attendanceDate,
   });
-  Future<List<LeaveHistoryModel>> getLeaveHistory(String employee);
+  Future<List<LeaveHistoryModel>> getLeaveHistory({
+    required String employee,
+    int limitStart = 0,
+    int limitPageLength = 10,
+  });
   Future<LeaveDetailsModel> getLeaveDetails({
     required String employee,
     required String date,
@@ -184,7 +188,11 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
   }
 
   @override
-  Future<List<LeaveHistoryModel>> getLeaveHistory(String employee) async {
+  Future<List<LeaveHistoryModel>> getLeaveHistory({
+    required String employee,
+    int limitStart = 0,
+    int limitPageLength = 10,
+  }) async {
     final response = await dioClient.get(
       AttendanceApiConstants.getLeaveHistory,
       queryParameters: {
@@ -204,8 +212,8 @@ class AttendanceRemoteDataSourceImpl implements IAttendanceRemoteDataSource {
         'filters': jsonEncode([
           ["employee", "=", employee],
         ]),
-        'limit_start': 0,
-        'limit_page_length': 10,
+        'limit_start': limitStart,
+        'limit_page_length': limitPageLength,
         'order_by': 'creation desc',
       },
     );

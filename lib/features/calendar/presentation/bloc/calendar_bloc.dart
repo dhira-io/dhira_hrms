@@ -30,7 +30,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     required this.localStorageService,
     required this.getAttendancePunchSummaryUseCase,
     required this.getLeaveHistoryUseCase,
-  }) : super(const CalendarState.initial()) {
+  }) : super(CalendarState.initial()) {
     on<CalendarStarted>(_onStarted);
     on<CalendarMonthChanged>(_onMonthChanged);
     on<CalendarDaySelected>(_onDaySelected);
@@ -40,7 +40,19 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     CalendarStarted event,
     Emitter<CalendarState> emit,
   ) async {
-    await _fetchData(DateTime.now(), emit);
+    final empid = localStorageService.getEmpId();
+    if (empid == null || empid.isEmpty) {
+      emit(state.copyWith(
+        status: CalendarStatus.error,
+        errorMessage: "Employee ID not found",
+      ));
+      return;
+    }
+    emit(state.copyWith(
+      status: CalendarStatus.loading,
+      employeeId: empid,
+    ));
+    await _fetchData(DateTime.now(), emit, employeeId: empid);
   }
 
   Future<void> _onMonthChanged(
@@ -54,79 +66,83 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     CalendarDaySelected event,
     Emitter<CalendarState> emit,
   ) async {
-    await state.mapOrNull(
-      loaded: (loadedState) async {
-        // Find matching leave in history
-        LeaveHistoryEntity? matchingLeave;
-        if (loadedState.leaveHistory != null) {
-          final targetYMD = DateTime(event.day.year, event.day.month, event.day.day);
-          for (final leave in loadedState.leaveHistory!) {
-            try {
-              final start = DateTime.parse(leave.fromDate);
-              final end = DateTime.parse(leave.toDate);
-              final startYMD = DateTime(start.year, start.month, start.day);
-              final endYMD = DateTime(end.year, end.month, end.day);
-              if ((targetYMD.isAfter(startYMD) || targetYMD.isAtSameMomentAs(startYMD)) &&
-                  (targetYMD.isBefore(endYMD) || targetYMD.isAtSameMomentAs(endYMD))) {
-                matchingLeave = leave;
-                break;
-              }
-            } catch (_) {}
-          }
-        }
-
-        emit(loadedState.copyWith(
-          selectedDay: event.day,
-          selectedDayLeaveDetails: matchingLeave,
-          isPunchSummaryLoading: true,
-          selectedDayPunchSummary: null,
-        ));
-
-        final dateStr = DateTimeUtils.formatToYMD(event.day);
-        final punchSummaryResult = await getAttendancePunchSummaryUseCase(attendanceDate: dateStr);
-
-        state.mapOrNull(
-          loaded: (currentLoadedState) {
-            if (currentLoadedState.selectedDay == event.day) {
-              AttendancePunchSummaryEntity? punchSummary;
-              punchSummaryResult.fold(
-                (failure) => null,
-                (summary) => punchSummary = summary,
-              );
-              emit(currentLoadedState.copyWith(
-                selectedDayPunchSummary: punchSummary,
-                isPunchSummaryLoading: false,
-              ));
+    if (state.status == CalendarStatus.loaded) {
+      LeaveHistoryEntity? matchingLeave;
+      final history = state.leaveHistory;
+      if (history != null) {
+        final targetYMD = DateTime(event.day.year, event.day.month, event.day.day);
+        for (final leave in history) {
+          try {
+            final start = leave.parsedFromDate;
+            final end = leave.parsedToDate;
+            final startYMD = DateTime(start.year, start.month, start.day);
+            final endYMD = DateTime(end.year, end.month, end.day);
+            if ((targetYMD.isAfter(startYMD) || targetYMD.isAtSameMomentAs(startYMD)) &&
+                (targetYMD.isBefore(endYMD) || targetYMD.isAtSameMomentAs(endYMD))) {
+              matchingLeave = leave;
+              break;
             }
-          },
+          } catch (_) {}
+        }
+      }
+
+      emit(state.copyWith(
+        selectedDay: event.day,
+        selectedDayLeaveDetails: matchingLeave,
+        isPunchSummaryLoading: true,
+        selectedDayPunchSummary: null,
+      ));
+
+      final dateStr = DateTimeUtils.formatToYMD(event.day);
+      final punchSummaryResult = await getAttendancePunchSummaryUseCase(attendanceDate: dateStr);
+
+      if (state.status == CalendarStatus.loaded && state.selectedDay == event.day) {
+        AttendancePunchSummaryEntity? punchSummary;
+        punchSummaryResult.fold(
+          (failure) => null,
+          (summary) => punchSummary = summary,
         );
-      },
-    );
+        emit(state.copyWith(
+          selectedDayPunchSummary: punchSummary,
+          isPunchSummaryLoading: false,
+        ));
+      }
+    }
   }
 
   Future<void> _fetchData(
     DateTime month,
     Emitter<CalendarState> emit, {
     bool isMonthChange = false,
+    String? employeeId,
   }) async {
+    final empid = employeeId ?? state.employeeId ?? localStorageService.getEmpId();
+    if (empid == null || empid.isEmpty) {
+      emit(state.copyWith(
+        status: CalendarStatus.error,
+        errorMessage: "Employee ID not found",
+      ));
+      return;
+    }
+
     List<TeamLeaveEntity>? existingLeaves;
     List<LeaveHistoryEntity>? existingLeaveHistory;
 
-    if (isMonthChange && state is CalendarLoaded) {
-      final loadedState = state as CalendarLoaded;
-      existingLeaves = loadedState.teamLeaves;
-      existingLeaveHistory = loadedState.leaveHistory;
-      emit(loadedState.copyWith(
+    if (isMonthChange && state.status == CalendarStatus.loaded) {
+      existingLeaves = state.teamLeaves;
+      existingLeaveHistory = state.leaveHistory;
+      emit(state.copyWith(
+        status: CalendarStatus.loading,
         focusedMonth: month,
-        events: {},
+        events: const {},
         summary: const CalendarSummaryEntity(
-          presentDays: 0,
-          absentDays: 0,
-          onLeaveDays: 0,
+          presentDays: 0.0,
+          absentDays: 0.0,
+          onLeaveDays: 0.0,
           holidays: 0,
           weekendDays: 0,
           totalWorkingDays: 0,
-          attendancePercentage: 0,
+          attendancePercentage: 0.0,
           holidayDetails: [],
         ),
         selectedDay: null,
@@ -134,13 +150,10 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
         selectedDayLeaveDetails: null,
       ));
     } else {
-      emit(const CalendarState.loading());
-    }
-
-    final empid = localStorageService.getEmpId();
-    if (empid == null || empid.isEmpty) {
-      emit(const CalendarState.error(message: "Employee ID not found"));
-      return;
+      emit(state.copyWith(
+        status: CalendarStatus.loading,
+        employeeId: empid,
+      ));
     }
 
     final fromDate = DateTimeUtils.formatToYMD(month.firstDayOfMonth);
@@ -167,7 +180,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
             )),
       existingLeaveHistory != null
           ? Future.value(right<Failure, List<LeaveHistoryEntity>>(existingLeaveHistory))
-          : getLeaveHistoryUseCase(empid),
+          : getLeaveHistoryUseCase(GetCalendarLeaveHistoryParams(employee: empid)),
     ]);
 
     final eventsResult = results[0] as Either<Failure, Map<String, String>>;
@@ -177,7 +190,10 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
 
     if (eventsResult.isLeft()) {
       eventsResult.fold(
-        (failure) => emit(CalendarState.error(message: failure.message)),
+        (failure) => emit(state.copyWith(
+          status: CalendarStatus.error,
+          errorMessage: failure.message,
+        )),
         (_) {},
       );
       return;
@@ -185,18 +201,22 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
 
     if (summaryResult.isLeft()) {
       summaryResult.fold(
-        (failure) => emit(CalendarState.error(message: failure.message)),
+        (failure) => emit(state.copyWith(
+          status: CalendarStatus.error,
+          errorMessage: failure.message,
+        )),
         (_) {},
       );
       return;
     }
 
-    final events = eventsResult.getOrElse(() => {});
+    final events = eventsResult.getOrElse(() => const {});
     final summary = summaryResult.getOrElse(() => throw Exception("Unexpected state"));
-    final teamLeaves = teamLeavesResult.getOrElse(() => []);
-    final leaveHistory = leaveHistoryResult.getOrElse(() => []);
+    final teamLeaves = teamLeavesResult.getOrElse(() => const []);
+    final leaveHistory = leaveHistoryResult.getOrElse(() => const []);
 
-    emit(CalendarState.loaded(
+    emit(state.copyWith(
+      status: CalendarStatus.loaded,
       events: events,
       summary: summary,
       focusedMonth: month,

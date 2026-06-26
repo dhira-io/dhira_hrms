@@ -340,6 +340,24 @@
   "leaveHistory": "Leave History",
   "teamOnLeave": "On Leave Today",
   "noOneOnLeaveToday": "🎉 Great news! No one from your team is on leave today.",
+  "oneEmployee": "1 Employee",
+  "multipleEmployees": "{count} Employees",
+  "@multipleEmployees": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "oneDay": "1 day",
+  "multipleDays": "{count} days",
+  "@multipleDays": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "day": "Day",
   "month": "Month",
   "week": "Week",

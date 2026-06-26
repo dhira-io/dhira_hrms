@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
-import 'package:dhira_hrms/core/services/local_storage_service.dart';
-import 'package:dhira_hrms/core/routing/app_router.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_bloc.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_state.dart';
 import 'package:dhira_hrms/features/calendar/domain/entities/attendance_punch_summary_entity.dart';
 import 'package:dhira_hrms/features/calendar/domain/entities/leave_history_entity.dart';
+import 'package:dhira_hrms/features/calendar/presentation/widgets/details_bottom_actions.dart';
 
 class AttendanceDetailsBottomSheet extends StatelessWidget {
   final DateTime selectedDay;
@@ -24,6 +22,7 @@ class AttendanceDetailsBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = AppColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -50,59 +49,54 @@ class AttendanceDetailsBottomSheet extends StatelessWidget {
           ),
           child: BlocBuilder<CalendarBloc, CalendarState>(
             builder: (context, state) {
-              return state.maybeWhen(
-                loaded:
-                    (
-                      events,
-                      summary,
-                      focusedMonth,
-                      selectedDayVal,
-                      teamLeaves,
-                      selectedDayPunchSummary,
-                      isPunchSummaryLoading,
-                      selectedDayLeaveDetails,
-                      leaveHistory,
-                    ) {
-                      if (isPunchSummaryLoading) {
-                        return const _ShimmerLoadingView();
-                      }
+              if (state.status == CalendarStatus.loading ||
+                  state.isPunchSummaryLoading) {
+                return const _ShimmerLoadingView();
+              }
 
-                      final dateKey = DateTimeUtils.formatToYMD(selectedDay);
-                      final rawStatus = events[dateKey] ?? '';
-                      final isWeekend = DateTimeUtils.isWeekend(selectedDay);
+              if (state.status == CalendarStatus.loaded) {
+                final dateKey = DateTimeUtils.formatToYMD(selectedDay);
+                final rawStatus = state.events[dateKey] ?? '';
+                final isWeekend = DateTimeUtils.isWeekend(selectedDay);
 
-                      String statusStr = rawStatus;
-                      if (isWeekend) {
-                        if (rawStatus.isEmpty ||
-                            rawStatus.toLowerCase() == 'holiday' ||
-                            rawStatus.toLowerCase() == 'weekend' ||
-                            rawStatus.toLowerCase() == 'weekly off') {
-                          statusStr = 'weekend';
-                        }
-                      }
+                String statusStr = rawStatus;
+                if (isWeekend) {
+                  if (rawStatus.isNotEmpty) {
+                    final s = rawStatus.toLowerCase();
+                    if (s == AttendanceStatus.present ||
+                        s == AttendanceStatus.halfDay ||
+                        s == AttendanceStatus.halfDayAlt) {
+                      statusStr = rawStatus;
+                    } else {
+                      statusStr = AttendanceStatus.weekend;
+                    }
+                  } else {
+                    statusStr = AttendanceStatus.weekend;
+                  }
+                }
 
-                      // Find holiday name
-                      String? holidayName;
-                      if (statusStr.toLowerCase() == 'holiday') {
-                        for (final h in summary.holidayDetails) {
-                          if (h.date == dateKey) {
-                            holidayName = h.name;
-                            break;
-                          }
-                        }
-                        holidayName ??= 'Public Holiday';
-                      }
+                // Find holiday name
+                String? holidayName;
+                if (statusStr.toLowerCase() == AttendanceStatus.holiday) {
+                  for (final h in state.summary.holidayDetails) {
+                    if (h.date == dateKey) {
+                      holidayName = h.name;
+                      break;
+                    }
+                  }
+                  holidayName ??= l10n.holiday;
+                }
 
-                      return _ContentArea(
-                        selectedDay: selectedDay,
-                        statusStr: statusStr,
-                        punchSummary: selectedDayPunchSummary,
-                        leaveDetails: selectedDayLeaveDetails,
-                        holidayName: holidayName,
-                      );
-                    },
-                orElse: () => const SizedBox.shrink(),
-              );
+                return _ContentArea(
+                  selectedDay: selectedDay,
+                  statusStr: statusStr,
+                  punchSummary: state.selectedDayPunchSummary,
+                  leaveDetails: state.selectedDayLeaveDetails,
+                  holidayName: holidayName,
+                );
+              }
+
+              return const SizedBox.shrink();
             },
           ),
         ),
@@ -231,23 +225,23 @@ class _StatusBadge extends StatelessWidget {
     Color dotColor;
     String labelText = statusStr;
 
-    if (status == 'present') {
+    if (status == AttendanceStatus.present) {
       borderColor = colors.presentText;
       dotColor = colors.presentText;
       labelText = l10n.present;
-    } else if (status == 'half day' || status == 'half-day') {
+    } else if (status == AttendanceStatus.halfDay || status == AttendanceStatus.halfDayAlt) {
       borderColor = colors.halfDayText;
       dotColor = colors.halfDayText;
       labelText = l10n.halfDay;
-    } else if (status == 'leave' || status == 'on leave') {
+    } else if (status == AttendanceStatus.leave || status == AttendanceStatus.onLeave) {
       borderColor = colors.leaveText;
       dotColor = colors.leaveText;
       labelText = l10n.leave;
-    } else if (status == 'holiday') {
+    } else if (status == AttendanceStatus.holiday) {
       borderColor = colors.holidayText;
       dotColor = colors.holidayText;
       labelText = l10n.holiday;
-    } else if (status == 'weekend' || status == 'weekly off') {
+    } else if (status == AttendanceStatus.weekend || status == AttendanceStatus.weeklyOff) {
       borderColor = colors.weekendText;
       dotColor = colors.weekendText;
       labelText = l10n.weekend;
@@ -309,16 +303,16 @@ class _ContentArea extends StatelessWidget {
   }
 
   String _formatOnlyTime(String? timeStr) {
-    if (timeStr == null || timeStr.isEmpty || timeStr == '--:--') {
-      return '--:--';
+    if (timeStr == null || timeStr.isEmpty || timeStr == AppConstants.timePlaceholder) {
+      return AppConstants.timePlaceholder;
     }
     try {
       final lower = timeStr.toLowerCase();
-      if (lower.contains('am') || lower.contains('pm')) {
+      if (lower.contains(AppConstants.am) || lower.contains(AppConstants.pm)) {
         final parts = timeStr.trim().split(RegExp(r'\s+'));
         if (parts.length >= 2) {
-          if (parts.last.toLowerCase() == 'am' ||
-              parts.last.toLowerCase() == 'pm') {
+          if (parts.last.toLowerCase() == AppConstants.am ||
+              parts.last.toLowerCase() == AppConstants.pm) {
             return '${parts[parts.length - 2]} ${parts.last.toUpperCase()}';
           }
         }
@@ -330,7 +324,7 @@ class _ContentArea extends StatelessWidget {
           DateTime.tryParse('2020-01-01 $timeStr');
 
       if (dt != null) {
-        return DateFormat('hh:mm a').format(dt);
+        return DateFormat(AppConstants.timeFormat12hrPadded).format(dt);
       }
     } catch (_) {}
     return timeStr;
@@ -343,19 +337,19 @@ class _ContentArea extends StatelessWidget {
     final colors = AppColors.of(context);
     final dateFormatted = DateTimeUtils.formatDate(
       selectedDay,
-      pattern: 'EEEE, d MMMM yyyy',
+      pattern: DateTimeUtils.dateFormatDayNameDayMonthYear,
     );
 
     Widget detailContent;
     bool showActionButtons = false;
     final summary = punchSummary;
 
-    if (status == 'present') {
+    if (status == AttendanceStatus.present) {
       final checkIn = _formatOnlyTime(summary?.firstIn);
       final checkOut = _formatOnlyTime(summary?.lastOut);
       final totalHours = summary != null
           ? _formatWorkingHours(summary.workingHours)
-          : '--:--';
+          : AppConstants.timePlaceholder;
 
       detailContent = _InfoRows(
         rows: [
@@ -364,12 +358,12 @@ class _ContentArea extends StatelessWidget {
           _InfoRowData(label: l10n.totalHoursLabel, value: totalHours),
         ],
       );
-    } else if (status == 'half day' || status == 'half-day') {
+    } else if (status == AttendanceStatus.halfDay || status == AttendanceStatus.halfDayAlt) {
       final checkIn = _formatOnlyTime(summary?.firstIn);
       final checkOut = _formatOnlyTime(summary?.lastOut);
       final totalHours = summary != null
           ? _formatWorkingHours(summary.workingHours)
-          : '--:--';
+          : AppConstants.timePlaceholder;
 
       detailContent = _InfoRows(
         rows: [
@@ -380,10 +374,12 @@ class _ContentArea extends StatelessWidget {
       );
 
       showActionButtons = true;
-    } else if (status == 'leave' || status == 'on leave') {
-      final leaveType = leaveDetails?.leaveType ?? 'Sick Leave';
+    } else if (status == AttendanceStatus.leave || status == AttendanceStatus.onLeave) {
+      final leaveType = leaveDetails?.leaveType ?? l10n.sick;
       final double days = leaveDetails?.totalLeaveDays ?? 1.0;
-      final duration = days % 1 == 0 ? '${days.toInt()} day' : '$days days';
+      final duration = days == 1.0
+          ? l10n.oneDay
+          : l10n.multipleDays(days % 1 == 0 ? days.toInt().toString() : days.toString());
 
       detailContent = _InfoRows(
         rows: [
@@ -391,7 +387,7 @@ class _ContentArea extends StatelessWidget {
           _InfoRowData(label: l10n.duration, value: duration),
         ],
       );
-    } else if (status == 'holiday') {
+    } else if (status == AttendanceStatus.holiday) {
       detailContent = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -399,7 +395,7 @@ class _ContentArea extends StatelessWidget {
             rows: [
               _InfoRowData(
                 label: l10n.holidayName,
-                value: holidayName ?? 'Public Holiday',
+                value: holidayName ?? l10n.holiday,
               ),
             ],
           ),
@@ -423,7 +419,7 @@ class _ContentArea extends StatelessWidget {
                 SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
-                    l10n.publicHolidayNoAttendance,
+                     l10n.publicHolidayNoAttendance,
                     style: AppTextStyle.labelMedium.copyWith(
                       color: colors.holidayText,
                     ),
@@ -434,7 +430,7 @@ class _ContentArea extends StatelessWidget {
           ),
         ],
       );
-    } else if (status == 'weekend' || status == 'weekly off') {
+    } else if (status == AttendanceStatus.weekend || status == AttendanceStatus.weeklyOff) {
       detailContent = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -564,7 +560,7 @@ class _ContentArea extends StatelessWidget {
         ),
         if (showActionButtons) ...[
           SizedBox(height: 12.h),
-          const _ActionButtonsArea(),
+          const DetailsBottomActions(),
         ],
       ],
     );
@@ -602,78 +598,6 @@ class _InfoRows extends StatelessWidget {
           ),
         );
       }).toList(),
-    );
-  }
-}
-
-class _ActionButtonsArea extends StatelessWidget {
-  const _ActionButtonsArea();
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final colors = AppColors.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-            context.push(AppRouter.attendanceRegularizationPath);
-          },
-          child: Container(
-            height: 36.h,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: colors.surface,
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: colors.tableBorder, width: 1.w),
-              boxShadow: [
-                BoxShadow(
-                  color: colors.black.withValues(alpha: 0.05),
-                  blurRadius: 2.r,
-                  offset: Offset(0, 1.h),
-                ),
-              ],
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              l10n.attendanceRegularization,
-              style: AppTextStyle.labelLarge.copyWith(
-                color: colors.onSurface,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 8.h),
-        GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-            final empId = Get.find<LocalStorageService>().getEmpId() ?? '';
-            context.push(
-              AppRouter.applyLeavePath,
-              extra: {AppRouter.argEmployeeId: empId},
-            );
-          },
-          child: Container(
-            height: 36.h,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: colors.primaryContainer,
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              l10n.applyLeaveBtn,
-              style: AppTextStyle.labelLarge.copyWith(
-                color: colors.surfaceContainerLowest,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

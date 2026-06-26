@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
+import 'package:dhira_hrms/core/constants/app_assets.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 
@@ -58,7 +59,7 @@ class _MonthSelectorHeader extends StatelessWidget {
       focusedMonth,
       pattern: DateTimeUtils.patternMonthYear,
     );
-
+    final themeColors = AppColors.of(context);
     return Container(
       width: double.infinity,
       height: 45.h,
@@ -67,9 +68,9 @@ class _MonthSelectorHeader extends StatelessWidget {
         vertical: 8.h,
       ),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surface,
+        color: themeColors.surface,
         borderRadius: BorderRadius.circular(AppConstants.r32),
-        border: Border.all(color: AppColors.of(context).outlineVariant),
+        border: Border.all(color: themeColors.outlineVariant),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,16 +86,16 @@ class _MonthSelectorHeader extends StatelessWidget {
               height: 32.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFFFAFAFA),
-                border: Border.all(color: const Color(0xFFE5E5E5)),
+                color: themeColors.calendarChevronBg,
+                border: Border.all(color: themeColors.calendarChevronBorder),
               ),
               child: Center(
                 child: SvgPicture.asset(
-                  'assets/svg/chevron_left.svg',
+                  AppAssets.chevronLeft,
                   width: 14.w,
                   height: 14.w,
                   colorFilter: ColorFilter.mode(
-                    AppColors.of(context).onSurface,
+                    themeColors.onSurface,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -104,7 +105,7 @@ class _MonthSelectorHeader extends StatelessWidget {
           Text(
             monthLabel,
             style: AppTextStyle.headingSmallTwoBold.copyWith(
-              color: AppColors.of(context).onSurface,
+              color: themeColors.onSurface,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -119,16 +120,16 @@ class _MonthSelectorHeader extends StatelessWidget {
               height: 32.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFFFAFAFA),
-                border: Border.all(color: const Color(0xFFE5E5E5)),
+                color: themeColors.calendarChevronBg,
+                border: Border.all(color: themeColors.calendarChevronBorder),
               ),
               child: Center(
                 child: SvgPicture.asset(
-                  'assets/svg/chevron_right.svg',
+                  AppAssets.chevronRight,
                   width: 14.w,
                   height: 14.w,
                   colorFilter: ColorFilter.mode(
-                    AppColors.of(context).onSurface,
+                    themeColors.onSurface,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -156,16 +157,13 @@ class _CalendarGridCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeColors = AppColors.of(context);
     // Generate week days header SUN, MON...
-    final weekdays = [
-      DateTime(2026, 6, 7), // Sunday
-      DateTime(2026, 6, 8), // Monday
-      DateTime(2026, 6, 9), // Tuesday
-      DateTime(2026, 6, 10), // Wednesday
-      DateTime(2026, 6, 11), // Thursday
-      DateTime(2026, 6, 12), // Friday
-      DateTime(2026, 6, 13), // Saturday
-    ].map((d) => DateTimeUtils.formatToDayAbbrFull(d)).toList();
+    final weekdays = List.generate(7, (index) {
+      // 2024-01-07 was a Sunday
+      final date = DateTime(2024, 1, 7 + index);
+      return DateTimeUtils.formatToDayAbbrFull(date);
+    });
 
     // Days calculation
     final firstDay = DateTime(focusedMonth.year, focusedMonth.month, 1);
@@ -180,9 +178,9 @@ class _CalendarGridCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppConstants.p10),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surface,
+        color: themeColors.surface,
         borderRadius: BorderRadius.circular(AppConstants.r16),
-        border: Border.all(color: AppColors.of(context).outlineVariant),
+        border: Border.all(color: themeColors.outlineVariant),
       ),
       child: Column(
         children: [
@@ -195,7 +193,7 @@ class _CalendarGridCard extends StatelessWidget {
                     weekdays[i],
                     textAlign: TextAlign.center,
                     style: AppTextStyle.labelMediumOne.copyWith(
-                      color: const Color(0xFF62748E),
+                      color: themeColors.onSurfaceVariant,
 
                       fontWeight: FontWeight.w600,
                     ),
@@ -242,7 +240,7 @@ class _CalendarGridCard extends StatelessWidget {
             },
           ),
           SizedBox(height: 16.h),
-          Divider(color: AppColors.of(context).outlineVariant, height: 1.h),
+          Divider(color: themeColors.outlineVariant, height: 1.h),
           SizedBox(height: 12.h),
           const _HorizontalLegendsRow(),
         ],
@@ -267,50 +265,68 @@ class _CalendarDayCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isToday = DateTimeUtils.isToday(day);
-
+    final themeColors = AppColors.of(context);
     // Style configurations based on status
-    Color backgroundColor = const Color(0xFFFFFFFF);
-    Color borderColor = const Color(0xFFE5E5E5);
+    Color backgroundColor = themeColors.surface;
+    Color borderColor = themeColors.outlineVariant;
     Color? dotColor;
     bool hasStatus = false;
 
-    if (status != null && status!.isNotEmpty) {
-      final s = status!.toLowerCase();
-      if (s == 'present') {
-        backgroundColor = AppColors.of(context).presentBg;
-        borderColor = AppColors.of(context).presentText;
-        dotColor = AppColors.of(context).presentText;
+    final isWeekend = DateTimeUtils.isWeekend(day);
+    String? resolvedStatus = status;
+
+    if (isWeekend) {
+      if (status != null && status!.isNotEmpty) {
+        final s = status!.toLowerCase();
+        if (s == AttendanceStatus.present ||
+            s == AttendanceStatus.halfDay ||
+            s == AttendanceStatus.halfDayAlt) {
+          resolvedStatus = status;
+        } else {
+          resolvedStatus = AttendanceStatus.weekend;
+        }
+      } else {
+        resolvedStatus = AttendanceStatus.weekend;
+      }
+    }
+
+    if (resolvedStatus != null && resolvedStatus!.isNotEmpty) {
+      final s = resolvedStatus!.toLowerCase();
+      if (s == AttendanceStatus.present) {
+        backgroundColor = themeColors.presentBg;
+        borderColor = themeColors.presentText;
+        dotColor = themeColors.presentText;
         hasStatus = true;
-      } else if (s == 'absent') {
-        backgroundColor = AppColors.of(context).absentBg;
-        borderColor = AppColors.of(context).absentText;
-        dotColor = AppColors.of(context).absentText;
+      } else if (s == AttendanceStatus.absent) {
+        backgroundColor = themeColors.absentBg;
+        borderColor = themeColors.absentText;
+        dotColor = themeColors.absentText;
         hasStatus = true;
-      } else if (s == 'on leave' || s == 'leave') {
-        backgroundColor = AppColors.of(context).leaveBg;
-        borderColor = AppColors.of(context).leaveText;
-        dotColor = AppColors.of(context).leaveText;
+      } else if (s == AttendanceStatus.leave || s == AttendanceStatus.onLeave) {
+        backgroundColor = themeColors.leaveBg;
+        borderColor = themeColors.leaveText;
+        dotColor = themeColors.leaveText;
         hasStatus = true;
-      } else if (s == 'holiday') {
-        backgroundColor = AppColors.of(context).holidayBg;
-        borderColor = AppColors.of(context).holidayText;
-        dotColor = AppColors.of(context).holidayText;
+      } else if (s == AttendanceStatus.holiday) {
+        backgroundColor = themeColors.holidayBg;
+        borderColor = themeColors.holidayText;
+        dotColor = themeColors.holidayText;
         hasStatus = true;
-      } else if (s == 'weekend' || s == 'weekly off') {
-        backgroundColor = AppColors.of(context).weekendBg;
-        borderColor = AppColors.of(context).weekendText;
-        dotColor = AppColors.of(context).weekendText;
+      } else if (s == AttendanceStatus.weekend || s == AttendanceStatus.weeklyOff) {
+        backgroundColor = themeColors.weekendBg;
+        borderColor = themeColors.weekendText;
+        dotColor = themeColors.weekendText;
         hasStatus = true;
-      } else if (s == 'half day' || s == 'half-day') {
-        backgroundColor = AppColors.of(context).halfDayBg;
-        borderColor = AppColors.of(context).halfDayText;
-        dotColor = AppColors.of(context).halfDayText;
+      } else if (s == AttendanceStatus.halfDay || s == AttendanceStatus.halfDayAlt) {
+        backgroundColor = themeColors.halfDayBg;
+        borderColor = themeColors.halfDayText;
+        dotColor = themeColors.halfDayText;
         hasStatus = true;
       }
     }
 
     if (isToday) {
-      borderColor = AppColors.of(context).calendarTodayBorder;
+      borderColor = themeColors.calendarTodayBorder;
     }
 
     return GestureDetector(
@@ -330,11 +346,10 @@ class _CalendarDayCell extends StatelessWidget {
               Text(
                 day.day.toString(),
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: hasStatus ? const Color(0xFF020618) : const Color(0xFF62748E),
-                  fontWeight: isToday
-                      ? FontWeight.bold
-                      : FontWeight.w600,
-                  fontSize: 12.sp,
+                  color: hasStatus
+                      ? themeColors.onSurface
+                      : themeColors.onSurfaceVariant,
+                  fontWeight: isToday ? FontWeight.bold : FontWeight.w600,
                 ),
               ),
               if (dotColor != null) ...[
@@ -428,6 +443,7 @@ class _LegendItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeColors = AppColors.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -441,7 +457,7 @@ class _LegendItem extends StatelessWidget {
         Text(
           label,
           style: AppTextStyle.bodyMediumOne.copyWith(
-            color: const Color(0xFF314158),
+            color: themeColors.onSurface,
             fontWeight: FontWeight.w600,
           ),
         ),

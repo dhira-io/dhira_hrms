@@ -24,9 +24,11 @@ abstract class IAttendanceRepository {
   getAttendancePunchSummary({
     required String attendanceDate,
   });
-  Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory(
-    String employee,
-  );
+  Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory({
+    required String employee,
+    int limitStart = 0,
+    int limitPageLength = 10,
+  });
   Future<Either<Failure, LeaveDetailsEntity>> getLeaveDetails({
     required String employee,
     required String date,

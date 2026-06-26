@@ -193,6 +193,8 @@ class AppColors {
   static const Color calendarDefaultText = Color(0xFF45556C);
   static const Color calendarTodayBorder = Color(0xFF2B7FFF);
   static const Color calendarDayLabel = Color(0xFF475569);
+  static const Color calendarChevronBg = Color(0xFFFAFAFA);
+  static const Color calendarChevronBorder = Color(0xFFE5E5E5);
 
   // Attendance Month Summary Colors
   static const Color monthSummaryPresentBg = Color(0xFFDCFCE7);
@@ -297,6 +299,8 @@ class AppColors {
   static const Color _darkCalendarDefaultBg = Color(0xFF1A1A1A);
   static const Color _darkCalendarDefaultText = Color(0xFFE1E1E1);
   static const Color _darkCalendarDayLabel = Color(0xFFA0A0A0);
+  static const Color _darkCalendarChevronBg = Color(0xFF2C2C2C);
+  static const Color _darkCalendarChevronBorder = Color(0xFF3A3A3A);
 
   // Slate alternatives for dark mode
   static const Color _darkSlateBg = Color(0xFF1E293B);
@@ -492,6 +496,8 @@ class AppColorsResolved {
   final Color calendarDefaultText;
   final Color calendarTodayBorder;
   final Color calendarDayLabel;
+  final Color calendarChevronBg;
+  final Color calendarChevronBorder;
   final Color monthSummaryPresentBg;
   final Color monthSummaryPresentText;
   final Color monthSummaryAbsentBg;
@@ -683,6 +689,8 @@ class AppColorsResolved {
     required this.calendarDefaultText,
     required this.calendarTodayBorder,
     required this.calendarDayLabel,
+    required this.calendarChevronBg,
+    required this.calendarChevronBorder,
     required this.monthSummaryPresentBg,
     required this.monthSummaryPresentText,
     required this.monthSummaryAbsentBg,
@@ -872,6 +880,8 @@ class AppColorsResolved {
     calendarDefaultText: AppColors.calendarDefaultText,
     calendarTodayBorder: AppColors.calendarTodayBorder,
     calendarDayLabel: AppColors.calendarDayLabel,
+    calendarChevronBg: AppColors.calendarChevronBg,
+    calendarChevronBorder: AppColors.calendarChevronBorder,
     monthSummaryPresentBg: AppColors.monthSummaryPresentBg,
     monthSummaryPresentText: AppColors.monthSummaryPresentText,
     monthSummaryAbsentBg: AppColors.monthSummaryAbsentBg,
@@ -1062,6 +1072,8 @@ class AppColorsResolved {
     calendarDefaultText: AppColors._darkCalendarDefaultText,
     calendarTodayBorder: AppColors.calendarTodayBorder,
     calendarDayLabel: AppColors._darkCalendarDayLabel,
+    calendarChevronBg: AppColors._darkCalendarChevronBg,
+    calendarChevronBorder: AppColors._darkCalendarChevronBorder,
     monthSummaryPresentBg: AppColors._darkMonthSummaryPresentBg,
     monthSummaryPresentText: AppColors._darkMonthSummaryPresentText,
     monthSummaryAbsentBg: AppColors._darkMonthSummaryAbsentBg,

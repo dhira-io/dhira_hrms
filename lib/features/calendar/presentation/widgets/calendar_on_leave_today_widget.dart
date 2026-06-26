@@ -3,10 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
-import 'package:dhira_hrms/core/constants/api_constants.dart';
 import 'package:dhira_hrms/core/utils/date_time_utils.dart';
-import 'package:dhira_hrms/core/utils/string_utils.dart';
 import 'package:dhira_hrms/features/calendar/domain/entities/team_leave_entity.dart';
+import 'package:dhira_hrms/features/calendar/presentation/widgets/employee_leave_card.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 
 class CalendarOnLeaveTodayWidget extends StatelessWidget {
@@ -20,7 +19,7 @@ class CalendarOnLeaveTodayWidget extends StatelessWidget {
     final themeColors = AppColors.of(context);
     final todayFormatted = DateTimeUtils.formatDate(
       DateTime.now(),
-      pattern: 'MMMM dd, yyyy',
+      pattern: DateTimeUtils.dateFormatMonthDayYear,
     );
 
     final int leaveCount = teamLeaves?.length ?? 0;
@@ -44,7 +43,6 @@ class CalendarOnLeaveTodayWidget extends StatelessWidget {
                 l10n.teamOnLeave,
                 style: AppTextStyle.labelLarge.copyWith(
                   color: AppColors.of(context).onSurface,
-
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -55,28 +53,28 @@ class CalendarOnLeaveTodayWidget extends StatelessWidget {
                   Text(
                     todayFormatted,
                     style: AppTextStyle.bodySmall.copyWith(
-                      color: const Color(0xFF62748E),
-                      fontSize: 12.sp,
+                      color: AppColors.of(context).onSurfaceVariant,
+
                       fontWeight: FontWeight.w500,
-                      height: 16 / 12,
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 8.w),
                     width: 3.w,
                     height: 3.w,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF62748E),
+                    decoration: BoxDecoration(
+                      color: AppColors.of(context).onSurfaceVariant,
                       shape: BoxShape.circle,
                     ),
                   ),
                   Text(
-                    leaveCount == 1 ? '1 Employee' : '$leaveCount Employees',
+                    leaveCount == 1
+                        ? l10n.oneEmployee
+                        : l10n.multipleEmployees(leaveCount),
                     style: AppTextStyle.bodySmall.copyWith(
-                      color: const Color(0xFF62748E),
-                      fontSize: 12.sp,
+                      color: AppColors.of(context).onSurfaceVariant,
+
                       fontWeight: FontWeight.w500,
-                      height: 16 / 12,
                     ),
                   ),
                 ],
@@ -92,10 +90,10 @@ class CalendarOnLeaveTodayWidget extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8.h),
               child: Text(
-                '🎉 Great news! No one from your team is on leave today.',
-                style: AppTextStyle.bodyMedium.copyWith(
-                  color: const Color(0xFF62748E),
-                  fontSize: 13.sp,
+                l10n.noOneOnLeaveToday,
+                style: AppTextStyle.labelLarge.copyWith(
+                  color: AppColors.of(context).onSurfaceVariant,
+
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -107,92 +105,9 @@ class CalendarOnLeaveTodayWidget extends StatelessWidget {
               itemCount: teamLeaves!.length,
               separatorBuilder: (context, index) => SizedBox(height: 12.h),
               itemBuilder: (context, index) {
-                return _EmployeeLeaveCard(leave: teamLeaves![index]);
+                return EmployeeLeaveCard(leave: teamLeaves![index]);
               },
             ),
-        ],
-      ),
-    );
-  }
-}
-
-class _EmployeeLeaveCard extends StatelessWidget {
-  final TeamLeaveEntity leave;
-
-  const _EmployeeLeaveCard({required this.leave});
-
-  @override
-  Widget build(BuildContext context) {
-    final themeColors = AppColors.of(context);
-    final imageUrl = leave.image;
-    final fullImageUrl = imageUrl != null && imageUrl.isNotEmpty
-        ? (imageUrl.isAbsoluteUrl
-              ? imageUrl
-              : '${ApiConstants.baseUrl}${imageUrl.startsWith('/') ? imageUrl.substring(1) : imageUrl}')
-        : null;
-
-    return Container(
-      width: double.infinity,
-      height: 50.h,
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 1.h),
-      decoration: BoxDecoration(
-        color: themeColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: themeColors.tableBorder, width: 1.w),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Avatar
-          Container(
-            width: 40.w,
-            height: 40.w,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: themeColors.slate100,
-              image: fullImageUrl != null
-                  ? DecorationImage(
-                      image: NetworkImage(fullImageUrl),
-                      fit: BoxFit.cover,
-                    )
-                  : null,
-            ),
-            child: fullImageUrl == null
-                ? Icon(Icons.person, size: 20.r, color: themeColors.slate400)
-                : null,
-          ),
-          SizedBox(width: 12.w),
-          // Name & Designation
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  leave.employeeName,
-                  style: AppTextStyle.bodyMedium.copyWith(
-                    color: const Color(0xFF020618),
-
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: 2.h),
-                Text(
-                  leave.designation ?? '',
-                  style: AppTextStyle.bodySmall.copyWith(
-                    color: const Color(0xFF62748E),
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w500,
-                    height: 16 / 12,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

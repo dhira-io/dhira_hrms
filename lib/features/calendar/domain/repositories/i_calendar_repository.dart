@@ -28,5 +28,9 @@ abstract class ICalendarRepository {
     required String attendanceDate,
   });
 
-  Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory(String employee);
+  Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory({
+    required String employee,
+    int limitStart = 0,
+    int limitPageLength = 100,
+  });
 }

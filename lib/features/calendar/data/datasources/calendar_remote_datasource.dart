@@ -29,7 +29,11 @@ abstract class ICalendarRemoteDataSource {
     required String attendanceDate,
   });
 
-  Future<List<LeaveHistoryModel>> getLeaveHistory(String employee);
+  Future<List<LeaveHistoryModel>> getLeaveHistory({
+    required String employee,
+    int limitStart = 0,
+    int limitPageLength = 100,
+  });
 }
 
 class CalendarRemoteDataSourceImpl implements ICalendarRemoteDataSource {
@@ -111,7 +115,11 @@ class CalendarRemoteDataSourceImpl implements ICalendarRemoteDataSource {
   }
 
   @override
-  Future<List<LeaveHistoryModel>> getLeaveHistory(String employee) async {
+  Future<List<LeaveHistoryModel>> getLeaveHistory({
+    required String employee,
+    int limitStart = 0,
+    int limitPageLength = 100,
+  }) async {
     final response = await dioClient.get(
       CalendarApiConstants.getLeaveHistory,
       queryParameters: {
@@ -131,8 +139,8 @@ class CalendarRemoteDataSourceImpl implements ICalendarRemoteDataSource {
         'filters': jsonEncode([
           ["employee", "=", employee],
         ]),
-        'limit_start': 0,
-        'limit_page_length': 10,
+        'limit_start': limitStart,
+        'limit_page_length': limitPageLength,
         'order_by': 'creation desc',
       },
     );

@@ -277,6 +277,8 @@ class AppConstants {
   // Common Strings
   static const String placeholderText = '--';
   static const String timePlaceholder = '--:--';
+  static const String am = 'am';
+  static const String pm = 'pm';
   static const String datePlaceholder = 'dd - mm - yyyy';
   static const String httpPrefix = 'http';
   static const String cookieSeparator = '; ';
@@ -368,6 +370,7 @@ class AppConstants {
   static const double dividerHeight = 1.0;
   static const double paginationThreshold = 0.9;
   static const double letterSpacingLarge = 1.2;
+  static const double standardWorkingHours = 9.5;
 }
 
 class AttendanceStatus {
@@ -377,6 +380,7 @@ class AttendanceStatus {
   static const String leave = 'leave';
   static const String absent = 'absent';
   static const String weekend = 'weekend';
+  static const String weeklyOff = 'weekly off';
   static const String halfDay = 'half day';
   static const String halfDayAlt = 'half-day';
 }

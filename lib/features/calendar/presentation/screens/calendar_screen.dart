@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:dhira_hrms/core/services/local_storage_service.dart';
 import 'package:dhira_hrms/core/utils/toast_utils.dart';
-import 'package:dhira_hrms/features/calendar/domain/usecases/get_calendar_events_usecase.dart';
-import 'package:dhira_hrms/features/calendar/domain/usecases/get_calendar_summary_usecase.dart';
-import 'package:dhira_hrms/features/calendar/domain/usecases/get_team_leaves_usecase.dart';
-import 'package:dhira_hrms/features/calendar/domain/usecases/get_attendance_punch_summary_usecase.dart';
-import 'package:dhira_hrms/features/calendar/domain/usecases/get_leave_history_usecase.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_bloc.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_event.dart';
 import 'package:dhira_hrms/features/calendar/presentation/bloc/calendar_state.dart';
@@ -19,47 +13,25 @@ class CalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CalendarBloc>(
-      create: (context) => CalendarBloc(
-        getCalendarEventsUseCase: Get.find<GetCalendarMonthEventsUseCase>(),
-        getCalendarSummaryUseCase: Get.find<GetCalendarSummaryUseCase>(),
-        getTeamLeavesUseCase: Get.find<GetCalendarTeamLeavesUseCase>(),
-        localStorageService: Get.find<LocalStorageService>(),
-        getAttendancePunchSummaryUseCase: Get.find<GetCalendarPunchSummaryUseCase>(),
-        getLeaveHistoryUseCase: Get.find<GetCalendarLeaveHistoryUseCase>(),
-      ),
+      create: (context) => Get.find<CalendarBloc>()..add(const CalendarEvent.started()),
       child: const CalendarScreenContent(),
     );
   }
 }
 
-class CalendarScreenContent extends StatefulWidget {
+class CalendarScreenContent extends StatelessWidget {
   const CalendarScreenContent({super.key});
-
-  @override
-  State<CalendarScreenContent> createState() => _CalendarScreenContentState();
-}
-
-class _CalendarScreenContentState extends State<CalendarScreenContent> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        context.read<CalendarBloc>().add(const CalendarEvent.started());
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<CalendarBloc, CalendarState>(
       listenWhen: (previous, current) =>
-          current.maybeMap(error: (_) => true, orElse: () => false),
+          current.status == CalendarStatus.error &&
+          previous.status != CalendarStatus.error,
       listener: (context, state) {
-        state.maybeWhen(
-          error: (message) => ToastUtils.showError(message),
-          orElse: () {},
-        );
+        if (state.status == CalendarStatus.error && state.errorMessage != null) {
+          ToastUtils.showError(state.errorMessage!);
+        }
       },
       child: const CalendarBodyWidget(),
     );

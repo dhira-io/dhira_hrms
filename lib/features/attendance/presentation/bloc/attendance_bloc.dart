@@ -270,7 +270,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     final empid = await _getEmpId();
     if (empid == null) return;
 
-    final result = await getLeaveHistoryUseCase(empid);
+    final result = await getLeaveHistoryUseCase(GetLeaveHistoryParams(employee: empid));
 
     result.fold(
       (failure) {

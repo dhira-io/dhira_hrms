@@ -24,4 +24,7 @@ class LeaveHistoryEntity {
     this.leaveApproverName,
     required this.totalLeaveDays,
   });
+
+  DateTime get parsedFromDate => DateTime.parse(fromDate);
+  DateTime get parsedToDate => DateTime.parse(toDate);
 }

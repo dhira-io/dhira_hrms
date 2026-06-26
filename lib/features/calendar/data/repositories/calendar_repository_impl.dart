@@ -78,9 +78,17 @@ class CalendarRepositoryImpl implements ICalendarRepository {
   }
 
   @override
-  Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory(String employee) async {
+  Future<Either<Failure, List<LeaveHistoryEntity>>> getLeaveHistory({
+    required String employee,
+    int limitStart = 0,
+    int limitPageLength = 100,
+  }) async {
     return networkInfo.executeSafely(() async {
-      final models = await remoteDataSource.getLeaveHistory(employee);
+      final models = await remoteDataSource.getLeaveHistory(
+        employee: employee,
+        limitStart: limitStart,
+        limitPageLength: limitPageLength,
+      );
       return models.map((e) => e.toEntity()).toList();
     });
   }
