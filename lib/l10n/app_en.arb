@@ -38,6 +38,8 @@
   "leave": "Leave",
   "team": "Team",
   "settings": "Settings",
+  "appearanceSettings": "Appearance Settings",
+  "availableLanguages": "Available Languages",
   "department": "Department",
   "location": "Location",
   "priority": "Priority",
@@ -2367,7 +2369,7 @@
     "publicHolidayNoAttendance": "This is a public holiday. No attendance is required.",
     "weekendNoAttendance": "This is weekend, no attendance required.",
     "noAttendanceRecordFound": "No attendance record found for this day. Please regularize or Apply leave",
-    "applyLeaveBtn": "Apply Leave"
+    "applyLeaveBtn": "Apply Leave",
+    "appearanceSettings": "Appearance Settings",
+    "availableLanguages": "Available Languages"
 }
-
-

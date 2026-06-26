@@ -38,6 +38,8 @@
   "leave": "छुट्टी",
   "team": "टीम",
   "settings": "सेटिंग्स",
+  "appearanceSettings": "दिखावट सेटिंग्स",
+  "availableLanguages": "उपलब्ध भाषाएं",
   "department": "विभाग",
   "location": "स्थान",
   "priority": "प्राथमिकता",
@@ -2201,7 +2203,7 @@
     "publicHolidayNoAttendance": "यह एक सार्वजनिक अवकाश है। कोई उपस्थिति आवश्यक नहीं है।",
     "weekendNoAttendance": "यह सप्ताहांत है, कोई उपस्थिति आवश्यक नहीं है।",
     "noAttendanceRecordFound": "इस दिन के लिए कोई उपस्थिति रिकॉर्ड नहीं मिला। कृपया नियमित करें या छुट्टी लागू करें",
-    "applyLeaveBtn": "छुट्टी लागू करें"
+    "applyLeaveBtn": "छुट्टी लागू करें",
+    "appearanceSettings": "दिखावट सेटिंग्स",
+    "availableLanguages": "उपलब्ध भाषाएं"
 }
-
-

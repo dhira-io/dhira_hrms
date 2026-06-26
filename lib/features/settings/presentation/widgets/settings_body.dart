@@ -41,62 +41,21 @@ class SettingsBody extends StatelessWidget {
           ),
           child: Column(
             children: [
-              BlocBuilder<ProfileBloc, ProfileState>(
-                builder: (context, profileState) {
-                  final profile = profileState.maybeWhen(
-                    loaded: (profile, resume) => profile,
-                    uploading: (profile, resume) => profile,
-                    orElse: () => null,
-                  );
-                  return SettingsProfileCard(
-                    profile: profile,
-                    onEditTap: () {
-                      context.push(AppRouter.profilePath);
-                    },
-                  );
-                },
-              ),
-                    SizedBox(height: 24.h),
-              SettingsGroupWidget(
-                title: l10n.account,
-                items: [
-                  SettingsItemWidget(
-                    icon: Icons.person_outline,
-                    title: l10n.profile,
-                    onTap: () {
-                      context.push(AppRouter.profilePath);
-                    },
-                  ),
-                  SettingsItemWidget(
-                    icon: Icons.lock_outline,
-                    title: l10n.privacyAndSecurity,
-                    onTap: () {
-                      context.push(
-                        AppRouter.commonWebViewPath,
-                        extra: {
-                          'url': SettingsWebViewUrls.privacyAndSecurity,
-                          'title': l10n.privacyAndSecurity,
-                        },
-                      );
-                    },
-                    showDivider: false,
-                  ),
-                ],
-              ),
-                    SizedBox(height: 24.h),
               SettingsGroupWidget(
                 title: l10n.preferences,
                 items: [
                   SettingsItemWidget(
-                    icon: Icons.notifications_none,
+                    icon: Icons.notifications_none_outlined,
                     title: l10n.notifications,
+                    iconColor: const Color(0xFF3B82F6),
                     onTap: () {
                       context.push(AppRouter.notificationPreferencesPath);
                     },
                   ),
                   SettingsItemWidget(
-                    icon: Icons.language,
+                    icon: Icons.language_outlined,
                     title: l10n.language,
+                    iconColor: const Color(0xFF10B981),
                     value: l10n.localeName == 'en' ? 'English' : 'हिन्दी',
                     onTap: () {
                       context.push(AppRouter.languageSelectionPath);
@@ -105,6 +64,7 @@ class SettingsBody extends StatelessWidget {
                   SettingsItemWidget(
                     icon: Icons.palette_outlined,
                     title: l10n.appearance,
+                    iconColor: const Color(0xFF8B5CF6),
                     value: context.watch<ThemeCubit>().state == ThemeMode.light
                         ? l10n.lightMode
                         : context.watch<ThemeCubit>().state == ThemeMode.dark
@@ -117,13 +77,14 @@ class SettingsBody extends StatelessWidget {
                   ),
                 ],
               ),
-                    SizedBox(height: 24.h),
+              SizedBox(height: 24.h),
               SettingsGroupWidget(
                 title: l10n.information,
                 items: [
                   SettingsItemWidget(
-                    icon: Icons.info_outline,
+                    icon: Icons.error_outline,
                     title: l10n.aboutUs,
+                    iconColor: const Color(0xFFEC4899),
                     onTap: () {
                       context.push(
                         AppRouter.commonWebViewPath,
@@ -137,6 +98,7 @@ class SettingsBody extends StatelessWidget {
                   SettingsItemWidget(
                     icon: Icons.description_outlined,
                     title: l10n.termsAndConditions,
+                    iconColor: const Color(0xFFF59E0B),
                     onTap: () {
                       context.push(
                         AppRouter.commonWebViewPath,
@@ -150,6 +112,7 @@ class SettingsBody extends StatelessWidget {
                   SettingsItemWidget(
                     icon: Icons.help_outline,
                     title: l10n.helpCenter,
+                    iconColor: const Color(0xFF8B5CF6),
                     onTap: () {
                       context.push(
                         AppRouter.commonWebViewPath,
