@@ -79,10 +79,7 @@ class ApprovalCard extends StatelessWidget {
           ],
         ),
         child: BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
-          selector: (state) => state?.maybeMap(
-            success: (s) => s.data.processingIds.contains(data.id),
-            orElse: () => false,
-          ) ?? false,
+          selector: (state) => (state != null && state.status == ApprovalsStatus.success && state.data != null) ? (() { final s = state; return s.data!.processingIds.contains(data.id); })() : false,
           builder: (context, isProcessing) {
             if (data.category == ApprovalCategory.raised) {
               return RaisedApprovalCardView(

@@ -9,6 +9,7 @@ import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.d
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
 import 'package:dhira_hrms/core/utils/string_utils.dart';
 import 'mini_status_badge.dart';
 
@@ -52,14 +53,13 @@ class ApprovalCardHeader extends StatelessWidget {
       );
     } else if (data.category == ApprovalCategory.team) {
       final approvalsState = context.read<ApprovalsBloc>().state;
-      approvalsState.maybeMap(
-        success: (s) {
+      if (approvalsState.status == ApprovalsStatus.success && approvalsState.data != null) { final s = approvalsState; 
           final baseUrl = ApiConstants.baseUrl.replaceAll(RegExp(r'/$'), '');
           if (displayRole.isEmpty ||
               displayImage == null ||
               displayImage!.isEmpty ||
               displayImage == baseUrl) {
-            final emp = s.data.employees.firstWhere(
+            final emp = s.data!.employees.firstWhere(
               (e) =>
                   (data.employeeId != null && e['name'] == data.employeeId) ||
                   e['employee_name'] == data.employeeName,
@@ -79,9 +79,7 @@ class ApprovalCardHeader extends StatelessWidget {
               }
             }
           }
-        },
-        orElse: () {},
-      );
+         } else {  }
     }
     final bool isPending =
         data.status.toLowerCase().contains(ApprovalsApiConstants.statusPending);

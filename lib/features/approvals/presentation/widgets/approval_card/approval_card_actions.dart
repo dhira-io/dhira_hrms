@@ -94,13 +94,10 @@ class _RaisedActions extends StatelessWidget {
     }
 
     return BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
-      selector: (state) => state.maybeMap(
-        success: (s) => s.data.processingIds.contains(data.id),
-        orElse: () => false,
-      ),
+      selector: (state) => (state.status == ApprovalsStatus.success && state.data != null) ? (() { final s = state; return s.data!.processingIds.contains(data.id); })() : false,
       builder: (context, isItemProcessing) {
         if (isItemProcessing) {
-          return       Padding(
+          return Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0.h),
             child: Center(
               child: SizedBox(
@@ -125,7 +122,7 @@ class _RaisedActions extends StatelessWidget {
                   onPressed: onEditLeave,
                 ),
               ),
-                    SizedBox(width: 12.w),
+              SizedBox(width: 12.w),
               Expanded(
                 child: _ActionButton(
                   label: l10n.withdraw,
@@ -212,10 +209,7 @@ class _TeamActions extends StatelessWidget {
     }
 
     return BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
-      selector: (state) => state.maybeMap(
-        success: (s) => s.data.processingIds.contains(data.id),
-        orElse: () => false,
-      ),
+      selector: (state) => (state.status == ApprovalsStatus.success && state.data != null) ? (() { final s = state; return s.data!.processingIds.contains(data.id); })() : false,
       builder: (context, isItemProcessing) {
         if (isItemProcessing) {
           return Padding(
@@ -246,7 +240,7 @@ class _TeamActions extends StatelessWidget {
                         : null,
                   ),
                 ),
-              if (showReject && showApprove)       SizedBox(width: 12.w),
+              if (showReject && showApprove) SizedBox(width: 12.w),
               if (showApprove)
                 Expanded(
                   child: _ActionButton(
@@ -295,7 +289,7 @@ class _ActionButton extends StatelessWidget {
       onPressed: onPressed,
       icon: Icon(
         icon,
-        size: 18,
+        size: 18.w,
         color: isDisabled ? textColor.withValues(alpha: 0.3) : textColor,
       ),
       label: Text(
@@ -336,7 +330,7 @@ class _CommentIconButton extends StatelessWidget {
         icon: Icon(
           Icons.chat_bubble,
           color: colors.primary,
-          size: 20,
+          size: 20.w,
         ),
         onPressed: onPressed,
       ),

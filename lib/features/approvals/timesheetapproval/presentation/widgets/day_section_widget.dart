@@ -289,7 +289,7 @@ class DaySectionWidget extends StatelessWidget {
       width: 140.w,
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: DropdownButtonFormField<String>(
-        value: selectedProject,
+        initialValue: selectedProject,
         isExpanded: true,
         dropdownColor: AppColors.of(context).surfaceContainerHighest,
         style: AppTextStyle.bodySmall.copyWith(

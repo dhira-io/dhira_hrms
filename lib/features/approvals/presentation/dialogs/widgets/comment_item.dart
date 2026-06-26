@@ -39,7 +39,7 @@ class CommentItem extends StatelessWidget {
                 Text(
                   DateTimeUtils.formatDate(
                     comment.creation,
-                    pattern: 'dd-MM-yyyy',
+                    pattern: DateTimeUtils.patternDDMMYYYY,
                   ),
                   style: AppTextStyle.bodySmall.copyWith(
                     color: colors.onSurfaceVariant,

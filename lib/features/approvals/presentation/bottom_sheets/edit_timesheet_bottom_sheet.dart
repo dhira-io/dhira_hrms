@@ -21,9 +21,8 @@ class EditTimesheetBottomSheet extends StatelessWidget {
 
     return BlocBuilder<ApprovalsBloc, ApprovalsState>(
       builder: (context, state) {
-        return state.maybeMap(
-          success: (s) {
-            if (s.data.isTimesheetLoading) {
+        if (state.status == ApprovalsStatus.success && state.data != null) { final s = state; 
+            if (s.data!.isTimesheetLoading) {
               return Container(
                 decoration: BoxDecoration(
                   color: colors.surfaceContainerLowest,
@@ -87,11 +86,11 @@ class EditTimesheetBottomSheet extends StatelessWidget {
               );
             }
 
-            final timesheet = s.data.editingTimesheet;
+            final timesheet = s.data!.editingTimesheet;
 
             if (timesheet == null) {
               return EditTimesheetErrorView(
-                errorMessage: s.data.errorMessage,
+                errorMessage: s.data!.errorMessage,
                 onClose: () => Navigator.pop(context),
               );
             }
@@ -111,15 +110,13 @@ class EditTimesheetBottomSheet extends StatelessWidget {
                 child: SafeArea(
                   child: EditTimesheetForm(
                     timesheet: timesheet,
-                    projects: s.data.projects,
-                    employees: s.data.employees,
+                    projects: s.data!.projects,
+                    employees: s.data!.employees,
                   ),
                 ),
               ),
             );
-          },
-          orElse: () => Center(child: Text(l10n.invalidStateForEdit)),
-        );
+           } return Center(child: Text(l10n.invalidStateForEdit));
       },
     );
   }

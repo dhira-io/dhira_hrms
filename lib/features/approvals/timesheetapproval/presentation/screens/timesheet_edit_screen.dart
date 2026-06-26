@@ -87,8 +87,8 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
 
     return BlocListener<ApprovalsBloc, ApprovalsState>(
       listener: (context, state) {
-        state.maybeWhen(
-          success: (data) {
+        if (state.status == ApprovalsStatus.success && state.data != null) {
+          final data = state.data!;
             if (data.successMessage != null) {
               ToastUtils.showSuccess(data.successMessage!);
               if (data.successMessage == ApprovalsApiConstants.msgTimesheetUpdated) {
@@ -98,10 +98,10 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
             if (data.errorMessage != null) {
               ToastUtils.showError(data.errorMessage!);
             }
-          },
-          failure: (message) => ToastUtils.showError(message),
-          orElse: () {},
-        );
+          
+        } else if (state.status == ApprovalsStatus.failure && state.errorMessage != null) {
+          ToastUtils.showError(state.errorMessage!);
+        }
       },
       child: Scaffold(
         backgroundColor: AppColors.of(context).slate500.withValues(alpha: 0.5),
@@ -114,10 +114,7 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
               borderRadius: BorderRadius.circular(AppConstants.r16),
             ),
             child: BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
-              selector: (state) => state.maybeMap(
-                success: (s) => s.data.isTimesheetLoading,
-                orElse: () => true,
-              ),
+              selector: (state) => (state.status == ApprovalsStatus.success && state.data != null) ? state.data!.isTimesheetLoading : true,
               builder: (context, isLoading) {
                 if (isLoading) return const TimesheetSkeleton();
 
@@ -126,17 +123,11 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
                   ApprovalsState,
                   TimesheetApprovalEntity?
                 >(
-                  selector: (state) => state.maybeMap(
-                    success: (s) => s.data.editingTimesheet,
-                    orElse: () => null,
-                  ),
+                  selector: (state) => (state.status == ApprovalsStatus.success && state.data != null) ? state.data!.editingTimesheet : null,
                   builder: (context, timesheet) {
                     if (timesheet == null) {
                       final error = context.select<ApprovalsBloc, String?>(
-                        (bloc) => bloc.state.maybeMap(
-                          success: (s) => s.data.errorMessage,
-                          orElse: () => null,
-                        ),
+                        (bloc) => (bloc.state.status == ApprovalsStatus.success && bloc.state.data != null) ? bloc.state.data!.errorMessage : null,
                       );
                       return _buildErrorState(error, l10n);
                     }
@@ -145,17 +136,11 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
 
                     final projects = context
                         .select<ApprovalsBloc, List<ProjectEntity>>(
-                          (bloc) => bloc.state.maybeMap(
-                            success: (s) => s.data.projects,
-                            orElse: () => [],
-                          ),
+                          (bloc) => (bloc.state.status == ApprovalsStatus.success && bloc.state.data != null) ? bloc.state.data!.projects : [],
                         );
                     final employees = context
                         .select<ApprovalsBloc, List<Map<String, dynamic>>>(
-                          (bloc) => bloc.state.maybeMap(
-                            success: (s) => s.data.employees,
-                            orElse: () => [],
-                          ),
+                          (bloc) => (bloc.state.status == ApprovalsStatus.success && bloc.state.data != null) ? bloc.state.data!.employees : [],
                         );
 
                     final filteredAssignments = _getFilteredAssignments();
@@ -205,7 +190,7 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
                                           () => _expandedDates.clear(),
                                         ),
                                       ),
-                                            SizedBox(height: 16.h),
+                                      SizedBox(height: 16.h),
                                       TimesheetFilterSection(
                                         projects: projects,
                                         employees: employees,
@@ -231,7 +216,7 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
                                               : val,
                                         ),
                                       ),
-                                            SizedBox(height: 16.h),
+                                      SizedBox(height: 16.h),
                                     ],
                                   ),
                                 ),
@@ -242,7 +227,7 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
                                 )
                               else
                                 SliverPadding(
-                                  padding:       EdgeInsets.symmetric(
+                                  padding: EdgeInsets.symmetric(
                                     horizontal: 20.w,
                                   ),
                                   sliver: SliverList(
@@ -289,10 +274,7 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
                           ),
                         ),
                         BlocSelector<ApprovalsBloc, ApprovalsState, bool>(
-                          selector: (state) => state.maybeMap(
-                            success: (s) => s.data.processingIds.contains(timesheet.name),
-                            orElse: () => false,
-                          ),
+                          selector: (state) => (state.status == ApprovalsStatus.success && state.data != null) ? state.data!.processingIds.contains(timesheet.name) : false,
                           builder: (context, isProcessing) {
                             return TimesheetEditFooter(
                               selectedCount: _localAssignments?.length ?? 0,
@@ -324,9 +306,9 @@ class _TimesheetEditScreenState extends State<TimesheetEditScreen> {
             size: AppConstants.iconXLarge,
             color: AppColors.of(context).error,
           ),
-                SizedBox(height: 16.h),
+          SizedBox(height: 16.h),
           Text(error ?? l10n.failedToLoadTimesheet),
-                SizedBox(height: 24.h),
+          SizedBox(height: 24.h),
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
             child: Text(l10n.close),

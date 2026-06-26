@@ -36,10 +36,9 @@ class CommentsDialog extends StatelessWidget {
         ),
         child: BlocBuilder<ApprovalsBloc, ApprovalsState>(
           builder: (context, state) {
-            return state.maybeMap(
-              success: (s) {
-                final comments = s.data.comments;
-                final isLoading = s.data.isCommentsLoading;
+            if (state.status == ApprovalsStatus.success && state.data != null) { final s = state; 
+                final comments = s.data!.comments;
+                final isLoading = s.data!.isCommentsLoading;
 
                 return Column(
                   mainAxisSize: MainAxisSize.min,
@@ -105,9 +104,7 @@ class CommentsDialog extends StatelessWidget {
                       ),
                   ],
                 );
-              },
-              orElse: () => const SizedBox.shrink(),
-            );
+               } return const SizedBox.shrink();
           },
         ),
       ),

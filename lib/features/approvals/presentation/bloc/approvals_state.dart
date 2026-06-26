@@ -3,10 +3,13 @@ import 'approvals_success_data.dart';
 
 part 'approvals_state.freezed.dart';
 
+enum ApprovalsStatus { initial, loading, success, failure }
+
 @freezed
 class ApprovalsState with _$ApprovalsState {
-  const factory ApprovalsState.initial() = Initial;
-  const factory ApprovalsState.loading() = Loading;
-  const factory ApprovalsState.success(ApprovalsSuccessData data) = Success;
-  const factory ApprovalsState.failure(String message) = Failure;
+  const factory ApprovalsState({
+    @Default(ApprovalsStatus.initial) ApprovalsStatus status,
+    ApprovalsSuccessData? data,
+    String? errorMessage,
+  }) = _ApprovalsState;
 }

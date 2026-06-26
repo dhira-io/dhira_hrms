@@ -64,8 +64,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     final colors = AppColors.of(context);
     return BlocListener<ApprovalsBloc, ApprovalsState>(
       listener: (context, state) {
-        state.maybeWhen(
-          success: (data) {
+        if (state.status == ApprovalsStatus.success && state.data != null) {
+          final data = state.data!;
             // Scroll to top only when category or type actually changed
             if (_previousCategory != null &&
                 (_previousCategory != data.category ||
@@ -95,10 +95,9 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                 const ApprovalsEvent.clearMessages(),
               );
             }
-          },
-          failure: (message) => ToastUtils.showError(message),
-          orElse: () {},
-        );
+        } else if (state.status == ApprovalsStatus.failure && state.errorMessage != null) {
+          ToastUtils.showError(state.errorMessage!);
+        }
       },
       child: Stack(
         children: [
@@ -109,8 +108,9 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
             return Column(
               children: [
                 const AppHeader(),
-                state.maybeWhen(
-                  success: (data) {
+                if (state.status == ApprovalsStatus.success && state.data != null) ...[
+                  Builder(builder: (context) {
+                    final data = state.data!;
                     final isTeam = data.category == ApprovalCategory.team;
                     final showSelectAll = isTeam &&
                         data.statusFilter
@@ -144,8 +144,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                                     child: Row(
                                       children: [
                                         SizedBox(
-                                          width: 24,
-                                          height: 24,
+                                          width: 24.w,
+                                          height: 24.h,
                                           child: Checkbox(
                                             value: data.filteredRequests.isNotEmpty &&
                                                 data.selectedRequestIds.length == data.filteredRequests.length,
@@ -182,9 +182,10 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                         ],
                       ],
                     );
-                  },
-                  orElse: () => const SizedBox.shrink(),
-                ),
+                  }),
+                ] else ...[
+                  const SizedBox.shrink(),
+                ],
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () async {
@@ -198,43 +199,36 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                       controller: _scrollController,
                       physics: const AlwaysScrollableScrollPhysics(),
                       slivers: [
-                        ...state.when(
-                          initial: () => [
+                        if (state.status == ApprovalsStatus.initial) ...[
                             const SliverToBoxAdapter(
                               child: ApprovalsFullScreenShimmer(),
                             ),
-                          ],
-                          loading: () => [
+                        ] else if (state.status == ApprovalsStatus.loading) ...[
                             const SliverToBoxAdapter(
                               child: ApprovalsFullScreenShimmer(),
                             ),
-                          ],
-                          failure: (message) => [
+                        ] else if (state.status == ApprovalsStatus.failure) ...[
                             SliverFillRemaining(
                               hasScrollBody: false,
                               child: NoInternetWidget(
-                                message: message,
+                                message: state.errorMessage ?? '',
                                 onReload: () => context.read<ApprovalsBloc>().add(
                                   const ApprovalsEvent.started(),
                                 ),
                               ),
                             ),
-                          ],
-                          success: (data) => [
-                            // 3. Data Section — spread flat slivers
+                        ] else if (state.status == ApprovalsStatus.success && state.data != null) ...[
                             ...ApprovalsListContent.buildSlivers(
-                              requests: data.filteredRequests,
-                              selectedRequestIds: data.selectedRequestIds,
-                              isLoading: data.isListLoading,
-                              isLoadMoreLoading: data.isLoadMoreLoading,
+                              requests: state.data!.filteredRequests,
+                              selectedRequestIds: state.data!.selectedRequestIds,
+                              isLoading: state.data!.isListLoading,
+                              isLoadMoreLoading: state.data!.isLoadMoreLoading,
                               context: context,
                             ),
-                            // Bottom padding
                             SliverPadding(
-                              padding: EdgeInsets.only(bottom: 100.h),
+                              padding: EdgeInsets.only(bottom: 80.h),
                             ),
-                          ], // closes success
-                        ), // closes maybeWhen
+                        ],
                       ], // closes slivers
                     ), // closes CustomScrollView
                   ),
@@ -247,7 +241,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
           BlocBuilder<ApprovalsBloc, ApprovalsState>(
             builder: (context, state) {
               final l10n = AppLocalizations.of(context)!;
-              if (state is Success && state.data.selectedRequestIds.isNotEmpty) {
+              if (state.status == ApprovalsStatus.success && state.data != null && state.data!.selectedRequestIds.isNotEmpty) {
+                final data = state.data!;
                 return Positioned(
                   bottom: 0,
                   left: 0,
@@ -291,25 +286,25 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                         ),
                         const SizedBox(height: AppConstants.p8),
                         Text(
-                          l10n.requestsSelected(state.data.selectedRequestIds.length.toString()),
+                          l10n.requestsSelected(data.selectedRequestIds.length.toString()),
                           style: AppTextStyle.bodyLarge.copyWith(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: AppConstants.p16),
                         Row(
                           children: [
-                            if (state.data.type != ApprovalType.timesheet) ...[
+                            if (data.type != ApprovalType.timesheet) ...[
                                 Expanded(
                                   child: OutlinedButton(
-                                    onPressed: state.data.isBulkActionLoading
+                                    onPressed: data.isBulkActionLoading
                                         ? null
                                         : () {
                                             setState(() => _bulkLoadingAction = ApprovalActions.reject);
                                             context.read<ApprovalsBloc>().add(
                                                   ApprovalsEvent.bulkWorkflowActionSubmitted(
-                                                    requestIds: state.data.selectedRequestIds.toList(),
+                                                    requestIds: data.selectedRequestIds.toList(),
                                                     action: l10n.reject,
-                                                    type: state.data.type,
-                                                    category: state.data.category,
+                                                    type: data.type,
+                                                    category: data.category,
                                                   ),
                                                 );
                                           },
@@ -319,7 +314,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                                       side: BorderSide(color: colors.colorRed400),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                                     ),
-                                    child: state.data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.reject
+                                    child: data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.reject
                                         ? SizedBox(
                                             height: 20.h,
                                             width: 20.w,
@@ -339,16 +334,16 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                             ],
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: state.data.isBulkActionLoading
+                                onPressed: data.isBulkActionLoading
                                     ? null
                                     : () {
                                         setState(() => _bulkLoadingAction = ApprovalActions.approve);
                                         context.read<ApprovalsBloc>().add(
                                               ApprovalsEvent.bulkWorkflowActionSubmitted(
-                                                requestIds: state.data.selectedRequestIds.toList(),
+                                                requestIds: data.selectedRequestIds.toList(),
                                                 action: l10n.approve,
-                                                type: state.data.type,
-                                                category: state.data.category,
+                                                type: data.type,
+                                                category: data.category,
                                               ),
                                             );
                                       },
@@ -358,7 +353,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                                   side: BorderSide(color: colors.greenSuccess),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.r8)),
                                 ),
-                                child: state.data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.approve
+                                child: data.isBulkActionLoading && _bulkLoadingAction == ApprovalActions.approve
                                     ? SizedBox(
                                         height: 20.h,
                                         width: 20.w,

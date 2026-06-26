@@ -1,3 +1,5 @@
+import 'package:dhira_hrms/core/constants/api_constants.dart';
+import 'package:dhira_hrms/features/approvals/data/constants/approvals_api_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,20 +24,9 @@ class AttachmentBottomSheet extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     final String path = Uri.parse(url).path.toLowerCase();
-    final bool isPdf = path.endsWith('.pdf');
-    final bool isImage =
-        path.endsWith('.png') ||
-        path.endsWith('.jpg') ||
-        path.endsWith('.jpeg') ||
-        path.endsWith('.gif') ||
-        path.endsWith('.webp');
-    final bool isOffice =
-        path.endsWith('.xlsx') ||
-        path.endsWith('.xls') ||
-        path.endsWith('.docx') ||
-        path.endsWith('.doc') ||
-        path.endsWith('.pptx') ||
-        path.endsWith('.ppt');
+    final bool isPdf = ApprovalsApiConstants.isPdfFile(path);
+    final bool isImage = ApprovalsApiConstants.isImageFile(path);
+    final bool isOffice = ApprovalsApiConstants.isOfficeFile(path);
 
     String sheetTitle;
     if (isPdf) {
@@ -191,7 +182,7 @@ class _AttachmentPreview extends StatelessWidget {
       );
     } else if (isOffice) {
       final String viewerUrl =
-          'https://docs.google.com/gview?embedded=true&url=${Uri.encodeComponent(url)}';
+          '${ApiConstants.googleDocsViewerUrl}${Uri.encodeComponent(url)}';
       return OfficeDocViewer(viewerUrl: viewerUrl);
     } else {
       return Center(

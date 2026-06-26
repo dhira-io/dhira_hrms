@@ -99,7 +99,7 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
             ],
           ),
         ),
-        if (!isProcessed && (showApprove || showReject)) ...[
+        if (!isProcessed) ...[
           const SizedBox(height: AppConstants.p8),
           Divider(color: colors.outlineVariant, height: 1),
           const SizedBox(height: AppConstants.p8),
@@ -171,7 +171,10 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
     // If checkbox is visible, we indent the text slightly more to align with the name
     final showCheckbox = widget.data.category == ApprovalCategory.team &&
         widget.data.status.toLowerCase().contains(ApprovalsApiConstants.statusPending);
-    return showCheckbox ? 36.0 + 48.0 + 12.0 : 48.0 + 12.0; // Checkbox width + Avatar width + Spacing
+    // Checkbox width (36) + Avatar width (48) + Spacing (12)
+    return showCheckbox
+        ? AppConstants.p36 + AppConstants.p48 + AppConstants.p12
+        : AppConstants.p48 + AppConstants.p12;
   }
 
   _TitleInfo _getTitleAndSubtitle(BuildContext context) {
@@ -186,7 +189,7 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
       ).value;
 
       final duration = widget.data.displayDetails.entries.firstWhere(
-        (e) => e.key.toLowerCase().contains('days') || e.key.toLowerCase().contains('hours'),
+        (e) => e.key.toLowerCase().contains(ApprovalsApiConstants.keyDays) || e.key.toLowerCase().contains(ApprovalsApiConstants.keyHours),
         orElse: () => const MapEntry('', ''),
       );
 
@@ -220,14 +223,14 @@ class _TeamApprovalCardViewState extends State<TeamApprovalCardView> {
       title = weekName.isNotEmpty ? "${l10n.timesheet}- $weekName" : l10n.timesheet;
       subtitle = "";
     } else if (widget.data.type == ApprovalType.compOff) {
-      final hoursStr = widget.data.displayDetails['Hours'] ?? '0';
-      final hours = double.tryParse(hoursStr) ?? 0;
-      final days = hours > 0 ? (hours / 4).round() / 2 : 1.0;
+      final hoursStr = widget.data.displayDetails[RequestDetailKeys.hours] ?? '0';
+      final hoursVal = double.tryParse(hoursStr) ?? 0;
+      final days = hoursVal > 0 ? (hoursVal / 4).round() / 2 : 1.0;
       final daysText = days == days.toInt() ? days.toInt().toString() : days.toStringAsFixed(1);
-      final dayStr = daysText == '1' ? '1 day' : '$daysText days';
+      final dayStr = daysText == '1' ? l10n.day : l10n.daysCount(days);
       title = "${l10n.compOffRequest} \u00b7 $dayStr";
-      
-      final dateStr = widget.data.displayDetails[RequestDetailKeys.workDate] ?? widget.data.displayDetails['Worked Date'] ?? widget.data.displayDetails[RequestDetailKeys.compOffDate] ?? widget.data.displayDetails[RequestDetailKeys.date] ?? '';
+
+      final dateStr = widget.data.displayDetails[RequestDetailKeys.workDate] ?? widget.data.displayDetails[RequestDetailKeys.workedDate] ?? widget.data.displayDetails[RequestDetailKeys.compOffDate] ?? widget.data.displayDetails[RequestDetailKeys.date] ?? '';
       subtitle = dateStr;
     }
 

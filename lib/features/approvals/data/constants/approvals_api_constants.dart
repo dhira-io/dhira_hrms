@@ -46,6 +46,19 @@ class ApprovalsApiConstants {
   static const String doctypeLeaveApplication = "Leave Application";
   static const String doctypeEmployeeTimesheet = "Employee Timesheet";
 
+  // Common Detail Keys
+  static const String keyDays = 'days';
+  static const String keyHours = 'hours';
+
+  // File Extensions
+  static const List<String> imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
+  static const List<String> officeExtensions = ['.xlsx', '.xls', '.docx', '.doc', '.pptx', '.ppt'];
+  static const String pdfExtension = '.pdf';
+
+  static bool isImageFile(String path) => imageExtensions.any((ext) => path.toLowerCase().endsWith(ext));
+  static bool isOfficeFile(String path) => officeExtensions.any((ext) => path.toLowerCase().endsWith(ext));
+  static bool isPdfFile(String path) => path.toLowerCase().endsWith(pdfExtension);
+
   // Status Constants
   static const String statusOpen = 'open';
   static const String statusDraft = 'draft';

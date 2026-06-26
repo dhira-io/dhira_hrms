@@ -68,7 +68,7 @@ class _EditTimesheetTaskBottomSheetState extends State<EditTimesheetTaskBottomSh
     // Attempting to format date to something like "09 Monday, June"
     final dateObj = DateTime.tryParse(widget.date);
     final formattedDate = dateObj != null 
-        ? DateTimeUtils.formatDateString(widget.date, pattern: "dd EEEE, MMMM")
+        ? DateTimeUtils.formatDateString(widget.date, pattern: DateTimeUtils.dateFormatDayNameMonth)
         : widget.date;
 
     return Container(

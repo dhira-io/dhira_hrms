@@ -3,10 +3,12 @@ import 'package:dhira_hrms/features/performance/presentation/cubit/file_operatio
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/widgets/shimmer_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:dhira_hrms/features/approvals/data/constants/approvals_api_constants.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../../../../core/services/local_storage_service.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -22,20 +24,9 @@ class AttachmentDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     final String path = Uri.parse(url).path.toLowerCase();
-    final bool isPdf = path.endsWith('.pdf');
-    final bool isImage =
-        path.endsWith('.png') ||
-        path.endsWith('.jpg') ||
-        path.endsWith('.jpeg') ||
-        path.endsWith('.gif') ||
-        path.endsWith('.webp');
-    final bool isOffice =
-        path.endsWith('.xlsx') ||
-        path.endsWith('.xls') ||
-        path.endsWith('.docx') ||
-        path.endsWith('.doc') ||
-        path.endsWith('.pptx') ||
-        path.endsWith('.ppt');
+    final bool isPdf = ApprovalsApiConstants.isPdfFile(path);
+    final bool isImage = ApprovalsApiConstants.isImageFile(path);
+    final bool isOffice = ApprovalsApiConstants.isOfficeFile(path);
 
     String dialogTitle;
     if (isPdf) {
@@ -180,8 +171,7 @@ class _AttachmentPreview extends StatelessWidget {
         ),
       );
     } else if (isOffice) {
-      final String viewerUrl =
-          'https://docs.google.com/gview?embedded=true&url=${Uri.encodeComponent(url)}';
+      final String viewerUrl = '${ApiConstants.googleDocsViewerUrl}${Uri.encodeComponent(url)}';
       return OfficeDocViewer(viewerUrl: viewerUrl);
     } else {
       return Center(

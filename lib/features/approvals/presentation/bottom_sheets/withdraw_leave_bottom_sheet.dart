@@ -23,7 +23,7 @@ class WithdrawLeaveBottomSheet extends StatelessWidget {
       title: l10n.withdraw,
       subtitle: l10n.withdrawConfirmation,
       icon: Icon(Icons.cancel_outlined, color: colors.error),
-      iconBackgroundColor: colors.error.withOpacity(0.1),
+      iconBackgroundColor: colors.error.withValues(alpha: 0.1),
       confirmAction: ConfirmationAction(
         label: l10n.yes,
         onTap: () {

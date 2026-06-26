@@ -23,13 +23,10 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
       builder: (context, state) {
         int selectedIndex = 0;
         int badgeCount = 0;
-        state.maybeMap(
-          success: (s) {
-            selectedIndex = s.data.category.getIndex(s.data.access.canAccess);
-            badgeCount = s.data.summary.totalAllPending;
-          },
-          orElse: () {},
-        );
+        if (state.status == ApprovalsStatus.success && state.data != null) { final s = state; 
+            selectedIndex = s.data!.category.getIndex(s.data!.access.canAccess);
+            badgeCount = s.data!.summary.totalAllPending;
+           } else {  }
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppConstants.p16),
@@ -67,18 +64,15 @@ class ApprovalsPrimaryTabBar extends StatelessWidget {
 
   void _handleTap(BuildContext context, int index) {
     final state = context.read<ApprovalsBloc>().state;
-    state.maybeMap(
-      success: (s) {
-        final canAccess = s.data.access.canAccess;
+    if (state.status == ApprovalsStatus.success && state.data != null) { final s = state; 
+        final canAccess = s.data!.access.canAccess;
         final newCategory = ApprovalCategoryX.fromIndex(index, canAccess);
-        if (s.data.category != newCategory) {
+        if (s.data!.category != newCategory) {
           context.read<ApprovalsBloc>().add(
             ApprovalsEvent.categoryChanged(ApprovalType.leave, newCategory),
           );
         }
-      },
-      orElse: () {},
-    );
+       } else {  }
   }
 }
 
@@ -141,7 +135,7 @@ class _ApprovalTabWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  badgeCount < 10 ? '0$badgeCount' : '$badgeCount',
+                  badgeCount.toString().padLeft(2, '0'),
                   style: AppTextStyle.labelSmall.copyWith(
                     color: colors.white,
                     fontWeight: FontWeight.bold,

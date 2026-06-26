@@ -22,7 +22,7 @@ class DeleteTimesheetBottomSheet extends StatelessWidget {
       title: l10n.deleteTimesheet,
       subtitle: "${l10n.areYouSureDelete} $requestId?\n\n${l10n.deleteTimesheetWarning}",
       icon: Icon(Icons.delete_outline, color: colors.error),
-      iconBackgroundColor: colors.error.withOpacity(0.1),
+      iconBackgroundColor: colors.error.withValues(alpha: 0.1),
       confirmAction: ConfirmationAction(
         label: l10n.delete,
         onTap: () {

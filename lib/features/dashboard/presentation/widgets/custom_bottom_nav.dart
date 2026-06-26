@@ -4,6 +4,7 @@ import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_e
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -123,26 +124,24 @@ class CustomBottomNav extends StatelessWidget {
           final approvalsBloc = context.read<ApprovalsBloc>();
           final currentState = approvalsBloc.state;
 
-          currentState.maybeMap(
-            success: (s) {
-              // If user has access (approver), show Team, otherwise Raised
-              final targetCategory = s.data.access.canAccess
-                  ? ApprovalCategory.team
-                  : ApprovalCategory.raised;
+          if (currentState.status == ApprovalsStatus.success &&
+              currentState.data != null) {
+            // If user has access (approver), show Team, otherwise Raised
+            final targetCategory = currentState.data!.access.canAccess
+                ? ApprovalCategory.team
+                : ApprovalCategory.raised;
 
-              approvalsBloc.add(
-                ApprovalsEvent.categoryChanged(
-                  ApprovalType.leave,
-                  targetCategory,
-                ),
-              );
-              approvalsBloc.add(const ApprovalsEvent.refreshSummary());
-            },
-            orElse: () {
-              // If not yet loaded, trigger start which handles role-based default
-              approvalsBloc.add(const ApprovalsEvent.started());
-            },
-          );
+            approvalsBloc.add(
+              ApprovalsEvent.categoryChanged(
+                ApprovalType.leave,
+                targetCategory,
+              ),
+            );
+            approvalsBloc.add(const ApprovalsEvent.refreshSummary());
+          } else {
+            // If not yet loaded, trigger start which handles role-based default
+            approvalsBloc.add(const ApprovalsEvent.started());
+          }
         }
       },
       behavior: HitTestBehavior.opaque,

@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
+import 'package:dhira_hrms/core/constants/api_constants.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
 import 'package:dhira_hrms/core/widgets/generic_error_widget.dart';
@@ -425,8 +426,8 @@ class _CommonPdfViewerState extends State<CommonPdfViewer> {
 
     if (widget.fileUrl != null) {
       if (_isOffice) {
-        final viewerUrl =
-            'https://docs.google.com/gview?embedded=true&url=${Uri.encodeComponent(widget.fileUrl!)}';
+        final String viewerUrl =
+            '${ApiConstants.googleDocsViewerUrl}${Uri.encodeComponent(widget.fileUrl!)}';
         return OfficeDocViewer(viewerUrl: viewerUrl);
       }
       return Stack(

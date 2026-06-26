@@ -266,9 +266,9 @@ class LeaveApplyFormState extends State<LeaveApplyForm> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                          if (state.isInitialLoading)
+                          if (state.isInitialLoading || (state.leaveTypes.isEmpty && !state.typesLoadFailed))
                             const LeaveFormSkeleton()
-                          else if (state.leaveTypes.isEmpty)
+                          else if (state.leaveTypes.isEmpty && state.typesLoadFailed)
                             Center(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(vertical: 40.h),
@@ -332,7 +332,7 @@ class LeaveApplyFormState extends State<LeaveApplyForm> {
                     ),
                   );
                   
-                  if (state.leaveTypes.isEmpty && !state.isInitialLoading) {
+                  if (state.leaveTypes.isEmpty && !state.isInitialLoading && state.typesLoadFailed) {
                     return RefreshIndicator(
                       onRefresh: widget.onRefresh,
                       color: AppColors.of(context).primary,

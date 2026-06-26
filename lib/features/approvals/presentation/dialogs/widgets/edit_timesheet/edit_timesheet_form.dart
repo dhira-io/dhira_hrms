@@ -122,17 +122,6 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
     return emp['employee_name'] ?? employeeId;
   }
 
-  String _formatDateRange(String? start, String? end) {
-    if (start == null || end == null) return "$start - $end";
-    try {
-      final s = DateTime.parse(start);
-      final e = DateTime.parse(end);
-      final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      return "${months[s.month - 1]} ${s.day}, ${s.year} - ${months[e.month - 1]} ${e.day}, ${e.year}";
-    } catch (_) {
-      return "$start - $end";
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +135,9 @@ class _EditTimesheetFormState extends State<EditTimesheetForm> {
       }
     }
     final sortedDates = grouped.keys.toList()..sort();
-    final dateRange = _formatDateRange(widget.timesheet.fromDate, widget.timesheet.toDate);
+    final dateRange = (widget.timesheet.fromDate != null && widget.timesheet.toDate != null)
+        ? DateTimeUtils.formatDateRange(widget.timesheet.fromDate!, widget.timesheet.toDate!)
+        : '';
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -326,7 +317,7 @@ class _EmptyState extends StatelessWidget {
           children: [
             Icon(
               Icons.info_outline,
-              size: 48,
+              size: 48.w,
               color: colors.textSecondary,
             ),
             SizedBox(height: 16.h),

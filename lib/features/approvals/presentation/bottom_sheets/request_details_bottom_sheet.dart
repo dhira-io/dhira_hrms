@@ -306,7 +306,7 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                         if (widget.data.type == ApprovalType.timesheet)
                           BlocBuilder<ApprovalsBloc, ApprovalsState>(
                             builder: (context, state) {
-                              if (state is Success && state.data.isTimesheetLoading) {
+                              if (state.status == ApprovalsStatus.success && state.data != null && state.data!.isTimesheetLoading) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(vertical: AppConstants.p8),
                                   child: Column(
@@ -325,8 +325,8 @@ class _RequestDetailsBottomSheetState extends State<RequestDetailsBottomSheet> {
                               }
                               
                               Map<String, String> updatedDetails = Map.from(details);
-                              if (state is Success && state.data.editingTimesheet != null) {
-                                final ts = state.data.editingTimesheet!;
+                              if (state.status == ApprovalsStatus.success && state.data != null && state.data!.editingTimesheet != null) {
+                                final ts = state.data!.editingTimesheet!;
                                 updatedDetails.remove(RequestDetailKeys.totalHours);
                                 updatedDetails.remove(RequestDetailKeys.projects);
                                 updatedDetails[RequestDetailKeys.expectedHours] = '${ts.expectedHoursTotal} ${l10n.hoursLabel}';
@@ -690,8 +690,8 @@ class _DetailRow extends StatelessWidget {
     
     return BlocBuilder<ApprovalsBloc, ApprovalsState>(
       builder: (context, state) {
-        if (state is Success) {
-          if (state.data.isCommentsLoading) {
+        if (state.status == ApprovalsStatus.success && state.data != null) {
+          if (state.data!.isCommentsLoading) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: AppConstants.p16),
               child: Column(
@@ -723,7 +723,7 @@ class _DetailRow extends StatelessWidget {
             );
           }
           
-          final comments = state.data.comments;
+          final comments = state.data!.comments;
           if (comments.isEmpty) {
             return const SizedBox.shrink();
           }
@@ -780,7 +780,4 @@ class _DetailRow extends StatelessWidget {
       },
     );
   }
-
-
-
 }

@@ -1,4 +1,3 @@
-import 'package:dhira_hrms/features/approvals/data/constants/approvals_api_constants.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,8 +20,8 @@ class ApprovalsFilterSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<ApprovalsBloc, ApprovalsState>(
       builder: (context, state) {
-        if (state is! Success) return const SizedBox.shrink();
-        final successData = state.data;
+        if (state.status != ApprovalsStatus.success || state.data == null) return const SizedBox.shrink();
+        final successData = state.data!;
         final isTeam = successData.category == ApprovalCategory.team;
 
         final typeItems = [
