@@ -305,6 +305,10 @@ class AppConstants {
   static const int docStatusDraft = 0;
   static const int docStatusSubmitted = 1;
 
+  // Frappe Actions
+  static const String actionSave = 'Save';
+  static const String actionSubmit = 'Submit';
+
   // Font Sizes
   static const double fs1 = 1.0;
   static const double fs2 = 2.0;
@@ -337,6 +341,7 @@ class AppConstants {
 
   // File Upload
   static const int maxAttachmentBytes = 10 * 1024 * 1024;
+  static const List<String> allowedExtensions = ['pdf', 'png', 'jpg', 'jpeg'];
 
   // Error Messages
   static const String invalidDateTitle = 'Invalid date selected';

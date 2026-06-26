@@ -125,19 +125,6 @@ class AppTextStyle {
     // Add other properties like font family if needed
   );
 
-  static TextStyle get statsValue => GoogleFonts.manrope(
-    fontSize: 22.sp,
-    fontWeight: FontWeight.w800,
-    color: AppColors.primary,
-  );
-
-  static TextStyle get statsLabel => GoogleFonts.inter(
-    fontSize: 10.sp,
-    fontWeight: FontWeight.w600,
-    letterSpacing: 1.2,
-    color: AppColors.textSecondary,
-  );
-
   static TextStyle get dateNumber =>
       GoogleFonts.manrope(fontSize: 16.sp, fontWeight: FontWeight.w800);
 

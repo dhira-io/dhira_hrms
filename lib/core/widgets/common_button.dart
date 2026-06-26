@@ -20,8 +20,9 @@ class CommonButton extends StatelessWidget {
     this.padding,
     this.borderRadius,
     this.backgroundColor,
-    this.foregroundColor,
     this.fontWeight,
+    this.textColor,
+    this.foregroundColor,
   });
 
   final String text;
@@ -35,8 +36,9 @@ class CommonButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
   final Color? backgroundColor;
-  final Color? foregroundColor;
   final FontWeight? fontWeight;
+  final Color? textColor;
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -95,14 +97,16 @@ class CommonButton extends StatelessWidget {
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             backgroundColor: backgroundColor,
             side: BorderSide(
-              color: colors.gray400.withValues(alpha: isButtonDisabled ? 0.5 : 1.0),
+              color: colors.gray400.withValues(
+                alpha: isButtonDisabled ? 0.5 : 1.0,
+              ),
               width: 1.0.w,
             ),
-            foregroundColor:
-                foregroundColor ?? colors.primaryContainer,
+            foregroundColor: foregroundColor ?? colors.primaryContainer,
             disabledForegroundColor:
-                (foregroundColor ?? colors.primaryContainer)
-                    .withValues(alpha: 0.5),
+                (foregroundColor ?? colors.primaryContainer).withValues(
+                  alpha: 0.5,
+                ),
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
@@ -124,11 +128,11 @@ class CommonButton extends StatelessWidget {
           style: TextButton.styleFrom(
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            foregroundColor:
-                foregroundColor ?? colors.primaryContainer,
+            foregroundColor: foregroundColor ?? colors.primaryContainer,
             disabledForegroundColor:
-                (foregroundColor ?? colors.primaryContainer)
-                    .withValues(alpha: 0.5),
+                (foregroundColor ?? colors.primaryContainer).withValues(
+                  alpha: 0.5,
+                ),
             padding:
                 padding ??
                 const EdgeInsets.symmetric(
@@ -163,10 +167,8 @@ class CommonButton extends StatelessWidget {
                             ? colors.secondary
                             : colors.primaryContainer))
                     .withValues(alpha: 0.5),
-            disabledForegroundColor:
-                (foregroundColor ?? colors.white).withValues(
-                  alpha: 0.8,
-                ),
+            disabledForegroundColor: (foregroundColor ?? colors.white)
+                .withValues(alpha: 0.8),
             elevation: 0,
             padding:
                 padding ??

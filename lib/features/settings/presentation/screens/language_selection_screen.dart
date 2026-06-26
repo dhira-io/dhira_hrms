@@ -103,7 +103,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               ),
             ),
             SizedBox(height: 24.h),
-            
+
             Padding(
               padding: EdgeInsets.only(left: 4.w, bottom: 12.h),
               child: Text(
@@ -185,7 +185,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     color: isSelected
-                                        ? AppColors.of(context).brandPurple
+                                        ? const Color(0xFF8B5CF6)
                                         : AppColors.of(context).outlineVariant,
                                     width: isSelected ? 6.w : 2.w,
                                   ),
