@@ -7,7 +7,7 @@ class BottomNavCubit extends Cubit<int> {
   static const int homeIndex = 0;
   static const int attendanceIndex = 1;
   static const int approvalsIndex = 2;
-  static const int settingsIndex = 3;
+  static const int payslipIndex = 3;
 
   void changeIndex(int index) => emit(index);
 }

@@ -13,6 +13,7 @@ class QuickStatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return BlocBuilder<DashboardCubit, DashboardState>(
@@ -23,33 +24,30 @@ class QuickStatsSection extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildStatCard(
-                context,
+              _StatCardWidget(
                 value: stats != null
                     ? stats.daysPresent.toString()
                     : AppConstants.placeholderText,
                 label: l10n.daysPresent,
-                valueColor: AppColors.of(context).primary,
+                valueColor: colors.primary,
               ),
               const SizedBox(width: AppConstants.p12),
-              _buildStatCard(
-                context,
+              _StatCardWidget(
                 value: stats != null
                     ? stats.leaveBalance.toString()
                     : AppConstants.placeholderText,
                 label: l10n.leaveBalance,
-                valueColor: AppColors.of(context).tertiary,
+                valueColor: colors.tertiary,
               ),
               const SizedBox(width: AppConstants.p12),
-              _buildStatCard(
-                context,
+              _StatCardWidget(
                 value: stats != null
                     ? (stats.nextHoliday.split('-').length >= 2
                           ? stats.nextHoliday.split('-').sublist(0, 2).join('-')
                           : stats.nextHoliday)
                     : AppConstants.placeholderText,
                 label: l10n.upcomingHoliday,
-                valueColor: AppColors.of(context).textPrimary,
+                valueColor: colors.textPrimary,
               ),
             ],
           ),
@@ -58,16 +56,27 @@ class QuickStatsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(
-    BuildContext context, {
-    required String value,
-    required String label,
-    required Color valueColor,
-    bool isSmallValue = false,
-  }) {
+}
+
+class _StatCardWidget extends StatelessWidget {
+  final String value;
+  final String label;
+  final Color valueColor;
+  final bool isSmallValue;
+
+  const _StatCardWidget({
+    required this.value,
+    required this.label,
+    required this.valueColor,
+    this.isSmallValue = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Expanded(
       child: Material(
-        color: Colors.transparent,
+        color: colors.transparent,
         child: InkWell(
           onTap: () {},
           borderRadius: BorderRadius.circular(AppConstants.r12),
@@ -77,7 +86,7 @@ class QuickStatsSection extends StatelessWidget {
               horizontal: AppConstants.p8,
             ),
             decoration: BoxDecoration(
-              color: AppColors.of(context).quickStatsBg,
+              color: colors.quickStatsBg,
               borderRadius: BorderRadius.circular(AppConstants.r12),
             ),
             child: Column(
@@ -88,9 +97,6 @@ class QuickStatsSection extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTextStyle.h1.copyWith(
                     color: valueColor,
-                    fontSize: isSmallValue
-                        ? AppConstants.fs18.sp
-                        : AppConstants.fs18.sp,
                     height: 1.2.h,
                     fontWeight: FontWeight.w800,
                   ),
@@ -102,10 +108,9 @@ class QuickStatsSection extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyle.labelSmall.copyWith(
-                    color: AppColors.of(context).onSurfaceVariant,
+                    color: colors.onSurfaceVariant,
                     fontWeight: FontWeight.bold,
-                    fontSize: AppConstants.fs10.sp,
-                  ),
+                    ),
                 ),
               ],
             ),

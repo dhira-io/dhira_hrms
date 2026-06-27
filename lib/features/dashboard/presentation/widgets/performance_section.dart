@@ -15,20 +15,15 @@ class PerformanceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.performance,
-          style: AppTextStyle.h3.copyWith(
-            fontSize: AppConstants.p16.sp,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: AppConstants.p16),
-        BlocBuilder<PerformanceBloc, PerformanceState>(
-          builder: (context, state) {
+
+        BlocSelector<PerformanceBloc, PerformanceState, bool>(
+          selector: (state) => state.isManager,
+          builder: (context, isManager) {
             return Column(
               children: [
                 IntrinsicHeight(
@@ -40,8 +35,8 @@ class PerformanceSection extends StatelessWidget {
                           icon: Icons.track_changes_outlined,
                           label: l10n.goalSetup,
                           subtitle: l10n.goalSetupSubtitle,
-                          iconBgColor: AppColors.of(context).iconbgblue,
-                          iconColor: AppColors.of(context).primary,
+                          iconBgColor: colors.iconbgblue,
+                          iconColor: colors.primary,
                           onTap: () =>
                               context.push(AppRouter.performanceGoalSetupPath),
                         ),
@@ -52,8 +47,8 @@ class PerformanceSection extends StatelessWidget {
                           icon: Icons.rate_review_outlined,
                           label: l10n.selfAssessment,
                           subtitle: l10n.selfAssessmentSubtitle,
-                          iconBgColor: AppColors.of(context).iconbgred,
-                          iconColor: AppColors.of(context).error,
+                          iconBgColor: colors.iconbgred,
+                          iconColor: colors.error,
                           onTap: () => context.push(
                             AppRouter.performanceSelfAssessmentPath,
                           ),
@@ -62,7 +57,7 @@ class PerformanceSection extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (state.isManager) ...[
+                if (isManager) ...[
                   const SizedBox(height: AppConstants.p16),
                   IntrinsicHeight(
                     child: Row(
@@ -73,8 +68,8 @@ class PerformanceSection extends StatelessWidget {
                             icon: Icons.groups_outlined,
                             label: l10n.teamEvaluation,
                             subtitle: l10n.teamEvaluationSubtitle,
-                            iconBgColor: AppColors.of(context).iconbgviolet,
-                            iconColor: AppColors.of(context).brandBlue,
+                            iconBgColor: colors.iconbgviolet,
+                            iconColor: colors.brandBlue,
                             onTap: () => context.push(
                               AppRouter.performanceTeamEvaluationPath,
                             ),
@@ -114,19 +109,20 @@ class _PerformanceActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Material(
-      color: Colors.transparent,
+      color: colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppConstants.r16),
         child: Ink(
           padding: const EdgeInsets.all(AppConstants.p10),
           decoration: BoxDecoration(
-            color: AppColors.of(context).surfaceContainerLowest,
+            color: colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
+                color: colors.black.withValues(alpha: 0.03),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -155,7 +151,6 @@ class _PerformanceActionCard extends StatelessWidget {
                 label,
                 style: AppTextStyle.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: AppConstants.fs12.sp,
                   height: 1.2.h,
                 ),
                 maxLines: 2,
@@ -165,8 +160,7 @@ class _PerformanceActionCard extends StatelessWidget {
               Text(
                 subtitle,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.of(context).textSecondary,
-                  fontSize: AppConstants.fs10.sp,
+                  color: colors.textSecondary,
                   height: 1.2.h,
                 ),
                 maxLines: 2,

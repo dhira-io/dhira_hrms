@@ -19,6 +19,7 @@ class HomeUserHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(
@@ -28,7 +29,7 @@ class HomeUserHeader extends StatelessWidget {
         AppConstants.p40,
       ),
       decoration: BoxDecoration(
-        color: AppColors.of(context).primaryBlue,
+        color: colors.primaryBlue,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(AppConstants.r24),
           bottomRight: Radius.circular(AppConstants.r24),
@@ -50,7 +51,7 @@ class HomeUserHeader extends StatelessWidget {
                       (userProfile?.userImage != null &&
                           userProfile!.userImage!.isNotEmpty)
                       ? NetworkImage(
-                          "${Get.find<DioClient>().baseUrl}${userProfile.userImage}",
+                          "${AppConstants.baseUrl}${userProfile.userImage}",
                         )
                       : const AssetImage(AppAssets.defaultProfile)
                             as ImageProvider,
@@ -65,16 +66,14 @@ class HomeUserHeader extends StatelessWidget {
                     Text(
                       DateTimeUtils.getGreetingMessage(prefix: "", l10n: l10n),
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.of(
-                          context,
-                        ).white.withValues(alpha: AppConstants.opacityMuted),
+                        color: colors.white.withValues(alpha: AppConstants.opacityMuted),
                       ),
                     ),
                     const SizedBox(height: AppConstants.p4),
                     Text(
                       userProfile?.fullName.split(' ').first ?? l10n.user,
                       style: AppTextStyle.h1.copyWith(
-                        color: AppColors.of(context).white,
+                        color: colors.white,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -82,7 +81,7 @@ class HomeUserHeader extends StatelessWidget {
                     Text(
                       l10n.softwareEngineer,
                       style: AppTextStyle.labelSmall.copyWith(
-                        color: AppColors.of(context).white,
+                        color: colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

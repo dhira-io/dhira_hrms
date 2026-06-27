@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/widgets/common_button.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -16,8 +15,6 @@ class PunchActionButtonRow extends StatelessWidget {
   final VoidCallback onPunchOut;
   final VoidCallback onEndBreak;
   final EdgeInsets? padding;
-  final Color? breakButtonColor;
-  final Color? punchOutColor;
 
   const PunchActionButtonRow({
     super.key,
@@ -29,168 +26,94 @@ class PunchActionButtonRow extends StatelessWidget {
     required this.onPunchOut,
     required this.onEndBreak,
     this.padding,
-    this.breakButtonColor,
-    this.punchOutColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isAnyLoading = loadingType != null;
+
     return Padding(
       padding:
           padding ??
           const EdgeInsets.fromLTRB(
-            AppConstants.p16,
+            AppConstants.p8,
             0,
-            AppConstants.p16,
-            AppConstants.p16,
+            AppConstants.p8,
+            AppConstants.p8,
           ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (!isPunchedIn) ...[
-            Text(
-              l10n.readyToStartDay,
-              style: AppTextStyle.bodyMedium.copyWith(
-                fontSize: AppConstants.fs12.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            SizedBox(height: 16.h),
-          ],
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (!isPunchedIn)
-                  Expanded(
-                    child: CommonButton(
-                      text: loadingType == AttendanceActionType.punchIn
-                          ? l10n.punchingIn
-                          : l10n.letsGo,
-                      icon: Icons.login_outlined,
-                      onPressed: loadingType != null ? null : onPunchIn,
-                      isLoading: loadingType == AttendanceActionType.punchIn,
-                    ),
-                  )
-                else if (!isOnBreak) ...[
-                  _ActionButton(
-                    label: l10n.takeBreak,
-                    icon: Icons.pause_circle_outline,
-                    color: loadingType == AttendanceActionType.takeBreak
-                        ? (breakButtonColor ?? AppColors.of(context).warning)
-                              .withValues(alpha: 0.5)
-                        : (breakButtonColor ?? AppColors.of(context).warning),
-                    onTap: loadingType != null ? null : onTakeBreak,
-                    isLoading: loadingType == AttendanceActionType.takeBreak,
-                    loadingLabel: l10n.takingBreak,
-                    flex: 2,
-                  ),
-                  SizedBox(width: 8.w),
-                  _ActionButton(
-                    label: l10n.thatsAllForToday,
-                    icon: Icons.history_toggle_off,
-                    color: loadingType == AttendanceActionType.punchOut
-                        ? (punchOutColor ?? AppColors.of(context).error)
-                              .withValues(alpha: 0.5)
-                        : (punchOutColor ?? AppColors.of(context).error),
-                    onTap: loadingType != null ? null : onPunchOut,
-                    isLoading: loadingType == AttendanceActionType.punchOut,
-                    loadingLabel: l10n.punchingOut,
-                    flex: 3,
-                  ),
-                ] else ...[
-                  _ActionButton(
-                    label: l10n.resume,
-                    icon: Icons.play_arrow,
-                    color: loadingType == AttendanceActionType.endBreak
-                        ? (breakButtonColor ?? AppColors.of(context).warning)
-                              .withValues(alpha: 0.5)
-                        : (breakButtonColor ?? AppColors.of(context).warning),
-                    onTap: loadingType != null ? null : onEndBreak,
-                    isLoading: loadingType == AttendanceActionType.endBreak,
-                    loadingLabel: l10n.resuming,
-                    flex: 2,
-                  ),
-                  SizedBox(width: 8.w),
-                  _ActionButton(
-                    label: l10n.thatsAllForToday,
-                    icon: Icons.history_toggle_off,
-                    color: loadingType == AttendanceActionType.punchOut
-                        ? (punchOutColor ?? AppColors.of(context).error)
-                              .withValues(alpha: 0.5)
-                        : (punchOutColor ?? AppColors.of(context).error),
-                    onTap: loadingType != null ? null : onPunchOut,
-                    isLoading: loadingType == AttendanceActionType.punchOut,
-                    loadingLabel: l10n.punchingOut,
-                    flex: 3,
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ActionButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final Color color;
-  final VoidCallback? onTap;
-  final bool isLoading;
-  final String loadingLabel;
-  final int flex;
-
-  const _ActionButton({
-    required this.label,
-    required this.icon,
-    required this.color,
-    this.onTap,
-    required this.isLoading,
-    required this.loadingLabel,
-    this.flex = 1,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: flex,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          constraints: BoxConstraints(minHeight: 40.h),
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(AppConstants.r8),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Row(
             children: [
-              Icon(
-                isLoading ? Icons.hourglass_bottom : icon,
-                color: AppColors.of(context).white,
-                size: 18,
-              ),
-              SizedBox(width: 4.w),
-              Flexible(
-                child: Text(
-                  isLoading ? loadingLabel : label,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyle.labelMedium.copyWith(
-                    color: AppColors.of(context).white,
-                    fontSize: AppConstants.fs11.sp,
+              if (!isPunchedIn)
+                Expanded(
+                  child: CommonButton(
+                    text: l10n.letsGoStartYourDay,
+                    icon: Icons.login_rounded,
+                    backgroundColor: AppColors.of(context).primary,
+                    onPressed: isAnyLoading ? null : onPunchIn,
+                    isLoading: loadingType == AttendanceActionType.punchIn,
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
+                  ),
+                )
+              else if (!isOnBreak) ...[
+                Expanded(
+                  flex: 2,
+                  child: CommonButton(
+                    text: l10n.takeABreak,
+                    icon: Icons.pause_rounded,
+                    backgroundColor: AppColors.of(context).punchBreak,
+                    onPressed: isAnyLoading ? null : onTakeBreak,
+                    isLoading: loadingType == AttendanceActionType.takeBreak,
+                    borderRadius: 8.r,
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
                   ),
                 ),
-              ),
+                SizedBox(width: 8.w),
+                Expanded(
+                  flex: 3,
+                  child: CommonButton(
+                    text: l10n.thatsAllForToday,
+                    icon: Icons.access_time_rounded,
+                    backgroundColor: AppColors.of(context).punchOut,
+                    onPressed: isAnyLoading ? null : onPunchOut,
+                    isLoading: loadingType == AttendanceActionType.punchOut,
+                    borderRadius: 8.r,
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
+                  ),
+                ),
+              ] else ...[
+                Expanded(
+                  flex: 2,
+                  child: CommonButton(
+                    text: l10n.resume,
+                    icon: Icons.stop_rounded,
+                    backgroundColor: AppColors.of(context).punchBreak,
+                    onPressed: isAnyLoading ? null : onEndBreak,
+                    isLoading: loadingType == AttendanceActionType.endBreak,
+                    borderRadius: 8.r,
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Expanded(
+                  flex: 3,
+                  child: CommonButton(
+                    text: l10n.thatsAllForToday,
+                    icon: Icons.access_time_rounded,
+                    backgroundColor: AppColors.of(context).punchOut,
+                    onPressed: isAnyLoading ? null : onPunchOut,
+                    isLoading: loadingType == AttendanceActionType.punchOut,
+                    borderRadius: 8.r,
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
+                  ),
+                ),
+              ],
             ],
           ),
-        ),
+        ],
       ),
     );
   }

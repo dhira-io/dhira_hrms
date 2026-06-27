@@ -12,6 +12,7 @@ class QuickActionsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,31 +27,31 @@ class QuickActionsGrid extends StatelessWidget {
             _ActionIcon(
               icon: Icons.checklist,
               label: l10n.tasks,
-              color: AppColors.of(context).error,
+              color: colors.error,
               onTap: () => context.push(AppRouter.myTaskPath),
             ),
             _ActionIcon(
               icon: Icons.add_task,
               label: l10n.timesheet,
-              color: AppColors.of(context).primary,
+              color: colors.primary,
               onTap: () {}, // TODO: Implementation
             ),
             _ActionIcon(
               icon: Icons.request_page,
               label: l10n.leave,
-              color: AppColors.of(context).warning,
+              color: colors.warning,
               onTap: () {},
             ),
             _ActionIcon(
               icon: Icons.people,
               label: l10n.team,
-              color: AppColors.of(context).secondary,
+              color: colors.secondary,
               onTap: () => context.push(AppRouter.organizationPath),
             ),
             _ActionIcon(
               icon: Icons.settings,
               label: l10n.settings,
-              color: AppColors.of(context).textSecondary,
+              color: colors.textSecondary,
               onTap: () {},
             ),
           ],
@@ -75,6 +76,7 @@ class _ActionIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Column(
       children: [
         InkWell(
@@ -90,7 +92,7 @@ class _ActionIcon extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppConstants.p8),
-        Text(label, style: AppTextStyle.bodySmall.copyWith(fontSize: 12.sp)),
+        Text(label, style: AppTextStyle.bodySmall),
       ],
     );
   }

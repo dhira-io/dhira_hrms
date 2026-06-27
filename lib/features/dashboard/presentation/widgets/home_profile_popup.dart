@@ -16,13 +16,14 @@ class HomeProfilePopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Stack(
       children: [
         Positioned.fill(
           child: GestureDetector(
             onTap: () => context.read<DashboardCubit>().closeMenus(),
-            child: Container(color: Colors.transparent),
+            child: Container(color: colors.transparent),
           ),
         ),
         Positioned(
@@ -32,7 +33,7 @@ class HomeProfilePopup extends StatelessWidget {
               AppConstants.p8,
           right: AppConstants.p16,
           child: Material(
-            color: AppColors.of(context).white,
+            color: colors.white,
             elevation: 8,
             borderRadius: BorderRadius.circular(AppConstants.r12),
             child: Container(
@@ -61,7 +62,7 @@ class HomeProfilePopup extends StatelessWidget {
                       );
                       context.go(AppRouter.loginPath);
                     },
-                    textColor: AppColors.of(context).error,
+                    textColor: colors.error,
                   ),
                 ],
               ),
@@ -79,6 +80,7 @@ class HomeProfilePopup extends StatelessWidget {
     VoidCallback onTap, {
     Color? textColor,
   }) {
+    final colors = AppColors.of(context);
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -91,14 +93,14 @@ class HomeProfilePopup extends StatelessWidget {
             Icon(
               icon,
               size: AppConstants.iconXSmall,
-              color: textColor ?? AppColors.of(context).textSecondary,
+              color: textColor ?? colors.textSecondary,
             ),
             const SizedBox(width: AppConstants.p12),
             Expanded(
               child: Text(
                 title,
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: textColor ?? AppColors.of(context).textPrimary,
+                  color: textColor ?? colors.textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),

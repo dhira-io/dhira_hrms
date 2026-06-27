@@ -12,6 +12,7 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final hour = DateTime.now().hour;
     String greeting = l10n.goodMorning;
@@ -27,13 +28,13 @@ class HomeHeader extends StatelessWidget {
             Text(
               greeting,
               style: AppTextStyle.bodyMedium.copyWith(
-                color: AppColors.of(context).textSecondary,
+                color: colors.textSecondary,
               ),
             ),
             Text(
               l10n.hello(userName),
               style: AppTextStyle.h1.copyWith(
-                color: AppColors.of(context).primary,
+                color: colors.primary,
               ),
             ),
           ],

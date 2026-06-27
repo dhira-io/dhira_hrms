@@ -9,6 +9,7 @@ import '../bloc/task_bloc.dart';
 import '../bloc/task_event.dart';
 import '../bloc/task_state.dart';
 import '../widgets/task_card.dart';
+import '../../../../core/widgets/common_app_bar.dart';
 
 class MyTaskScreen extends StatelessWidget {
   const MyTaskScreen({super.key});
@@ -62,7 +63,7 @@ class _MyTaskViewState extends State<MyTaskView> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      appBar: AppBar(title: Text(l10n.myTasks)),
+      appBar: CommonAppBar(title: l10n.myTasks),
       body: BlocBuilder<TaskBloc, TaskState>(
         builder: (context, state) {
           return state.maybeWhen(

@@ -11,7 +11,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../core/widgets/common_app_bar.dart';
+import 'package:dhira_hrms/core/widgets/app_header.dart';
 import '../../../../core/widgets/generic_error_widget.dart';
 import '../bloc/payslip_bloc.dart';
 import '../bloc/payslip_event.dart';
@@ -66,10 +66,9 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      backgroundColor: AppColors.of(context).background,
-      appBar: CommonAppBar(title: l10n.payslips, onBack: () => context.pop()),
-      body: BlocBuilder<PayslipBloc, PayslipState>(
+    return Container(
+      color: AppColors.of(context).background,
+      child: BlocBuilder<PayslipBloc, PayslipState>(
         buildWhen: (previous, current) =>
             previous.isListLoading != current.isListLoading ||
             previous.listError != current.listError ||
@@ -104,6 +103,7 @@ class _PayslipListScreenState extends State<PayslipListScreen> {
             child: CustomScrollView(
               controller: _scrollController,
               slivers: [
+                const SliverToBoxAdapter(child: AppHeader()),
                 // YTD Stats Banner
                 SliverToBoxAdapter(
                   child: YtdBanner(

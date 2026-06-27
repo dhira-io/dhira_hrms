@@ -21,6 +21,7 @@ class HomeMainMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Stack(
       children: [
@@ -47,7 +48,7 @@ class HomeMainMenu extends StatelessWidget {
               opacity: fadeAnimation,
               child: Material(
                 elevation: 8,
-                color: AppColors.of(context).white,
+                color: colors.white,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppConstants.p20,
@@ -94,6 +95,7 @@ class HomeMainMenu extends StatelessWidget {
     IconData icon,
     VoidCallback onTap,
   ) {
+    final colors = AppColors.of(context);
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -106,14 +108,14 @@ class HomeMainMenu extends StatelessWidget {
             Icon(
               icon,
               size: AppConstants.iconXSmall,
-              color: AppColors.of(context).textSecondary,
+              color: colors.textSecondary,
             ),
             const SizedBox(width: AppConstants.p12),
             Expanded(
               child: Text(
                 title,
                 style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.of(context).textPrimary,
+                  color: colors.textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),

@@ -19,16 +19,12 @@ class PunchCard extends StatefulWidget {
   final bool showBackground;
   final EdgeInsets? padding;
   final bool showDateAndTime;
-  final Color? breakButtonColor;
-  final Color? punchOutColor;
 
   const PunchCard({
     super.key,
     this.showBackground = true,
     this.padding,
     this.showDateAndTime = true,
-    this.breakButtonColor,
-    this.punchOutColor,
   });
 
   @override
@@ -174,7 +170,9 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
         );
       },
       builder: (context, state) {
-        final timeFormatted = _formatDuration(_computedWorkedSeconds);
+        final timeFormatted = _isPunchedIn
+            ? _formatDuration(_computedWorkedSeconds)
+            : "00:00:00";
         final loadingType = state.mapOrNull(loading: (s) => s.actionType);
 
         if (state.mapOrNull(loading: (s) => s.actionType) ==
@@ -182,7 +180,7 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
           return Padding(
             padding:
                 widget.padding ??
-                const EdgeInsets.symmetric(horizontal: AppConstants.p15),
+                const EdgeInsets.symmetric(horizontal: AppConstants.p14),
             child: const PunchCardSkeleton(),
           );
         }
@@ -192,7 +190,7 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
         return Padding(
           padding:
               widget.padding ??
-              const EdgeInsets.symmetric(horizontal: AppConstants.p15),
+              const EdgeInsets.symmetric(horizontal: AppConstants.p14),
           child: Container(
             decoration: widget.showBackground
                 ? BoxDecoration(
@@ -216,19 +214,17 @@ class _PunchCardState extends State<PunchCard> with WidgetsBindingObserver {
                     timeFormatted: timeFormatted,
                     dateFormatted: dateFormatted,
                   ),
-                        SizedBox(height: 16.h),
+                  SizedBox(height: 4.h),
                 ],
                 PunchActionButtonRow(
                   padding: widget.showDateAndTime
                       ? null
                       : (_isPunchedIn
-                            ?       EdgeInsets.symmetric(
+                            ? EdgeInsets.symmetric(
                                 horizontal: 8.w,
                                 vertical: 8.h,
                               )
                             : EdgeInsets.zero),
-                  breakButtonColor: widget.breakButtonColor,
-                  punchOutColor: widget.punchOutColor,
                   isPunchedIn: _isPunchedIn,
                   isOnBreak: _isOnBreak,
                   loadingType: loadingType,

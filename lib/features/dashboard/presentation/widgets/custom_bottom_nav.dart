@@ -17,104 +17,80 @@ class CustomBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return BlocBuilder<BottomNavCubit, int>(
       builder: (context, state) {
         return SafeArea(
           child: Container(
-            margin: const EdgeInsets.only(
-              bottom: AppConstants.p24,
-              left: AppConstants.p16,
-              right: AppConstants.p16,
-            ),
             height: 70.h,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppConstants.r24),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.of(
-                    context,
-                  ).onSurface.withValues(alpha: 0.08),
-                  blurRadius: 32,
-                  offset: const Offset(0, -12),
+              color: colors.surface,
+              border: Border(
+                top: BorderSide(color: colors.bordergrey, width: 1),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppConstants.p8,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _BottomNavItemWidget(
+                  index: BottomNavCubit.homeIndex,
+                  currentIndex: state,
+                  icon: Icons.home_outlined,
+                  activeIcon: Icons.home_outlined,
+                  label: l10n.home,
+                ),
+                _BottomNavItemWidget(
+                  index: BottomNavCubit.attendanceIndex,
+                  currentIndex: state,
+                  icon: Icons.calendar_today_outlined,
+                  activeIcon: Icons.calendar_today_outlined,
+                  label: l10n.calendar,
+                ),
+                _BottomNavItemWidget(
+                  index: BottomNavCubit.approvalsIndex,
+                  currentIndex: state,
+                  icon: Icons.assignment_outlined,
+                  activeIcon: Icons.assignment_outlined,
+                  label: l10n.approvals,
+                ),
+                _BottomNavItemWidget(
+                  index: BottomNavCubit.payslipIndex,
+                  currentIndex: state,
+                  icon: Icons.payments_outlined,
+                  activeIcon: Icons.payments_outlined,
+                  label: l10n.payslip,
                 ),
               ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24.r),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-                child: Container(
-                  color: AppColors.of(
-                    context,
-                  ).surfaceContainerLowest.withValues(alpha: 0.8),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.p8,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildNavItem(
-                        context,
-                        index: BottomNavCubit.homeIndex,
-                        currentIndex: state,
-                        icon: Icons.home_filled,
-                        label: l10n.home,
-                      ),
-                      _buildNavItem(
-                        context,
-                        index: BottomNavCubit.attendanceIndex,
-                        currentIndex: state,
-                        icon: Icons.calendar_today_outlined,
-                        label: l10n.calendar,
-                      ),
-                      _buildNavItem(
-                        context,
-                        index: BottomNavCubit.approvalsIndex,
-                        currentIndex: state,
-                        icon: Icons.assignment_turned_in_outlined,
-                        label: l10n.approvals,
-                      ),
-                      // _buildNavItem(
-                      //   context,
-                      //   index: BottomNavCubit.myOrgIndex,
-                      //   currentIndex: state,
-                      //   icon: Icons.corporate_fare_outlined,
-                      //   label: l10n.myOrg,
-                      // ),
-
-                      // _buildNavItem(
-                      //   context,
-                      //   index: BottomNavCubit.notificationsIndex,
-                      //   currentIndex: state,
-                      //   icon: Icons.notifications_outlined,
-                      //   label: "Inbox",
-                      // ),
-                      _buildNavItem(
-                        context,
-                        index: BottomNavCubit.settingsIndex,
-                        currentIndex: state,
-                        icon: Icons.settings_outlined,
-                        label: l10n.settings,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
             ),
           ),
         );
       },
     );
   }
+}
 
-  Widget _buildNavItem(
-    BuildContext context, {
-    required int index,
-    required int currentIndex,
-    required IconData icon,
-    required String label,
-  }) {
+class _BottomNavItemWidget extends StatelessWidget {
+  final int index;
+  final int currentIndex;
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+
+  const _BottomNavItemWidget({
+    required this.index,
+    required this.currentIndex,
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final isActive = index == currentIndex;
     return GestureDetector(
       onTap: () {
@@ -125,7 +101,6 @@ class CustomBottomNav extends StatelessWidget {
 
           currentState.maybeMap(
             success: (s) {
-              // If user has access (approver), show Team, otherwise Raised
               final targetCategory = s.data.access.canAccess
                   ? ApprovalCategory.team
                   : ApprovalCategory.raised;
@@ -139,7 +114,6 @@ class CustomBottomNav extends StatelessWidget {
               approvalsBloc.add(const ApprovalsEvent.refreshSummary());
             },
             orElse: () {
-              // If not yet loaded, trigger start which handles role-based default
               approvalsBloc.add(const ApprovalsEvent.started());
             },
           );
@@ -154,29 +128,28 @@ class CustomBottomNav extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: isActive
-              ? AppColors.of(context).primaryFixed
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppConstants.r16),
+              ? colors.primary
+              : colors.transparent,
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              icon,
+              isActive ? activeIcon : icon,
               color: isActive
-                  ? AppColors.of(context).primary
-                  : AppColors.of(context).onSurfaceVariant,
+                  ? colors.onPrimary
+                  : colors.onSurfaceVariant,
               size: AppConstants.iconMedium,
             ),
             if (isActive) ...[
-                    SizedBox(height: 2.h),
+              SizedBox(height: 2.h),
               Text(
                 label,
                 style: AppTextStyle.labelSmall.copyWith(
-                  color: AppColors.of(context).primary,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 10.sp,
-                ),
+                  color: colors.onPrimary,
+                  fontWeight: FontWeight.w600,
+                  ),
               ),
             ],
           ],

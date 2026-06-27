@@ -94,9 +94,9 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
           orElse: () {},
         );
       },
-      child: Scaffold(
-        backgroundColor: AppColors.of(context).background,
-        body: RefreshIndicator(
+      child: Container(
+        color: AppColors.of(context).background,
+        child: RefreshIndicator(
           onRefresh: () async {
             final completer = Completer<void>();
             context.read<ApprovalsBloc>().add(

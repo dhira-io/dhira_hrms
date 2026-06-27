@@ -1,8 +1,8 @@
+import 'package:dhira_hrms/core/widgets/common_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../theme/app_colors.dart';
-import '../../theme/app_text_style.dart';
 
 class CommonWebViewScreen extends StatefulWidget {
   final String url;
@@ -60,24 +60,9 @@ class _CommonWebViewScreenState extends State<CommonWebViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.of(context).background,
-      appBar: AppBar(
-        backgroundColor: AppColors.of(context).surfaceContainerLowest,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.close,
-            color: AppColors.of(context).onSurfaceVariant,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          widget.title,
-          style: AppTextStyle.h3.copyWith(
-            color: AppColors.of(context).onSurface,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      appBar: CommonAppBar(
+        title: widget.title,
+        onBack: () => Navigator.of(context).pop(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(2),
           child: _isLoading

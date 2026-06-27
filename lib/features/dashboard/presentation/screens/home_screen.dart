@@ -2,24 +2,30 @@ import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../bloc/dashboard_cubit.dart';
 import '../bloc/dashboard_state.dart';
-import '../widgets/welcome_profile_card.dart';
-import '../widgets/quick_stats_section.dart';
-import '../widgets/employee_actions_section.dart';
-import '../widgets/performance_section.dart';
-import '../widgets/salary_section.dart';
-import '../widgets/policies_section.dart';
+import '../widgets/home_header_widget.dart';
+import '../widgets/home_user_clock_card.dart';
+import '../widgets/home_employee_actions.dart';
+import '../widgets/home_quick_stats.dart';
 import 'package:dhira_hrms/core/widgets/app_header.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -27,42 +33,43 @@ class HomeScreen extends StatelessWidget {
           orElse: () {},
         );
       },
-      child: Column(
-        children: [
-          const AppHeader(),
-          Expanded(
-            child: BlocBuilder<DashboardCubit, DashboardState>(
-              builder: (context, state) {
-                return CustomScrollView(
+      child: BlocBuilder<DashboardCubit, DashboardState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              AppHeader(
+                backgroundColor: colors.surface,
+                iconColor: colors.onSurface,
+              ),
+              Expanded(
+                child: CustomScrollView(
                   slivers: [
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppConstants.p14,
-                        vertical: AppConstants.p16,
-                      ),
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate([
-                          const WelcomeProfileCard(),
-                          const SizedBox(height: AppConstants.p20),
-                          const QuickStatsSection(),
-                          const SizedBox(height: AppConstants.p20),
-                          const EmployeeActionsSection(),
-                          const SizedBox(height: AppConstants.p20),
-                          const PerformanceSection(),
-                          const SizedBox(height: AppConstants.p20),
-                          const SalarySection(),
-                          const SizedBox(height: AppConstants.p20),
-                          const PoliciesSection(),
-                          const SizedBox(height: AppConstants.p10),
-                        ]),
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          const HomeHeaderWidget(),
+                          Transform.translate(
+                            offset: Offset(0, -40.h),
+                            child: Column(
+                              children: [
+                                const HomeUserClockCard(),
+                                SizedBox(height: 8.h),
+                                const HomeEmployeeActions(),
+                                SizedBox(height: 8.h),
+                                const HomeQuickStats(),
+                                SizedBox(height: 8.h),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
-                );
-              },
-            ),
-          ),
-        ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

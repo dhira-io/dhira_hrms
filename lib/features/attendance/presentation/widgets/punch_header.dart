@@ -1,7 +1,6 @@
 import 'package:dhira_hrms/core/constants/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/utils/date_time_utils.dart';
@@ -30,12 +29,11 @@ class PunchHeader extends StatelessWidget {
       padding: const EdgeInsets.all(AppConstants.p8),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: AppConstants.p24),
+        padding: const EdgeInsets.symmetric(vertical: AppConstants.p8),
         decoration: BoxDecoration(
-          color: AppColors.of(context).profileHeaderBg.withValues(alpha: 0.5),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(AppConstants.r16),
-            topRight: Radius.circular(AppConstants.r16),
+          color: AppColors.clockCardBg,
+          border: Border.all(color: AppColors.clockCardBorder, width: 1),
+          borderRadius: const BorderRadius.all(Radius.circular(AppConstants.r16),
           ),
         ),
         child: Column(
@@ -45,55 +43,49 @@ class PunchHeader extends StatelessWidget {
                 l10n.startedDayAt(
                   DateTimeUtils.convertDateStringToTime(firstIn!),
                 ),
-                style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.of(context).textSecondary,
-                  fontWeight: FontWeight.w500,
+                style: AppTextStyle.labelLargeOne.copyWith(
+                  color: AppColors.of(context).slate550,
                 ),
               )
             else if (!isPunchedIn)
               Text(
-                dateFormatted,
-                style: AppTextStyle.bodyMedium.copyWith(
-                  color: AppColors.of(context).textSecondary,
-                  fontWeight: FontWeight.w500,
+                l10n.notClockedIn,
+                style: AppTextStyle.labelLargeOne.copyWith(
+                  color: AppColors.of(context).slate550,
                 ),
               ),
 
-            if (isPunchedIn) ...[
-              SizedBox(height: 8.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    timeFormatted,
-                    style: GoogleFonts.manrope(
-                      fontSize: AppConstants.fs33.sp,
-                      fontWeight: FontWeight.bold,
-                      color: isOnBreak
-                          ? AppColors.of(context).warning
-                          : AppColors.of(context).primary,
-                      letterSpacing: 1.5,
-                    ),
+            SizedBox(height: 4.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  timeFormatted,
+                  style: AppTextStyle.displaySmallSemiBold.copyWith(
+                    color: isOnBreak
+                        ? AppColors.of(context).warning
+                        : AppColors.of(context).primary,
                   ),
-                  if (isOnBreak) ...[
-                    SizedBox(width: 8.w),
-                    Icon(
-                      Icons.pause,
-                      color: AppColors.of(context).warning,
-                      size: AppConstants.iconXXSmall,
-                    ),
-                  ],
-                ],
-              ),
-              SizedBox(height: 4.h),
-              Text(
-                isOnBreak ? l10n.onBreak : l10n.timeElapsed,
-                style: AppTextStyle.bodySmall.copyWith(
-                  color: AppColors.of(context).textSecondary,
-                  fontWeight: FontWeight.w500,
                 ),
+                if (isOnBreak) ...[
+                  SizedBox(width: 8.w),
+                  Icon(
+                    Icons.pause,
+                    color: AppColors.of(context).warning,
+                    size: AppConstants.iconXXSmall,
+                  ),
+                ],
+              ],
+            ),
+            SizedBox(height: 4.h),
+            Text(
+              !isPunchedIn 
+                  ? l10n.readyToStartYourDay 
+                  : (isOnBreak ? l10n.onBreak : l10n.timeElapsed),
+              style: AppTextStyle.labelLarge.copyWith(
+                color: AppColors.of(context).slate550,
               ),
-            ],
+            ),
           ],
         ),
       ),

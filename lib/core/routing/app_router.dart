@@ -12,12 +12,22 @@ import 'package:dhira_hrms/features/organization/presentation/screens/organizati
 import 'package:dhira_hrms/features/auth/presentation/screens/auth_callback_screen.dart'
     as dhira_auth_callback;
 import 'package:dhira_hrms/features/payslip/presentation/bloc/payslip_bloc.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/dashboard_cubit.dart';
+import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
+import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
+import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
+import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
+import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
+import 'package:dhira_hrms/features/settings/presentation/bloc/settings_cubit.dart';
+import 'package:get/get.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_detail_screen.dart';
 import 'package:dhira_hrms/features/payslip/presentation/screens/payslip_list_screen.dart';
 import 'package:dhira_hrms/features/policy/presentation/bloc/policy_bloc.dart';
 import 'package:dhira_hrms/features/policy/presentation/bloc/policy_event.dart';
 import 'package:dhira_hrms/features/policy/presentation/screens/policy_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
+import 'package:dhira_hrms/features/performance/presentation/bloc/performance_event.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/file_operation/file_operation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_cubit.dart';
 import 'package:dhira_hrms/features/performance/presentation/cubit/team_evaluation/team_evaluation_filter_cubit.dart';
@@ -26,6 +36,7 @@ import 'package:dhira_hrms/features/onboarding/presentation/screens/welcome_scre
 import 'package:dhira_hrms/features/onboarding/presentation/screens/get_started_screen.dart';
 import 'package:dhira_hrms/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:dhira_hrms/features/onboarding/presentation/bloc/onboarding_cubit.dart';
+import 'package:dhira_hrms/features/settings/presentation/screens/settings_screen.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_event.dart';
 import 'package:dhira_hrms/features/timesheet/presentation/screens/apply_timesheet_screen.dart';
 import 'package:dhira_hrms/features/leave/presentation/screens/apply_leave_screen.dart';
@@ -36,8 +47,10 @@ import 'package:dhira_hrms/features/attendance_regularization/presentation/scree
 import 'package:dhira_hrms/features/compensatory_leave/presentation/bloc/compensatory_leave_bloc.dart';
 import 'package:dhira_hrms/features/compensatory_leave/presentation/screens/compensatory_leave_screen.dart';
 import 'package:dhira_hrms/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:dhira_hrms/core/widgets/coming_soon_screen.dart';
 
 import 'package:dhira_hrms/features/performance/presentation/screens/self_assessment_screen.dart';
+import 'package:dhira_hrms/features/performance/presentation/screens/performance_dashboard_screen.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/goal_setup_page.dart';
 import 'package:dhira_hrms/features/performance/presentation/widgets/team_evaluation_page.dart';
 import 'package:dhira_hrms/features/performance/presentation/screens/team_evaluation_review_screen.dart';
@@ -50,15 +63,9 @@ import 'package:dhira_hrms/features/performance/presentation/cubit/self_assessme
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_type.dart';
 import 'package:dhira_hrms/features/approvals/domain/entities/approval_request_entity.dart';
 import 'package:dhira_hrms/features/approvals/domain/usecases/get_approvals_access_usecase.dart';
-import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_bloc.dart';
 import 'package:dhira_hrms/features/approvals/presentation/bloc/approvals_event.dart';
-import 'package:dhira_hrms/features/dashboard/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:go_router/go_router.dart';
-import 'package:get/get.dart';
 import 'package:dhira_hrms/features/auth/domain/repositories/auth_repository.dart';
-import 'package:dhira_hrms/features/leave/presentation/bloc/leave_bloc.dart';
-import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:dhira_hrms/features/timesheet/presentation/bloc/timesheet_bloc.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -86,6 +93,7 @@ class AppRouter {
       '/attendance-regularization';
   static const String compensatoryLeavePath = '/compensatory-leave';
 
+  static const String performanceDashboardPath = '/performance-dashboard';
   static const String performanceGoalSetupPath = '/performance-goal-setup';
   static const String performanceSelfAssessmentPath =
       '/performance-self-assessment';
@@ -99,6 +107,8 @@ class AppRouter {
   static const String commonWebViewPath = '/webview';
   static const String payslipPath = '/payslip';
   static const String payslipDetailPath = '/payslip-detail';
+  static const String settingsPath = '/settings';
+  static const String comingSoonPath = '/coming-soon';
   static const String policyPath = '/policy';
 
   // Router Extra Keys
@@ -369,13 +379,44 @@ class AppRouter {
           child: const OnboardingScreen(),
         ),
       ),
+
+        GoRoute(
+          path: comingSoonPath,
+          builder: (context, state) {
+            final title = state.extra as String? ?? 'Coming Soon';
+            return ComingSoonScreen(title: title);
+          },
+        ),
       GoRoute(
         path: loginPath,
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: dashboardPath,
-        builder: (context, state) => const DashboardScreen(),
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider<BottomNavCubit>.value(value: Get.find<BottomNavCubit>()),
+            BlocProvider<DashboardCubit>.value(value: Get.find<DashboardCubit>()),
+            BlocProvider<AttendanceBloc>.value(value: Get.find<AttendanceBloc>()),
+            BlocProvider<LeaveBloc>.value(value: Get.find<LeaveBloc>()),
+            BlocProvider<TimesheetBloc>.value(value: Get.find<TimesheetBloc>()),
+            BlocProvider<ProfileBloc>.value(value: Get.find<ProfileBloc>()),
+            BlocProvider<ApprovalsBloc>.value(value: Get.find<ApprovalsBloc>()),
+            BlocProvider<PerformanceBloc>.value(
+              value: Get.find<PerformanceBloc>()
+                ..add(const PerformanceEvent.started()),
+            ),
+            BlocProvider<TeamEvaluationCubit>.value(
+              value: Get.find<TeamEvaluationCubit>(),
+            ),
+            BlocProvider<TeamEvaluationFilterCubit>.value(
+              value: Get.find<TeamEvaluationFilterCubit>(),
+            ),
+            BlocProvider<SettingsCubit>.value(value: Get.find<SettingsCubit>()),
+            BlocProvider<PayslipBloc>.value(value: Get.find<PayslipBloc>()),
+          ],
+          child: const DashboardScreen(),
+        ),
       ),
       GoRoute(
         path: authCallbackPath,
@@ -529,6 +570,13 @@ class AppRouter {
       ),
 
       GoRoute(
+        path: performanceDashboardPath,
+        builder: (context, state) => BlocProvider.value(
+          value: Get.find<PerformanceBloc>(),
+          child: const PerformanceDashboardScreen(),
+        ),
+      ),
+      GoRoute(
         path: performanceGoalSetupPath,
         builder: (context, state) => BlocProvider.value(
           value: Get.find<PerformanceBloc>(),
@@ -653,6 +701,16 @@ class AppRouter {
         builder: (context, state) => BlocProvider.value(
           value: Get.find<PolicyBloc>()..add(const PolicyEvent.started()),
           child: const PolicyScreen(),
+        ),
+      ),
+      GoRoute(
+        path: settingsPath,
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: Get.find<SettingsCubit>()),
+            BlocProvider.value(value: Get.find<ProfileBloc>()),
+          ],
+          child: const SettingsScreen(),
         ),
       ),
     ],

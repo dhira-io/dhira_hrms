@@ -48,7 +48,7 @@ class CommonButton extends StatelessWidget {
     Widget buttonChild = isLoading
         ? SizedBox(
             width: 20.w,
-            height: 20.w,
+            height: 20.h,
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 variant == ButtonVariant.outlined ||
@@ -77,11 +77,16 @@ class CommonButton extends StatelessWidget {
                 ),
                 const SizedBox(width: AppConstants.p8),
               ],
-              Text(
-                text,
-                style: AppTextStyle.button.copyWith(
-                  color: _getTextColor(colors, isButtonDisabled),
-                  fontWeight: fontWeight ?? FontWeight.w700,
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    text,
+                    style: AppTextStyle.button.copyWith(
+                      color: _getTextColor(colors, isButtonDisabled),
+                      fontWeight: fontWeight ?? FontWeight.w700,
+                    ),
+                  ),
                 ),
               ),
             ],

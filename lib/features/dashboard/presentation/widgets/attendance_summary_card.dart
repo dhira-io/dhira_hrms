@@ -13,6 +13,7 @@ class AttendanceSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return BlocSelector<AttendanceBloc, AttendanceState, String?>(
       selector: (state) {
@@ -27,8 +28,8 @@ class AttendanceSummaryCard extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                AppColors.of(context).primary,
-                AppColors.of(context).secondary,
+                colors.primary,
+                colors.secondary,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -36,9 +37,7 @@ class AttendanceSummaryCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppConstants.r20),
             boxShadow: [
               BoxShadow(
-                color: AppColors.of(
-                  context,
-                ).primary.withValues(alpha: AppConstants.opacityMedium),
+                color: colors.primary.withValues(alpha: AppConstants.opacityMedium),
                 blurRadius: AppConstants.p15,
                 offset: const Offset(0, AppConstants.p8),
               ),
@@ -52,7 +51,7 @@ class AttendanceSummaryCard extends StatelessWidget {
                   Text(
                     l10n.todaysAttendance,
                     style: AppTextStyle.bodyMedium.copyWith(
-                      color: AppColors.of(context).surface,
+                      color: colors.surface,
                     ),
                   ),
                   _StatusBadge(text: statusText ?? l10n.onTime),
@@ -70,9 +69,7 @@ class AttendanceSummaryCard extends StatelessWidget {
                   Container(
                     width: 1.w,
                     height: AppConstants.p40,
-                    color: AppColors.of(
-                      context,
-                    ).surface.withValues(alpha: AppConstants.opacityFaded),
+                    color: colors.surface.withValues(alpha: AppConstants.opacityFaded),
                   ),
                   _TimeColumn(
                     label: l10n.checkOut,
@@ -95,24 +92,22 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppConstants.p10,
         vertical: AppConstants.p4,
       ),
       decoration: BoxDecoration(
-        color: AppColors.of(
-          context,
-        ).surface.withValues(alpha: AppConstants.opacitySlight),
+        color: colors.surface.withValues(alpha: AppConstants.opacitySlight),
         borderRadius: BorderRadius.circular(AppConstants.r20),
       ),
       child: Text(
         text,
         style: AppTextStyle.bodySmall.copyWith(
-          color: AppColors.of(context).surface,
+          color: colors.surface,
           fontWeight: FontWeight.bold,
-          fontSize: AppConstants.p10,
-        ),
+          ),
       ),
     );
   }
@@ -131,26 +126,23 @@ class _TimeColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Column(
       children: [
         Icon(
           icon,
-          color: AppColors.of(
-            context,
-          ).surface.withValues(alpha: AppConstants.opacityMuted),
+          color: colors.surface.withValues(alpha: AppConstants.opacityMuted),
           size: AppConstants.iconSmall + 2,
         ),
         const SizedBox(height: AppConstants.p8),
         Text(
           time,
-          style: AppTextStyle.h2.copyWith(color: AppColors.of(context).surface),
+          style: AppTextStyle.h2.copyWith(color: colors.surface),
         ),
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.of(
-              context,
-            ).surface.withValues(alpha: AppConstants.opacityMuted),
+            color: colors.surface.withValues(alpha: AppConstants.opacityMuted),
           ),
         ),
       ],

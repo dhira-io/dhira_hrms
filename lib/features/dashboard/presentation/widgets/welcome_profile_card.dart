@@ -14,6 +14,7 @@ class WelcomeProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Column(
@@ -28,11 +29,11 @@ class WelcomeProfileCard extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(AppConstants.p18),
           decoration: BoxDecoration(
-            color: AppColors.of(context).surfaceContainerLowest,
+            color: colors.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppConstants.r20),
             boxShadow: [
               BoxShadow(
-                color: AppColors.of(context).onSurface.withValues(alpha: 0.06),
+                color: colors.onSurface.withValues(alpha: 0.06),
                 blurRadius: 32,
                 offset: const Offset(0, 12),
               ),
@@ -57,18 +58,16 @@ class WelcomeProfileCard extends StatelessWidget {
                   Text(
                     profile?.fullName ?? l10n.employeeName,
                     style: AppTextStyle.h2.copyWith(
-                      fontSize: AppConstants.fs22.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.of(context).onSurface,
+                      color: colors.onSurface,
                     ),
                   ),
                   const SizedBox(height: AppConstants.p8),
                   Text(
                     profile?.designation ?? l10n.designation,
                     style: AppTextStyle.h2.copyWith(
-                      fontSize: AppConstants.fs12.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.of(context).onSurface,
+                      color: colors.onSurface,
                     ),
                   ),
                   const SizedBox(height: AppConstants.p8),
@@ -79,19 +78,17 @@ class WelcomeProfileCard extends StatelessWidget {
                         vertical: AppConstants.p6,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.of(context).primaryFixed,
+                        color: colors.primaryFixed,
                         borderRadius: BorderRadius.circular(AppConstants.r12),
                         border: Border.all(
-                          color: AppColors.of(
-                            context,
-                          ).primary.withValues(alpha: AppConstants.opacityLow),
+                          color: colors.primary.withValues(alpha: AppConstants.opacityLow),
                         ),
                       ),
                       child: Text(
                         empIdToDisplay,
                         style: AppTextStyle.bodyMedium.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.of(context).onPrimaryFixed,
+                          color: colors.onPrimaryFixed,
                         ),
                       ),
                     ),
@@ -100,8 +97,6 @@ class WelcomeProfileCard extends StatelessWidget {
                   PunchCard(
                     showDateAndTime: false,
                     padding: EdgeInsets.zero,
-                    breakButtonColor: AppColors.of(context).punchBreak,
-                    punchOutColor: AppColors.of(context).punchOut,
                   ),
                 ],
               );
@@ -112,36 +107,4 @@ class WelcomeProfileCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoChip({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required Color backgroundColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.p12,
-        vertical: AppConstants.p8,
-      ),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(AppConstants.r10),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: AppConstants.p16, color: color),
-          const SizedBox(width: AppConstants.p8),
-          Text(
-            label.toUpperCase(),
-            style: AppTextStyle.bodyMedium.copyWith(
-              color: color,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
