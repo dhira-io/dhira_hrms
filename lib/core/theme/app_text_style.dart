@@ -43,6 +43,8 @@ class AppTextStyle {
       GoogleFonts.inter(fontSize: 22.sp, fontWeight: FontWeight.w700);
   static TextStyle get displaySmall =>
       GoogleFonts.inter(fontSize: 20.sp, fontWeight: FontWeight.w700);
+  static TextStyle get displaySmallSemiBold =>
+      GoogleFonts.inter(fontSize: 20.sp, fontWeight: FontWeight.w600);
   static TextStyle get displaySmallOne =>
       GoogleFonts.inter(fontSize: 18.sp, fontWeight: FontWeight.w600);
   static TextStyle get displaySmallTwo =>

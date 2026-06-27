@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_style.dart';
 import '../../../../core/widgets/common_button.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -56,7 +55,7 @@ class PunchActionButtonRow extends StatelessWidget {
                     backgroundColor: AppColors.of(context).primary,
                     onPressed: isAnyLoading ? null : onPunchIn,
                     isLoading: loadingType == AttendanceActionType.punchIn,
-                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
                   ),
                 )
               else if (!isOnBreak) ...[
@@ -69,7 +68,7 @@ class PunchActionButtonRow extends StatelessWidget {
                     onPressed: isAnyLoading ? null : onTakeBreak,
                     isLoading: loadingType == AttendanceActionType.takeBreak,
                     borderRadius: 8.r,
-                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 4.w),
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
                   ),
                 ),
                 SizedBox(width: 8.w),
@@ -82,7 +81,7 @@ class PunchActionButtonRow extends StatelessWidget {
                     onPressed: isAnyLoading ? null : onPunchOut,
                     isLoading: loadingType == AttendanceActionType.punchOut,
                     borderRadius: 8.r,
-                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 4.w),
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
                   ),
                 ),
               ] else ...[
@@ -95,7 +94,7 @@ class PunchActionButtonRow extends StatelessWidget {
                     onPressed: isAnyLoading ? null : onEndBreak,
                     isLoading: loadingType == AttendanceActionType.endBreak,
                     borderRadius: 8.r,
-                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 4.w),
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
                   ),
                 ),
                 SizedBox(width: 8.w),
@@ -108,7 +107,7 @@ class PunchActionButtonRow extends StatelessWidget {
                     onPressed: isAnyLoading ? null : onPunchOut,
                     isLoading: loadingType == AttendanceActionType.punchOut,
                     borderRadius: 8.r,
-                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 4.w),
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
                   ),
                 ),
               ],

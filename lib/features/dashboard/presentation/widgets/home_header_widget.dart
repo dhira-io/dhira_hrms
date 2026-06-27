@@ -38,13 +38,11 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
         _searchCubit.initItems([
           SearchMenuItem(title: l10n.home, icon: Icons.dashboard_outlined, bottomNavIndex: 0),
           SearchMenuItem(title: l10n.timesheet, icon: Icons.access_time, route: AppRouter.timesheetPath),
-          SearchMenuItem(title: l10n.applyLeave, subtitle: l10n.applyLeaveSubtitle, icon: Icons.calendar_today_outlined, route: AppRouter.applyLeavePath),
-          SearchMenuItem(title: l10n.compensatoryLeave, subtitle: l10n.requestCompensatoryLeave, icon: Icons.card_giftcard_outlined, route: AppRouter.compensatoryLeavePath),
+          SearchMenuItem(title: l10n.applyLeave, icon: Icons.calendar_today_outlined, route: AppRouter.applyLeavePath),
+          SearchMenuItem(title: l10n.compensatoryLeave, icon: Icons.card_giftcard_outlined, route: AppRouter.compensatoryLeavePath),
           SearchMenuItem(title: l10n.attendanceRegularization, icon: Icons.person_add_alt_1_outlined, route: AppRouter.attendanceRegularizationPath),
           SearchMenuItem(title: l10n.attendance, icon: Icons.assignment_turned_in_outlined, bottomNavIndex: 1),
           SearchMenuItem(title: l10n.calendar, icon: Icons.calendar_month_outlined, bottomNavIndex: 1),
-          SearchMenuItem(title: l10n.organizationHierarchy, icon: Icons.account_tree_outlined, route: AppRouter.comingSoonPath),
-          SearchMenuItem(title: l10n.projectBasedServiceHierarchy, icon: Icons.bar_chart_outlined, route: AppRouter.comingSoonPath),
           SearchMenuItem(title: l10n.myActions, icon: Icons.check_box_outlined, bottomNavIndex: 2),
           SearchMenuItem(title: l10n.myProfile, icon: Icons.person_outline, route: AppRouter.profilePath),
         ]);
@@ -143,9 +141,9 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                     
                     return Text(
                       "${AppLocalizations.of(context)!.welcomeName} $displayFirstName!",
-                      style: AppTextStyle.bodyMedium.copyWith(
+                      style: AppTextStyle.headingSmallOne.copyWith(
                         color: colors.onPrimary,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700
                       ),
                     );
                   },
@@ -157,7 +155,7 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                 child: CompositedTransformTarget(
                   link: _layerLink,
                   child: Container(
-                    height: 40.h,
+                    height: 28.h,
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                       color: colors.surface,
@@ -168,8 +166,8 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                         SizedBox(width: AppConstants.p16.w),
                         Icon(
                           Icons.search,
-                          color: AppColors.searchHint,
-                          size: 20.w,
+                          color: colors.searchHint,
+                          size: 18.w,
                         ),
                         SizedBox(width: AppConstants.p8.w),
                         Expanded(
@@ -185,9 +183,8 @@ class _HomeHeaderWidgetState extends State<HomeHeaderWidget> {
                             textAlignVertical: TextAlignVertical.center,
                             decoration: InputDecoration(
                               hintText: AppLocalizations.of(context)!.searchForSomething,
-                              hintStyle: AppTextStyle.bodySmall.copyWith(
-                                color: AppColors.searchHint,
-                                fontWeight: FontWeight.w400,
+                              hintStyle: AppTextStyle.bodyMedium.copyWith(
+                                color: colors.searchHint,
                               ),
                               border: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -310,15 +307,6 @@ class _SearchOverlayContent extends StatelessWidget {
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    if (item.subtitle != null) ...[
-                                      SizedBox(height: 2.h),
-                                      Text(
-                                        item.subtitle!,
-                                        style: AppTextStyle.bodySmall.copyWith(
-                                          color: colors.onSurfaceVariant,
-                                          ),
-                                      ),
-                                    ],
                                   ],
                                 ),
                               ),

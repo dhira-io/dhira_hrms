@@ -82,12 +82,11 @@ class HomeEmployeeActions extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(8.w),
               child: Text(
                 l10n.employeeActions,
-                style: AppTextStyle.bodyLarge.copyWith(
+                style: AppTextStyle.headingSmallOne.copyWith(
                   color: colors.onSurface,
-                  fontWeight: FontWeight.w500,
                   ),
               ),
             ),
@@ -97,7 +96,7 @@ class HomeEmployeeActions extends StatelessWidget {
               color: colors.outlineVariant.withValues(alpha: 0.3),
             ),
             Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(10.w),
               child: actions.isEmpty
                   ? Padding(
                       padding: EdgeInsets.symmetric(vertical: 24.h),
@@ -137,7 +136,7 @@ class HomeEmployeeActions extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               child: Center(
-                                child: action.iconPath.endsWith('.svg')
+                                child: action.iconPath.endsWith(AppAssets.svgExtension)
                                     ? SvgPicture.asset(
                                         action.iconPath,
                                         width: 20.w,
@@ -162,17 +161,15 @@ class HomeEmployeeActions extends StatelessWidget {
                                 children: [
                                   Text(
                                     action.label,
-                                    style: AppTextStyle.bodySmall.copyWith(
+                                    style: AppTextStyle.labelLarge.copyWith(
                                       color: colors.textPrimary,
-                                      fontWeight: FontWeight.w500,
                                       ),
                                   ),
                                   SizedBox(height: 2.h),
                                   Text(
                                     action.subtitle,
-                                    style: AppTextStyle.bodySmall.copyWith(
-                                      color: colors.textSecondary,
-                                      fontWeight: FontWeight.w500,
+                                    style: AppTextStyle.labelMedium.copyWith(
+                                      color: colors.slate500,
                                       ),
                                   ),
                                 ],

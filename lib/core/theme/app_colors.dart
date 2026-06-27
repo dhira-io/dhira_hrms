@@ -8,6 +8,8 @@ class AppColors {
   static const Color onPrimaryFixed = Color(0xFF00164E);
   static const Color secondary = Color(0xff0066FF);
   static const Color blue400 = Color(0xFF51A2FF);
+  static const Color darkblue = Color(0xFF0084D1);
+  static const Color darkbluegrey = Color(0xFF274754);
 
   static const Color username = Color(0xFF111827);
 
@@ -106,6 +108,7 @@ class AppColors {
   static const Color drawerIconColor = Color(0xFF23444A);
   static const Color employeeActionText = Color(0xFF020618);
   static const Color employeeActionSubtitle = Color(0xFF62748E);
+  static const Color _darkDrawerIconColor = Color(0xFFB0C4CC);
 
   // Profile Specific
   static const Color profileHeaderBg = Color(0xFFEBFDFF);
@@ -476,6 +479,8 @@ class AppColorsResolved {
   final Color gray400;
   final Color darkGradientEnd;
   final Color lightGrey;
+  final Color drawerIconColor;
+  final Color searchHint;
   final Color charcoal;
   final Color slateGrey;
   final Color purpleHoliday;
@@ -560,6 +565,8 @@ class AppColorsResolved {
   final Color welcomeSubtitleColor;
 
   final Color blue400;
+  final Color darkblue;
+  final Color darkbluegrey;
 
   // Timesheet card colors (theme-aware)
   final Color colorBlue50;
@@ -668,6 +675,8 @@ class AppColorsResolved {
     required this.gray400,
     required this.darkGradientEnd,
     required this.lightGrey,
+    required this.drawerIconColor,
+    required this.searchHint,
     required this.charcoal,
     required this.slateGrey,
     required this.purpleHoliday,
@@ -748,6 +757,8 @@ class AppColorsResolved {
     required this.welcomeTitlePrimary,
     required this.welcomeSubtitleColor,
     required this.blue400,
+    required this.darkblue,
+    required this.darkbluegrey,
     required this.colorBlue50,
     required this.colorGreen50,
     required this.colorOrange50,
@@ -856,6 +867,8 @@ class AppColorsResolved {
     gray400: AppColors.gray400,
     darkGradientEnd: AppColors.darkGradientEnd,
     lightGrey: AppColors.lightGrey,
+    drawerIconColor: AppColors.drawerIconColor,
+    searchHint: AppColors.searchHint,
     charcoal: AppColors.charcoal,
     slateGrey: AppColors.slateGrey,
     purpleHoliday: AppColors.purpleHoliday,
@@ -893,6 +906,8 @@ class AppColorsResolved {
     approvedBg: AppColors.approvedBg,
     approvedText: AppColors.approvedText,
     blue400: AppColors.blue400,
+    darkblue: AppColors.darkblue,
+    darkbluegrey: AppColors.darkbluegrey,
     pendingStatusBg: AppColors.pendingStatusBg,
     pendingStatusText: AppColors.pendingStatusText,
     cancelledBg: AppColors.cancelledBg,
@@ -1047,6 +1062,8 @@ class AppColorsResolved {
     gray400: AppColors.gray400,
     darkGradientEnd: AppColors.darkGradientEnd,
     lightGrey: AppColors.lightGrey,
+    drawerIconColor: AppColors._darkDrawerIconColor,
+    searchHint: AppColors.searchHint,
     charcoal: AppColors._darkTextPrimary,
     slateGrey: AppColors._darkTextSecondary,
     purpleHoliday: AppColors.purpleHoliday,
@@ -1083,6 +1100,8 @@ class AppColorsResolved {
     approvedBg: AppColors._darkApprovedBg,
     approvedText: AppColors._darkApprovedText,
     blue400: AppColors.blue400,
+    darkblue: AppColors.darkblue,
+    darkbluegrey: AppColors.darkbluegrey,
     pendingStatusBg: AppColors._darkPendingStatusBg,
     pendingStatusText: AppColors._darkPendingStatusText,
     cancelledBg: AppColors._darkCancelledBg,

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../bloc/dashboard_cubit.dart';
@@ -13,8 +12,6 @@ import '../widgets/home_header_widget.dart';
 import '../widgets/home_user_clock_card.dart';
 import '../widgets/home_employee_actions.dart';
 import '../widgets/home_quick_stats.dart';
-
-import '../widgets/salary_section.dart';
 import 'package:dhira_hrms/core/widgets/app_header.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -60,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const HomeEmployeeActions(),
                                 SizedBox(height: 8.h),
                                 const HomeQuickStats(),
-                                SizedBox(height: 10.h),
+                                SizedBox(height: 8.h),
                               ],
                             ),
                           ),

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dhira_hrms/core/services/local_storage_service.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/network_info.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -99,41 +100,71 @@ class AuthRepositoryImpl implements IAuthRepository {
     }
   }
 
+  Future<Either<Failure, UserEntity>> _getCachedUser() async {
+    final email = localStorageService.getUserEmail();
+    final fullName = localStorageService.getUserFullname() ?? localStorageService.getEmpName();
+    final empId = localStorageService.getEmpId();
+
+    if (email != null && fullName != null && empId != null) {
+      return Right(UserEntity(
+        fullName: fullName,
+        email: email,
+        empId: empId,
+        department: localStorageService.getDepartment(),
+        approver: localStorageService.getApprover(),
+        gender: localStorageService.getGender(),
+        userImage: localStorageService.getCookieMap()?['user_image'] as String?,
+      ));
+    }
+    return const Left(CacheFailure("No cached user session found"));
+  }
+
   @override
   Future<Either<Failure, UserEntity>> getCurrentUser() async {
-    return networkInfo.connectedAndRun(() async {
-      try {
-        final email = localStorageService.getUserEmail();
-        if (email == null) {
-          return const Left(CacheFailure("No user session found"));
-        }
+    final hasInternet = await networkInfo.isConnected;
+    if (!hasInternet) {
+      return _getCachedUser();
+    }
 
-        final userModel = await remoteDataSource.getEmployeeDetails(email);
-
-        var userEntity = userModel.toEntity();
-        if (userEntity.approver == null) {
-          userEntity = userEntity.copyWith(
-            approver: localStorageService.getApprover(),
-          );
-        }
-        if (userEntity.department == null) {
-          userEntity = userEntity.copyWith(
-            department: localStorageService.getDepartment(),
-          );
-        }
-        if (userEntity.gender != null) {
-          await localStorageService.saveGender(userEntity.gender!);
-        } else {
-          userEntity = userEntity.copyWith(
-            gender: localStorageService.getGender(),
-          );
-        }
-
-        return Right(userEntity);
-      } catch (e) {
-        return Left(Failure.fromException(e));
+    try {
+      final email = localStorageService.getUserEmail();
+      if (email == null) {
+        return const Left(CacheFailure("No user session found"));
       }
-    });
+
+      final userModel = await remoteDataSource.getEmployeeDetails(email);
+
+      var userEntity = userModel.toEntity();
+      if (userEntity.approver == null) {
+        userEntity = userEntity.copyWith(
+          approver: localStorageService.getApprover(),
+        );
+      }
+      if (userEntity.department == null) {
+        userEntity = userEntity.copyWith(
+          department: localStorageService.getDepartment(),
+        );
+      }
+      if (userEntity.gender != null) {
+        await localStorageService.saveGender(userEntity.gender!);
+      } else {
+        userEntity = userEntity.copyWith(
+          gender: localStorageService.getGender(),
+        );
+      }
+
+      return Right(userEntity);
+    } on UnauthorizedException catch (e) {
+      return Left(UnauthorizedFailure(e.message));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
+    } catch (e) {
+      final cachedResult = await _getCachedUser();
+      return cachedResult.fold(
+        (cacheFailure) => Left(Failure.fromException(e)),
+        (cachedUser) => Right(cachedUser),
+      );
+    }
   }
 
   @override

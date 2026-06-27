@@ -14,8 +14,6 @@ import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart'
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_bloc.dart';
 import 'package:dhira_hrms/features/performance/presentation/bloc/performance_state.dart';
-import 'package:dhira_hrms/core/network/dio_client.dart';
-import 'package:get/get.dart';
 import 'package:dhira_hrms/core/presentation/dialogs/logout_alert_dialog.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -25,7 +23,7 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = AppColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final baseUrl = Get.find<DioClient>().baseUrl;
+    final baseUrl = AppConstants.baseUrl;
 
     return Drawer(
       backgroundColor: colors.surface,
@@ -165,16 +163,13 @@ class CustomDrawer extends StatelessWidget {
                           },
                         ),
 
-                        BlocProvider<PerformanceBloc>.value(
-                          value: Get.find<PerformanceBloc>(),
-                          child: BlocBuilder<PerformanceBloc, PerformanceState>(
-                            builder: (context, performanceState) {
-                              return _ExpandablePerformanceMenuItem(
-                                l10n: l10n,
-                                performanceState: performanceState,
-                              );
-                            },
-                          ),
+                        BlocBuilder<PerformanceBloc, PerformanceState>(
+                          builder: (context, performanceState) {
+                            return _ExpandablePerformanceMenuItem(
+                              l10n: l10n,
+                              performanceState: performanceState,
+                            );
+                          },
                         ),
                         _DrawerMenuItemWidget(
                           icon: Icons.policy_outlined,
@@ -253,13 +248,13 @@ class _DrawerMenuItemWidget extends StatelessWidget {
       child: ListTile(
         leading: Icon(
           icon,
-          color: AppColors.drawerIconColor,
+          color: colors.drawerIconColor,
           size: 24.w,
         ),
         title: Text(
           title,
           style: AppTextStyle.bodyMedium.copyWith(
-            color: AppColors.drawerIconColor,
+            color: colors.drawerIconColor,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -309,18 +304,18 @@ class _ExpandablePerformanceMenuItemState
             duration: const Duration(milliseconds: 200),
             child: Icon(
               Icons.keyboard_arrow_right,
-              color: AppColors.drawerIconColor,
+              color: colors.drawerIconColor,
             ),
           ),
           leading: Icon(
             Icons.speed_outlined,
-            color: AppColors.drawerIconColor,
+            color: colors.drawerIconColor,
             size: 24.w,
           ),
           title: Text(
             widget.l10n.performance,
             style: AppTextStyle.bodyMedium.copyWith(
-              color: AppColors.drawerIconColor,
+              color: colors.drawerIconColor,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -379,11 +374,12 @@ class _DrawerSubMenuItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return ListTile(
       title: Text(
         title,
         style: AppTextStyle.bodyMedium.copyWith(
-          color: AppColors.drawerIconColor,
+          color: colors.drawerIconColor,
           fontWeight: FontWeight.w500,
         ),
       ),

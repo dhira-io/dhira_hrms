@@ -66,9 +66,7 @@ class HomeUserHeader extends StatelessWidget {
                     Text(
                       DateTimeUtils.getGreetingMessage(prefix: "", l10n: l10n),
                       style: AppTextStyle.bodySmall.copyWith(
-                        color: AppColors.of(
-                          context,
-                        ).white.withValues(alpha: AppConstants.opacityMuted),
+                        color: colors.white.withValues(alpha: AppConstants.opacityMuted),
                       ),
                     ),
                     const SizedBox(height: AppConstants.p4),

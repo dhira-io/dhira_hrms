@@ -50,6 +50,7 @@ class _AppHeaderState extends State<AppHeader> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Column(
       children: [
         Container(
@@ -57,7 +58,7 @@ class _AppHeaderState extends State<AppHeader> {
             horizontal: AppConstants.p20,
             vertical: AppConstants.p16,
           ),
-          color: widget.backgroundColor ?? AppColors.of(context).background,
+          color: widget.backgroundColor ?? colors.background,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -67,7 +68,7 @@ class _AppHeaderState extends State<AppHeader> {
                   IconButton(
                     icon: Icon(
                       Icons.menu,
-                      color: widget.iconColor ?? AppColors.of(context).onSurface,
+                      color: widget.iconColor ?? colors.onSurface,
                     ),
                     onPressed: () {
                       Scaffold.maybeOf(context)?.openDrawer();
@@ -101,7 +102,7 @@ class _AppHeaderState extends State<AppHeader> {
                                   height: AppConstants.p32,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: AppColors.of(context).primaryFixed,
+                                    color: colors.primaryFixed,
                                   ),
                                   clipBehavior: Clip.antiAlias,
                                   child: (profileImage != null &&
@@ -148,9 +149,7 @@ class _AppHeaderState extends State<AppHeader> {
           Container(
             height: AppConstants.dividerHeight,
             width: double.infinity,
-            color: AppColors.of(
-              context,
-            ).outlineVariant.withValues(alpha: AppConstants.opacityMedium),
+            color: colors.outlineVariant.withValues(alpha: AppConstants.opacityMedium),
           ),
       ],
     );

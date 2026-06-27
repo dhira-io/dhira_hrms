@@ -58,11 +58,22 @@ class AuthInterceptor extends Interceptor {
         }
       }
       if (cookieMap.isNotEmpty) {
+        final existingCookieString = _prefs.getString(StorageConstants.cookies);
+        Map<String, dynamic> existingCookieMap = {};
+        if (existingCookieString != null) {
+          try {
+            existingCookieMap = json.decode(existingCookieString);
+          } catch (_) {}
+        }
+        final mergedCookies = {
+          ...existingCookieMap,
+          ...cookieMap,
+        };
         // IMPORTANT: We must wait for the save to complete to avoid race conditions
         // with the Repository reading cookies immediately after login/SSO.
         await _prefs.setString(
           StorageConstants.cookies,
-          json.encode(cookieMap),
+          json.encode(mergedCookies),
         );
       }
     }

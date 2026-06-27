@@ -6,10 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dhira_hrms/core/theme/app_colors.dart';
 import 'package:dhira_hrms/core/theme/app_text_style.dart';
 import 'package:dhira_hrms/core/constants/app_constants.dart';
-import 'package:dhira_hrms/core/constants/app_assets.dart';
-import 'package:dhira_hrms/core/network/dio_client.dart';
-import 'package:dhira_hrms/core/utils/toast_utils.dart';
-import 'package:dhira_hrms/core/utils/date_time_utils.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:dhira_hrms/features/auth/presentation/bloc/auth_state.dart';
 import 'package:dhira_hrms/features/profile/presentation/bloc/profile_bloc.dart';
@@ -17,10 +13,7 @@ import 'package:dhira_hrms/features/profile/presentation/bloc/profile_state.dart
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_bloc.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_event.dart';
 import 'package:dhira_hrms/features/attendance/presentation/bloc/attendance_state.dart';
-import 'package:dhira_hrms/features/attendance/presentation/dialogs/punch_out_dialog.dart';
-import 'package:dhira_hrms/core/widgets/common_button.dart';
 import 'package:dhira_hrms/l10n/app_localizations.dart';
-import 'package:get/get.dart';
 
 class HomeUserClockCard extends StatefulWidget {
   const HomeUserClockCard({super.key});
@@ -69,8 +62,11 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) _stopPolling();
-    else if (state == AppLifecycleState.resumed) _startPolling();
+    if (state == AppLifecycleState.paused) {
+      _stopPolling();
+    } else if (state == AppLifecycleState.resumed) {
+      _startPolling;
+    }();
   }
 
   Future<void> _fetchInitialData() async {
@@ -108,8 +104,6 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
     _stopPolling();
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +186,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                           height: 48.w,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: colors.primary, // Dark green-ish from mockup
+                            color: colors.darkbluegrey, // Dark green-ish from mockup
                           ),
                           clipBehavior: Clip.antiAlias,
                           child: (profileImage != null && profileImage.isNotEmpty)
@@ -205,7 +199,7 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                                       Center(
                                     child: Text(
                                       displayInitials,
-                                      style: AppTextStyle.bodyLarge.copyWith(color: colors.white),
+                                      style: AppTextStyle.titleLarge.copyWith(color: colors.white),
                                     ),
                                   ),
                                 )
@@ -223,9 +217,9 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                             children: [
                               Text(
                                 fullName ?? l10n.employeeName,
-                                style: AppTextStyle.bodyMedium.copyWith(
+                                style: AppTextStyle.headingSmallOne.copyWith(
                                   color: colors.onSurface,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
                               SizedBox(height: 4.h),
@@ -237,9 +231,8 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                                 ),
                                 child: Text(
                                   designation ?? l10n.designation,
-                                  style: AppTextStyle.bodySmall.copyWith(
+                                  style: AppTextStyle.bodyMedium.copyWith(
                                     color: colors.primary,
-                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
@@ -249,13 +242,13 @@ class _HomeUserClockCardState extends State<HomeUserClockCard> with WidgetsBindi
                                 runSpacing: 4.h,
                                 children: [
                                   _Badge(
-                                    icon: Icon(Icons.business, size: 12.w, color: colors.holidayText),
+                                    icon: Icon(Icons.business, size: 14.w, color: colors.holidayText),
                                     text: company ?? "", // From API or default to Dhira
                                     backgroundColor: colors.holidayBg,
                                     textColor: colors.holidayText,
                                   ),
                                   _Badge(
-                                    icon: Icon(Icons.badge_outlined, size: 12.w, color: colors.holidayText),
+                                    icon: Icon(Icons.badge_outlined, size: 14.w, color: colors.holidayText),
                                     text: empId ?? l10n.notAvailable,
                                     backgroundColor: colors.holidayBg,
                                     textColor: colors.holidayText,
@@ -296,7 +289,6 @@ class _Badge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppColors.of(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
@@ -310,9 +302,8 @@ class _Badge extends StatelessWidget {
           SizedBox(width: 4.w),
           Text(
             text,
-            style: AppTextStyle.bodySmall.copyWith(
+            style: AppTextStyle.labelLarge.copyWith(
               color: textColor,
-              fontWeight: FontWeight.w600,
             ),
           ),
         ],

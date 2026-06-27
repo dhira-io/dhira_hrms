@@ -47,8 +47,7 @@ class SearchCubit extends Cubit<SearchState> {
     final lowerQuery = query.toLowerCase();
     return items.where((item) {
       final matchTitle = item.title.toLowerCase().contains(lowerQuery);
-      final matchSubtitle = item.subtitle?.toLowerCase().contains(lowerQuery) ?? false;
-      return matchTitle || matchSubtitle;
+      return matchTitle;
     }).toList();
   }
 }

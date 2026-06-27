@@ -38,12 +38,11 @@ class HomeQuickStats extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(8.w),
               child: Text(
                 l10n.quickStats,
-                style: AppTextStyle.bodyLarge.copyWith(
+                style: AppTextStyle.headingSmallOne.copyWith(
                   color: colors.onSurface,
-                  fontWeight: FontWeight.w500,
                   ),
               ),
             ),
@@ -126,9 +125,8 @@ class _StatColumn extends StatelessWidget {
       children: [
         Text(
           value,
-          style: AppTextStyle.headlineSmall.copyWith(
+          style: AppTextStyle.headingSmall.copyWith(
             color: colors.primary,
-            fontWeight: FontWeight.w500,
             ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -136,9 +134,8 @@ class _StatColumn extends StatelessWidget {
         SizedBox(height: 4.h),
         Text(
           title,
-          style: AppTextStyle.bodySmall.copyWith(
-            color: colors.onSurfaceVariant,
-            fontWeight: FontWeight.w500,
+          style: AppTextStyle.labelMedium.copyWith(
+            color: colors.slate500,
             ),
           textAlign: TextAlign.center,
           maxLines: 1,

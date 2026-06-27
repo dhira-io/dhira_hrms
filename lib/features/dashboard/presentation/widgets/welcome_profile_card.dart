@@ -81,9 +81,7 @@ class WelcomeProfileCard extends StatelessWidget {
                         color: colors.primaryFixed,
                         borderRadius: BorderRadius.circular(AppConstants.r12),
                         border: Border.all(
-                          color: AppColors.of(
-                            context,
-                          ).primary.withValues(alpha: AppConstants.opacityLow),
+                          color: colors.primary.withValues(alpha: AppConstants.opacityLow),
                         ),
                       ),
                       child: Text(

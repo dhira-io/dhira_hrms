@@ -37,9 +37,7 @@ class AttendanceSummaryCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppConstants.r20),
             boxShadow: [
               BoxShadow(
-                color: AppColors.of(
-                  context,
-                ).primary.withValues(alpha: AppConstants.opacityMedium),
+                color: colors.primary.withValues(alpha: AppConstants.opacityMedium),
                 blurRadius: AppConstants.p15,
                 offset: const Offset(0, AppConstants.p8),
               ),
@@ -71,9 +69,7 @@ class AttendanceSummaryCard extends StatelessWidget {
                   Container(
                     width: 1.w,
                     height: AppConstants.p40,
-                    color: AppColors.of(
-                      context,
-                    ).surface.withValues(alpha: AppConstants.opacityFaded),
+                    color: colors.surface.withValues(alpha: AppConstants.opacityFaded),
                   ),
                   _TimeColumn(
                     label: l10n.checkOut,
@@ -103,9 +99,7 @@ class _StatusBadge extends StatelessWidget {
         vertical: AppConstants.p4,
       ),
       decoration: BoxDecoration(
-        color: AppColors.of(
-          context,
-        ).surface.withValues(alpha: AppConstants.opacitySlight),
+        color: colors.surface.withValues(alpha: AppConstants.opacitySlight),
         borderRadius: BorderRadius.circular(AppConstants.r20),
       ),
       child: Text(
@@ -137,9 +131,7 @@ class _TimeColumn extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: AppColors.of(
-            context,
-          ).surface.withValues(alpha: AppConstants.opacityMuted),
+          color: colors.surface.withValues(alpha: AppConstants.opacityMuted),
           size: AppConstants.iconSmall + 2,
         ),
         const SizedBox(height: AppConstants.p8),
@@ -150,9 +142,7 @@ class _TimeColumn extends StatelessWidget {
         Text(
           label,
           style: AppTextStyle.bodySmall.copyWith(
-            color: AppColors.of(
-              context,
-            ).surface.withValues(alpha: AppConstants.opacityMuted),
+            color: colors.surface.withValues(alpha: AppConstants.opacityMuted),
           ),
         ),
       ],
